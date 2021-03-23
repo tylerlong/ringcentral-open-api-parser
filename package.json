@@ -6,6 +6,7 @@
     "test": "jest -w 1 --detectOpenHandles -c ./test/jest.config.ts"
   },
   "dependencies": {
+    "change-case": "^4.1.2",
     "js-yaml": "^4.0.0",
     "openapi-types": "^7.2.3"
   },
