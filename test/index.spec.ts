@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-import */
 import {parse} from '../src/index';
 import fs from 'fs';
 import yaml from 'js-yaml';

@@ -1,5 +1,8 @@
 import {OpenAPIV3} from 'openapi-types';
-import {pascalCase} from 'change-case';
+
+const capitalizeFirstLetter = (s: string): string => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 
 export type ParseResult = {
   models: Model[];
@@ -118,7 +121,8 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
         if (mediaTypeObject) {
           const schema = mediaTypeObject.schema!;
           if ('properties' in schema) {
-            const name = pascalCase(operation.operationId!) + 'Request';
+            const name =
+              capitalizeFirstLetter(operation.operationId!) + 'Request';
             if (!schema.description) {
               schema.description = `Request body for operation ${operation.operationId}`;
             }
@@ -134,7 +138,8 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
         ?.map(p => p as OpenAPIV3.ParameterObject)
         .filter(p => p.in === 'query');
       if (queryParameters && queryParameters?.length > 0) {
-        const name = pascalCase(operation.operationId!) + 'Parameters';
+        const name =
+          capitalizeFirstLetter(operation.operationId!) + 'Parameters';
         const schema = {
           description: `Query parameters for operation ${operation.operationId}`,
           properties: Object.fromEntries(
