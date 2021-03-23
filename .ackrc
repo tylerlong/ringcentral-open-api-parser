@@ -1,1 +1,3 @@
 --ignore-file=match:/^yarn\.lock$/
+--ignore-file=match:/parsed\.json$/
+--ignore-directory=lib

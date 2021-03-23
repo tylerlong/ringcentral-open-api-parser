@@ -1,11 +1,11 @@
 {
   "license": "MIT",
   "name": "ringcentral-open-api-parser",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "engines": {
     "node": ">=14.0.0"
   },
-  "main": "./build/src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest -w 1 --detectOpenHandles -c ./test/jest.config.ts",
     "prepublishOnly": "tsc"
