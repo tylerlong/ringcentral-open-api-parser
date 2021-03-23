@@ -10,7 +10,7 @@ const doc = yaml.load(
 describe('index', () => {
   test('default', async () => {
     const parsed = parse(doc);
-    console.log(parsed);
+    console.log(JSON.stringify(parsed, null, 2));
     expect(parsed.models).toBeDefined();
   });
 });

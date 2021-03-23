@@ -9,7 +9,17 @@ export type Model = {
   fields: Field[];
 };
 
-export type Field = {
+export type Property = {
+  type?: string;
+  $ref?: string;
+  description?: string;
+  enum?: string[];
+  example?: string;
+  format?: string;
+  items?: Property;
+};
+
+export type Field = Property & {
   name: string;
 };
 
@@ -21,12 +31,11 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
   const schemas = doc.components?.schemas as SchemaDict;
   const models: Model[] = [];
   for (const name of Object.keys(schemas)) {
-    console.log(name);
     const schema = schemas[name];
     const properties = schema.properties as SchemaDict;
     const fields = Object.keys(properties).map(k => ({
       name: k,
-      ...properties[k],
+      ...(properties[k] as Property),
     }));
     models.push({name, fields});
   }
