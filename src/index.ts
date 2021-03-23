@@ -6,6 +6,7 @@ export type ParseResult = {
 
 export type Model = {
   name: string;
+  description?: string;
   fields: Field[];
 };
 
@@ -39,7 +40,30 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
       name: k,
       required: schema.required?.includes(k),
     }));
-    models.push({name, fields});
+    models.push({name, description: schema.description, fields});
   }
+  models.push({
+    name: 'Attachment',
+    description: 'Attachment is a file to be uploaded',
+    fields: [
+      {
+        name: 'filename',
+        type: 'string',
+        description: 'Filename with extension',
+        example: 'example.png',
+      },
+      {
+        name: 'content',
+        type: 'byte[]',
+        description: 'Binary content of the file',
+        required: true,
+      },
+      {
+        name: 'contentType',
+        type: 'string',
+        description: 'Content type of the file, such as "image/png"',
+      },
+    ],
+  });
   return {models};
 };
