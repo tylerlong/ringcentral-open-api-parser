@@ -31,13 +31,19 @@ export type SchemaDict = {
 };
 
 const normalizeField = (field: Field): Field => {
+  if (field.$ref) {
+    field.$ref = field.$ref.split('/').slice(-1)[0];
+  }
   if (
     field.type === 'file' ||
     (field.type === 'string' && field.format === 'binary')
   ) {
-    field.$ref = '#/components/schemas/Attachment';
+    field.$ref = 'Attachment';
     delete field.type;
     delete field.format;
+  }
+  if (field.items) {
+    field.items = normalizeField(field.items);
   }
   return field;
 };
