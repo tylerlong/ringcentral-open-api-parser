@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "build",
     "esModuleInterop": true,
-    "lib": ["ES2019"]
+    "lib": ["ES2019"],
+    "resolveJsonModule": true,
   },
   "include": [
     "src/**/*.ts",

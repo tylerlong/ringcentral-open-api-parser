@@ -1,6 +1,7 @@
 /* eslint-disable node/no-unpublished-import */
 import {parse} from '../src/index';
 import fs from 'fs';
+import path from 'path';
 import yaml from 'js-yaml';
 import {OpenAPIV3} from 'openapi-types';
 
@@ -11,7 +12,9 @@ const doc = yaml.load(
 describe('index', () => {
   test('default', async () => {
     const parsed = parse(doc);
-    console.log(JSON.stringify(parsed, null, 2));
+    const jsonStr = JSON.stringify(parsed, null, 2);
+    console.log(jsonStr);
+    fs.writeFileSync(path.join(__dirname, '..', 'src', 'parsed.json'), jsonStr);
     expect(parsed.models).toBeDefined();
   });
 });

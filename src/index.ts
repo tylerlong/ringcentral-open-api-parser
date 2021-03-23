@@ -1,5 +1,7 @@
 import {OpenAPIV3} from 'openapi-types';
 
+export {default as parsed} from './parsed.json';
+
 const capitalizeFirstLetter = (s: string): string => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
