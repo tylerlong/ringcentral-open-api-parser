@@ -119,6 +119,9 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
           const schema = mediaTypeObject.schema!;
           if ('properties' in schema) {
             const name = pascalCase(operation.operationId!) + 'Request';
+            if (!schema.description) {
+              schema.description = `Request body for operation ${operation.operationId}`;
+            }
             models.push(
               normalizeSchema(name, schema as OpenAPIV3.SchemaObject)
             );
@@ -127,26 +130,22 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
       }
 
       // query parameters schemas
-      if (
-        operation.parameters?.some(
-          p => (p as OpenAPIV3.ParameterObject).in === 'query'
-        )
-      ) {
+      const queryParameters = operation.parameters
+        ?.map(p => p as OpenAPIV3.ParameterObject)
+        .filter(p => p.in === 'query');
+      if (queryParameters && queryParameters?.length > 0) {
         const name = pascalCase(operation.operationId!) + 'Parameters';
         const schema = {
           description: `Query parameters for operation ${operation.operationId}`,
           properties: Object.fromEntries(
-            operation.parameters
-              ?.map(p => p as OpenAPIV3.ParameterObject)
-              ?.filter(p => p.in === 'query')
-              .map(p => {
-                let schemaObject = p as OpenAPIV3.SchemaObject;
-                schemaObject = Object.assign(schemaObject, p.schema, {
-                  in: undefined,
-                  schema: undefined,
-                });
-                return [p.name, schemaObject];
-              })
+            queryParameters.map(p => {
+              let schemaObject = p as OpenAPIV3.SchemaObject;
+              schemaObject = Object.assign(schemaObject, p.schema, {
+                in: undefined,
+                schema: undefined,
+              });
+              return [p.name, schemaObject];
+            })
           ),
         };
         models.push(normalizeSchema(name, schema));
