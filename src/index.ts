@@ -37,6 +37,7 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
     const fields = Object.keys(properties).map(k => ({
       ...(properties[k] as Field),
       name: k,
+      required: schema.required?.includes(k),
     }));
     models.push({name, fields});
   }
