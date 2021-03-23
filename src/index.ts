@@ -102,13 +102,14 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
     ],
   });
 
-  // form-data schemas
   Object.keys(doc.paths).forEach(p => {
     const pathObject = doc.paths[p] as {
       [key: string]: OpenAPIV3.OperationObject;
     };
     Object.keys(pathObject).forEach(method => {
       const operation = pathObject[method];
+
+      // form-data schemas
       const requestBody = operation.requestBody as OpenAPIV3.RequestBodyObject;
       if (requestBody) {
         const mediaTypeObject =
@@ -124,10 +125,34 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
           }
         }
       }
+
+      // query parameters schemas
+      if (
+        operation.parameters?.some(
+          p => (p as OpenAPIV3.ParameterObject).in === 'query'
+        )
+      ) {
+        const name = pascalCase(operation.operationId!) + 'Parameters';
+        const schema = {
+          description: `Query parameters for operation ${operation.operationId}`,
+          properties: Object.fromEntries(
+            operation.parameters
+              ?.map(p => p as OpenAPIV3.ParameterObject)
+              ?.filter(p => p.in === 'query')
+              .map(p => {
+                let schemaObject = p as OpenAPIV3.SchemaObject;
+                schemaObject = Object.assign(schemaObject, p.schema, {
+                  in: undefined,
+                  schema: undefined,
+                });
+                return [p.name, schemaObject];
+              })
+          ),
+        };
+        models.push(normalizeSchema(name, schema));
+      }
     });
   });
-
-  // query parameters schemas
 
   return {models};
 };
