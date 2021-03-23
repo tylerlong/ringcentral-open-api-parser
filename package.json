@@ -2,6 +2,9 @@
   "license": "MIT",
   "name": "open-api-parser",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "test": "jest -w 1 --detectOpenHandles -c ./test/jest.config.ts"
   },
