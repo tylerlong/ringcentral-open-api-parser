@@ -17,6 +17,10 @@ export type Property = {
   example?: string;
   format?: string;
   items?: Property;
+  default?: string | boolean;
+  minimum?: number;
+  maximum?: number;
+  required?: boolean;
 };
 
 export type Field = Property & {
