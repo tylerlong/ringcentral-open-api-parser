@@ -7,6 +7,7 @@ const capitalizeFirstLetter = (s: string): string => {
 
 export type ParseResult = {
   models: Model[];
+  paths: {};
 };
 export const parsed: ParseResult = parseResult as ParseResult;
 
@@ -72,7 +73,7 @@ const normalizeSchema = (
   };
 };
 
-export const parse = (doc: OpenAPIV3.Document): ParseResult => {
+export const parseModels = (doc: OpenAPIV3.Document): Model[] => {
   const schemas = doc.components?.schemas as SchemaDict;
   const models: Model[] = [];
 
@@ -160,5 +161,17 @@ export const parse = (doc: OpenAPIV3.Document): ParseResult => {
     });
   });
 
-  return {models};
+  return models;
+};
+
+export const parsePaths = (doc: OpenAPIV3.Document) => {
+  console.log(doc);
+  return {};
+};
+
+export const parse = (doc: OpenAPIV3.Document): ParseResult => {
+  return {
+    models: parseModels(doc),
+    paths: parsePaths(doc),
+  };
 };
