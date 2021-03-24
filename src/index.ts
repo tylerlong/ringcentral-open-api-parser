@@ -1,6 +1,5 @@
 import {OpenAPIV3} from 'openapi-types';
-
-export {default as parsed} from './parsed.json';
+import parseResult from './parsed.json';
 
 const capitalizeFirstLetter = (s: string): string => {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -9,6 +8,7 @@ const capitalizeFirstLetter = (s: string): string => {
 export type ParseResult = {
   models: Model[];
 };
+export const parsed: ParseResult = parseResult as ParseResult;
 
 export type Model = {
   name: string;
