@@ -5,7 +5,9 @@ import {Path} from './types';
 
 export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
   let result: Path[] = [];
-  const paths = Object.keys(doc.paths);
+  const paths = Object.keys(doc.paths).sort((item1, item2) =>
+    item1.length > item2.length ? 1 : -1
+  );
   for (const item of paths) {
     const pathContent = doc.paths[item]! as {
       [key: string]: OpenAPIV3.OperationObject & {[key: string]: string};
@@ -53,8 +55,5 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
       }
     }
   }
-  result.sort((item1, items2) =>
-    item1.endpoint.length > items2.endpoint.length ? 1 : -1
-  );
   return result;
 };

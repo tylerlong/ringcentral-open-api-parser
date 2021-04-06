@@ -28781,67 +28781,6 @@
   ],
   "paths": [
     {
-      "endpoint": "/restapi/oauth/token",
-      "paths": [
-        "restapi",
-        "oauth",
-        "token"
-      ],
-      "operations": [
-        {
-          "method": "post",
-          "description": "Returns access tokens for making API requests",
-          "summary": "Get Token",
-          "operationId": "getToken",
-          "rateLimitGroup": "Auth",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "endpoint": "/restapi/{apiVersion}",
-      "paths": [
-        "restapi"
-      ],
-      "operations": [
-        {
-          "method": "get",
-          "description": "Returns current API version(s) and server info.",
-          "summary": "Get API Versions",
-          "operationId": "readAPIVersions",
-          "rateLimitGroup": "NoThrottling",
-          "withParameter": false
-        },
-        {
-          "method": "get",
-          "description": "Returns current API version info by apiVersion.",
-          "summary": "Get Version Info",
-          "operationId": "readAPIVersion",
-          "rateLimitGroup": "NoThrottling",
-          "withParameter": true
-        }
-      ],
-      "parameter": "apiVersion"
-    },
-    {
-      "endpoint": "/restapi/oauth/revoke",
-      "paths": [
-        "restapi",
-        "oauth",
-        "revoke"
-      ],
-      "operations": [
-        {
-          "method": "post",
-          "description": "Revokes access/refresh token. Requests to this endpoint must be authenticated with HTTP Basic scheme using the application key and application secret as login and password, correspondingly.",
-          "summary": "Revoke Token",
-          "operationId": "revokeToken",
-          "rateLimitGroup": "Auth",
-          "withParameter": false
-        }
-      ]
-    },
-    {
       "endpoint": "/scim/{version}/health",
       "paths": [
         "scim",
@@ -28853,23 +28792,6 @@
           "summary": "Check Health",
           "operationId": "checkHealth2",
           "rateLimitGroup": "NoThrottling",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "endpoint": "/restapi/oauth/authorize",
-      "paths": [
-        "restapi",
-        "oauth",
-        "authorize"
-      ],
-      "operations": [
-        {
-          "method": "post",
-          "description": "Returns a link to a login page location.",
-          "summary": "Authorize",
-          "operationId": "authorize",
           "withParameter": false
         }
       ]
@@ -28933,6 +28855,67 @@
       "parameter": "id"
     },
     {
+      "endpoint": "/restapi/oauth/token",
+      "paths": [
+        "restapi",
+        "oauth",
+        "token"
+      ],
+      "operations": [
+        {
+          "method": "post",
+          "description": "Returns access tokens for making API requests",
+          "summary": "Get Token",
+          "operationId": "getToken",
+          "rateLimitGroup": "Auth",
+          "withParameter": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/restapi/{apiVersion}",
+      "paths": [
+        "restapi"
+      ],
+      "operations": [
+        {
+          "method": "get",
+          "description": "Returns current API version(s) and server info.",
+          "summary": "Get API Versions",
+          "operationId": "readAPIVersions",
+          "rateLimitGroup": "NoThrottling",
+          "withParameter": false
+        },
+        {
+          "method": "get",
+          "description": "Returns current API version info by apiVersion.",
+          "summary": "Get Version Info",
+          "operationId": "readAPIVersion",
+          "rateLimitGroup": "NoThrottling",
+          "withParameter": true
+        }
+      ],
+      "parameter": "apiVersion"
+    },
+    {
+      "endpoint": "/restapi/oauth/revoke",
+      "paths": [
+        "restapi",
+        "oauth",
+        "revoke"
+      ],
+      "operations": [
+        {
+          "method": "post",
+          "description": "Revokes access/refresh token. Requests to this endpoint must be authenticated with HTTP Basic scheme using the application key and application secret as login and password, correspondingly.",
+          "summary": "Revoke Token",
+          "operationId": "revokeToken",
+          "rateLimitGroup": "Auth",
+          "withParameter": false
+        }
+      ]
+    },
+    {
       "endpoint": "/scim/{version}/Users/dotSearch",
       "paths": [
         "scim",
@@ -28946,6 +28929,23 @@
           "operationId": "searchViaPost2",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
+          "withParameter": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/restapi/oauth/authorize",
+      "paths": [
+        "restapi",
+        "oauth",
+        "authorize"
+      ],
+      "operations": [
+        {
+          "method": "post",
+          "description": "Returns a link to a login page location.",
+          "summary": "Authorize",
+          "operationId": "authorize",
           "withParameter": false
         }
       ]
@@ -29583,37 +29583,6 @@
       ]
     },
     {
-      "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts",
-      "paths": [
-        "restapi",
-        "glip",
-        "chats",
-        "posts"
-      ],
-      "operations": [
-        {
-          "method": "get",
-          "description": "Returns a list of posts from the specified chat.",
-          "summary": "Get Posts",
-          "operationId": "readGlipPosts",
-          "rateLimitGroup": "Medium",
-          "appPermission": "Glip",
-          "userPermission": "Glip",
-          "withParameter": false
-        },
-        {
-          "method": "post",
-          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
-          "summary": "Create Post",
-          "operationId": "createGlipPost",
-          "rateLimitGroup": "Medium",
-          "appPermission": "Glip",
-          "userPermission": "Glip",
-          "withParameter": false
-        }
-      ]
-    },
-    {
       "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/leave",
       "paths": [
         "restapi",
@@ -29972,36 +29941,6 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadPresence",
           "userPermission": "ReadPresenceStatus",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension",
-      "paths": [
-        "restapi",
-        "account",
-        "extension"
-      ],
-      "operations": [
-        {
-          "method": "get",
-          "description": "Returns the list of extensions created for a particular account. All types of extensions are included in this list.",
-          "summary": "Get Extension List",
-          "operationId": "listExtensions",
-          "rateLimitGroup": "Medium",
-          "appPermission": "ReadAccounts",
-          "userPermission": "ReadExtensions",
-          "withParameter": false
-        },
-        {
-          "method": "post",
-          "description": "Creates an extension.",
-          "summary": "Create Extension",
-          "operationId": "createExtension",
-          "rateLimitGroup": "Medium",
-          "appPermission": "EditAccounts",
-          "userPermission": "AddRemoveUsers",
           "withParameter": false
         }
       ]
@@ -30410,6 +30349,26 @@
       "operations": [
         {
           "method": "get",
+          "description": "Returns a list of posts from the specified chat.",
+          "summary": "Get Posts",
+          "operationId": "readGlipPosts",
+          "rateLimitGroup": "Medium",
+          "appPermission": "Glip",
+          "userPermission": "Glip",
+          "withParameter": false
+        },
+        {
+          "method": "post",
+          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
+          "summary": "Create Post",
+          "operationId": "createGlipPost",
+          "rateLimitGroup": "Medium",
+          "appPermission": "Glip",
+          "userPermission": "Glip",
+          "withParameter": false
+        },
+        {
+          "method": "get",
           "description": "Returns information about the specified post.",
           "summary": "Get Post",
           "operationId": "readGlipPost",
@@ -30510,26 +30469,6 @@
       ]
     },
     {
-      "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/messages",
-      "paths": [
-        "restapi",
-        "account",
-        "a2p-sms",
-        "messages"
-      ],
-      "operations": [
-        {
-          "method": "get",
-          "description": "Returns the list of outbound/inbound A2P messages sent from/to A2P phone numbers of the current account. The list can be filtered by message batch ID and/or phone number.",
-          "summary": "Get A2P SMS List",
-          "operationId": "listA2PSMS",
-          "rateLimitGroup": "Light",
-          "appPermission": "A2PSMS",
-          "withParameter": false
-        }
-      ]
-    },
-    {
       "endpoint": "/restapi/{apiVersion}/account/{accountId}/device/{deviceId}",
       "paths": [
         "restapi",
@@ -30559,26 +30498,6 @@
         }
       ],
       "parameter": "deviceId"
-    },
-    {
-      "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries",
-      "paths": [
-        "restapi",
-        "account",
-        "directory",
-        "entries"
-      ],
-      "operations": [
-        {
-          "method": "get",
-          "description": "Returns contact information on corporate users of federated accounts. Please note: 1. `User`, `DigitalUser`, `VirtualUser` and `FaxUser` types are returned as `User` type. 2. `ApplicationExtension` type is not returned. 3. Only extensions in `Enabled`, `Disabled` and `NotActivated` state are returned.",
-          "summary": "Get Company Directory Entries",
-          "operationId": "listDirectoryEntries",
-          "rateLimitGroup": "Medium",
-          "appPermission": "ReadAccounts",
-          "withParameter": false
-        }
-      ]
     },
     {
       "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/call-out",
@@ -30863,6 +30782,26 @@
         "extension"
       ],
       "operations": [
+        {
+          "method": "get",
+          "description": "Returns the list of extensions created for a particular account. All types of extensions are included in this list.",
+          "summary": "Get Extension List",
+          "operationId": "listExtensions",
+          "rateLimitGroup": "Medium",
+          "appPermission": "ReadAccounts",
+          "userPermission": "ReadExtensions",
+          "withParameter": false
+        },
+        {
+          "method": "post",
+          "description": "Creates an extension.",
+          "summary": "Create Extension",
+          "operationId": "createExtension",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditAccounts",
+          "userPermission": "AddRemoveUsers",
+          "withParameter": false
+        },
         {
           "method": "get",
           "description": "Returns basic information about a particular extension.",
@@ -31320,6 +31259,15 @@
       "operations": [
         {
           "method": "get",
+          "description": "Returns contact information on corporate users of federated accounts. Please note: 1. `User`, `DigitalUser`, `VirtualUser` and `FaxUser` types are returned as `User` type. 2. `ApplicationExtension` type is not returned. 3. Only extensions in `Enabled`, `Disabled` and `NotActivated` state are returned.",
+          "summary": "Get Company Directory Entries",
+          "operationId": "listDirectoryEntries",
+          "rateLimitGroup": "Medium",
+          "appPermission": "ReadAccounts",
+          "withParameter": false
+        },
+        {
+          "method": "get",
           "description": "Returns contact information on a particular corporate user of a federated account.",
           "summary": "Get Corporate Directory Entry",
           "operationId": "readDirectoryEntry",
@@ -31370,6 +31318,15 @@
         "messages"
       ],
       "operations": [
+        {
+          "method": "get",
+          "description": "Returns the list of outbound/inbound A2P messages sent from/to A2P phone numbers of the current account. The list can be filtered by message batch ID and/or phone number.",
+          "summary": "Get A2P SMS List",
+          "operationId": "listA2PSMS",
+          "rateLimitGroup": "Light",
+          "appPermission": "A2PSMS",
+          "withParameter": false
+        },
         {
           "method": "get",
           "description": "Returns the details of an A2P SMS message by ID.",
