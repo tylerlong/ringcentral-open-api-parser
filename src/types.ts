@@ -20,6 +20,12 @@ export type Path = {
 
 export type Operation = {
   method: string;
+  description?: string;
+  summary?: string;
+  operationId: string;
+  rateLimitGroup: string;
+  appPermission: string;
+  userPermission: string;
 };
 
 export type Field = {

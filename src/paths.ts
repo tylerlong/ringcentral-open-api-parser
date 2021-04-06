@@ -5,7 +5,9 @@ export const parsePaths = (doc: OpenAPIV3.Document) => {
   const result = [];
   const paths = Object.keys(doc.paths);
   for (const item of paths) {
-    const pathContent = doc.paths[item]!;
+    const pathContent = doc.paths[item]! as {
+      [key: string]: OpenAPIV3.OperationObject & {[key: string]: string};
+    };
     const endpoint = item
       .replace(/\/restapi\/v1\.0\//, '/restapi/{apiVersion}/')
       .replace(/\/scim\/v2/, '/scim/{version}')
@@ -21,7 +23,16 @@ export const parsePaths = (doc: OpenAPIV3.Document) => {
     }
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
-        path.operations.push({method});
+        const operation = pathContent[method];
+        path.operations.push({
+          method,
+          description: operation.description,
+          summary: operation.summary,
+          operationId: operation.operationId!,
+          rateLimitGroup: operation['x-throttling-group'],
+          appPermission: operation['x-app-permission'],
+          userPermission: operation['x-user-permission'],
+        });
       }
     }
   }
