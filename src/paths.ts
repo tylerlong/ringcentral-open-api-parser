@@ -1,8 +1,10 @@
 import {OpenAPIV3} from 'openapi-types';
+import R from 'ramda';
+
 import {Path} from './types';
 
-export const parsePaths = (doc: OpenAPIV3.Document) => {
-  const result = [];
+export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
+  let result: Path[] = [];
   const paths = Object.keys(doc.paths);
   for (const item of paths) {
     const pathContent = doc.paths[item]! as {
@@ -17,10 +19,24 @@ export const parsePaths = (doc: OpenAPIV3.Document) => {
       paths: endpoint.split('/').filter(t => t !== '' && !t.startsWith('{')),
       operations: [],
     };
-    result.push(path);
     if (endpoint.endsWith('}')) {
       path.parameter = endpoint.split('/').slice(-1)[0].slice(1, -1);
+      const matchingResult = R.find(
+        r =>
+          r.endpoint ===
+          endpoint.substring(0, endpoint.length - path.parameter!.length - 3),
+        result
+      );
+      if (matchingResult) {
+        path.operations = matchingResult.operations;
+      }
+      result = result.filter(
+        r =>
+          r.endpoint !==
+          endpoint.substring(0, endpoint.length - path.parameter!.length - 3)
+      );
     }
+    result.push(path);
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
         const operation = pathContent[method];
@@ -32,6 +48,7 @@ export const parsePaths = (doc: OpenAPIV3.Document) => {
           rateLimitGroup: operation['x-throttling-group'],
           appPermission: operation['x-app-permission'],
           userPermission: operation['x-user-permission'],
+          withParameter: endpoint.endsWith('}'),
         });
       }
     }

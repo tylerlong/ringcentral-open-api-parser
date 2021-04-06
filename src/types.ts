@@ -26,6 +26,7 @@ export type Operation = {
   rateLimitGroup: string;
   appPermission: string;
   userPermission: string;
+  withParameter: boolean;
 };
 
 export type Field = {
