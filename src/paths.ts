@@ -25,6 +25,15 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
       const matchingResult = R.find(r => R.equals(r.paths, path.paths), result);
       if (matchingResult) {
         path.operations = matchingResult.operations;
+        if ('get' in pathContent) {
+          const getOperation = R.find(
+            o => o.method2 === 'get',
+            path.operations
+          );
+          if (getOperation) {
+            getOperation.method2 = 'list';
+          }
+        }
       }
       result = result.filter(r => !R.equals(r.paths, path.paths));
     }
@@ -48,6 +57,7 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
         path.operations.push({
           endpoint,
           method,
+          method2: method,
           description: operation.description,
           summary: operation.summary,
           operationId: operation.operationId!,
