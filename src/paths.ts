@@ -1,7 +1,7 @@
 import {OpenAPIV3} from 'openapi-types';
 import R from 'ramda';
 
-import {Path} from './types';
+import {Path, ResponseSchema} from './types';
 
 export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
   let result: Path[] = [];
@@ -40,10 +40,10 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
           responses[205] ||
           responses[302] ||
           responses.default) as OpenAPIV3.ResponseObject).content;
-        let responseSchema: OpenAPIV3.SchemaObject | undefined = undefined;
+        let responseSchema: ResponseSchema | undefined = undefined;
         if (responseContent && !R.isEmpty(responseContent)) {
-          responseSchema = responseContent[Object.keys(responseContent)[0]]
-            .schema as OpenAPIV3.SchemaObject;
+          responseSchema =
+            responseContent[Object.keys(responseContent)[0]].schema;
         }
         path.operations.push({
           endpoint,

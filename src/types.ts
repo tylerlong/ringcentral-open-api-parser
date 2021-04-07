@@ -17,6 +17,12 @@ export type Path = {
   operations: Operation[];
 };
 
+export type ResponseSchema = {
+  $ref?: string;
+  type?: string;
+  format?: string;
+};
+
 export type Operation = {
   endpoint: string;
   method: string;
@@ -27,7 +33,7 @@ export type Operation = {
   appPermission: string;
   userPermission: string;
   withParameter: boolean;
-  responseSchema?: OpenAPIV3.SchemaObject;
+  responseSchema?: ResponseSchema;
 };
 
 export type Field = {
