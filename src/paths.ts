@@ -17,32 +17,23 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
       .replace(/\/scim\/v2/, '/scim/{version}')
       .replace(/\/\.search/, '/dotSearch');
     const path: Path = {
-      endpoint,
       paths: endpoint.split('/').filter(t => t !== '' && !t.startsWith('{')),
       operations: [],
     };
     if (endpoint.endsWith('}')) {
       path.parameter = endpoint.split('/').slice(-1)[0].slice(1, -1);
-      const matchingResult = R.find(
-        r =>
-          r.endpoint ===
-          endpoint.substring(0, endpoint.length - path.parameter!.length - 3),
-        result
-      );
+      const matchingResult = R.find(r => R.equals(r.paths, path.paths), result);
       if (matchingResult) {
         path.operations = matchingResult.operations;
       }
-      result = result.filter(
-        r =>
-          r.endpoint !==
-          endpoint.substring(0, endpoint.length - path.parameter!.length - 3)
-      );
+      result = result.filter(r => !R.equals(r.paths, path.paths));
     }
     result.push(path);
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
         const operation = pathContent[method];
         path.operations.push({
+          endpoint,
           method,
           description: operation.description,
           summary: operation.summary,
@@ -55,5 +46,20 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
       }
     }
   }
-  return result;
+  const bridgePaths: Path[] = [];
+  for (const item of result) {
+    for (let i = 1; i < item.paths.length; i++) {
+      const subPaths = item.paths.slice(0, i);
+      if (
+        !R.find(r => R.equals(r.paths, subPaths), bridgePaths) &&
+        !R.find(r => R.equals(r.paths, subPaths), result)
+      ) {
+        bridgePaths.push({
+          paths: subPaths,
+          operations: [],
+        });
+      }
+    }
+  }
+  return [...result, ...bridgePaths];
 };
