@@ -12,13 +12,13 @@ export type Model = {
 };
 
 export type Path = {
-  endpoint: string;
   paths: string[];
   parameter?: string;
   operations: Operation[];
 };
 
 export type Operation = {
+  endpoint: string;
   method: string;
   description?: string;
   summary?: string;
