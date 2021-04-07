@@ -1,4 +1,6 @@
 import {OpenAPIV3} from 'openapi-types';
+import R from 'ramda';
+
 import {Field, Model, SchemaDict} from './types';
 import {capitalizeFirstLetter} from './utils';
 
@@ -39,7 +41,8 @@ const normalizeSchema = (
   };
 };
 
-export const parseModels = (doc: OpenAPIV3.Document): Model[] => {
+export const parseModels = (_doc: OpenAPIV3.Document): Model[] => {
+  const doc = R.clone(_doc);
   const schemas = doc.components?.schemas as SchemaDict;
   const models: Model[] = [];
 

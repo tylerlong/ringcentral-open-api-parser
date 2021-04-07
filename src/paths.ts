@@ -2,8 +2,10 @@ import {OpenAPIV3} from 'openapi-types';
 import R from 'ramda';
 
 import {Path, ResponseSchema} from './types';
+import {capitalizeFirstLetter} from './utils';
 
-export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
+export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
+  const doc = R.clone(_doc);
   let result: Path[] = [];
   const paths = Object.keys(doc.paths).sort((item1, item2) =>
     item1.length > item2.length ? 1 : -1
@@ -54,6 +56,15 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
           responseSchema =
             responseContent[Object.keys(responseContent)[0]].schema;
         }
+        let queryParameters: string | undefined = undefined;
+        if (
+          operation.parameters?.some(
+            p => (p as OpenAPIV3.ParameterObject).in === 'query'
+          )
+        ) {
+          queryParameters =
+            capitalizeFirstLetter(operation.operationId!) + 'Parameters';
+        }
         path.operations.push({
           endpoint,
           method,
@@ -66,6 +77,7 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
           userPermission: operation['x-user-permission'],
           withParameter: endpoint.endsWith('}'),
           responseSchema,
+          queryParameters,
         });
       }
     }

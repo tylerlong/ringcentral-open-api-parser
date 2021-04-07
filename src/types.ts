@@ -35,6 +35,7 @@ export type Operation = {
   userPermission: string;
   withParameter: boolean;
   responseSchema?: ResponseSchema;
+  queryParameters?: string;
 };
 
 export type Field = {
