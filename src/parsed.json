@@ -28809,7 +28809,10 @@
           "operationId": "searchViaGet2",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserSearchResponse"
+          }
         },
         {
           "endpoint": "/scim/{version}/Users",
@@ -28818,7 +28821,10 @@
           "operationId": "createUser2",
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
         },
         {
           "endpoint": "/scim/{version}/Users/{id}",
@@ -28827,7 +28833,10 @@
           "operationId": "readUser2",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
         },
         {
           "endpoint": "/scim/{version}/Users/{id}",
@@ -28836,7 +28845,10 @@
           "operationId": "replaceUser2",
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
         },
         {
           "endpoint": "/scim/{version}/Users/{id}",
@@ -28854,7 +28866,10 @@
           "operationId": "patchUser2",
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
         }
       ],
       "parameter": "id"
@@ -28873,7 +28888,10 @@
           "summary": "Get Token",
           "operationId": "getToken",
           "rateLimitGroup": "Auth",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/TokenInfo"
+          }
         }
       ]
     },
@@ -28889,7 +28907,10 @@
           "summary": "Get API Versions",
           "operationId": "readAPIVersions",
           "rateLimitGroup": "NoThrottling",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetVersionsResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}",
@@ -28898,7 +28919,10 @@
           "summary": "Get Version Info",
           "operationId": "readAPIVersion",
           "rateLimitGroup": "NoThrottling",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetVersionResponse"
+          }
         }
       ],
       "parameter": "apiVersion"
@@ -28935,7 +28959,10 @@
           "operationId": "searchViaPost2",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserSearchResponse"
+          }
         }
       ]
     },
@@ -28972,7 +28999,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEveryoneInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/everyone",
@@ -28983,7 +29013,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEveryoneInfo"
+          }
         }
       ]
     },
@@ -29003,7 +29036,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
+          }
         }
       ]
     },
@@ -29019,7 +29055,10 @@
           "summary": "Get Service Provider Config",
           "operationId": "readServiceProviderConfig2",
           "rateLimitGroup": "NoThrottling",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ServiceProviderConfig"
+          }
         }
       ]
     },
@@ -29039,7 +29078,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPreferencesInfo"
+          }
         }
       ]
     },
@@ -29060,7 +29102,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
+          }
         }
       ]
     },
@@ -29078,7 +29123,10 @@
           "summary": "Get Location List",
           "operationId": "listLocations",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetLocationListResponse"
+          }
         }
       ]
     },
@@ -29097,7 +29145,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetAccountInfoResponse"
+          }
         }
       ],
       "parameter": "accountId"
@@ -29116,7 +29167,10 @@
           "summary": "Parse Phone Number",
           "operationId": "parsePhoneNumber",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ParsePhoneNumberResponse"
+          }
         }
       ]
     },
@@ -29134,7 +29188,10 @@
           "summary": "Get Task",
           "operationId": "readTask",
           "rateLimitGroup": "Medium",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTaskInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/tasks/{taskId}",
@@ -29152,7 +29209,10 @@
           "summary": "Patch Task",
           "operationId": "patchTask",
           "rateLimitGroup": "Medium",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTaskList"
+          }
         }
       ],
       "parameter": "taskId"
@@ -29173,7 +29233,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetGlipNoteInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}",
@@ -29195,7 +29258,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipNoteInfo"
+          }
         }
       ],
       "parameter": "noteId"
@@ -29216,7 +29282,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTeamsList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams",
@@ -29227,7 +29296,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTeamInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
@@ -29238,7 +29310,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTeamInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
@@ -29260,7 +29335,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTeamInfo"
+          }
         }
       ],
       "parameter": "chatId"
@@ -29281,7 +29359,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipChatsList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}",
@@ -29292,7 +29373,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipChatInfo"
+          }
         }
       ],
       "parameter": "chatId"
@@ -29313,7 +29397,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventsInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events",
@@ -29324,7 +29411,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
@@ -29335,7 +29425,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
@@ -29346,7 +29439,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
@@ -29378,7 +29474,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPersonInfo"
+          }
         }
       ],
       "parameter": "personId"
@@ -29480,7 +29579,10 @@
           "summary": "Get Fax Cover Page List",
           "operationId": "listFaxCoverPages",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ListFaxCoverPagesResponse"
+          }
         }
       ]
     },
@@ -29499,7 +29601,10 @@
           "operationId": "createSIPRegistration",
           "rateLimitGroup": "Heavy",
           "appPermission": "VoipCalling",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CreateSipRegistrationResponse"
+          }
         }
       ]
     },
@@ -29519,7 +29624,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipWebhookList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}",
@@ -29530,7 +29638,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipWebhookList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}",
@@ -29561,7 +29672,10 @@
           "summary": "Get Chat Tasks",
           "operationId": "listChatTasks",
           "rateLimitGroup": "Heavy",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTaskList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/tasks",
@@ -29570,7 +29684,10 @@
           "summary": "Create Task",
           "operationId": "createTask",
           "rateLimitGroup": "Medium",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipTaskInfo"
+          }
         }
       ]
     },
@@ -29591,7 +29708,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipNotesInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/notes",
@@ -29602,7 +29722,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipNoteInfo"
+          }
         }
       ]
     },
@@ -29642,7 +29765,10 @@
           "operationId": "listDataExportTasks",
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DataExportTaskList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export",
@@ -29652,7 +29778,10 @@
           "operationId": "createDataExportTask",
           "rateLimitGroup": "Heavy",
           "appPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DataExportTask"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export/{taskId}",
@@ -29662,7 +29791,10 @@
           "operationId": "readDataExportTask",
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DataExportTask"
+          }
         }
       ],
       "parameter": "taskId"
@@ -29681,7 +29813,10 @@
           "summary": "Get States List",
           "operationId": "listStates",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetStateListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/state/{stateId}",
@@ -29690,7 +29825,10 @@
           "summary": "Get State",
           "operationId": "readState",
           "rateLimitGroup": "Light",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetStateInfoResponse"
+          }
         }
       ],
       "parameter": "stateId"
@@ -29711,7 +29849,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipCompany"
+          }
         }
       ],
       "parameter": "companyId"
@@ -29836,7 +29977,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipConversationsList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations",
@@ -29847,7 +29991,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipConversationInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations/{chatId}",
@@ -29858,7 +30005,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipConversationInfo"
+          }
         }
       ],
       "parameter": "chatId"
@@ -29879,7 +30029,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ReadUserInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomCompanyGreetingInfo"
+          }
         }
       ]
     },
@@ -29919,7 +30072,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/events",
@@ -29930,7 +30086,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipEventInfo"
+          }
         }
       ]
     },
@@ -29971,7 +30130,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadPresence",
           "userPermission": "ReadPresenceStatus",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountPresenceInfo"
+          }
         }
       ]
     },
@@ -30009,7 +30171,10 @@
           "summary": "Get Subscription List",
           "operationId": "listSubscriptions",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/RecordsCollectionResourceSubscriptionResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription",
@@ -30018,7 +30183,10 @@
           "summary": "Create Subscription",
           "operationId": "createSubscription",
           "rateLimitGroup": "Medium",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SubscriptionInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
@@ -30027,7 +30195,10 @@
           "summary": "Get Subscription",
           "operationId": "readSubscription",
           "rateLimitGroup": "Light",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SubscriptionInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
@@ -30036,7 +30207,10 @@
           "summary": "Update Subscription",
           "operationId": "updateSubscription",
           "rateLimitGroup": "Medium",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SubscriptionInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
@@ -30064,7 +30238,10 @@
           "summary": "Get Country List",
           "operationId": "listCountries",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetCountryListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/country/{countryId}",
@@ -30073,7 +30250,10 @@
           "summary": "Get Country",
           "operationId": "readCountry",
           "rateLimitGroup": "Light",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetCountryInfoDictionaryResponse"
+          }
         }
       ],
       "parameter": "countryId"
@@ -30095,7 +30275,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipWebhookList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/webhooks",
@@ -30106,7 +30289,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipWebhookInfo"
+          }
         }
       ]
     },
@@ -30145,7 +30331,10 @@
           "summary": "Get Timezone List",
           "operationId": "listTimezones",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetTimezoneListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/timezone/{timezoneId}",
@@ -30154,7 +30343,10 @@
           "summary": "Get Timezone",
           "operationId": "readTimezone",
           "rateLimitGroup": "Light",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetTimezoneInfoResponse"
+          }
         }
       ],
       "parameter": "timezoneId"
@@ -30173,7 +30365,10 @@
           "summary": "Get Language List",
           "operationId": "listLanguages",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/LanguageList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/language/{languageId}",
@@ -30182,7 +30377,10 @@
           "summary": "Get Language",
           "operationId": "readLanguage",
           "rateLimitGroup": "Light",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/LanguageInfo"
+          }
         }
       ],
       "parameter": "languageId"
@@ -30203,7 +30401,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadServicePlanInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetServiceInfoResponse"
+          }
         }
       ]
     },
@@ -30223,7 +30424,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyActiveCallsResponse"
+          }
         }
       ]
     },
@@ -30241,7 +30445,10 @@
           "summary": "Get Standard Greeting List",
           "operationId": "listStandardGreetings",
           "rateLimitGroup": "Medium",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DictionaryGreetingList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/greeting/{greetingId}",
@@ -30250,7 +30457,10 @@
           "summary": "Get Standard Greeting",
           "operationId": "readStandardGreeting",
           "rateLimitGroup": "Medium",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DictionaryGreetingInfo"
+          }
         }
       ],
       "parameter": "greetingId"
@@ -30271,7 +30481,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountCallLogSyncResponse"
+          }
         }
       ]
     },
@@ -30312,7 +30525,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallRecordingSettingsResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording",
@@ -30323,7 +30539,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallRecordingSettingsResource"
+          }
         }
       ]
     },
@@ -30343,7 +30562,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyBusinessHours"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-hours",
@@ -30354,7 +30576,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyBusinessHours"
+          }
         }
       ]
     },
@@ -30396,7 +30621,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPostsList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts",
@@ -30407,7 +30635,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPostInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
@@ -30418,7 +30649,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPostInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
@@ -30440,7 +30674,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GlipPostInfo"
+          }
         }
       ],
       "parameter": "postId"
@@ -30459,7 +30696,10 @@
           "summary": "Renew Subscription",
           "operationId": "renewSubscription",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SubscriptionInfo"
+          }
         }
       ]
     },
@@ -30479,7 +30719,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountBusinessAddressResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-address",
@@ -30490,7 +30733,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountBusinessAddressResource"
+          }
         }
       ]
     },
@@ -30510,7 +30756,10 @@
           "operationId": "readA2PSMSOptOuts",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/OptOutListResponse"
+          }
         }
       ]
     },
@@ -30530,7 +30779,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyDevices",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetDeviceInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/device/{deviceId}",
@@ -30541,7 +30793,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyDevices",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetDeviceInfoResponse"
+          }
         }
       ],
       "parameter": "deviceId"
@@ -30562,7 +30817,10 @@
           "operationId": "createCallOutCallSession",
           "rateLimitGroup": "Heavy",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallSession"
+          }
         }
       ]
     },
@@ -30582,7 +30840,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Meetings",
           "userPermission": "MeetingsRecordings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
+          }
         }
       ]
     },
@@ -30602,7 +30863,10 @@
           "operationId": "createConferenceCallSession",
           "rateLimitGroup": "Heavy",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallSessionObject"
+          }
         }
       ]
     },
@@ -30623,7 +30887,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/FederationResource"
+          }
         }
       ]
     },
@@ -30643,7 +30910,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "EditExtensionInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionBulkUpdateTaskResource"
+          }
         }
       ]
     },
@@ -30663,7 +30933,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueues"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}",
@@ -30674,7 +30947,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueueDetails"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}",
@@ -30685,7 +30961,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueueDetails"
+          }
         }
       ],
       "parameter": "groupId"
@@ -30706,7 +30985,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "AutoReceptionist",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/IVRMenuInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
@@ -30717,7 +30999,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "AutoReceptionist",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/IVRMenuInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
@@ -30728,7 +31013,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "AutoReceptionist",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/IVRMenuInfo"
+          }
         }
       ],
       "parameter": "ivrMenuId"
@@ -30749,7 +31037,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserTemplates"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/templates/{templateId}",
@@ -30760,7 +31051,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/TemplateInfo"
+          }
         }
       ],
       "parameter": "templateId"
@@ -30781,7 +31075,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyGreetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/IVRPrompts"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts",
@@ -30792,7 +31089,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyGreetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PromptInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -30803,7 +31103,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyGreetings",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PromptInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -30814,7 +31117,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyGreetings",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PromptInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -30846,7 +31152,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension",
@@ -30857,7 +31166,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "AddRemoveUsers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionCreationResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
@@ -30868,7 +31180,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
@@ -30879,7 +31194,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo OR EditUserCredentials",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
@@ -30912,7 +31230,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountLockedSettingResponse"
+          }
         }
       ]
     },
@@ -30932,7 +31253,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomFieldsResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields",
@@ -30943,7 +31267,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "Users",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomFieldResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
@@ -30954,7 +31281,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "Users",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomFieldResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
@@ -30986,7 +31316,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallRecording",
           "userPermission": "ReadCallRecording",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetCallRecordingResponse"
+          }
         }
       ],
       "parameter": "recordingId"
@@ -31007,7 +31340,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "FullCompanyCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountCallLogResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-log/{callRecordId}",
@@ -31018,7 +31354,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "FullCompanyCallLog",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyCallLogRecord"
+          }
         }
       ],
       "parameter": "callRecordId"
@@ -31039,7 +31378,10 @@
           "operationId": "createA2PSMS",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CreateMessageBatchResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/batch/{batchId}",
@@ -31049,7 +31391,10 @@
           "operationId": "readA2PBatch",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageBatchResponse"
+          }
         }
       ],
       "parameter": "batchId"
@@ -31070,7 +31415,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyAnsweringRuleList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule",
@@ -31081,7 +31429,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
@@ -31092,7 +31443,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyAnsweringRules",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
@@ -31103,7 +31457,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyAnsweringRules",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
@@ -31135,7 +31492,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "Contacts",
           "userPermission": "EditPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AddressBookBulkUploadResponse"
+          }
         }
       ]
     },
@@ -31157,7 +31517,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DirectoryResource"
+          }
         }
       ]
     },
@@ -31178,7 +31541,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallRecordingExtensions"
+          }
         }
       ]
     },
@@ -31219,7 +31585,11 @@
           "operationId": "readDataExportTaskDataset",
           "rateLimitGroup": "Heavy",
           "appPermission": "Glip",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ],
       "parameter": "datasetId"
@@ -31240,7 +31610,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "AccountAdministration",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageStoreConfiguration"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-configuration",
@@ -31251,7 +31624,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "AccountAdministration",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageStoreConfiguration"
+          }
         }
       ]
     },
@@ -31272,7 +31648,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "Faxes",
           "userPermission": "OutboundFaxes",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/FaxResponse"
+          }
         }
       ]
     },
@@ -31293,7 +31672,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "SMS",
           "userPermission": "OutboundSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
+          }
         }
       ]
     },
@@ -31314,7 +31696,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "SMS",
           "userPermission": "OutboundSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
+          }
         }
       ]
     },
@@ -31334,7 +31719,10 @@
           "operationId": "listDirectoryEntries",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/DirectoryResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries/{entryId}",
@@ -31344,7 +31732,10 @@
           "operationId": "readDirectoryEntry",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ContactResource"
+          }
         }
       ],
       "parameter": "entryId"
@@ -31365,7 +31756,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyPhoneNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AccountPhoneNumbers"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/phone-number/{phoneNumberId}",
@@ -31376,7 +31770,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyPhoneNumbers",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CompanyPhoneNumberInfo"
+          }
         }
       ],
       "parameter": "phoneNumberId"
@@ -31397,7 +31794,10 @@
           "operationId": "listA2PSMS",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/messages/{messageId}",
@@ -31407,7 +31807,10 @@
           "operationId": "readA2PSMS",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageDetailsResponse"
+          }
         }
       ],
       "parameter": "messageId"
@@ -31429,7 +31832,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueueMembers"
+          }
         }
       ]
     },
@@ -31450,7 +31856,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionGrantListResponse"
+          }
         }
       ]
     },
@@ -31470,7 +31879,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadMessages",
           "userPermission": "Users",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageStoreReport"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}",
@@ -31481,7 +31893,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadMessages",
           "userPermission": "Users",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageStoreReport"
+          }
         }
       ],
       "parameter": "taskId"
@@ -31503,7 +31918,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserDevices",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionDevicesResponse"
+          }
         }
       ]
     },
@@ -31524,7 +31942,11 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyGreetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ]
     },
@@ -31544,7 +31966,10 @@
           "operationId": "readCallQueuePresence",
           "rateLimitGroup": "Light",
           "appPermission": "ReadPresence",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueuePresence"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}/presence",
@@ -31554,7 +31979,10 @@
           "operationId": "updateCallQueuePresence",
           "rateLimitGroup": "Medium",
           "appPermission": "EditPresence",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallQueuePresence"
+          }
         }
       ]
     },
@@ -31575,7 +32003,11 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallRecording",
           "userPermission": "ReadCallRecording",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ]
     },
@@ -31596,7 +32028,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/FeatureList"
+          }
         }
       ]
     },
@@ -31616,7 +32051,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallMonitoringGroups"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups",
@@ -31627,7 +32065,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "Groups",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallMonitoringGroup"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
@@ -31638,7 +32079,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "Groups",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallMonitoringGroup"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
@@ -31670,7 +32114,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/EmergencyLocationList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations",
@@ -31691,7 +32138,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/EmergencyLocationInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -31702,7 +32152,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/EmergencyLocationInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -31735,7 +32188,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadContacts",
           "userPermission": "ReadPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/FavoriteContactList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/favorite",
@@ -31746,7 +32202,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Contacts",
           "userPermission": "EditPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/FavoriteContactList"
+          }
         }
       ]
     },
@@ -31767,7 +32226,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadPresence",
           "userPermission": "ReadPresenceStatus",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetPresenceInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/presence",
@@ -31777,7 +32239,10 @@
           "operationId": "updateUserPresenceStatus",
           "rateLimitGroup": "Medium",
           "appPermission": "EditPresence",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PresenceInfoResponse"
+          }
         }
       ]
     },
@@ -31819,7 +32284,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCallerIDSettings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionCallerIdInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-id",
@@ -31830,7 +32298,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditCallerIDSettings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionCallerIdInfo"
+          }
         }
       ]
     },
@@ -31851,7 +32322,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Accounts",
           "userPermission": "JoinLeaveCallQueue",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserCallQueues"
+          }
         }
       ]
     },
@@ -31872,7 +32346,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AutomaticLocationUpdatesUserList"
+          }
         }
       ]
     },
@@ -31893,7 +32370,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditExtensions",
           "userPermission": "EditExtensionInfo",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionBulkUpdateTaskResource"
+          }
         }
       ],
       "parameter": "taskId"
@@ -31915,7 +32395,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "OrganizeConference",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetConferencingInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/conferencing",
@@ -31926,7 +32409,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "OrganizeConference",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetConferencingInfoResponse"
+          }
         }
       ]
     },
@@ -31947,7 +32433,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserPhoneNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionPhoneNumbersResponse"
+          }
         }
       ]
     },
@@ -31968,7 +32457,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadMessages",
           "userPermission": "ReadMessages",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetMessageSyncResponse"
+          }
         }
       ]
     },
@@ -31989,7 +32481,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserActiveCallsResponse"
+          }
         }
       ]
     },
@@ -32008,7 +32503,10 @@
           "summary": "Get Authorization Profile",
           "operationId": "readAuthorizationProfile",
           "rateLimitGroup": "Medium",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AuthProfileResource"
+          }
         }
       ]
     },
@@ -32029,7 +32527,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ListDevicesAutomaticLocationUpdates"
+          }
         }
       ]
     },
@@ -32050,7 +32551,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "InternalMessages",
           "userPermission": "InternalSMS",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetInternalTextMessageInfoResponse"
+          }
         }
       ]
     },
@@ -32071,7 +32575,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallLogSync"
+          }
         }
       ]
     },
@@ -32092,7 +32599,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetUserBusinessHoursResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/business-hours",
@@ -32103,7 +32613,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserBusinessHoursUpdateResponse"
+          }
         }
       ]
     },
@@ -32123,7 +32636,10 @@
           "operationId": "readCallSessionStatus",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallSession"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}",
@@ -32155,7 +32671,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Contacts",
           "userPermission": "EditPersonalContacts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AddressBookBulkUploadResponse"
+          }
         }
       ],
       "parameter": "taskId"
@@ -32177,7 +32696,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadBlockedNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallerBlockingSettings"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking",
@@ -32188,7 +32710,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditExtensions",
           "userPermission": "EditBlockedNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallerBlockingSettings"
+          }
         }
       ]
     },
@@ -32209,7 +32734,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallMonitoringGroupMemberList"
+          }
         }
       ]
     },
@@ -32230,7 +32758,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadPresence",
           "userPermission": "ReadPresenceStatus",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UnifiedPresence"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/unified-presence",
@@ -32241,7 +32772,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditPresence",
           "userPermission": "EditPresenceStatus",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UnifiedPresence"
+          }
         }
       ]
     },
@@ -32262,7 +32796,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadContacts",
           "userPermission": "ReadPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AddressBookSync"
+          }
         }
       ]
     },
@@ -32283,7 +32820,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Meetings",
           "userPermission": "MeetingsRecordings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
+          }
         }
       ]
     },
@@ -32303,7 +32843,10 @@
           "summary": "Check User Permission",
           "operationId": "checkUserPermission",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AuthProfileCheckResource"
+          }
         }
       ]
     },
@@ -32324,7 +32867,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserVideoConfiguration"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/video-configuration",
@@ -32334,7 +32880,10 @@
           "operationId": "updateUserVideoConfiguration",
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserVideoConfiguration"
+          }
         }
       ]
     },
@@ -32354,7 +32903,10 @@
           "operationId": "getExtensionEmergencyLocations",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserEmergencyLocationList"
+          }
         }
       ]
     },
@@ -32375,7 +32927,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingsResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting",
@@ -32386,7 +32941,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingResponseResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
@@ -32397,7 +32955,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingResponseResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
@@ -32408,7 +32969,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingResponseResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
@@ -32440,7 +33004,10 @@
           "operationId": "readExtensionCallQueuePresence",
           "rateLimitGroup": "Light",
           "appPermission": "ReadPresence",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-queue-presence",
@@ -32450,7 +33017,10 @@
           "operationId": "updateExtensionCallQueuePresence",
           "rateLimitGroup": "Medium",
           "appPermission": "EditPresence",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
+          }
         }
       ]
     },
@@ -32470,7 +33040,10 @@
           "operationId": "createRingOutCall",
           "rateLimitGroup": "Heavy",
           "appPermission": "RingOut",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetRingOutStatusResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out/{ringoutId}",
@@ -32480,7 +33053,10 @@
           "operationId": "readRingOutCallStatus",
           "rateLimitGroup": "Light",
           "appPermission": "RingOut",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetRingOutStatusResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out/{ringoutId}",
@@ -32533,7 +33109,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PagingOnlyGroupUsers"
+          }
         }
       ]
     },
@@ -32554,7 +33133,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AutomaticLocationUpdatesTaskInfo"
+          }
         }
       ],
       "parameter": "taskId"
@@ -32577,7 +33159,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingServiceInfoResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/service-info",
@@ -32588,7 +33173,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingServiceInfoResource"
+          }
         }
       ]
     },
@@ -32609,7 +33197,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallRecordingCustomGreetings"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/custom-greetings",
@@ -32653,7 +33244,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadMessagesNotificationsSettings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/NotificationSettings"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/notification-settings",
@@ -32664,7 +33258,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditMessagesNotificationsSettings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/NotificationSettings"
+          }
         }
       ]
     },
@@ -32686,7 +33283,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MeetingUserSettingsResponse"
+          }
         }
       ]
     },
@@ -32707,7 +33307,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomUserGreetingInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting/{greetingId}",
@@ -32718,7 +33321,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserInfo",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomUserGreetingInfo"
+          }
         }
       ],
       "parameter": "greetingId"
@@ -32740,7 +33346,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyDevices",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PagingOnlyGroupDevices"
+          }
         }
       ]
     },
@@ -32805,7 +33414,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserCallLogResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log",
@@ -32827,7 +33439,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadCallLog",
           "userPermission": "ReadCallLog",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserCallLogRecord"
+          }
         }
       ],
       "parameter": "callRecordId"
@@ -32849,7 +33464,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UserAnsweringRuleList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule",
@@ -32860,7 +33478,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserAnsweringRules",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CustomAnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -32871,7 +33492,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserAnsweringRules",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -32882,7 +33506,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserAnsweringRules",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AnsweringRuleInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -32915,7 +33542,10 @@
           "operationId": "superviseCallSession",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SuperviseCallSession"
+          }
         }
       ]
     },
@@ -32936,7 +33566,11 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
@@ -32969,7 +33603,11 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ],
       "parameter": "scaleSize"
@@ -32991,7 +33629,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SwitchesList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches",
@@ -33002,7 +33643,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SwitchInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
@@ -33013,7 +33657,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SwitchInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
@@ -33024,7 +33671,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/SwitchInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
@@ -33079,7 +33729,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadMessages",
           "userPermission": "Users",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/MessageStoreReportArchive"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive/{archiveId}",
@@ -33090,7 +33743,11 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadMessages",
           "userPermission": "Users",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ],
       "parameter": "archiveId"
@@ -33112,7 +33769,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadMessages",
           "userPermission": "ReadMessages",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetMessageList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store",
@@ -33134,7 +33794,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadMessages",
           "userPermission": "ReadMessages",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetMessageInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
@@ -33145,7 +33808,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditMessages",
           "userPermission": "EditMessages",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetMessageInfoResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
@@ -33199,7 +33865,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UpdateMultipleSwitchesResponse"
+          }
         }
       ]
     },
@@ -33220,7 +33889,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CreateMultipleSwitchesResponse"
+          }
         }
       ]
     },
@@ -33241,7 +33913,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/NetworksList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks",
@@ -33252,7 +33927,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/NetworkInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
@@ -33263,7 +33941,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/NetworkInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
@@ -33307,7 +33988,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ValidateMultipleSwitchesResponse"
+          }
         }
       ]
     },
@@ -33329,7 +34013,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PublicMeetingInvitationResponse"
+          }
         }
       ]
     },
@@ -33350,7 +34037,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/WirelessPointsList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points",
@@ -33361,7 +34051,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/WirelessPointInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
@@ -33372,7 +34065,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/WirelessPointInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
@@ -33383,7 +34079,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/WirelessPointInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
@@ -33417,7 +34116,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AssistedUsersResource"
+          }
         }
       ]
     },
@@ -33439,7 +34141,10 @@
           "operationId": "createCallPartyWithBringIn",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33461,7 +34166,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadContacts",
           "userPermission": "ReadPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ContactList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact",
@@ -33472,7 +34180,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "Contacts",
           "userPermission": "EditPersonalContacts",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PersonalContactResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
@@ -33483,7 +34194,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadContacts",
           "userPermission": "ReadPersonalContacts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PersonalContactResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
@@ -33494,7 +34208,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "Contacts",
           "userPermission": "EditPersonalContacts",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PersonalContactResource"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
@@ -33527,7 +34244,10 @@
           "operationId": "readCallPartyStatus",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}",
@@ -33547,7 +34267,10 @@
           "operationId": "updateCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ],
       "parameter": "partyId"
@@ -33569,7 +34292,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/UpdateMultipleWirelessPointsResponse"
+          }
         }
       ]
     },
@@ -33590,7 +34316,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CreateMultipleWirelessPointsResponse"
+          }
         }
       ]
     },
@@ -33612,7 +34341,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "Meetings",
           "userPermission": "Meetings",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/AssistantsResource"
+          }
         }
       ]
     },
@@ -33633,7 +34365,10 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ValidateMultipleWirelessPointsResponse"
+          }
         }
       ]
     },
@@ -33675,7 +34410,10 @@
           "operationId": "callParkParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33719,7 +34457,10 @@
           "operationId": "holdCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33740,7 +34481,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserForwardingFlipNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/GetExtensionForwardingNumberListResponse"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number",
@@ -33751,7 +34495,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserForwardingFlipNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ForwardingNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
@@ -33762,7 +34509,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadUserForwardingFlipNumbers",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ForwardingNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
@@ -33773,7 +34523,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserForwardingFlipNumbers",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ForwardingNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
@@ -33807,7 +34560,10 @@
           "operationId": "replyParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/ReplyParty"
+          }
         }
       ]
     },
@@ -33829,7 +34585,10 @@
           "operationId": "pickupCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33851,7 +34610,10 @@
           "operationId": "answerCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33873,7 +34635,10 @@
           "operationId": "bridgeCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33939,7 +34704,10 @@
           "operationId": "unholdCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33961,7 +34729,10 @@
           "operationId": "forwardCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -33983,7 +34754,10 @@
           "operationId": "transferCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallParty"
+          }
         }
       ]
     },
@@ -34005,7 +34779,10 @@
           "operationId": "superviseCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/PartySuperviseResponse"
+          }
         }
       ]
     },
@@ -34027,7 +34804,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadBlockedNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/BlockedAllowedPhoneNumbersList"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers",
@@ -34038,7 +34818,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditBlockedNumbers",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
@@ -34049,7 +34832,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadBlockedNumbers",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
@@ -34060,7 +34846,10 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditExtensions",
           "userPermission": "EditBlockedNumbers",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
@@ -34094,7 +34883,11 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadMessages",
           "userPermission": "ReadMessageContent",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ],
       "parameter": "attachmentId"
@@ -34127,7 +34920,10 @@
           "operationId": "pauseResumeCallRecording",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": true
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "#/components/schemas/CallRecording"
+          }
         }
       ],
       "parameter": "recordingId"

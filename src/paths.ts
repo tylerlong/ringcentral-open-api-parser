@@ -32,6 +32,19 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
         const operation = pathContent[method];
+        const responses = operation.responses!;
+        const responseContent = ((responses[200] ||
+          responses[201] ||
+          responses[202] ||
+          responses[204] ||
+          responses[205] ||
+          responses[302] ||
+          responses.default) as OpenAPIV3.ResponseObject).content;
+        let responseSchema: OpenAPIV3.SchemaObject | undefined = undefined;
+        if (responseContent && !R.isEmpty(responseContent)) {
+          responseSchema = responseContent[Object.keys(responseContent)[0]]
+            .schema as OpenAPIV3.SchemaObject;
+        }
         path.operations.push({
           endpoint,
           method,
@@ -42,6 +55,7 @@ export const parsePaths = (doc: OpenAPIV3.Document): Path[] => {
           appPermission: operation['x-app-permission'],
           userPermission: operation['x-user-permission'],
           withParameter: endpoint.endsWith('}'),
+          responseSchema,
         });
       }
     }

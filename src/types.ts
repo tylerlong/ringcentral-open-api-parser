@@ -27,6 +27,7 @@ export type Operation = {
   appPermission: string;
   userPermission: string;
   withParameter: boolean;
+  responseSchema?: OpenAPIV3.SchemaObject;
 };
 
 export type Field = {
