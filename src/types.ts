@@ -14,6 +14,7 @@ export type Model = {
 export type Path = {
   paths: string[];
   parameter?: string;
+  defaultParameter?: string;
   operations: Operation[];
 };
 

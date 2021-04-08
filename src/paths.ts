@@ -24,6 +24,18 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
     };
     if (endpoint.endsWith('}')) {
       path.parameter = endpoint.split('/').slice(-1)[0].slice(1, -1);
+      const name = R.last(path.paths);
+      switch (name) {
+        case 'account':
+        case 'extension':
+          path.defaultParameter = '~';
+          break;
+        case 'restapi':
+          path.defaultParameter = 'v1.0';
+          break;
+        default:
+          break;
+      }
       const matchingResult = R.find(r => R.equals(r.paths, path.paths), result);
       if (matchingResult) {
         path.operations = matchingResult.operations;
@@ -142,6 +154,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           paths: subPaths,
           operations: [],
           parameter: R.last(subPaths) === 'scim' ? 'version' : undefined,
+          defaultParameter: R.last(subPaths) === 'scim' ? 'v2' : undefined,
         });
       }
     }

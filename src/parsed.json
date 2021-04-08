@@ -28941,7 +28941,8 @@
           }
         }
       ],
-      "parameter": "apiVersion"
+      "parameter": "apiVersion",
+      "defaultParameter": "v1.0"
     },
     {
       "paths": [
@@ -29187,7 +29188,8 @@
           }
         }
       ],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "defaultParameter": "~"
     },
     {
       "paths": [
@@ -31423,7 +31425,8 @@
           "queryParameters": "deleteExtensionParameters"
         }
       ],
-      "parameter": "extensionId"
+      "parameter": "extensionId",
+      "defaultParameter": "~"
     },
     {
       "paths": [
@@ -35471,7 +35474,8 @@
         "scim"
       ],
       "operations": [],
-      "parameter": "version"
+      "parameter": "version",
+      "defaultParameter": "v2"
     },
     {
       "paths": [
