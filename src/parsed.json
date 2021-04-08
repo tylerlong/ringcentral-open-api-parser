@@ -31920,7 +31920,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
           },
-          "bodyParameters": "createMMSRequest"
+          "bodyParameters": "CreateMMSMessage"
         }
       ]
     },
@@ -31946,7 +31946,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
           },
-          "bodyParameters": "createSMSMessageRequest"
+          "bodyParameters": "CreateSMSMessage"
         }
       ]
     },

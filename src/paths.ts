@@ -87,7 +87,12 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
             requestContent['application/x-www-form-urlencoded'] ||
             requestContent['multipart/form-data'];
           if (mediaTypeObject) {
-            bodyParameters = `${operation.operationId}Request`;
+            const refObj = mediaTypeObject.schema as OpenAPIV3.ReferenceObject;
+            if (refObj.$ref) {
+              bodyParameters = R.last(refObj.$ref.split('/'));
+            } else {
+              bodyParameters = `${operation.operationId}Request`;
+            }
           } else {
             bodyParameters = lowerCaseFirstLetter(
               R.last(
