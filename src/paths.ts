@@ -36,6 +36,15 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
             getOperation.method2 = 'list';
           }
         }
+        if ('delete' in pathContent) {
+          const deleteOperation = R.find(
+            o => o.method2 === 'delete',
+            path.operations
+          );
+          if (deleteOperation) {
+            deleteOperation.method2 = 'deleteAll';
+          }
+        }
       }
       result = result.filter(r => !R.equals(r.paths, path.paths));
     }
