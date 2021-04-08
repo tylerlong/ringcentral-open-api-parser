@@ -36,6 +36,7 @@ export type Operation = {
   withParameter: boolean;
   responseSchema?: ResponseSchema;
   queryParameters?: string;
+  bodyParameters?: string;
 };
 
 export type Field = {

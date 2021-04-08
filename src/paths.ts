@@ -2,7 +2,7 @@ import {OpenAPIV3} from 'openapi-types';
 import R from 'ramda';
 
 import {Path, ResponseSchema} from './types';
-import {capitalizeFirstLetter} from './utils';
+import {lowerCaseFirstLetter} from './utils';
 
 export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
   const doc = R.clone(_doc);
@@ -43,6 +43,8 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
         const operation = pathContent[method];
+
+        // responseSchema
         const responses = operation.responses!;
         const responseContent = ((responses[200] ||
           responses[201] ||
@@ -56,15 +58,37 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           responseSchema =
             responseContent[Object.keys(responseContent)[0]].schema;
         }
+
+        // queryParameters
         let queryParameters: string | undefined = undefined;
         if (
           operation.parameters?.some(
             p => (p as OpenAPIV3.ParameterObject).in === 'query'
           )
         ) {
-          queryParameters =
-            capitalizeFirstLetter(operation.operationId!) + 'Parameters';
+          queryParameters = `${operation.operationId}Parameters`;
         }
+
+        // bodyParameters
+        let bodyParameters: string | undefined = undefined;
+        if (operation.requestBody) {
+          const requestContent = (operation.requestBody as OpenAPIV3.RequestBodyObject)
+            .content;
+          const mediaTypeObject =
+            requestContent['application/x-www-form-urlencoded'] ||
+            requestContent['multipart/form-data'];
+          if (mediaTypeObject) {
+            bodyParameters = `${operation.operationId}Request`;
+          } else {
+            bodyParameters = lowerCaseFirstLetter(
+              R.last(
+                (requestContent[Object.keys(requestContent)[0]]
+                  .schema as OpenAPIV3.ReferenceObject).$ref!.split('/')
+              )!
+            );
+          }
+        }
+
         path.operations.push({
           endpoint,
           method,
@@ -78,6 +102,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           withParameter: endpoint.endsWith('}'),
           responseSchema,
           queryParameters,
+          bodyParameters,
         });
       }
     }

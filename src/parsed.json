@@ -28815,7 +28815,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserSearchResponse"
           },
-          "queryParameters": "SearchViaGet2Parameters"
+          "queryParameters": "searchViaGet2Parameters"
         },
         {
           "endpoint": "/scim/{version}/Users",
@@ -28828,7 +28828,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UserResponse"
-          }
+          },
+          "bodyParameters": "createUser"
         },
         {
           "endpoint": "/scim/{version}/Users/{id}",
@@ -28854,7 +28855,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/UserResponse"
-          }
+          },
+          "bodyParameters": "user"
         },
         {
           "endpoint": "/scim/{version}/Users/{id}",
@@ -28877,7 +28879,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/UserResponse"
-          }
+          },
+          "bodyParameters": "userPatch"
         }
       ],
       "parameter": "id"
@@ -28900,7 +28903,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/TokenInfo"
-          }
+          },
+          "bodyParameters": "getTokenRequest"
         }
       ]
     },
@@ -28953,7 +28957,8 @@
           "summary": "Revoke Token",
           "operationId": "revokeToken",
           "rateLimitGroup": "Auth",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "revokeTokenRequest"
         }
       ]
     },
@@ -28975,7 +28980,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UserSearchResponse"
-          }
+          },
+          "bodyParameters": "searchRequest"
         }
       ]
     },
@@ -28993,7 +28999,8 @@
           "description": "Returns a link to a login page location.",
           "summary": "Authorize",
           "operationId": "authorize",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "authorizeRequest"
         }
       ]
     },
@@ -29032,7 +29039,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipEveryoneInfo"
-          }
+          },
+          "bodyParameters": "updateGlipEveryoneRequest"
         }
       ]
     },
@@ -29057,7 +29065,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
           },
-          "queryParameters": "ListFavoriteChatsParameters"
+          "queryParameters": "listFavoriteChatsParameters"
         }
       ]
     },
@@ -29127,7 +29135,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
           },
-          "queryParameters": "ListRecentChatsParameters"
+          "queryParameters": "listRecentChatsParameters"
         }
       ]
     },
@@ -29150,7 +29158,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetLocationListResponse"
           },
-          "queryParameters": "ListLocationsParameters"
+          "queryParameters": "listLocationsParameters"
         }
       ]
     },
@@ -29197,7 +29205,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ParsePhoneNumberResponse"
           },
-          "queryParameters": "ParsePhoneNumberParameters"
+          "queryParameters": "parsePhoneNumberParameters",
+          "bodyParameters": "parsePhoneNumberRequest"
         }
       ]
     },
@@ -29242,7 +29251,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTaskList"
-          }
+          },
+          "bodyParameters": "glipUpdateTask"
         }
       ],
       "parameter": "taskId"
@@ -29294,7 +29304,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipNoteInfo"
-          }
+          },
+          "bodyParameters": "glipNoteCreate"
         }
       ],
       "parameter": "noteId"
@@ -29320,7 +29331,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTeamsList"
           },
-          "queryParameters": "ListGlipTeamsParameters"
+          "queryParameters": "listGlipTeamsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams",
@@ -29335,7 +29346,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTeamInfo"
-          }
+          },
+          "bodyParameters": "glipPostTeamBody"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
@@ -29377,7 +29389,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTeamInfo"
-          }
+          },
+          "bodyParameters": "glipPatchTeamBody"
         }
       ],
       "parameter": "chatId"
@@ -29403,7 +29416,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipChatsList"
           },
-          "queryParameters": "ListGlipChatsParameters"
+          "queryParameters": "listGlipChatsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}",
@@ -29444,7 +29457,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipEventsInfo"
           },
-          "queryParameters": "ReadGlipEventsParameters"
+          "queryParameters": "readGlipEventsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events",
@@ -29459,7 +29472,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipEventInfo"
-          }
+          },
+          "bodyParameters": "glipEventCreate"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
@@ -29489,7 +29503,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipEventInfo"
-          }
+          },
+          "bodyParameters": "glipEventCreate"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
@@ -29549,7 +29564,8 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "glipPostMembersListBody"
         }
       ]
     },
@@ -29637,7 +29653,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ListFaxCoverPagesResponse"
           },
-          "queryParameters": "ListFaxCoverPagesParameters"
+          "queryParameters": "listFaxCoverPagesParameters"
         }
       ]
     },
@@ -29660,7 +29676,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CreateSipRegistrationResponse"
-          }
+          },
+          "bodyParameters": "createSipRegistrationRequest"
         }
       ]
     },
@@ -29736,7 +29753,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTaskList"
           },
-          "queryParameters": "ListChatTasksParameters"
+          "queryParameters": "listChatTasksParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/tasks",
@@ -29749,7 +29766,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipTaskInfo"
-          }
+          },
+          "bodyParameters": "glipCreateTask"
         }
       ]
     },
@@ -29775,7 +29793,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipNotesInfo"
           },
-          "queryParameters": "ListChatNotesParameters"
+          "queryParameters": "listChatNotesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/notes",
@@ -29790,7 +29808,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipNoteInfo"
-          }
+          },
+          "bodyParameters": "glipNoteCreate"
         }
       ]
     },
@@ -29836,7 +29855,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/DataExportTaskList"
           },
-          "queryParameters": "ListDataExportTasksParameters"
+          "queryParameters": "listDataExportTasksParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export",
@@ -29850,7 +29869,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/DataExportTask"
-          }
+          },
+          "bodyParameters": "createDataExportTaskRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export/{taskId}",
@@ -29888,7 +29908,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetStateListResponse"
           },
-          "queryParameters": "ListStatesParameters"
+          "queryParameters": "listStatesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/state/{stateId}",
@@ -29992,7 +30012,8 @@
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "glipPostMembersIdsListBody"
         }
       ]
     },
@@ -30061,7 +30082,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipConversationsList"
           },
-          "queryParameters": "ListGlipConversationsParameters"
+          "queryParameters": "listGlipConversationsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations",
@@ -30076,7 +30097,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipConversationInfo"
-          }
+          },
+          "bodyParameters": "createGlipConversationRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations/{chatId}",
@@ -30116,7 +30138,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CustomCompanyGreetingInfo"
-          }
+          },
+          "bodyParameters": "createCompanyGreetingRequest"
         }
       ]
     },
@@ -30136,7 +30159,8 @@
           "summary": "Complete Task",
           "operationId": "completeTask",
           "rateLimitGroup": "Medium",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "glipCompleteTask"
         }
       ]
     },
@@ -30176,7 +30200,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipEventInfo"
-          }
+          },
+          "bodyParameters": "glipEventCreate"
         }
       ]
     },
@@ -30223,7 +30248,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AccountPresenceInfo"
           },
-          "queryParameters": "ReadAccountPresenceParameters"
+          "queryParameters": "readAccountPresenceParameters"
         }
       ]
     },
@@ -30279,7 +30304,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/SubscriptionInfo"
-          }
+          },
+          "bodyParameters": "createSubscriptionRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
@@ -30305,7 +30331,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/SubscriptionInfo"
-          }
+          },
+          "bodyParameters": "modifySubscriptionRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
@@ -30339,7 +30366,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetCountryListResponse"
           },
-          "queryParameters": "ListCountriesParameters"
+          "queryParameters": "listCountriesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/country/{countryId}",
@@ -30438,7 +30465,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetTimezoneListResponse"
           },
-          "queryParameters": "ListTimezonesParameters"
+          "queryParameters": "listTimezonesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/timezone/{timezoneId}",
@@ -30452,7 +30479,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetTimezoneInfoResponse"
           },
-          "queryParameters": "ReadTimezoneParameters"
+          "queryParameters": "readTimezoneParameters"
         }
       ],
       "parameter": "timezoneId"
@@ -30538,7 +30565,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyActiveCallsResponse"
           },
-          "queryParameters": "ListCompanyActiveCallsParameters"
+          "queryParameters": "listCompanyActiveCallsParameters"
         }
       ]
     },
@@ -30561,7 +30588,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/DictionaryGreetingList"
           },
-          "queryParameters": "ListStandardGreetingsParameters"
+          "queryParameters": "listStandardGreetingsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/greeting/{greetingId}",
@@ -30600,7 +30627,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AccountCallLogSyncResponse"
           },
-          "queryParameters": "SyncAccountCallLogParameters"
+          "queryParameters": "syncAccountCallLogParameters"
         }
       ]
     },
@@ -30661,7 +30688,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallRecordingSettingsResource"
-          }
+          },
+          "bodyParameters": "callRecordingSettingsResource"
         }
       ]
     },
@@ -30700,7 +30728,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyBusinessHours"
-          }
+          },
+          "bodyParameters": "companyBusinessHoursUpdateRequest"
         }
       ]
     },
@@ -30748,7 +30777,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GlipPostsList"
           },
-          "queryParameters": "ReadGlipPostsParameters"
+          "queryParameters": "readGlipPostsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts",
@@ -30763,7 +30792,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipPostInfo"
-          }
+          },
+          "bodyParameters": "glipPostPostBody"
         },
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
@@ -30805,7 +30835,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GlipPostInfo"
-          }
+          },
+          "bodyParameters": "glipPatchPostBody"
         }
       ],
       "parameter": "postId"
@@ -30867,7 +30898,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/AccountBusinessAddressResource"
-          }
+          },
+          "bodyParameters": "modifyAccountBusinessAddressRequest"
         }
       ]
     },
@@ -30892,7 +30924,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/OptOutListResponse"
           },
-          "queryParameters": "ReadA2PSMSOptOutsParameters"
+          "queryParameters": "readA2PSMSOptOutsParameters"
         }
       ]
     },
@@ -30917,7 +30949,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetDeviceInfoResponse"
           },
-          "queryParameters": "ReadDeviceParameters"
+          "queryParameters": "readDeviceParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/device/{deviceId}",
@@ -30933,7 +30965,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetDeviceInfoResponse"
           },
-          "queryParameters": "UpdateDeviceParameters"
+          "queryParameters": "updateDeviceParameters",
+          "bodyParameters": "accountDeviceUpdate"
         }
       ],
       "parameter": "deviceId"
@@ -30958,7 +30991,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallSession"
-          }
+          },
+          "bodyParameters": "makeCallOutRequest"
         }
       ]
     },
@@ -30983,7 +31017,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
           },
-          "queryParameters": "ListAccountMeetingRecordingsParameters"
+          "queryParameters": "listAccountMeetingRecordingsParameters"
         }
       ]
     },
@@ -31056,7 +31090,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ExtensionBulkUpdateTaskResource"
-          }
+          },
+          "bodyParameters": "extensionBulkUpdateRequest"
         }
       ]
     },
@@ -31081,7 +31116,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallQueues"
           },
-          "queryParameters": "ListCallQueuesParameters"
+          "queryParameters": "listCallQueuesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}",
@@ -31111,7 +31146,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/CallQueueDetails"
-          }
+          },
+          "bodyParameters": "callQueueUpdateDetails"
         }
       ],
       "parameter": "groupId"
@@ -31136,7 +31172,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/IVRMenuInfo"
-          }
+          },
+          "bodyParameters": "iVRMenuInfo"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
@@ -31166,7 +31203,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/IVRMenuInfo"
-          }
+          },
+          "bodyParameters": "iVRMenuInfo"
         }
       ],
       "parameter": "ivrMenuId"
@@ -31192,7 +31230,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserTemplates"
           },
-          "queryParameters": "ListUserTemplatesParameters"
+          "queryParameters": "listUserTemplatesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/templates/{templateId}",
@@ -31247,7 +31285,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/PromptInfo"
-          }
+          },
+          "bodyParameters": "createIVRPromptRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -31277,7 +31316,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/PromptInfo"
-          }
+          },
+          "bodyParameters": "updateIVRPromptRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -31315,7 +31355,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionListResponse"
           },
-          "queryParameters": "ListExtensionsParameters"
+          "queryParameters": "listExtensionsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension",
@@ -31330,7 +31370,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ExtensionCreationResponse"
-          }
+          },
+          "bodyParameters": "extensionCreationRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
@@ -31360,7 +31401,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionInfoResponse"
-          }
+          },
+          "bodyParameters": "extensionUpdateRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
@@ -31373,7 +31415,7 @@
           "appPermission": "EditAccounts",
           "userPermission": "AddRemoveUsers",
           "withParameter": true,
-          "queryParameters": "DeleteExtensionParameters"
+          "queryParameters": "deleteExtensionParameters"
         }
       ],
       "parameter": "extensionId"
@@ -31438,7 +31480,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CustomFieldResource"
-          }
+          },
+          "bodyParameters": "customFieldCreateRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
@@ -31453,7 +31496,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/CustomFieldResource"
-          }
+          },
+          "bodyParameters": "customFieldUpdateRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
@@ -31516,7 +31560,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AccountCallLogResponse"
           },
-          "queryParameters": "ReadCompanyCallLogParameters"
+          "queryParameters": "readCompanyCallLogParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-log/{callRecordId}",
@@ -31532,7 +31576,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyCallLogRecord"
           },
-          "queryParameters": "ReadCompanyCallRecordParameters"
+          "queryParameters": "readCompanyCallRecordParameters"
         }
       ],
       "parameter": "callRecordId"
@@ -31557,7 +31601,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CreateMessageBatchResponse"
-          }
+          },
+          "bodyParameters": "createSMSMessageBatchRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/batch/{batchId}",
@@ -31597,7 +31642,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyAnsweringRuleList"
           },
-          "queryParameters": "ListCompanyAnsweringRulesParameters"
+          "queryParameters": "listCompanyAnsweringRulesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule",
@@ -31612,7 +31657,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
-          }
+          },
+          "bodyParameters": "companyAnsweringRuleRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
@@ -31642,7 +31688,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
-          }
+          },
+          "bodyParameters": "companyAnsweringRuleUpdate"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
@@ -31679,7 +31726,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/AddressBookBulkUploadResponse"
-          }
+          },
+          "bodyParameters": "addressBookBulkUploadRequest"
         }
       ]
     },
@@ -31705,7 +31753,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/DirectoryResource"
-          }
+          },
+          "bodyParameters": "searchDirectoryEntriesRequest"
         }
       ]
     },
@@ -31752,7 +31801,8 @@
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "bulkAccountCallRecordingsResource"
         }
       ]
     },
@@ -31817,7 +31867,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/MessageStoreConfiguration"
-          }
+          },
+          "bodyParameters": "messageStoreConfiguration"
         }
       ]
     },
@@ -31842,7 +31893,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/FaxResponse"
-          }
+          },
+          "bodyParameters": "createFaxMessageRequest"
         }
       ]
     },
@@ -31867,7 +31919,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
-          }
+          },
+          "bodyParameters": "createMMSRequest"
         }
       ]
     },
@@ -31892,7 +31945,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
-          }
+          },
+          "bodyParameters": "createSMSMessageRequest"
         }
       ]
     },
@@ -31917,7 +31971,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/DirectoryResource"
           },
-          "queryParameters": "ListDirectoryEntriesParameters"
+          "queryParameters": "listDirectoryEntriesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries/{entryId}",
@@ -31957,7 +32011,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AccountPhoneNumbers"
           },
-          "queryParameters": "ListAccountPhoneNumbersParameters"
+          "queryParameters": "listAccountPhoneNumbersParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/phone-number/{phoneNumberId}",
@@ -31998,7 +32052,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/MessageListResponse"
           },
-          "queryParameters": "ListA2PSMSParameters"
+          "queryParameters": "listA2PSMSParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/messages/{messageId}",
@@ -32039,7 +32093,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallQueueMembers"
           },
-          "queryParameters": "ListCallQueueMembersParameters"
+          "queryParameters": "listCallQueueMembersParameters"
         }
       ]
     },
@@ -32065,7 +32119,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionGrantListResponse"
           },
-          "queryParameters": "ListExtensionGrantsParameters"
+          "queryParameters": "listExtensionGrantsParameters"
         }
       ]
     },
@@ -32089,7 +32143,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/MessageStoreReport"
-          }
+          },
+          "bodyParameters": "createMessageStoreReportRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}",
@@ -32131,7 +32186,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionDevicesResponse"
           },
-          "queryParameters": "ListExtensionDevicesParameters"
+          "queryParameters": "listExtensionDevicesParameters"
         }
       ]
     },
@@ -32195,7 +32250,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallQueuePresence"
-          }
+          },
+          "bodyParameters": "callQueueUpdatePresence"
         }
       ]
     },
@@ -32247,7 +32303,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/FeatureList"
           },
-          "queryParameters": "ReadUserFeaturesParameters"
+          "queryParameters": "readUserFeaturesParameters"
         }
       ]
     },
@@ -32272,7 +32328,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallMonitoringGroups"
           },
-          "queryParameters": "ListCallMonitoringGroupsParameters"
+          "queryParameters": "listCallMonitoringGroupsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups",
@@ -32287,7 +32343,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallMonitoringGroup"
-          }
+          },
+          "bodyParameters": "createCallMonitoringGroupRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
@@ -32302,7 +32359,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/CallMonitoringGroup"
-          }
+          },
+          "bodyParameters": "createCallMonitoringGroupRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
@@ -32340,7 +32398,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/EmergencyLocationList"
           },
-          "queryParameters": "ListEmergencyLocationsParameters"
+          "queryParameters": "listEmergencyLocationsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations",
@@ -32351,7 +32409,8 @@
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "emergencyLocationInfoRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -32381,7 +32440,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/EmergencyLocationInfo"
-          }
+          },
+          "bodyParameters": "emergencyLocationInfoRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -32394,7 +32454,7 @@
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
-          "queryParameters": "DeleteEmergencyLocationParameters"
+          "queryParameters": "deleteEmergencyLocationParameters"
         }
       ],
       "parameter": "locationId"
@@ -32435,7 +32495,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/FavoriteContactList"
-          }
+          },
+          "bodyParameters": "favoriteCollection"
         }
       ]
     },
@@ -32461,7 +32522,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetPresenceInfo"
           },
-          "queryParameters": "ReadUserPresenceStatusParameters"
+          "queryParameters": "readUserPresenceStatusParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/presence",
@@ -32475,7 +32536,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/PresenceInfoResponse"
-          }
+          },
+          "bodyParameters": "presenceInfoRequest"
         }
       ]
     },
@@ -32497,7 +32559,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "Groups",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "callQueueBulkAssignResource"
         }
       ]
     },
@@ -32537,7 +32600,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ExtensionCallerIdInfo"
-          }
+          },
+          "bodyParameters": "extensionCallerIdInfo"
         }
       ]
     },
@@ -32562,7 +32626,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UserCallQueues"
-          }
+          },
+          "bodyParameters": "userCallQueues"
         }
       ]
     },
@@ -32588,7 +32653,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AutomaticLocationUpdatesUserList"
           },
-          "queryParameters": "ListAutomaticLocationUpdatesUsersParameters"
+          "queryParameters": "listAutomaticLocationUpdatesUsersParameters"
         }
       ]
     },
@@ -32640,7 +32705,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetConferencingInfoResponse"
           },
-          "queryParameters": "ReadConferencingSettingsParameters"
+          "queryParameters": "readConferencingSettingsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/conferencing",
@@ -32655,7 +32720,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GetConferencingInfoResponse"
-          }
+          },
+          "bodyParameters": "updateConferencingInfoRequest"
         }
       ]
     },
@@ -32681,7 +32747,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionPhoneNumbersResponse"
           },
-          "queryParameters": "ListExtensionPhoneNumbersParameters"
+          "queryParameters": "listExtensionPhoneNumbersParameters"
         }
       ]
     },
@@ -32707,7 +32773,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetMessageSyncResponse"
           },
-          "queryParameters": "SyncMessagesParameters"
+          "queryParameters": "syncMessagesParameters"
         }
       ]
     },
@@ -32733,7 +32799,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserActiveCallsResponse"
           },
-          "queryParameters": "ListExtensionActiveCallsParameters"
+          "queryParameters": "listExtensionActiveCallsParameters"
         }
       ]
     },
@@ -32782,7 +32848,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ListDevicesAutomaticLocationUpdates"
           },
-          "queryParameters": "ListDevicesAutomaticLocationUpdatesParameters"
+          "queryParameters": "listDevicesAutomaticLocationUpdatesParameters"
         }
       ]
     },
@@ -32807,7 +32873,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GetInternalTextMessageInfoResponse"
-          }
+          },
+          "bodyParameters": "createInternalTextMessageRequest"
         }
       ]
     },
@@ -32833,7 +32900,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallLogSync"
           },
-          "queryParameters": "SyncUserCallLogParameters"
+          "queryParameters": "syncUserCallLogParameters"
         }
       ]
     },
@@ -32873,7 +32940,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UserBusinessHoursUpdateResponse"
-          }
+          },
+          "bodyParameters": "userBusinessHoursUpdateRequest"
         }
       ]
     },
@@ -32898,7 +32966,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallSession"
           },
-          "queryParameters": "ReadCallSessionStatusParameters"
+          "queryParameters": "readCallSessionStatusParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}",
@@ -32976,7 +33044,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallerBlockingSettings"
-          }
+          },
+          "bodyParameters": "callerBlockingSettingsUpdate"
         }
       ]
     },
@@ -33002,7 +33071,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallMonitoringGroupMemberList"
           },
-          "queryParameters": "ListCallMonitoringGroupMembersParameters"
+          "queryParameters": "listCallMonitoringGroupMembersParameters"
         }
       ]
     },
@@ -33042,7 +33111,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UnifiedPresence"
-          }
+          },
+          "bodyParameters": "updateUnifiedPresence"
         }
       ]
     },
@@ -33068,7 +33138,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AddressBookSync"
           },
-          "queryParameters": "SyncAddressBookParameters"
+          "queryParameters": "syncAddressBookParameters"
         }
       ]
     },
@@ -33094,7 +33164,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
           },
-          "queryParameters": "ListUserMeetingRecordingsParameters"
+          "queryParameters": "listUserMeetingRecordingsParameters"
         }
       ]
     },
@@ -33119,7 +33189,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AuthProfileCheckResource"
           },
-          "queryParameters": "CheckUserPermissionParameters"
+          "queryParameters": "checkUserPermissionParameters"
         }
       ]
     },
@@ -33158,7 +33228,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UserVideoConfiguration"
-          }
+          },
+          "bodyParameters": "userVideoConfiguration"
         }
       ]
     },
@@ -33222,7 +33293,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/MeetingResponseResource"
-          }
+          },
+          "bodyParameters": "meetingRequestResource"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
@@ -33252,7 +33324,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/MeetingResponseResource"
-          }
+          },
+          "bodyParameters": "meetingRequestResource"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
@@ -33290,7 +33363,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
           },
-          "queryParameters": "ReadExtensionCallQueuePresenceParameters"
+          "queryParameters": "readExtensionCallQueuePresenceParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-queue-presence",
@@ -33304,7 +33377,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
-          }
+          },
+          "bodyParameters": "extensionCallQueueUpdatePresenceList"
         }
       ]
     },
@@ -33328,7 +33402,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/GetRingOutStatusResponse"
-          }
+          },
+          "bodyParameters": "makeRingOutRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out/{ringoutId}",
@@ -33376,7 +33451,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "Groups",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "callMonitoringBulkAssign"
         }
       ]
     },
@@ -33402,7 +33478,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/PagingOnlyGroupUsers"
           },
-          "queryParameters": "ListPagingGroupUsersParameters"
+          "queryParameters": "listPagingGroupUsersParameters"
         }
       ]
     },
@@ -33469,7 +33545,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/MeetingServiceInfoResource"
-          }
+          },
+          "bodyParameters": "meetingServiceInfoRequest"
         }
       ]
     },
@@ -33495,7 +33572,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallRecordingCustomGreetings"
           },
-          "queryParameters": "ListCallRecordingCustomGreetingsParameters"
+          "queryParameters": "listCallRecordingCustomGreetingsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/custom-greetings",
@@ -33560,7 +33637,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/NotificationSettings"
-          }
+          },
+          "bodyParameters": "notificationSettingsUpdateRequest"
         }
       ]
     },
@@ -33612,7 +33690,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CustomUserGreetingInfo"
           },
-          "queryParameters": "CreateCustomUserGreetingParameters"
+          "queryParameters": "createCustomUserGreetingParameters",
+          "bodyParameters": "createCustomUserGreetingRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting/{greetingId}",
@@ -33654,7 +33733,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/PagingOnlyGroupDevices"
           },
-          "queryParameters": "ListPagingGroupDevicesParameters"
+          "queryParameters": "listPagingGroupDevicesParameters"
         }
       ]
     },
@@ -33677,7 +33756,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "bulkAssignAutomaticLocationUpdatesUsers"
         }
       ]
     },
@@ -33726,7 +33806,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserCallLogResponse"
           },
-          "queryParameters": "ReadUserCallLogParameters"
+          "queryParameters": "readUserCallLogParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log",
@@ -33739,7 +33819,7 @@
           "appPermission": "EditCallLog",
           "userPermission": "EditCallLog",
           "withParameter": false,
-          "queryParameters": "DeleteUserCallLogParameters"
+          "queryParameters": "deleteUserCallLogParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log/{callRecordId}",
@@ -33755,7 +33835,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserCallLogRecord"
           },
-          "queryParameters": "ReadUserCallRecordParameters"
+          "queryParameters": "readUserCallRecordParameters"
         }
       ],
       "parameter": "callRecordId"
@@ -33782,7 +33862,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/UserAnsweringRuleList"
           },
-          "queryParameters": "ListAnsweringRulesParameters"
+          "queryParameters": "listAnsweringRulesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule",
@@ -33797,7 +33877,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CustomAnsweringRuleInfo"
-          }
+          },
+          "bodyParameters": "createAnsweringRuleRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -33813,7 +33894,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/AnsweringRuleInfo"
           },
-          "queryParameters": "ReadAnsweringRuleParameters"
+          "queryParameters": "readAnsweringRuleParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -33828,7 +33909,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/AnsweringRuleInfo"
-          }
+          },
+          "bodyParameters": "updateAnsweringRuleRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
@@ -33866,7 +33948,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/SuperviseCallSession"
-          }
+          },
+          "bodyParameters": "superviseCallSessionRequest"
         }
       ]
     },
@@ -33904,7 +33987,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "createUserProfileImageRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
@@ -33916,7 +34000,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "updateUserProfileImageRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}",
@@ -33959,7 +34044,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/SwitchesList"
           },
-          "queryParameters": "ListAccountSwitchesParameters"
+          "queryParameters": "listAccountSwitchesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches",
@@ -33974,7 +34059,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/SwitchInfo"
-          }
+          },
+          "bodyParameters": "createSwitchInfo"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
@@ -34004,7 +34090,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/SwitchInfo"
-          }
+          },
+          "bodyParameters": "updateSwitchInfo"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
@@ -34040,7 +34127,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "assignMultipleDevicesAutomaticLocationUpdates"
         }
       ]
     },
@@ -34108,7 +34196,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetMessageList"
           },
-          "queryParameters": "ListMessagesParameters"
+          "queryParameters": "listMessagesParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store",
@@ -34121,7 +34209,7 @@
           "appPermission": "EditMessages",
           "userPermission": "EditMessages",
           "withParameter": false,
-          "queryParameters": "DeleteMessageByFilterParameters"
+          "queryParameters": "deleteMessageByFilterParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
@@ -34152,7 +34240,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetMessageInfoResponse"
           },
-          "queryParameters": "UpdateMessageParameters"
+          "queryParameters": "updateMessageParameters",
+          "bodyParameters": "updateMessageRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
@@ -34165,7 +34254,7 @@
           "appPermission": "EditMessages",
           "userPermission": "EditMessages",
           "withParameter": true,
-          "queryParameters": "DeleteMessageParameters"
+          "queryParameters": "deleteMessageParameters"
         }
       ],
       "parameter": "messageId"
@@ -34188,7 +34277,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "Groups",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "editPagingGroupRequest"
         }
       ]
     },
@@ -34213,7 +34303,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UpdateMultipleSwitchesResponse"
-          }
+          },
+          "bodyParameters": "updateMultipleSwitchesRequest"
         }
       ]
     },
@@ -34238,7 +34329,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CreateMultipleSwitchesResponse"
-          }
+          },
+          "bodyParameters": "createMultipleSwitchesRequest"
         }
       ]
     },
@@ -34278,7 +34370,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/NetworkInfo"
-          }
+          },
+          "bodyParameters": "createNetworkRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
@@ -34305,7 +34398,8 @@
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
           "userPermission": "ConfigureEmergencyMaps",
-          "withParameter": true
+          "withParameter": true,
+          "bodyParameters": "updateNetworkRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
@@ -34343,7 +34437,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ValidateMultipleSwitchesResponse"
-          }
+          },
+          "bodyParameters": "validateMultipleSwitchesRequest"
         }
       ]
     },
@@ -34395,7 +34490,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/WirelessPointsList"
           },
-          "queryParameters": "ListWirelessPointsParameters"
+          "queryParameters": "listWirelessPointsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points",
@@ -34410,7 +34505,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/WirelessPointInfo"
-          }
+          },
+          "bodyParameters": "createWirelessPoint"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
@@ -34440,7 +34536,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/WirelessPointInfo"
-          }
+          },
+          "bodyParameters": "updateWirelessPoint"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
@@ -34505,7 +34602,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "addPartyRequest"
         }
       ]
     },
@@ -34532,7 +34630,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/ContactList"
           },
-          "queryParameters": "ListContactsParameters"
+          "queryParameters": "listContactsParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact",
@@ -34548,7 +34646,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/PersonalContactResource"
           },
-          "queryParameters": "CreateContactParameters"
+          "queryParameters": "createContactParameters",
+          "bodyParameters": "personalContactRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
@@ -34579,7 +34678,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/PersonalContactResource"
           },
-          "queryParameters": "UpdateContactParameters"
+          "queryParameters": "updateContactParameters",
+          "bodyParameters": "personalContactRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
@@ -34642,7 +34742,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "partyUpdateRequest"
         }
       ],
       "parameter": "partyId"
@@ -34668,7 +34769,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/UpdateMultipleWirelessPointsResponse"
-          }
+          },
+          "bodyParameters": "updateMultipleWirelessPointsRequest"
         }
       ]
     },
@@ -34693,7 +34795,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CreateMultipleWirelessPointsResponse"
-          }
+          },
+          "bodyParameters": "createMultipleWirelessPointsRequest"
         }
       ]
     },
@@ -34744,7 +34847,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ValidateMultipleWirelessPointsResponse"
-          }
+          },
+          "bodyParameters": "validateMultipleWirelessPointsRequest"
         }
       ]
     },
@@ -34765,7 +34869,8 @@
           "summary": "Upload User Meeting Profile Image",
           "operationId": "createUserMeetingProfileImage",
           "rateLimitGroup": "Light",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "createUserMeetingProfileImageRequest"
         }
       ]
     },
@@ -34814,7 +34919,8 @@
           "operationId": "callFlipParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "callPartyFlip"
         }
       ]
     },
@@ -34866,7 +34972,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetExtensionForwardingNumberListResponse"
           },
-          "queryParameters": "ListForwardingNumbersParameters"
+          "queryParameters": "listForwardingNumbersParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number",
@@ -34881,7 +34987,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ForwardingNumberInfo"
-          }
+          },
+          "bodyParameters": "createForwardingNumberRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
@@ -34911,7 +35018,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/ForwardingNumberInfo"
-          }
+          },
+          "bodyParameters": "updateForwardingNumberRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
@@ -34950,7 +35058,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/ReplyParty"
-          }
+          },
+          "bodyParameters": "callPartyReply"
         }
       ]
     },
@@ -34976,7 +35085,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "pickupTarget"
         }
       ]
     },
@@ -35002,7 +35112,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "answerTarget"
         }
       ]
     },
@@ -35028,7 +35139,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "bridgeTargetRequest"
         }
       ]
     },
@@ -35051,7 +35163,8 @@
           "operationId": "ignoreCallInQueue",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "bodyParameters": "ignoreRequestBody"
         }
       ]
     },
@@ -35126,7 +35239,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "forwardTarget"
         }
       ]
     },
@@ -35152,7 +35266,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/CallParty"
-          }
+          },
+          "bodyParameters": "transferTarget"
         }
       ]
     },
@@ -35178,7 +35293,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/PartySuperviseResponse"
-          }
+          },
+          "bodyParameters": "partySuperviseRequest"
         }
       ]
     },
@@ -35205,7 +35321,7 @@
           "responseSchema": {
             "$ref": "#/components/schemas/BlockedAllowedPhoneNumbersList"
           },
-          "queryParameters": "ListBlockedAllowedNumbersParameters"
+          "queryParameters": "listBlockedAllowedNumbersParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers",
@@ -35220,7 +35336,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
-          }
+          },
+          "bodyParameters": "addBlockedAllowedPhoneNumber"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
@@ -35250,7 +35367,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
-          }
+          },
+          "bodyParameters": "addBlockedAllowedPhoneNumber"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
@@ -35291,7 +35409,7 @@
             "type": "string",
             "format": "binary"
           },
-          "queryParameters": "ReadMessageContentParameters"
+          "queryParameters": "readMessageContentParameters"
         }
       ],
       "parameter": "attachmentId"
@@ -35330,7 +35448,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CallRecording"
           },
-          "queryParameters": "PauseResumeCallRecordingParameters"
+          "queryParameters": "pauseResumeCallRecordingParameters",
+          "bodyParameters": "callRecordingUpdate"
         }
       ],
       "parameter": "recordingId"
