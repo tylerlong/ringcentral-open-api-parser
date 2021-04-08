@@ -132,6 +132,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         bridgePaths.push({
           paths: subPaths,
           operations: [],
+          parameter: R.last(subPaths) === 'scim' ? 'version' : undefined,
         });
       }
     }

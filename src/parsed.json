@@ -35458,7 +35458,8 @@
       "paths": [
         "scim"
       ],
-      "operations": []
+      "operations": [],
+      "parameter": "version"
     },
     {
       "paths": [
