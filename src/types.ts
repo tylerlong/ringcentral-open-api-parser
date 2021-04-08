@@ -37,6 +37,8 @@ export type Operation = {
   responseSchema?: ResponseSchema;
   queryParameters?: string;
   bodyParameters?: string;
+  formUrlEncoded?: boolean;
+  multipart?: boolean;
 };
 
 export type Field = {

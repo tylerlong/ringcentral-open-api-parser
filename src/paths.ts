@@ -80,6 +80,8 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
 
         // bodyParameters
         let bodyParameters: string | undefined = undefined;
+        let formUrlEncoded: boolean | undefined = undefined;
+        let multipart: boolean | undefined = undefined;
         if (operation.requestBody) {
           const requestContent = (operation.requestBody as OpenAPIV3.RequestBodyObject)
             .content;
@@ -87,6 +89,11 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
             requestContent['application/x-www-form-urlencoded'] ||
             requestContent['multipart/form-data'];
           if (mediaTypeObject) {
+            if (requestContent['application/x-www-form-urlencoded']) {
+              formUrlEncoded = true;
+            } else {
+              multipart = true;
+            }
             const refObj = mediaTypeObject.schema as OpenAPIV3.ReferenceObject;
             if (refObj.$ref) {
               bodyParameters = R.last(refObj.$ref.split('/'));
@@ -117,6 +124,8 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           responseSchema,
           queryParameters,
           bodyParameters,
+          formUrlEncoded,
+          multipart,
         });
       }
     }

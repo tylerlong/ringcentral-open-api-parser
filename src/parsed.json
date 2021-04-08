@@ -28904,7 +28904,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/TokenInfo"
           },
-          "bodyParameters": "getTokenRequest"
+          "bodyParameters": "getTokenRequest",
+          "formUrlEncoded": true
         }
       ]
     },
@@ -28958,7 +28959,8 @@
           "operationId": "revokeToken",
           "rateLimitGroup": "Auth",
           "withParameter": false,
-          "bodyParameters": "revokeTokenRequest"
+          "bodyParameters": "revokeTokenRequest",
+          "formUrlEncoded": true
         }
       ]
     },
@@ -29000,7 +29002,8 @@
           "summary": "Authorize",
           "operationId": "authorize",
           "withParameter": false,
-          "bodyParameters": "authorizeRequest"
+          "bodyParameters": "authorizeRequest",
+          "formUrlEncoded": true
         }
       ]
     },
@@ -30139,7 +30142,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/CustomCompanyGreetingInfo"
           },
-          "bodyParameters": "createCompanyGreetingRequest"
+          "bodyParameters": "createCompanyGreetingRequest",
+          "multipart": true
         }
       ]
     },
@@ -31286,7 +31290,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/PromptInfo"
           },
-          "bodyParameters": "createIVRPromptRequest"
+          "bodyParameters": "createIVRPromptRequest",
+          "multipart": true
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
@@ -31894,7 +31899,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/FaxResponse"
           },
-          "bodyParameters": "createFaxMessageRequest"
+          "bodyParameters": "createFaxMessageRequest",
+          "multipart": true
         }
       ]
     },
@@ -31920,7 +31926,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
           },
-          "bodyParameters": "CreateMMSMessage"
+          "bodyParameters": "CreateMMSMessage",
+          "multipart": true
         }
       ]
     },
@@ -31946,7 +31953,8 @@
           "responseSchema": {
             "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
           },
-          "bodyParameters": "CreateSMSMessage"
+          "bodyParameters": "CreateSMSMessage",
+          "multipart": true
         }
       ]
     },
@@ -33691,7 +33699,8 @@
             "$ref": "#/components/schemas/CustomUserGreetingInfo"
           },
           "queryParameters": "createCustomUserGreetingParameters",
-          "bodyParameters": "createCustomUserGreetingRequest"
+          "bodyParameters": "createCustomUserGreetingRequest",
+          "multipart": true
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting/{greetingId}",
@@ -33988,7 +33997,8 @@
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
           "withParameter": false,
-          "bodyParameters": "createUserProfileImageRequest"
+          "bodyParameters": "createUserProfileImageRequest",
+          "multipart": true
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
@@ -34001,7 +34011,8 @@
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
           "withParameter": false,
-          "bodyParameters": "updateUserProfileImageRequest"
+          "bodyParameters": "updateUserProfileImageRequest",
+          "multipart": true
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}",
@@ -34870,7 +34881,8 @@
           "operationId": "createUserMeetingProfileImage",
           "rateLimitGroup": "Light",
           "withParameter": false,
-          "bodyParameters": "createUserMeetingProfileImageRequest"
+          "bodyParameters": "createUserMeetingProfileImageRequest",
+          "multipart": true
         }
       ]
     },
