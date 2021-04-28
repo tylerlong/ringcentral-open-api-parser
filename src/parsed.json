@@ -1314,7 +1314,7 @@
     },
     {
       "name": "APSInfo",
-      "description": "Apple Push Notification Service Info",
+      "description": "APS (Apple Push Service) information/ priority data",
       "fields": [
         {
           "type": "integer",
@@ -1418,7 +1418,7 @@
       "name": "ExtensionCallQueuePresence",
       "fields": [
         {
-          "$ref": "CallQueueInfo",
+          "$ref": "PresenceCallQueueInfo",
           "name": "callQueue"
         },
         {
@@ -1490,13 +1490,9 @@
       ]
     },
     {
-      "name": "CallQueueInfo",
+      "name": "PresenceCallQueueInfo",
+      "description": "Call queue information",
       "fields": [
-        {
-          "type": "string",
-          "description": "Link to a call queue",
-          "name": "uri"
-        },
         {
           "type": "string",
           "description": "Internal identifier of a call queue",
@@ -1504,13 +1500,18 @@
         },
         {
           "type": "string",
+          "description": "Name of a call queue",
+          "name": "name"
+        },
+        {
+          "type": "string",
           "description": "Extension number of a call queue",
           "name": "extensionNumber"
         },
         {
-          "type": "string",
-          "description": "Name of a call queue",
-          "name": "name"
+          "type": "boolean",
+          "description": "Flag allow members to change their queue status",
+          "name": "editableMemberStatus"
         }
       ]
     },
@@ -1848,13 +1849,13 @@
       "fields": [
         {
           "type": "string",
-          "description": "Time of adding subscrition to a black list in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*",
+          "description": "Time of adding subscription to a black list in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*",
           "format": "date-time",
           "name": "blacklistedAt"
         },
         {
           "type": "string",
-          "description": "Reason for adding subscrition to a black list",
+          "description": "Reason for adding subscription to a black list",
           "name": "reason"
         }
       ]
@@ -2000,18 +2001,28 @@
     },
     {
       "name": "CreatorInfo",
-      "description": "Note creator information",
+      "description": "Task creator information",
       "fields": [
         {
           "type": "string",
-          "description": "Internal identifier of a user who created a note/task",
+          "description": "Internal identifier of a user",
           "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "First name of a user",
+          "name": "firstName"
+        },
+        {
+          "type": "string",
+          "description": "Last name of a user",
+          "name": "lastName"
         }
       ]
     },
     {
       "name": "SpecificInfo",
-      "description": "Information specififed in request",
+      "description": "Information specified in request",
       "fields": [
         {
           "type": "string",
@@ -2169,7 +2180,7 @@
           "name": "preview"
         },
         {
-          "$ref": "CreatorInfo",
+          "$ref": "GlipCreatorInfo",
           "name": "creator"
         },
         {
@@ -2240,7 +2251,7 @@
           "name": "body"
         },
         {
-          "$ref": "CreatorInfo",
+          "$ref": "GlipCreatorInfo",
           "name": "creator"
         },
         {
@@ -2280,6 +2291,17 @@
       ]
     },
     {
+      "name": "GlipCreatorInfo",
+      "description": "Note creator information",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a user who created a note/task",
+          "name": "id"
+        }
+      ]
+    },
+    {
       "name": "LockedByInfo",
       "description": "Returned for the note being edited (locked) at the current moment. Information on the user editing the note",
       "fields": [
@@ -2306,7 +2328,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Title of a note. Max allowed legth is 250 characters",
+          "description": "Title of a note. Max allowed length is 250 characters",
           "name": "title",
           "required": true
         },
@@ -2599,8 +2621,8 @@
       "name": "GlipCompany",
       "fields": [
         {
+          "description": "Internal identifier of a Glip company (RC account)",
           "type": "string",
-          "description": "Internal identifier of an RC account/Glip company, or tilde (~) to indicate a company the current user belongs to",
           "name": "id",
           "required": true
         },
@@ -3195,7 +3217,7 @@
         },
         {
           "type": "array",
-          "description": "List of at mentions in post text with names.",
+          "description": "List of mentions in post text with names.",
           "items": {
             "$ref": "GlipMentionsInfo"
           },
@@ -3243,7 +3265,7 @@
       "description": "Apple notification data",
       "fields": [
         {
-          "$ref": "APSInfo",
+          "$ref": "GlipAPSInfo",
           "name": "aps"
         },
         {
@@ -3388,6 +3410,17 @@
           "type": "string",
           "description": "User data",
           "name": "srvLvlExt"
+        }
+      ]
+    },
+    {
+      "name": "GlipAPSInfo",
+      "description": "Apple Push Notification Service Info",
+      "fields": [
+        {
+          "type": "integer",
+          "description": "If the value is '1' then notification is turned on even if the application is in background",
+          "name": "content-available"
         }
       ]
     },
@@ -3912,7 +3945,7 @@
           "name": "type"
         },
         {
-          "$ref": "CreatorInfo",
+          "$ref": "GlipCreatorInfo",
           "name": "creator"
         },
         {
@@ -4100,13 +4133,13 @@
         },
         {
           "type": "string",
-          "description": "Task section to group / search by. Max allowed legth is 100 characters.",
+          "description": "Task section to group / search by. Max allowed length is 100 characters.",
           "name": "section",
           "required": false
         },
         {
           "type": "string",
-          "description": "Task details. Max allowed legth is 102400 characters (100kB).",
+          "description": "Task details. Max allowed length is 102400 characters (100kB).",
           "name": "description",
           "required": false
         },
@@ -4218,12 +4251,12 @@
         },
         {
           "type": "string",
-          "description": "Task section to group/search by. Max allowed legth is 100 characters",
+          "description": "Task section to group/search by. Max allowed length is 100 characters",
           "name": "section"
         },
         {
           "type": "string",
-          "description": "Task details. Max allowed legth is 102400 characters (100kB)",
+          "description": "Task details. Max allowed length is 102400 characters (100kB)",
           "name": "description"
         },
         {
@@ -4351,7 +4384,7 @@
         },
         {
           "type": "string",
-          "description": "Availability setting specifing whether to receive Glip notifications or not",
+          "description": "Availability setting specifying whether to receive Glip notifications or not",
           "enum": [
             "Available",
             "DND"
@@ -5342,7 +5375,7 @@
     },
     {
       "name": "ADGErrorResponse",
-      "description": "Format of response in case that any error occured during request processing",
+      "description": "Format of response in case that any error occurred during request processing",
       "fields": [
         {
           "type": "array",
@@ -5457,7 +5490,7 @@
           "name": "id"
         },
         {
-          "$ref": "CountryResource",
+          "$ref": "DeviceCountryResource",
           "name": "country"
         },
         {
@@ -6982,8 +7015,7 @@
       ]
     },
     {
-      "name": "ExtensionInfo",
-      "description": "Information on the extension, to which the phone number is assigned. Returned only for the request of Account phone number list",
+      "name": "CallHandlingExtensionInfo",
       "fields": [
         {
           "type": "string",
@@ -6997,17 +7029,12 @@
         },
         {
           "type": "string",
-          "description": "Extension name",
-          "name": "name"
-        },
-        {
-          "type": "string",
           "description": "Number of extension",
           "name": "extensionNumber"
         },
         {
           "type": "string",
-          "description": "For partner applications. Internal identifier of an extension created by partner. The RingCentral supports the mapping of accounts and stores the corresponding account ID/extension ID for each partner ID of a client application. In request URIs partner IDs are accepted instead of regular RingCentral native IDs as path parameters using pid = XXX clause. Though in response URIs contain the corresponding account IDs and extension IDs. In all request and response bodies these values are reflected via partnerId attributes of account and extension",
+          "description": "For Partner Applications Internal identifier of an extension created by partner. The RingCentral supports the mapping of accounts and stores the corresponding account ID/extension ID for each partner ID of a client application. In request URIs partner IDs are accepted instead of regular RingCentral native IDs as path parameters using pid = XXX clause. Though in response URIs contain the corresponding account IDs and extension IDs. In all request and response bodies these values are reflected via partnerId attributes of account and extension",
           "name": "partnerId"
         }
       ]
@@ -8007,7 +8034,7 @@
       "description": "Transfer settings applied for department (call queue) extension type, with 'TransferToExtension' call handling action",
       "fields": [
         {
-          "$ref": "ExtensionInfo",
+          "$ref": "CallHandlingExtensionInfo",
           "name": "extension"
         }
       ]
@@ -8393,7 +8420,7 @@
       "fields": [
         {
           "type": "boolean",
-          "description": "Flag for controling Automatic Call Recording settings",
+          "description": "Flag for controlling Automatic Call Recording settings",
           "name": "enabled"
         },
         {
@@ -8828,7 +8855,7 @@
         },
         {
           "type": "string",
-          "description": "Internal identifier of an asnwering rule",
+          "description": "Internal identifier of an answering rule",
           "example": "business-hours-rule",
           "name": "id"
         },
@@ -9721,7 +9748,7 @@
           "name": "startTime"
         },
         {
-          "$ref": "DelegateInfo",
+          "$ref": "CallLogDelegateInfo",
           "name": "delegate"
         },
         {
@@ -10005,34 +10032,18 @@
       ]
     },
     {
-      "name": "DelegateInfo",
+      "name": "CallLogDelegateInfo",
+      "description": "Information on a delegate extension that actually implemented a call action. For Secretary call log the field is returned if the current extension implemented a call. For Boss call log the field contains information on a Secretary extension which actually implemented a call on behalf of the current extension",
       "fields": [
         {
-          "$ref": "DelegateExtensionInfo",
-          "name": "extension"
+          "type": "string",
+          "description": "Internal identifier of a Secretary extension",
+          "name": "id"
         },
         {
-          "type": "boolean",
-          "description": "Specifies whether secretary user is permitted to pickup calls on behalf of boss user role",
-          "name": "callPickup"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies whether secretary user is permitted to organize conference on behalf of boss user role",
-          "name": "conferencing"
-        },
-        {
-          "type": "object",
-          "$ref": "ConferencingSettingsInfo",
-          "name": "conferencingSettings"
-        },
-        {
-          "type": "array",
-          "description": "List of the delegate users for the current boss user",
-          "items": {
-            "type": "string"
-          },
-          "name": "delegateIds"
+          "type": "string",
+          "description": "Custom name of a Secretary extension",
+          "name": "name"
         }
       ]
     },
@@ -10278,7 +10289,7 @@
           "name": "billing"
         },
         {
-          "$ref": "DelegateInfo",
+          "$ref": "CallLogDelegateInfo",
           "name": "delegate"
         },
         {
@@ -10587,7 +10598,7 @@
           "name": "message"
         },
         {
-          "$ref": "DelegateInfo",
+          "$ref": "CallLogDelegateInfo",
           "name": "delegate"
         },
         {
@@ -11815,6 +11826,10 @@
           "name": "addons"
         },
         {
+          "type": "string",
+          "name": "deviceClass"
+        },
+        {
           "type": "array",
           "description": "Device feature or multiple features supported",
           "items": {
@@ -12735,7 +12750,7 @@
         {
           "type": "array",
           "items": {
-            "$ref": "DepartmentResource"
+            "$ref": "DeviceDepartmentResource"
           },
           "name": "departments"
         },
@@ -12834,11 +12849,11 @@
       "name": "RegionalSettingsInfo",
       "fields": [
         {
-          "$ref": "TimezoneResource",
+          "$ref": "DeviceTimezoneResource",
           "name": "timezone"
         },
         {
-          "$ref": "CountryResource",
+          "$ref": "DeviceCountryResource",
           "name": "homeCountry"
         },
         {
@@ -12956,7 +12971,7 @@
       ]
     },
     {
-      "name": "CountryResource",
+      "name": "DeviceCountryResource",
       "description": "Brief information on a phone number country",
       "fields": [
         {
@@ -12998,8 +13013,7 @@
       ]
     },
     {
-      "name": "TimezoneResource",
-      "description": "Timezone setting. For extension bulk assignment is configured automatically based on contact info setting",
+      "name": "DeviceTimezoneResource",
       "fields": [
         {
           "type": "string",
@@ -13017,10 +13031,6 @@
         {
           "type": "string",
           "name": "description"
-        },
-        {
-          "type": "string",
-          "name": "bias"
         }
       ]
     },
@@ -13062,7 +13072,8 @@
       ]
     },
     {
-      "name": "DepartmentResource",
+      "name": "DeviceDepartmentResource",
+      "description": "Please note that legacy 'Department' extension type corresponds to 'Call Queue' extensions in modern RingCentral product terminology",
       "fields": [
         {
           "type": "string",
@@ -13617,8 +13628,30 @@
           "name": "durationInMinutes"
         },
         {
-          "$ref": "TimezoneResource",
+          "$ref": "MeetingsTimezoneResource",
           "name": "timeZone"
+        }
+      ]
+    },
+    {
+      "name": "MeetingsTimezoneResource",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "name": "description"
         }
       ]
     },
@@ -13945,8 +13978,49 @@
           "name": "location"
         },
         {
-          "$ref": "CountryResource",
+          "$ref": "MeetingsCountryResource",
           "name": "country"
+        }
+      ]
+    },
+    {
+      "name": "MeetingsCountryResource",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "name": "isoCode"
+        },
+        {
+          "type": "string",
+          "name": "callingCode"
+        },
+        {
+          "type": "boolean",
+          "default": false,
+          "name": "emergencyCalling"
+        },
+        {
+          "type": "boolean",
+          "default": false,
+          "name": "numberSelling"
+        },
+        {
+          "type": "boolean",
+          "default": false,
+          "name": "loginAllowed"
         }
       ]
     },
@@ -15449,6 +15523,7 @@
         {
           "type": "string",
           "enum": [
+            "AllLinesInUse",
             "Undefined",
             "NoFaxSendPermission",
             "NoInternationalPermission",
@@ -17032,6 +17107,12 @@
           "name": "phoneNumber"
         },
         {
+          "type": "boolean",
+          "description": "Specifies if the number is primary or not",
+          "example": false,
+          "name": "primary"
+        },
+        {
           "type": "string",
           "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise it is an external number not yet ported to RingCentral",
           "name": "status"
@@ -17048,7 +17129,7 @@
         },
         {
           "type": "string",
-          "description": "Usage type of a phone number. Numbers of 'NumberPool' type wont't be returned for phone number list requests",
+          "description": "Usage type of a phone number. Numbers of 'NumberPool' type will not be returned for phone number list requests",
           "enum": [
             "MainCompanyNumber",
             "AdditionalCompanyNumber",
@@ -17241,6 +17322,37 @@
           "type": "string",
           "description": "Calling code of a country",
           "name": "callingCode"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionInfo",
+      "description": "Information on the extension, to which the phone number is assigned. Returned only for the request of Account phone number list",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Canonical URI of an extension",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Extension name",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Number of extension",
+          "name": "extensionNumber"
+        },
+        {
+          "type": "string",
+          "description": "For partner applications. Internal identifier of an extension created by partner. The RingCentral supports the mapping of accounts and stores the corresponding account ID/extension ID for each partner ID of a client application. In request URIs partner IDs are accepted instead of regular RingCentral native IDs as path parameters using pid = XXX clause. Though in response URIs contain the corresponding account IDs and extension IDs. In all request and response bodies these values are reflected via partnerId attributes of account and extension",
+          "name": "partnerId"
         }
       ]
     },
@@ -19971,7 +20083,7 @@
         },
         {
           "type": "integer",
-          "description": "Meetings recording cloud storage limitaion in Gb",
+          "description": "Meetings recording cloud storage limitation in Gb",
           "name": "cloudRecordingStorage"
         },
         {
@@ -20802,6 +20914,11 @@
       "name": "EmergencyLocationList",
       "fields": [
         {
+          "type": "string",
+          "description": "Link to the emergency location list resource",
+          "name": "uri"
+        },
+        {
           "type": "array",
           "items": {
             "$ref": "EmergencyLocationInfo"
@@ -21265,6 +21382,16 @@
       "fields": [
         {
           "type": "string",
+          "example": "2874044",
+          "description": "Internal identifier of a network",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "uri"
+        },
+        {
+          "type": "string",
           "name": "name"
         },
         {
@@ -21570,7 +21697,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "description": "Call monitoring permission; mltiple values are allowed: * `Monitoring` - User can monitor a group * `Monitored` - User can be monitored\n",
+            "description": "Call monitoring permission; multiple values are allowed: * `Monitoring` - User can monitor a group * `Monitored` - User can be monitored",
             "enum": [
               "Monitoring",
               "Monitored"
@@ -21657,6 +21784,31 @@
           "$ref": "ProvisioningPagingInfo",
           "name": "paging",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "CallQueueInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Link to a call queue",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a call queue",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Extension number of a call queue",
+          "name": "extensionNumber"
+        },
+        {
+          "type": "string",
+          "description": "Name of a call queue",
+          "name": "name"
         }
       ]
     },
@@ -21934,7 +22086,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Internal idetifier of a site extension",
+          "description": "Internal identifier of a site extension",
           "name": "id"
         },
         {
@@ -21949,7 +22101,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Internal idetifier of a site extension",
+          "description": "Internal identifier of a site extension",
           "name": "id"
         },
         {
@@ -21974,7 +22126,7 @@
         },
         {
           "type": "string",
-          "description": "Exetnsion user email",
+          "description": "Extension user email",
           "name": "email"
         },
         {
@@ -22957,41 +23109,6 @@
           "type": "boolean",
           "description": "Allows members to change their queue status",
           "name": "editableMemberStatus"
-        }
-      ]
-    },
-    {
-      "name": "ConferencingSettingsInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Delegated access code for a host user",
-          "name": "hostCode"
-        },
-        {
-          "type": "string",
-          "description": "Delegated access code for a participant user",
-          "name": "participantCode"
-        }
-      ]
-    },
-    {
-      "name": "DelegateExtensionInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Canonical URI of an extension",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Extension name",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "description": "Number of an extension",
-          "name": "extensionNumber"
         }
       ]
     },
@@ -24613,6 +24730,13 @@
           "example": "400378008008",
           "name": "agentExtensionId",
           "required": true
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
+          "default": true,
+          "name": "autoAnswer",
+          "required": false
         }
       ]
     },
@@ -25290,16 +25414,16 @@
         },
         {
           "type": "string",
-          "description": "Extension number of the user that will be monitored",
-          "example": "105",
-          "name": "agentExtensionNumber",
-          "required": false
-        },
-        {
-          "type": "string",
           "description": "Extension identifier of the user that will be monitored",
           "example": "400378008008",
           "name": "agentExtensionId",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
+          "default": true,
+          "name": "autoAnswer",
           "required": false
         }
       ]
@@ -26245,7 +26369,8 @@
             "authorization_code",
             "password",
             "refresh_token",
-            "client_credentials"
+            "client_credentials",
+            "urn:ietf:params:oauth:grant-type:jwt-bearer"
           ],
           "name": "grant_type"
         },
@@ -26660,7 +26785,7 @@
           "required": false
         },
         {
-          "description": "Meida file to upload",
+          "description": "Media file to upload",
           "name": "binary",
           "required": true,
           "$ref": "Attachment"
@@ -26693,7 +26818,7 @@
           "required": false
         },
         {
-          "description": "Meida file to upload",
+          "description": "Media file to upload",
           "name": "binary",
           "required": true,
           "$ref": "Attachment"
@@ -26977,45 +27102,6 @@
         {
           "name": "dateTo",
           "description": "The end datetime for records deletion in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601]  format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is current time",
-          "type": "string",
-          "format": "date-time"
-        },
-        {
-          "name": "phoneNumber",
-          "type": "string"
-        },
-        {
-          "name": "extensionNumber",
-          "type": "string"
-        },
-        {
-          "name": "type",
-          "style": "form",
-          "explode": true,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "Voice",
-              "Fax"
-            ]
-          }
-        },
-        {
-          "name": "direction",
-          "style": "form",
-          "explode": true,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "Inbound",
-              "Outbound"
-            ]
-          }
-        },
-        {
-          "name": "dateFrom",
           "type": "string",
           "format": "date-time"
         }
@@ -28783,23 +28869,6 @@
     {
       "paths": [
         "scim",
-        "health"
-      ],
-      "operations": [
-        {
-          "endpoint": "/scim/{version}/health",
-          "method": "get",
-          "method2": "get",
-          "summary": "Check Health",
-          "operationId": "checkHealth2",
-          "rateLimitGroup": "NoThrottling",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "paths": [
-        "scim",
         "Users"
       ],
       "operations": [
@@ -30199,7 +30268,7 @@
           "method2": "post",
           "description": "Creates a new calendar event within the specified group.",
           "summary": "Create Event by Group ID",
-          "operationId": "createEventbyGroupId",
+          "operationId": "createEventByGroupId",
           "rateLimitGroup": "Medium",
           "appPermission": "Glip",
           "userPermission": "Glip",
@@ -32377,7 +32446,7 @@
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
           "method": "delete",
           "method2": "delete",
-          "description": "Remove infromation about the given call monitoring group.",
+          "description": "Removes information about the given call monitoring group.",
           "summary": "Delete Call Monitoring Group",
           "operationId": "deleteCallMonitoringGroup",
           "rateLimitGroup": "Medium",
@@ -32975,7 +33044,7 @@
           "appPermission": "CallControl",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallSession"
+            "$ref": "#/components/schemas/CallSessionObject"
           },
           "queryParameters": "readCallSessionStatusParameters"
         },
@@ -34023,7 +34092,7 @@
           "method2": "get",
           "description": "Returns scaled profile image of an extension.",
           "summary": "Get Scaled User Profile Image",
-          "operationId": "readScaledPofileImage",
+          "operationId": "readScaledProfileImage",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
