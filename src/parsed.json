@@ -28875,6 +28875,9 @@
         {
           "endpoint": "/scim/{version}/Users",
           "method": "get",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "list",
           "summary": "Search/List Users",
           "operationId": "searchViaGet2",
@@ -28889,6 +28892,9 @@
         {
           "endpoint": "/scim/{version}/Users",
           "method": "post",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "post",
           "summary": "Create User",
           "operationId": "createUser2",
@@ -28903,6 +28909,9 @@
         {
           "endpoint": "/scim/{version}/Users/{id}",
           "method": "get",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "get",
           "summary": "Get User",
           "operationId": "readUser2",
@@ -28916,6 +28925,9 @@
         {
           "endpoint": "/scim/{version}/Users/{id}",
           "method": "put",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "put",
           "summary": "Update/Replace User",
           "operationId": "replaceUser2",
@@ -28930,6 +28942,9 @@
         {
           "endpoint": "/scim/{version}/Users/{id}",
           "method": "delete",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "delete",
           "summary": "Delete User",
           "operationId": "deleteUser2",
@@ -28940,6 +28955,9 @@
         {
           "endpoint": "/scim/{version}/Users/{id}",
           "method": "patch",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "patch",
           "summary": "Update/Patch User",
           "operationId": "patchUser2",
@@ -28964,6 +28982,9 @@
         {
           "endpoint": "/restapi/oauth/token",
           "method": "post",
+          "tags": [
+            "OAuth 2.0"
+          ],
           "method2": "post",
           "description": "Returns access tokens for making API requests",
           "summary": "Get Token",
@@ -28986,6 +29007,9 @@
         {
           "endpoint": "/restapi",
           "method": "get",
+          "tags": [
+            "API Info"
+          ],
           "method2": "list",
           "description": "Returns current API version(s) and server info.",
           "summary": "Get API Versions",
@@ -28999,6 +29023,9 @@
         {
           "endpoint": "/restapi/{apiVersion}",
           "method": "get",
+          "tags": [
+            "API Info"
+          ],
           "method2": "get",
           "description": "Returns current API version info by apiVersion.",
           "summary": "Get Version Info",
@@ -29023,6 +29050,9 @@
         {
           "endpoint": "/restapi/oauth/revoke",
           "method": "post",
+          "tags": [
+            "OAuth 2.0"
+          ],
           "method2": "post",
           "description": "Revokes access/refresh token. Requests to this endpoint must be authenticated with HTTP Basic scheme using the application key and application secret as login and password, correspondingly.",
           "summary": "Revoke Token",
@@ -29044,6 +29074,9 @@
         {
           "endpoint": "/scim/{version}/Users/dotSearch",
           "method": "post",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "post",
           "summary": "Search/List Users",
           "operationId": "searchViaPost2",
@@ -29067,6 +29100,9 @@
         {
           "endpoint": "/restapi/oauth/authorize",
           "method": "post",
+          "tags": [
+            "OAuth 2.0"
+          ],
           "method2": "post",
           "description": "Returns a link to a login page location.",
           "summary": "Authorize",
@@ -29087,6 +29123,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/everyone",
           "method": "get",
+          "tags": [
+            "Teams"
+          ],
           "method2": "get",
           "description": "Returns information about Everyone chat, which is a company level chat including all employees; assigned with specific name.",
           "summary": "Get Everyone Chat",
@@ -29102,6 +29141,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/everyone",
           "method": "patch",
+          "tags": [
+            "Teams"
+          ],
           "method2": "patch",
           "description": "Updates Everyone chat information. Everyone chat is a company level chat including all employees; assigned with specific name.",
           "summary": "Update Everyone Сhat",
@@ -29127,6 +29169,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/favorites",
           "method": "get",
+          "tags": [
+            "Chats"
+          ],
           "method2": "get",
           "description": "Returns a list of the current user's favorite chats. **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"",
           "summary": "Get Favorite Chats",
@@ -29151,6 +29196,9 @@
         {
           "endpoint": "/scim/{version}/ServiceProviderConfig",
           "method": "get",
+          "tags": [
+            "SCIM"
+          ],
           "method2": "get",
           "summary": "Get Service Provider Config",
           "operationId": "readServiceProviderConfig2",
@@ -29172,6 +29220,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/preferences",
           "method": "get",
+          "tags": [
+            "Glip Profile"
+          ],
           "method2": "get",
           "description": "Returns information about user preferences.",
           "summary": "Get Preferences",
@@ -29197,6 +29248,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/recent/chats",
           "method": "get",
+          "tags": [
+            "Chats"
+          ],
           "method2": "get",
           "description": "Returns recent chats where the user is a member. All records in response are sorted by the `lastModifiedTime` in descending order (the latest changed chat is displayed first on page). **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"",
           "summary": "Get Recent Chats",
@@ -29222,6 +29276,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/location",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "get",
           "description": "Returns all available locations for a certain state.",
           "summary": "Get Location List",
@@ -29244,6 +29301,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}",
           "method": "get",
+          "tags": [
+            "Company"
+          ],
           "method2": "get",
           "description": "Returns basic information about a particular RingCentral customer account.",
           "summary": "Get Account Info",
@@ -29270,6 +29330,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/number-parser/parse",
           "method": "post",
+          "tags": [
+            "Phone Numbers"
+          ],
           "method2": "post",
           "description": "Returns one or more parsed and/or formatted phone numbers that are passed as a string.",
           "summary": "Parse Phone Number",
@@ -29294,6 +29357,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/tasks/{taskId}",
           "method": "get",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "get",
           "description": "Returns information about the specified task(s) by ID(s).",
           "summary": "Get Task",
@@ -29307,6 +29373,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/tasks/{taskId}",
           "method": "delete",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "delete",
           "description": "Deletes the specified task.",
           "summary": "Delete Task",
@@ -29317,6 +29386,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/tasks/{taskId}",
           "method": "patch",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "patch",
           "description": "Updates the specified task by ID.",
           "summary": "Patch Task",
@@ -29341,6 +29413,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}",
           "method": "get",
+          "tags": [
+            "Notes"
+          ],
           "method2": "get",
           "description": "Returns the specified note(s). It is possible to fetch up to 50 notes per request.",
           "summary": "Get Note",
@@ -29356,6 +29431,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}",
           "method": "delete",
+          "tags": [
+            "Notes"
+          ],
           "method2": "delete",
           "description": "Deletes the specified note.",
           "summary": "Delete Note",
@@ -29368,6 +29446,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}",
           "method": "patch",
+          "tags": [
+            "Notes"
+          ],
           "method2": "patch",
           "description": "Edits a note. Notes can be edited by any user if posted to a chat. the user belongs to.",
           "summary": "Update Note",
@@ -29394,6 +29475,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams",
           "method": "get",
+          "tags": [
+            "Teams"
+          ],
           "method2": "list",
           "description": "Returns the list of teams where the user is a member (both archived and active) combined with a list of public teams that can be joined by the current user. All records in response are sorted by creation time of a chat in ascending order. A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
           "summary": "Get Teams",
@@ -29410,6 +29494,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Creates a team, and adds a list of people to the team.  A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
           "summary": "Create Team",
@@ -29426,6 +29513,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
           "method": "get",
+          "tags": [
+            "Teams"
+          ],
           "method2": "get",
           "description": "Returns information about the specified team. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Get Team",
@@ -29441,6 +29531,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
           "method": "delete",
+          "tags": [
+            "Teams"
+          ],
           "method2": "delete",
           "description": "Deletes the specified team. A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
           "summary": "Delete Team",
@@ -29453,6 +29546,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}",
           "method": "patch",
+          "tags": [
+            "Teams"
+          ],
           "method2": "patch",
           "description": "Updates the name and description of the specified team. A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
           "summary": "Update Team",
@@ -29479,6 +29575,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats",
           "method": "get",
+          "tags": [
+            "Chats"
+          ],
           "method2": "list",
           "description": "Returns the list of chats where the user is a member and also public teams that can be joined. All records in response are sorted by creation time of a chat in ascending order. **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).",
           "summary": "Get Chats",
@@ -29495,6 +29594,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}",
           "method": "get",
+          "tags": [
+            "Chats"
+          ],
           "method2": "get",
           "description": "Returns information about a chat by ID. **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"",
           "summary": "Get Chat",
@@ -29520,6 +29622,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/events",
           "method": "get",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "list",
           "description": "Returns all calendar events created by the current user.",
           "summary": "Get User Events List",
@@ -29536,6 +29641,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/events",
           "method": "post",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "post",
           "description": "Creates a new calendar event.",
           "summary": "Create Event",
@@ -29552,6 +29660,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
           "method": "get",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "get",
           "description": "Returns the specified calendar event(s) by ID(s).",
           "summary": "Get Event",
@@ -29567,6 +29678,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
           "method": "put",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "put",
           "description": "Updates the specified calendar event.",
           "summary": "Update Event",
@@ -29583,6 +29697,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/events/{eventId}",
           "method": "delete",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "delete",
           "description": "Deletes the specified calendar event.",
           "summary": "Delete Event",
@@ -29605,6 +29722,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/persons/{personId}",
           "method": "get",
+          "tags": [
+            "Glip Profile"
+          ],
           "method2": "get",
           "description": "Returns a user or multiple users by their ID(s). Batch request is supported.",
           "summary": "Get Person",
@@ -29631,6 +29751,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/add",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Adds members to the specified team. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Add Team Members",
@@ -29654,6 +29777,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}/lock",
           "method": "post",
+          "tags": [
+            "Notes"
+          ],
           "method2": "post",
           "description": "Locks a note providing the user with the unique write access for 5 hours.",
           "summary": "Lock Note",
@@ -29676,6 +29802,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/read",
           "method": "post",
+          "tags": [
+            "Chats"
+          ],
           "method2": "post",
           "description": "Sets the specified chat status to 'Read' for the current user.",
           "summary": "Mark Chat as Read",
@@ -29697,6 +29826,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/join",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Adds the current user to the specified team. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Join Team",
@@ -29718,6 +29850,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/fax-cover-page",
           "method": "get",
+          "tags": [
+            "Fax"
+          ],
           "method2": "get",
           "description": "Returns fax cover pages available for the current extension.",
           "summary": "Get Fax Cover Page List",
@@ -29741,6 +29876,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/client-info/sip-provision",
           "method": "post",
+          "tags": [
+            "Device SIP Registration"
+          ],
           "method2": "post",
           "description": "Creates SIP registration of a device/application (WebPhone, Mobile, softphone).",
           "summary": "Register Device",
@@ -29765,6 +29903,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks",
           "method": "get",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "list",
           "description": "Returns the list of all webhooks associated with the current account.",
           "summary": "Get Webhooks",
@@ -29780,6 +29921,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}",
           "method": "get",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "get",
           "description": "Returns webhooks(s) with the specified id(s).",
           "summary": "Get Webhook",
@@ -29795,6 +29939,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}",
           "method": "delete",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "delete",
           "description": "Deletes a webhook by ID.",
           "summary": "Delete Webhook",
@@ -29818,6 +29965,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/tasks",
           "method": "get",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "get",
           "description": "Returns the list of tasks of the specified chat.",
           "summary": "Get Chat Tasks",
@@ -29832,6 +29982,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/tasks",
           "method": "post",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "post",
           "description": "Creates a task in the specified chat.",
           "summary": "Create Task",
@@ -29856,6 +30009,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/notes",
           "method": "get",
+          "tags": [
+            "Notes"
+          ],
           "method2": "get",
           "description": "Returns the list of notes created in the specified chat.",
           "summary": "Get Chat Notes",
@@ -29872,6 +30028,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/notes",
           "method": "post",
+          "tags": [
+            "Notes"
+          ],
           "method2": "post",
           "description": "Creates a new note in the specified chat.",
           "summary": "Create Note",
@@ -29898,6 +30057,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/leave",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Removes the current user from the specified team. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Leave Team",
@@ -29919,6 +30081,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export",
           "method": "get",
+          "tags": [
+            "Glip Compliance Exports"
+          ],
           "method2": "list",
           "description": "Returns the list of Glip data export tasks.",
           "summary": "Get Data Export Task List",
@@ -29934,6 +30099,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export",
           "method": "post",
+          "tags": [
+            "Glip Compliance Exports"
+          ],
           "method2": "post",
           "description": "Creates a task for Glip data export and returns a link at which the exported data will be available in future once the task is implemented. The exported data can be downloaded by calling Get Data Export Task method with the specified task ID. Simultaneously no more than 2 tasks per company can be created.",
           "summary": "Create Data Export Task",
@@ -29949,6 +30117,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export/{taskId}",
           "method": "get",
+          "tags": [
+            "Glip Compliance Exports"
+          ],
           "method2": "get",
           "description": "Returns the links for downloading Glip data exported within the specified task. If the export task is still in progress, then only the task status will be returned. If the data is ready for downloading, then the list of URLs will be returned.",
           "summary": "Get Data Export Task",
@@ -29973,6 +30144,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/state",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "list",
           "description": "Returns all the states of a certain country",
           "summary": "Get States List",
@@ -29987,6 +30161,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/state/{stateId}",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "get",
           "description": "Returns the information on a specific state.",
           "summary": "Get State",
@@ -30010,6 +30187,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/companies/{companyId}",
           "method": "get",
+          "tags": [
+            "Glip Profile"
+          ],
           "method2": "get",
           "description": "Returns information about one or more companies by their IDs.",
           "summary": "Get Company Info",
@@ -30036,6 +30216,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}/unlock",
           "method": "post",
+          "tags": [
+            "Notes"
+          ],
           "method2": "post",
           "description": "Unlocks a note letting other users edit this note. Once the note is locked (by another user) it cannot be unlocked during 5 hours since the lock datetime.",
           "summary": "Unlock Note",
@@ -30058,6 +30241,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/unread",
           "method": "post",
+          "tags": [
+            "Chats"
+          ],
           "method2": "post",
           "description": "Sets the specified chat status to 'Unread' for the current user. **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"",
           "summary": "Mark Chat as Unread",
@@ -30079,6 +30265,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/remove",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Removes members from the specified team. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Remove Team Members",
@@ -30102,6 +30291,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/notes/{noteId}/publish",
           "method": "post",
+          "tags": [
+            "Notes"
+          ],
           "method2": "post",
           "description": "Publishes a note making it visible to other users.",
           "summary": "Publish Note",
@@ -30124,6 +30316,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/archive",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Changes the status of the specified team to 'Archived'. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Archive Team",
@@ -30145,6 +30340,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations",
           "method": "get",
+          "tags": [
+            "Conversations"
+          ],
           "method2": "list",
           "description": "Returns the list of conversations where the user is a member. All records in response are sorted by creation time of a conversation in ascending order. Conversation is a chat of the *Group* type.",
           "summary": "Get Conversations",
@@ -30161,6 +30359,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations",
           "method": "post",
+          "tags": [
+            "Conversations"
+          ],
           "method2": "post",
           "description": "Creates a new conversation or opens the existing one. If the conversation already exists, then its ID will be returned in response. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation (group), it creates a whole new conversation.",
           "summary": "Create/Open Conversation",
@@ -30177,6 +30378,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/conversations/{chatId}",
           "method": "get",
+          "tags": [
+            "Conversations"
+          ],
           "method2": "get",
           "description": "Returns information about the specified conversation, including the list of conversation participants. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation, it creates a whole new conversation.",
           "summary": "Get Conversation",
@@ -30202,6 +30406,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/greeting",
           "method": "post",
+          "tags": [
+            "Greetings"
+          ],
           "method2": "post",
           "description": "Creates a custom company greeting.",
           "summary": "Create Company Greeting",
@@ -30229,6 +30436,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/tasks/{taskId}/complete",
           "method": "post",
+          "tags": [
+            "Tasks"
+          ],
           "method2": "post",
           "description": "Completes a task in the specified chat.",
           "summary": "Complete Task",
@@ -30250,6 +30460,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/events",
           "method": "get",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "get",
           "description": "Returns a list of calendar events available for the current user within the specified group. Users can only see their personal tasks and public tasks.",
           "summary": "Get Group Events",
@@ -30265,6 +30478,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/events",
           "method": "post",
+          "tags": [
+            "Calendar Events"
+          ],
           "method2": "post",
           "description": "Creates a new calendar event within the specified group.",
           "summary": "Create Event by Group ID",
@@ -30291,6 +30507,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/favorite",
           "method": "post",
+          "tags": [
+            "Chats"
+          ],
           "method2": "post",
           "description": "Adds the specified chat to the users's list of favorites. **Note** 'Chat' is a general name for all types of threads icluding *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"",
           "summary": "Add Chat to Favorites",
@@ -30312,6 +30531,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/presence",
           "method": "get",
+          "tags": [
+            "Presence"
+          ],
           "method2": "get",
           "description": "Returns presence status of all extensions of an account. Please note: The presenceStatus is returned as Offline (the parameters telephonyStatus, message, userStatus and dndStatus are not returned at all) for the following extension types: Department, Announcement Only, Voicemail (Take Messages Only), Fax User, Paging Only Group, Shared Lines Group, IVR Menu, Application Extension.",
           "summary": "Get User Presence Status List",
@@ -30338,6 +30560,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/teams/{chatId}/unarchive",
           "method": "post",
+          "tags": [
+            "Teams"
+          ],
           "method2": "post",
           "description": "Changes the status of the specified team to 'Active'. A team is a chat between 2 and more participants assigned with specific name.",
           "summary": "Unarchive Team",
@@ -30358,6 +30583,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription",
           "method": "get",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "list",
           "description": "Returns the list of subscriptions created by the logged-in user for the currently authorized client application.",
           "summary": "Get Subscription List",
@@ -30371,6 +30599,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription",
           "method": "post",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "post",
           "description": "Creates a new subscription.",
           "summary": "Create Subscription",
@@ -30385,6 +30616,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
           "method": "get",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "get",
           "description": "Returns the requested subscription by ID.",
           "summary": "Get Subscription",
@@ -30398,6 +30632,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
           "method": "put",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "put",
           "description": "Updates the existent subscription. The client application can extend/narrow the events for which it receives notifications within the frame of one subscription. If event filters are specified, calling this method modifies them for the existing subscription. The method also allows to set the subscription expiration time. If other than `events` and `expiresIn` parameters are passed in request they will be ignored. If the request body is empty then the specified subscription will be just renewed without any event filter change and with expiration time default.",
           "summary": "Update Subscription",
@@ -30412,6 +30649,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}",
           "method": "delete",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "delete",
           "description": "Cancels the existent subscription.",
           "summary": "Cancel Subscription",
@@ -30432,6 +30672,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/country",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "list",
           "description": "Returns all the countries available for calling.",
           "summary": "Get Country List",
@@ -30446,6 +30689,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/country/{countryId}",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "get",
           "description": "Returns the information on a specific country.",
           "summary": "Get Country",
@@ -30470,6 +30716,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/webhooks",
           "method": "get",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "get",
           "description": "Returns webhooks which are available for the current user by group ID.",
           "summary": "Get Webhooks in Group",
@@ -30485,6 +30734,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/groups/{groupId}/webhooks",
           "method": "post",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "post",
           "description": "Creates a new webhook.",
           "summary": "Create Webhook in Group",
@@ -30510,6 +30762,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/unfavorite",
           "method": "post",
+          "tags": [
+            "Chats"
+          ],
           "method2": "post",
           "description": "Removes the specified chat from the users's list of favorites.",
           "summary": "Remove Chat from Favorites",
@@ -30531,6 +30786,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/timezone",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "list",
           "description": "Returns all available timezones.",
           "summary": "Get Timezone List",
@@ -30545,6 +30803,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/timezone/{timezoneId}",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "get",
           "description": "Returns the information on a certain timezone.",
           "summary": "Get Timezone",
@@ -30569,6 +30830,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/language",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "list",
           "description": "Returns the information about supported languages.",
           "summary": "Get Language List",
@@ -30582,6 +30846,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/language/{languageId}",
           "method": "get",
+          "tags": [
+            "Regional Settings"
+          ],
           "method2": "get",
           "description": "Returns language by ID.",
           "summary": "Get Language",
@@ -30605,6 +30872,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/service-info",
           "method": "get",
+          "tags": [
+            "Company"
+          ],
           "method2": "get",
           "description": "Returns the information about service plan, available features and limitations for a particular RingCentral customer account.",
           "summary": "Get Account Service Info",
@@ -30629,6 +30899,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/active-calls",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Returns records of all calls that are in progress, ordered by start time in descending order.",
           "summary": "Get Company Active Calls",
@@ -30654,6 +30927,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/greeting",
           "method": "get",
+          "tags": [
+            "Greetings"
+          ],
           "method2": "list",
           "description": "Returns the list of predefined standard greetings. Custom greetings recorded by user are not returned in response to this request. See Get Extension Custom Greetings.",
           "summary": "Get Standard Greeting List",
@@ -30668,6 +30944,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/dictionary/greeting/{greetingId}",
           "method": "get",
+          "tags": [
+            "Greetings"
+          ],
           "method2": "get",
           "description": "Returns a standard greeting by ID.",
           "summary": "Get Standard Greeting",
@@ -30691,6 +30970,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-log-sync",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Synchronizes company call log records.",
           "summary": "Sync Company Call Log",
@@ -30717,6 +30999,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}/suspend",
           "method": "post",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "post",
           "description": "Suspends a webhook by ID.",
           "summary": "Suspend Webhook",
@@ -30738,6 +31023,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording",
           "method": "get",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "get",
           "description": "Returns call recording settings.",
           "summary": "Get Call Recording Settings",
@@ -30753,6 +31041,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording",
           "method": "put",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "put",
           "description": "Updates current call recording settings.",
           "summary": "Update Call Recording Settings",
@@ -30778,6 +31069,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-hours",
           "method": "get",
+          "tags": [
+            "Business Hours"
+          ],
           "method2": "get",
           "description": "Returns the company business hours schedule. Business hours (and After hours - all the remaining time) schedules are commonly used for setting call handling rules - `business-hours-rule` and `after-hours-rule` correspondingly.",
           "summary": "Get Company Business Hours",
@@ -30793,6 +31087,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-hours",
           "method": "put",
+          "tags": [
+            "Business Hours"
+          ],
           "method2": "put",
           "description": "Updates the company business hours schedule.",
           "summary": "Update Company Business Hours",
@@ -30819,6 +31116,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/webhooks/{webhookId}/activate",
           "method": "post",
+          "tags": [
+            "Glip Webhooks"
+          ],
           "method2": "post",
           "description": "Activates a webhook by ID.",
           "summary": "Activate Webhook",
@@ -30841,6 +31141,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts",
           "method": "get",
+          "tags": [
+            "Posts"
+          ],
           "method2": "list",
           "description": "Returns a list of posts from the specified chat.",
           "summary": "Get Posts",
@@ -30857,6 +31160,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts",
           "method": "post",
+          "tags": [
+            "Posts"
+          ],
           "method2": "post",
           "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
           "summary": "Create Post",
@@ -30873,6 +31179,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
           "method": "get",
+          "tags": [
+            "Posts"
+          ],
           "method2": "get",
           "description": "Returns information about the specified post.",
           "summary": "Get Post",
@@ -30888,6 +31197,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
           "method": "delete",
+          "tags": [
+            "Posts"
+          ],
           "method2": "delete",
           "description": "Deletes the specified post from the chat.",
           "summary": "Delete Post",
@@ -30900,6 +31212,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/chats/{chatId}/posts/{postId}",
           "method": "patch",
+          "tags": [
+            "Posts"
+          ],
           "method2": "patch",
           "description": "Updates a specific post within a chat.",
           "summary": "Update Post",
@@ -30926,6 +31241,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/subscription/{subscriptionId}/renew",
           "method": "post",
+          "tags": [
+            "Subscriptions"
+          ],
           "method2": "post",
           "description": "Renews an existent subscription by posting request with an empty body.",
           "summary": "Renew Subscription",
@@ -30948,6 +31266,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-address",
           "method": "get",
+          "tags": [
+            "Company"
+          ],
           "method2": "get",
           "description": "Returns business address of a company.",
           "summary": "Get Account Business Address",
@@ -30963,6 +31284,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/business-address",
           "method": "put",
+          "tags": [
+            "Company"
+          ],
           "method2": "put",
           "description": "Updates the business address of a company that account is linked to. Batch request is supported.",
           "summary": "Update Company Business Address",
@@ -30989,6 +31313,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/opt-outs",
           "method": "get",
+          "tags": [
+            "High Volume SMS"
+          ],
           "method2": "get",
           "description": "Returns the list of numbers opted out from the account. The list can be filtered by `to`/`from` phone number query parameters. Specifying `text/csv` in the Accept header downloads the data in CSV format.",
           "summary": "Get Opted Out Numbers",
@@ -31013,6 +31340,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/device/{deviceId}",
           "method": "get",
+          "tags": [
+            "Devices"
+          ],
           "method2": "get",
           "description": "Returns account device(s) by their ID(s).",
           "summary": "Get Device",
@@ -31029,6 +31359,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/device/{deviceId}",
           "method": "put",
+          "tags": [
+            "Devices"
+          ],
           "method2": "put",
           "description": "Updates account device(s) by their ID(s).",
           "summary": "Update Device",
@@ -31057,6 +31390,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/call-out",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Creates a new outbound call out session. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
           "summary": "Make CallOut",
@@ -31081,6 +31417,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/meeting-recordings",
           "method": "get",
+          "tags": [
+            "Meeting Recordings"
+          ],
           "method2": "get",
           "description": "Returns the list of meeting recordings for the current account.",
           "summary": "Get Account Meeting Recordings List",
@@ -31107,6 +31446,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/conference",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Initiates a conference call session.",
           "summary": "Start Conference Call Session",
@@ -31131,6 +31473,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/federation",
           "method": "get",
+          "tags": [
+            "Internal Contacts"
+          ],
           "method2": "get",
           "description": "Returns information on a federation and associated accounts.",
           "summary": "Get Account Federation",
@@ -31155,6 +31500,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension-bulk-update",
           "method": "post",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "post",
           "description": "Updates multiple extensions at once. Maximum 500 extensions can be updated per request.",
           "summary": "Update Multiple Extensions",
@@ -31180,6 +31528,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues",
           "method": "get",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "list",
           "description": "Returns call queue group list.",
           "summary": "Get Call Queue List",
@@ -31196,6 +31547,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}",
           "method": "get",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "get",
           "description": "Returns basic information on a call queue group extension.",
           "summary": "Get Call Queue",
@@ -31211,6 +31565,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}",
           "method": "put",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "put",
           "description": "Updates information on a call queue group extension.",
           "summary": "Update Call Queue",
@@ -31237,6 +31594,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus",
           "method": "post",
+          "tags": [
+            "IVR"
+          ],
           "method2": "post",
           "description": "Creates a company IVR menu.",
           "summary": "Create IVR Menu",
@@ -31253,6 +31613,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
           "method": "get",
+          "tags": [
+            "IVR"
+          ],
           "method2": "get",
           "description": "Returns a company IVR menu by ID.",
           "summary": "Get IVR Menu",
@@ -31268,6 +31631,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
           "method": "put",
+          "tags": [
+            "IVR"
+          ],
           "method2": "put",
           "description": "Updates a company IVR menu by ID.",
           "summary": "Update IVR Menu",
@@ -31294,6 +31660,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/templates",
           "method": "get",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "list",
           "description": "Returns the list of user templates for the current account.",
           "summary": "Get User Template List",
@@ -31310,6 +31679,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/templates/{templateId}",
           "method": "get",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "get",
           "description": "Returns the user template by ID.",
           "summary": "Get User Template",
@@ -31335,6 +31707,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts",
           "method": "get",
+          "tags": [
+            "IVR"
+          ],
           "method2": "list",
           "description": "Returns the list of IVR prompts.",
           "summary": "Get IVR Prompt List",
@@ -31350,6 +31725,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts",
           "method": "post",
+          "tags": [
+            "IVR"
+          ],
           "method2": "post",
           "description": "Creates an IVR prompt.",
           "summary": "Create IVR Prompts",
@@ -31367,6 +31745,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
           "method": "get",
+          "tags": [
+            "IVR"
+          ],
           "method2": "get",
           "description": "Returns an IVR prompt by ID.",
           "summary": "Get IVR Prompt",
@@ -31382,6 +31763,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
           "method": "put",
+          "tags": [
+            "IVR"
+          ],
           "method2": "put",
           "description": "Updates an IVR prompt by ID",
           "summary": "Update IVR Prompt",
@@ -31398,6 +31782,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}",
           "method": "delete",
+          "tags": [
+            "IVR"
+          ],
           "method2": "delete",
           "description": "Deletes an IVR prompt by ID.",
           "summary": "Delete IVR Prompt",
@@ -31420,6 +31807,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension",
           "method": "get",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "list",
           "description": "Returns the list of extensions created for a particular account. All types of extensions are included in this list.",
           "summary": "Get Extension List",
@@ -31436,6 +31826,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension",
           "method": "post",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "post",
           "description": "Creates an extension.",
           "summary": "Create Extension",
@@ -31452,6 +31845,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns basic information about a particular extension.",
           "summary": "Get Extension",
@@ -31467,6 +31863,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
           "method": "put",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "put",
           "description": "Updates user settings.",
           "summary": "Update Extension",
@@ -31483,6 +31882,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}",
           "method": "delete",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "delete",
           "description": "Deletes extension(s) by ID(s). When an extension is being deleted the default API behaviour is as follows: ⋅⋅* user's direct numbers are preserved by becoming additional company numbers; ⋅⋅* user's digital lines (both device & associated phone number) are deleted. You can change this behaviour using the filters: ..* create unassigned extensions for each digital line of the deleted extension by setting the query parameter `savePhoneLines` to `true` in request path; ..* remove direct numbers of the deleted extension by setting the query parameter `savePhoneNumbers` to `false` in request path",
           "summary": "Delete Extension",
@@ -31508,6 +31910,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/meeting/locked-settings",
           "method": "get",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "get",
           "description": "Returns information on user meeting settings that are locked on account level and therefore cannot be changed by user.",
           "summary": "Get Locked Meeting Settings",
@@ -31532,6 +31937,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields",
           "method": "get",
+          "tags": [
+            "Custom Fields"
+          ],
           "method2": "get",
           "description": "Returns the list of created custom fields.",
           "summary": "Get Custom Field List",
@@ -31547,6 +31955,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields",
           "method": "post",
+          "tags": [
+            "Custom Fields"
+          ],
           "method2": "post",
           "description": "Creates custom field attached to the object.",
           "summary": "Create Custom Field",
@@ -31563,6 +31974,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
           "method": "put",
+          "tags": [
+            "Custom Fields"
+          ],
           "method2": "put",
           "description": "Updates custom field by ID specified in path.",
           "summary": "Update Сustom Field",
@@ -31579,6 +31993,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/custom-fields/{fieldId}",
           "method": "delete",
+          "tags": [
+            "Custom Fields"
+          ],
           "method2": "delete",
           "description": "Deletes custom field(s) by ID(s) with the corresponding values.",
           "summary": "Delete Custom Field",
@@ -31601,6 +32018,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/recording/{recordingId}",
           "method": "get",
+          "tags": [
+            "Call Recordings"
+          ],
           "method2": "get",
           "description": "Returns call recordings by ID(s).",
           "summary": "Get Call Recording",
@@ -31626,6 +32046,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-log",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "list",
           "description": "Returns call log records filtered by parameters specified.",
           "summary": "Get Company Call Log Records",
@@ -31642,6 +32065,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-log/{callRecordId}",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Returns individual call log record(s) by ID(s). Batch request is supported.",
           "summary": "Get Company Call Log Record(s)",
@@ -31669,6 +32095,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/batch",
           "method": "post",
+          "tags": [
+            "High Volume SMS"
+          ],
           "method2": "post",
           "description": "Allows to send high volume of A2P (Application-to-Person) SMS messages (in message batches). Only phone number with the `A2PSmsSender` feature can be used as a sender.",
           "summary": "Send A2P SMS",
@@ -31684,6 +32113,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/batch/{batchId}",
           "method": "get",
+          "tags": [
+            "High Volume SMS"
+          ],
           "method2": "get",
           "description": "Returns information on a message batch.",
           "summary": "Get A2P SMS Batch",
@@ -31708,6 +32140,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule",
           "method": "get",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "list",
           "description": "Returns a list of company call handling rules.",
           "summary": "Get Company Call Handling Rule List",
@@ -31724,6 +32159,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule",
           "method": "post",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "post",
           "description": "Creates call handling rule on account level.",
           "summary": "Create Company Call Handling Rule",
@@ -31740,6 +32178,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
           "method": "get",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "get",
           "description": "Returns a company call handling rule by ID.",
           "summary": "Get Company Call Handling Rule",
@@ -31755,6 +32196,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
           "method": "put",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "put",
           "description": "Updates a company call handling rule.",
           "summary": "Update Company Call Handling Rule",
@@ -31771,6 +32215,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/answering-rule/{ruleId}",
           "method": "delete",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "delete",
           "description": "Deletes a company custom call handling rule by a particular ID.",
           "summary": "Delete Company Call Handling Rule",
@@ -31793,6 +32240,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/address-book-bulk-upload",
           "method": "post",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "post",
           "description": "Uploads multiple contacts for multiple extensions at once. Maximum 500 extension, each up to 10000 contacts, can be updated per request.",
           "summary": "Update Multiple Contacts",
@@ -31820,6 +32270,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries/search",
           "method": "post",
+          "tags": [
+            "Internal Contacts"
+          ],
           "method2": "post",
           "description": "Returns contact information on corporate users of federated accounts according to the specified filtering and ordering.",
           "summary": "Search Company Directory Entries",
@@ -31846,6 +32299,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/extensions",
           "method": "get",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "get",
           "description": "Returns the list of extensions to be recorded.",
           "summary": "Get Call Recording Extension List",
@@ -31871,6 +32327,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/bulk-assign",
           "method": "post",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "post",
           "description": "Creates or updates the list of extensions to be recorded.",
           "summary": "Update Call Recording Extension List",
@@ -31894,6 +32353,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/glip/data-export/{taskId}/datasets/{datasetId}",
           "method": "get",
+          "tags": [
+            "Glip Compliance Exports"
+          ],
           "method2": "get",
           "description": "Returns the specified dataset by ID. Each dataset is a ZIP archive the size of which is limited to 1 Gb.",
           "summary": "Get Data Export Task Dataset",
@@ -31919,6 +32381,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-configuration",
           "method": "get",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "get",
           "description": "Returns message store settings.",
           "summary": "Get Message Store Configuration",
@@ -31934,6 +32399,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-configuration",
           "method": "put",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "put",
           "description": "Updates message store settings.",
           "summary": "Update Message Store Configuration",
@@ -31960,6 +32428,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/fax",
           "method": "post",
+          "tags": [
+            "Fax"
+          ],
           "method2": "post",
           "description": "Creates and sends/resends a fax message. Resend can be implemented if sending has failed. Fax attachment size (both single and total) is limited to 50Mb.",
           "summary": "Create Fax Message",
@@ -31987,6 +32458,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/mms",
           "method": "post",
+          "tags": [
+            "SMS"
+          ],
           "method2": "post",
           "description": "Creates and sends media messages. Sending MMS messages simultaneously to different recipients is limited up to 50 requests per minute; relevant for all client applications.",
           "summary": "Send MMS",
@@ -32014,6 +32488,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/sms",
           "method": "post",
+          "tags": [
+            "SMS"
+          ],
           "method2": "post",
           "description": "Creates and sends a new text message. You can send SMS messages simultaneously to different recipients up to 40 requests per minute; this limitation is relevant for all client applications. Sending and receiving SMS is available for Toll-Free Numbers within the USA. You can send up to 10 attachments in one MMS message; the size of all attachments linked is limited to 1500000 bytes.",
           "summary": "Send SMS",
@@ -32041,6 +32518,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries",
           "method": "get",
+          "tags": [
+            "Internal Contacts"
+          ],
           "method2": "list",
           "description": "Returns contact information on corporate users of federated accounts. Please note: 1. `User`, `DigitalUser`, `VirtualUser` and `FaxUser` types are returned as `User` type. 2. `ApplicationExtension` type is not returned. 3. Only extensions in `Enabled`, `Disabled` and `NotActivated` state are returned.",
           "summary": "Get Company Directory Entries",
@@ -32056,6 +32536,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/directory/entries/{entryId}",
           "method": "get",
+          "tags": [
+            "Internal Contacts"
+          ],
           "method2": "get",
           "description": "Returns contact information on a particular corporate user of a federated account.",
           "summary": "Get Corporate Directory Entry",
@@ -32080,6 +32563,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/phone-number",
           "method": "get",
+          "tags": [
+            "Phone Numbers"
+          ],
           "method2": "list",
           "description": "Returns the list of phone numbers assigned to RingCentral customer account. Both company-level and extension-level numbers are returned.",
           "summary": "Get Company Phone Number List",
@@ -32096,6 +32582,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/phone-number/{phoneNumberId}",
           "method": "get",
+          "tags": [
+            "Phone Numbers"
+          ],
           "method2": "get",
           "description": "Returns the phone number(s) belonging to a certain account or extension by phoneNumberId(s). Batch request is supported.",
           "summary": "Get Phone Number",
@@ -32122,6 +32611,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/messages",
           "method": "get",
+          "tags": [
+            "High Volume SMS"
+          ],
           "method2": "list",
           "description": "Returns the list of outbound/inbound A2P messages sent from/to A2P phone numbers of the current account. The list can be filtered by message batch ID and/or phone number.",
           "summary": "Get A2P SMS List",
@@ -32137,6 +32629,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/a2p-sms/messages/{messageId}",
           "method": "get",
+          "tags": [
+            "High Volume SMS"
+          ],
           "method2": "get",
           "description": "Returns the details of an A2P SMS message by ID.",
           "summary": "Get A2P SMS",
@@ -32162,6 +32657,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}/members",
           "method": "get",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "get",
           "description": "Returns call queue group members.",
           "summary": "Get Call Queue Members",
@@ -32188,6 +32686,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/grant",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns the list of extensions with the information on grants given to the current extension regarding them. Currently the list of grants include: picking up a call, monitoring, calling or receiving a call on behalf of somebody, call delegation and calling paging groups.",
           "summary": "Get Extension Grant List",
@@ -32213,6 +32714,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report",
           "method": "post",
+          "tags": [
+            "Message Exports"
+          ],
           "method2": "post",
           "description": "Creates a task to collect all account messages within the specified time interval. Maximum number of simaltaneous tasks per account is 2.",
           "summary": "Create Message Store Report",
@@ -32229,6 +32733,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}",
           "method": "get",
+          "tags": [
+            "Message Exports"
+          ],
           "method2": "get",
           "description": "Returns the current status of a task on report creation.",
           "summary": "Get Message Store Report Task",
@@ -32255,6 +32762,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/device",
           "method": "get",
+          "tags": [
+            "Devices"
+          ],
           "method2": "get",
           "description": "Returns devices of the extension(s) by their ID(s). Batch request is supported",
           "summary": "Get Extension Device List",
@@ -32281,6 +32791,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}/content",
           "method": "get",
+          "tags": [
+            "IVR"
+          ],
           "method2": "get",
           "description": "Returns media content of an IVR prompt by ID.",
           "summary": "Get IVR Prompt Content",
@@ -32307,6 +32820,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}/presence",
           "method": "get",
+          "tags": [
+            "Presence"
+          ],
           "method2": "get",
           "description": "Returns presence status of the call queue members.",
           "summary": "Get Call Queue Presence",
@@ -32321,6 +32837,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}/presence",
           "method": "put",
+          "tags": [
+            "Presence"
+          ],
           "method2": "put",
           "description": "Updates presence status of the call queue members in the specified queue.",
           "summary": "Update Call Queue Presence",
@@ -32346,6 +32865,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/recording/{recordingId}/content",
           "method": "get",
+          "tags": [
+            "Call Recordings"
+          ],
           "method2": "get",
           "description": "Returns media content of a call recording.",
           "summary": "Get Call Recordings Data",
@@ -32372,6 +32894,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/features",
           "method": "get",
+          "tags": [
+            "Features"
+          ],
           "method2": "get",
           "description": "Returns the list of supported features and information on their availability for the current extension. Specific feature(s) might be checked by providing `featureId` query param. Multiple values supported, format: `?featureId=Feature1&featureId=Feature2`. To get only available features in order to decrease response size, `availableOnly=true` query param might be specified.\nIn case the feature is available for the current user, `\"available\": true` is returned in the response for the record with corresponding feature `id`. Otherwise, additional attribute `reason` is returned with the appropriate code:\n* `ServicePlanLimitation` - the feature not included to the account service plan;\n* `AccountLimitation` - the feature is turned off for the account;\n* `ExtensionTypeLimitation` - the feature is not applicable for the extension type;\n* `ExtensionLimitation` - the feature is not available for the extension, e.g., additional license required;\n* `InsufficientPermissions` - required permission not granted to the current user (not the one, who is specified in the URL, but the one who's access token is used);\n* `ConfigurationLimitation` - the feature is turned off for the extension, e.g., by the account administrator.\n\nAlso, some feature may have some additional parameters, e.g., limits, which are returned in `params` attribute as a name-value collection:\n\n    {\n      \"id\": \"HUD\",\n      \"available\": true,\n      \"params\": [\n        {\n          \"name\": \"limitMax\",\n          \"value\": \"100\"\n        }\n      ]\n    }",
           "summary": "Get User Features",
@@ -32397,6 +32922,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups",
           "method": "get",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "get",
           "description": "Returns call monitoring groups that can be filtered by some extension.",
           "summary": "Get Call Monitoring Groups List",
@@ -32413,6 +32941,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups",
           "method": "post",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "post",
           "description": "Creates a new call monitoring group.",
           "summary": "Create Call Monitoring Group",
@@ -32429,6 +32960,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
           "method": "put",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "put",
           "description": "Updates call monitoring group name by ID.",
           "summary": "Updates Call Monitoring Group",
@@ -32445,6 +32979,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}",
           "method": "delete",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "delete",
           "description": "Removes information about the given call monitoring group.",
           "summary": "Delete Call Monitoring Group",
@@ -32467,6 +33004,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "list",
           "description": "Returns emergency response locations of the current account.",
           "summary": "Get Emergency Location List",
@@ -32483,6 +33023,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "summary": "Add Emergency Location",
           "operationId": "createEmergencyLocation",
@@ -32495,6 +33038,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns emergency response location by ID.",
           "summary": "Get Emergency Location",
@@ -32510,6 +33056,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
           "method": "put",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "put",
           "description": "Updates the specified emergency response location.",
           "summary": "Update Emergency Location",
@@ -32526,6 +33075,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
           "method": "delete",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "delete",
           "description": "Deletes the specified emergency response location.",
           "summary": "Delete Emergency Location",
@@ -32550,6 +33102,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/favorite",
           "method": "get",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "get",
           "description": "Returns the list of favorite contacts of the current extension. Favorite contacts include both company contacts (extensions) and personal contacts (address book records).",
           "summary": "Get Favorite Contact List",
@@ -32565,6 +33120,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/favorite",
           "method": "put",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "put",
           "description": "Updates the list of favorite contacts of the current extension. Favorite contacts include both company contacts (extensions) and personal contacts (address book records).**Please note**: currently personal address book size is limited to 10 000 contacts.",
           "summary": "Update Favorite Contact List",
@@ -32591,6 +33149,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/presence",
           "method": "get",
+          "tags": [
+            "Presence"
+          ],
           "method2": "get",
           "description": "Returns presence status of an extension or several extensions by their ID(s). Batch request is supported. The 'presenceStatus' is returned as Offline (the parameters 'telephonyStatus', 'message', 'userStatus' and 'dndStatus' are not returned at all) for the following extension types: Department/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.If the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off. Batch request is supported. For batch requests the number of extensions in one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error code InvalidMultipartRequest and the corresponding message 'Extension Presence Info multipart request is limited to 30 extensions'.",
           "summary": "Get User Presence Status",
@@ -32607,6 +33168,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/presence",
           "method": "put",
+          "tags": [
+            "Presence"
+          ],
           "method2": "put",
           "description": "Updates user-defined extension presence status, status message and DnD status by extension ID. Supported for regular User extensions only. The extension types listed do not support presence status: Department, Announcement Only, Take Messages Only (Voicemail), Fax User, Paging Only Group, Shared Lines Group, IVR Menu, Application Extension.",
           "summary": "Update User Presence Status",
@@ -32632,6 +33196,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-queues/{groupId}/bulk-assign",
           "method": "post",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "post",
           "description": "Updates a call queue group.",
           "summary": "Assign Multiple Call Queue Members",
@@ -32655,6 +33222,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-id",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns information on an outbound caller ID of an extension.",
           "summary": "Get Extension Caller ID",
@@ -32670,6 +33240,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-id",
           "method": "put",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "put",
           "description": "Updates outbound caller ID information of an extension.",
           "summary": "Update Extension Caller ID",
@@ -32696,6 +33269,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-queues",
           "method": "put",
+          "tags": [
+            "Call Queues"
+          ],
           "method2": "put",
           "description": "Updates the list of call queues where the user is an agent. This is a full update request, which means that if any queue where the user is an agent is not mentioned in request, then the user is automatically removed from this queue.",
           "summary": "Update User Call Queues",
@@ -32722,6 +33298,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/users",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns the list of users with their status of Automatic Location Updates feature.",
           "summary": "Get User List",
@@ -32748,6 +33327,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension-bulk-update/tasks/{taskId}",
           "method": "get",
+          "tags": [
+            "Extensions"
+          ],
           "method2": "get",
           "description": "Returns the status of multiple extension update task",
           "summary": "Get Update Task Status",
@@ -32774,6 +33356,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/conferencing",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns the information on the Free Conference Calling (FCC) feature for a given extension.",
           "summary": "Get User Conferencing Settings",
@@ -32790,6 +33375,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/conferencing",
           "method": "put",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "put",
           "description": "Updates the default conferencing number for the current extension. The number can be selected from conferencing numbers of the current extension. Updates the setting, allowing participants join the conference before host.",
           "summary": "Update User Conferencing Settings",
@@ -32816,6 +33404,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/phone-number",
           "method": "get",
+          "tags": [
+            "Phone Numbers"
+          ],
           "method2": "get",
           "description": "Returns the list of phone numbers that are used by a particular extension, and can be filtered by the phone number type. The returned list contains all numbers which are directly mapped to a given extension plus the features and also company-level numbers which may be used when performing different operations on behalf of this extension.",
           "summary": "Get Extension Phone Number List",
@@ -32842,6 +33433,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-sync",
           "method": "get",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "get",
           "description": "Synchronizes messages.",
           "summary": "Sync Messages",
@@ -32868,6 +33462,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/active-calls",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Returns records of all extension calls that are in progress, ordered by start time in descending order.",
           "summary": "Get User Active Calls",
@@ -32894,6 +33491,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/authz-profile",
           "method": "get",
+          "tags": [
+            "User Permissions"
+          ],
           "method2": "get",
           "description": "Returns a list of user permissions granted at authorization procedure. Please note: Some permissions may be restricted by extension type.",
           "summary": "Get Authorization Profile",
@@ -32917,6 +33517,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/devices",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns the list of common devices with their status of Automatic Location Updates feature.",
           "summary": "Get Device List",
@@ -32943,6 +33546,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/company-pager",
           "method": "post",
+          "tags": [
+            "Pager Messages"
+          ],
           "method2": "post",
           "description": "Creates and sends an internal text message.",
           "summary": "Create Internal Text Message",
@@ -32969,6 +33575,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log-sync",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Synchronizes call log records.",
           "summary": "Sync User Call Log",
@@ -32995,6 +33604,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/business-hours",
           "method": "get",
+          "tags": [
+            "Business Hours"
+          ],
           "method2": "get",
           "description": "Returns the user business hours schedule. Business hours (and After hours - all the remaining time) schedules are commonly used for setting call handling rules - `business-hours-rule` and `after-hours-rule` correspondingly. **Please note:** If the user business hours are set to 'Custom hours' then a particular schedule is returned; however if set to '24 hours/7 days a week' the schedule will be empty.",
           "summary": "Get User Business Hours",
@@ -33010,6 +33622,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/business-hours",
           "method": "put",
+          "tags": [
+            "Business Hours"
+          ],
           "method2": "put",
           "description": "Updates the user business hours schedule.",
           "summary": "Update User Business Hours",
@@ -33036,6 +33651,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}",
           "method": "get",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "get",
           "description": "Returns the status of a call session by ID.",
           "summary": "Get Call Session Status",
@@ -33051,6 +33669,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}",
           "method": "delete",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "delete",
           "description": "Drops a call session.",
           "summary": "Drop Call Session",
@@ -33073,6 +33694,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/address-book-bulk-upload/tasks/{taskId}",
           "method": "get",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "get",
           "description": "Returns the status of a task on adding multiple contacts to multiple extensions.",
           "summary": "Get Contacts Update Task",
@@ -33099,6 +33723,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking",
           "method": "get",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "get",
           "description": "Returns the current caller blocking settings of a user.",
           "summary": "Get Caller Blocking Settings",
@@ -33114,6 +33741,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking",
           "method": "put",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "put",
           "description": "Updates the current caller blocking settings of a user.",
           "summary": "Update Caller Blocking Settings",
@@ -33140,6 +33770,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}/members",
           "method": "get",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "get",
           "description": "Returns call monitoring group members.",
           "summary": "Get Call Monitoring Group Member List",
@@ -33166,6 +33799,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/unified-presence",
           "method": "get",
+          "tags": [
+            "Presence"
+          ],
           "method2": "get",
           "description": "Returns the unified presence status of the requested user(s). The set of parameters returned by this method differs whether you return the requester's presence or any other user presence.",
           "summary": "Get Unified Presence",
@@ -33181,6 +33817,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/unified-presence",
           "method": "patch",
+          "tags": [
+            "Presence"
+          ],
           "method2": "patch",
           "description": "Updates the unified presence for the current user specified in path.",
           "summary": "Update Unified Presence",
@@ -33207,6 +33846,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book-sync",
           "method": "get",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "get",
           "description": "Synchronizes user contacts.",
           "summary": "Address Book Synchronization",
@@ -33233,6 +33875,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting-recordings",
           "method": "get",
+          "tags": [
+            "Meeting Recordings"
+          ],
           "method2": "get",
           "description": "Returns the list of meetings recordings for the current user.",
           "summary": "Get User Meeting Recordings List",
@@ -33260,6 +33905,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/authz-profile/check",
           "method": "get",
+          "tags": [
+            "User Permissions"
+          ],
           "method2": "get",
           "description": "Checks if a certain user permission is activated for a particular extension.",
           "summary": "Check User Permission",
@@ -33284,6 +33932,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/video-configuration",
           "method": "get",
+          "tags": [
+            "Video Configuration"
+          ],
           "method2": "get",
           "description": "Returns information about video configuration of the current user.",
           "summary": "Get User Video Configuration",
@@ -33299,6 +33950,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/video-configuration",
           "method": "put",
+          "tags": [
+            "Video Configuration"
+          ],
           "method2": "put",
           "description": "Allows to update user video settings, for example video provider.",
           "summary": "Update User Video Configuration",
@@ -33324,6 +33978,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/emergency-locations",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns a list of emergency response locations available for the current user extension.",
           "summary": "Get User Emergency Location List",
@@ -33348,6 +34005,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting",
           "method": "get",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "list",
           "description": "Returns a list of user meetings scheduled for the future (meetings of 'Instant' type are not included).",
           "summary": "Get Scheduled Meetings",
@@ -33363,6 +34023,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting",
           "method": "post",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "post",
           "description": "Creates a new meeting.",
           "summary": "Create Meeting",
@@ -33379,6 +34042,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
           "method": "get",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "get",
           "description": "Returns a particular meetings details by ID.",
           "summary": "Get Meeting Info",
@@ -33394,6 +34060,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
           "method": "put",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "put",
           "description": "Modifies a particular meeting.",
           "summary": "Update Meeting",
@@ -33410,6 +34079,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}",
           "method": "delete",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "delete",
           "description": "Deletes a scheduled meeting.",
           "summary": "Delete Meeting",
@@ -33433,6 +34105,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-queue-presence",
           "method": "get",
+          "tags": [
+            "Presence"
+          ],
           "method2": "get",
           "description": "Returns a list of agent's call queues with the agent presence status (per queue)",
           "summary": "Get Agent’s Call Queue Presence",
@@ -33448,6 +34123,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-queue-presence",
           "method": "put",
+          "tags": [
+            "Presence"
+          ],
           "method2": "put",
           "description": "Updates availability of the agent for the call queues.",
           "summary": "Update Call Queue Presence",
@@ -33473,6 +34151,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out",
           "method": "post",
+          "tags": [
+            "RingOut"
+          ],
           "method2": "post",
           "description": "Makes a 2-leg RingOut call.",
           "summary": "Make RingOut Call",
@@ -33488,6 +34169,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out/{ringoutId}",
           "method": "get",
+          "tags": [
+            "RingOut"
+          ],
           "method2": "get",
           "description": "Returns the status of a 2-leg RingOut call.",
           "summary": "Get RingOut Call Status",
@@ -33502,6 +34186,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/ring-out/{ringoutId}",
           "method": "delete",
+          "tags": [
+            "RingOut"
+          ],
           "method2": "delete",
           "description": "Cancels a 2-leg RingOut call.",
           "summary": "Cancel RingOut Call",
@@ -33524,6 +34211,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-monitoring-groups/{groupId}/bulk-assign",
           "method": "post",
+          "tags": [
+            "Call Monitoring Groups"
+          ],
           "method2": "post",
           "description": "Updates call monitoring groups.",
           "summary": "Update Call Monitoring Group List",
@@ -33547,6 +34237,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}/users",
           "method": "get",
+          "tags": [
+            "Paging Only Groups"
+          ],
           "method2": "get",
           "description": "Returns the list of users allowed to page this group.",
           "summary": "Get Paging Group Users",
@@ -33573,6 +34266,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/tasks/{taskId}",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns results of the task created within the frame of Automatic Location Updates feature. Currently four task types are supported: 'Wireless Points Bulk Create', 'Wireless Points Bulk Update', 'Switches Bulk Create', 'Switches Bulk Update'.",
           "summary": "Get Emergency Map Configuration Task",
@@ -33600,6 +34296,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/service-info",
           "method": "get",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "get",
           "description": "Returns information on dial-in numbers for meetings, support and international dial-in numbers URIs and meeting account information.",
           "summary": "Get Meeting Service Info",
@@ -33615,6 +34314,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/service-info",
           "method": "patch",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "patch",
           "description": "Updates personal meeting identifier.",
           "summary": "Update Meeting Service Info",
@@ -33641,6 +34343,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/custom-greetings",
           "method": "get",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "get",
           "description": "Returns call recording custom greetings.",
           "summary": "Get Call Recording Custom Greeting List",
@@ -33657,6 +34362,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/custom-greetings",
           "method": "delete",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "deleteAll",
           "description": "Deletes call recording custom greetings.",
           "summary": "Delete Call Recording Custom Greeting List",
@@ -33669,6 +34377,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recording/custom-greetings/{greetingId}",
           "method": "delete",
+          "tags": [
+            "Call Recording Settings"
+          ],
           "method2": "delete",
           "description": "Deletes call recording custom greeting(s).",
           "summary": "Delete Call Recording Custom Greeting",
@@ -33692,6 +34403,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/notification-settings",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns notification settings for the current extension.\n <p>Knowledge Article: <a href=\"https://success.ringcentral.com/articles/RC_Knowledge_Article/9740\">User Settings - Set up Message Notifications</a></p>",
           "summary": "Get Notification Settings",
@@ -33707,6 +34421,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/notification-settings",
           "method": "put",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "put",
           "description": "Updates notification settings for the current extension.\n<p>Knowledge Article: <a href=\"https://success.ringcentral.com/articles/RC_Knowledge_Article/9740\">User Settings - Set up Message Notifications</a></p>",
           "summary": "Update Notification Settings",
@@ -33734,6 +34451,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/user-settings",
           "method": "get",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "get",
           "description": "Returns user settings for meetings.",
           "summary": "Get Meeting User Settings",
@@ -33759,6 +34479,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting",
           "method": "post",
+          "tags": [
+            "Greetings"
+          ],
           "method2": "post",
           "description": "Creates custom greeting for an extension user.",
           "summary": "Create Custom User Greeting",
@@ -33777,6 +34500,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting/{greetingId}",
           "method": "get",
+          "tags": [
+            "Greetings"
+          ],
           "method2": "get",
           "description": "Returns a custom user greeting by ID.",
           "summary": "Get Custom Greeting",
@@ -33803,6 +34529,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}/devices",
           "method": "get",
+          "tags": [
+            "Paging Only Groups"
+          ],
           "method2": "get",
           "description": "Returns the list of paging devices assigned to this group.",
           "summary": "Get Paging Group Devices",
@@ -33830,6 +34559,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/users/bulk-assign",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Enables or disables Automatic Location Updates feature for multiple account users.",
           "summary": "Enable Automatic Location Updates for Users",
@@ -33854,6 +34586,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}/end",
           "method": "post",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "post",
           "description": "Ends a meetings which is in progress.",
           "summary": "End Meeting",
@@ -33876,6 +34611,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "list",
           "description": "Returns call log records filtered by parameters specified.",
           "summary": "Get User Call Log Records",
@@ -33892,6 +34630,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log",
           "method": "delete",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "delete",
           "description": "Deletes filtered call log records.",
           "summary": "Delete User Call Log",
@@ -33905,6 +34646,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/call-log/{callRecordId}",
           "method": "get",
+          "tags": [
+            "Call Log"
+          ],
           "method2": "get",
           "description": "Returns call log records by ID.",
           "summary": "Get User Call Record",
@@ -33932,6 +34676,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule",
           "method": "get",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "list",
           "description": "Returns call handling rules of an extension.",
           "summary": "Get Call Handling Rules",
@@ -33948,6 +34695,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule",
           "method": "post",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "post",
           "description": "Creates a custom call handling rule for a particular caller ID.",
           "summary": "Create Call Handling Rule",
@@ -33964,6 +34714,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
           "method": "get",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "get",
           "description": "Returns an call handling rule by ID.",
           "summary": "Get Call Handling Rule",
@@ -33980,6 +34733,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
           "method": "put",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "put",
           "description": "Updates a custom call handling rule for a particular caller ID.",
           "summary": "Update Call Handling Rule",
@@ -33996,6 +34752,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/answering-rule/{ruleId}",
           "method": "delete",
+          "tags": [
+            "Call Handling Rules"
+          ],
           "method2": "delete",
           "description": "Deletes a custom call handling rule by a particular ID.",
           "summary": "Delete Call Handling Rule",
@@ -34020,6 +34779,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/supervise",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Allows to monitor a call session in 'Listen' mode. Input parameters should contain internal identifiers of a monitored user and a supervisor's device. Call session should be specified in path. Please note that this method supports single channel audio flow, which means that audio of both call participants is mixed and delivered to the supervisor in single audio channel. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
           "summary": "Supervise Call Session",
@@ -34045,6 +34807,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "list",
           "description": "Returns a profile image of an extension.",
           "summary": "Get User Profile Image",
@@ -34061,6 +34826,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
           "method": "post",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "post",
           "description": "Uploads the extension profile image.",
           "summary": "Upload User Profile Image",
@@ -34075,6 +34843,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image",
           "method": "put",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "put",
           "description": "Updates the extension profile image",
           "summary": "Update User Profile Image",
@@ -34089,6 +34860,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}",
           "method": "get",
+          "tags": [
+            "User Settings"
+          ],
           "method2": "get",
           "description": "Returns scaled profile image of an extension.",
           "summary": "Get Scaled User Profile Image",
@@ -34116,6 +34890,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "list",
           "description": "Returns corporate map of configured network switches with the assigned emergency addresses for the logged-in account.",
           "summary": "Get Account Switch List",
@@ -34132,6 +34909,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Creates a new switch in corporate map based on chassis ID and used for Automatic Locations Update feature.",
           "summary": "Create Switch",
@@ -34148,6 +34928,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns the specified switch with the assigned emergency address.",
           "summary": "Get Switch",
@@ -34163,6 +34946,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
           "method": "put",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "put",
           "description": "Updates switch. Partial update is not supported, all switch parameters should be specified. If null value is received or parameter is missing, its value is removed.",
           "summary": "Update Switch",
@@ -34179,6 +34965,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches/{switchId}",
           "method": "delete",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "delete",
           "description": "Deletes wireless switch(es) in network configuration for Automatic Location Updates feature.",
           "summary": "Delete Switch",
@@ -34203,6 +34992,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/devices/bulk-assign",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Enables or disables Automatic Location Updates feature for the specified common phones.",
           "summary": "Enable Automatic Location Updates for Devices",
@@ -34226,6 +35018,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive",
           "method": "get",
+          "tags": [
+            "Message Exports"
+          ],
           "method2": "list",
           "description": "Returns the created report with message data not including attachments.",
           "summary": "Get Message Store Report Archive",
@@ -34241,6 +35036,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive/{archiveId}",
           "method": "get",
+          "tags": [
+            "Message Exports"
+          ],
           "method2": "get",
           "description": "Returns one of the report archives with message contents in application/zip format.",
           "summary": "Get Message Store Report Archive Content",
@@ -34268,6 +35066,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store",
           "method": "get",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "list",
           "description": "Returns the list of messages from an extension mailbox.",
           "summary": "Get Message List",
@@ -34284,6 +35085,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store",
           "method": "delete",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "deleteAll",
           "description": "Deletes conversation(s) by conversation ID(s). Batch request is supported, max number of IDs passed as query/path parameters is 50. Alternative syntax is supported - user converations can be deleted by passing multiple IDs in request body as an array of string, max number of conversation IDs passed in request body is 100. In this case asterisk is used in the path instead of IDs",
           "summary": "Delete Conversation",
@@ -34297,6 +35101,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
           "method": "get",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "get",
           "description": "Returns individual message record(s) by the given message ID(s). The length of inbound messages is unlimited. Batch request is supported.",
           "summary": "Get Message",
@@ -34312,6 +35119,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
           "method": "put",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "put",
           "description": "Updates message(s) by ID(s). Currently only message read status can be updated. Batch request is supported, max number of IDs passed as query/path parameters is 50. Alternative syntax is supported - user messages can be updated by passing multiple IDs in request body as an array of string, max number of IDs passed in request body is 1000. In this case asterisk is used in the path instead of IDs.",
           "summary": "Update Message List",
@@ -34329,6 +35139,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}",
           "method": "delete",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "delete",
           "description": "Deletes message(s) by the given message ID(s). The first call of this method transfers the message to the 'Delete' status. The second call transfers the deleted message to the 'Purged' status. If it is required to make the message 'Purged' immediately (from the first call), then set the query parameter purge to 'True'.",
           "summary": "Delete Message",
@@ -34353,6 +35166,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}/bulk-assign",
           "method": "post",
+          "tags": [
+            "Paging Only Groups"
+          ],
           "method2": "post",
           "description": "Adds and/or removes paging group users and devices.",
           "summary": "Assign Paging Group Users and Devices",
@@ -34376,6 +35192,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches-bulk-update",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Updates multiple switches in corporate map. The maximum number of switches per request is 10 000; limitation for account is 10 000.",
           "summary": "Update Multiple Switches",
@@ -34402,6 +35221,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches-bulk-create",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Creates multiple switches in corporate map. The maximum number of switches per request is 10 000; limitation for account is 10 000.",
           "summary": "Create Multiple Switches",
@@ -34428,6 +35250,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "list",
           "description": "Returns corporate networks map with emergency addresses assigned to the current account.",
           "summary": "Get Network Map",
@@ -34443,6 +35268,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Creates a new network in corporate ethernet map for assignment of emergency addresses to network access points.",
           "summary": "Create Network",
@@ -34459,6 +35287,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns the specified network with emergency addresses assigned to the current account.",
           "summary": "Get Network",
@@ -34474,6 +35305,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
           "method": "put",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "put",
           "description": "Updates network in corporate ethernet map for assignment of emergency addresses to network access points.",
           "summary": "Update Network",
@@ -34487,6 +35321,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/networks/{networkId}",
           "method": "delete",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "delete",
           "description": "Deletes network(s) in corporate ethernet map for Automatic Location Updates feature.",
           "summary": "Delete Network",
@@ -34510,6 +35347,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/switches-bulk-validate",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Validates switches before creation or update. The maximum number of switches per request is 10 000.",
           "summary": "Validate Multiple Switches",
@@ -34537,6 +35377,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting/{meetingId}/invitation",
           "method": "get",
+          "tags": [
+            "Meeting Management"
+          ],
           "method2": "get",
           "description": "Returns a meeting invitation by ID.",
           "summary": "Get Meeting Invitation",
@@ -34562,6 +35405,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "list",
           "description": "Returns account wireless points configured and used for Automatic Location Updates feature.",
           "summary": "Get Wireless Point List",
@@ -34578,6 +35424,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Creates a new wireless point in network configuration with the emergency address assigned.",
           "summary": "Create Wireless Point",
@@ -34594,6 +35443,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
           "method": "get",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "get",
           "description": "Returns the specified wireless access point of a corporate map with the emergency address assigned.",
           "summary": "Get Wireless Point",
@@ -34609,6 +35461,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
           "method": "put",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "put",
           "description": "Updates the specified wireless access point of a corporate map by ID.",
           "summary": "Update Wireless Point",
@@ -34625,6 +35480,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points/{pointId}",
           "method": "delete",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "delete",
           "description": "Deletes wireless point(s) of a corporate map by ID(s).",
           "summary": "Delete Wireless Point",
@@ -34649,6 +35507,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meetings-configuration/assisted",
           "method": "get",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "get",
           "description": "Returns assisted users information.",
           "summary": "Get Assisted Users",
@@ -34676,6 +35537,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/bring-in",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Adds a new party to the call session by bringing-in an established SIP call connection. The maximum number of parties to bring-in is 10; only 1 call party can be added per request. Currently the method is supported for sessions of 'Conference' origin only.",
           "summary": "Bring-In Call Party",
@@ -34702,6 +35566,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact",
           "method": "get",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "list",
           "description": "Returns user personal contacts.",
           "summary": "Get Contact List",
@@ -34718,6 +35585,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact",
           "method": "post",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "post",
           "description": "Creates personal user contact.",
           "summary": "Create Contact",
@@ -34735,6 +35605,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
           "method": "get",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "get",
           "description": "Returns contact(s) by ID(s). Batch request is supported.",
           "summary": "Get Contact",
@@ -34750,6 +35623,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
           "method": "put",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "put",
           "description": "Updates personal contact information by contact ID(s). Batch request is supported",
           "summary": "Update Contact",
@@ -34767,6 +35643,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/address-book/contact/{contactId}",
           "method": "delete",
+          "tags": [
+            "External Contacts"
+          ],
           "method2": "delete",
           "description": "Deletes contact(s) by ID(s). Batch request is supported.",
           "summary": "Delete Contact",
@@ -34791,6 +35670,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}",
           "method": "get",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "get",
           "description": "Returns a call party status by ID.",
           "summary": "Get Call Party Status",
@@ -34805,6 +35687,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}",
           "method": "delete",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "delete",
           "description": "Removes a party from a call session by ID. A party can be deleted only if supervised or parked. It is possible to delete only one conference participant per request.",
           "summary": "Delete Call Party",
@@ -34816,6 +35701,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}",
           "method": "patch",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "patch",
           "description": "Modifies a call party by ID. There is a known limitation for Mute scenario - mute via REST API doesn't work with mute placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and Ringcentral Desktop app you need to unmute both endpoints to bring the media back.",
           "summary": "Update Call Party",
@@ -34842,6 +35730,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points-bulk-update",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Updates wireless points in corporate map. The maximum number of wireless points per request is 10 000; limitation for account is 70 000.",
           "summary": "Update Multiple Wireless Points",
@@ -34868,6 +35759,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points-bulk-create",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Creates multiple wireless points in corporate map. The maximum number of wireless points per request is 10 000; limitation for account is 70 000.",
           "summary": "Create Multiple Wireless Points",
@@ -34895,6 +35789,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meetings-configuration/assistants",
           "method": "get",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "get",
           "description": "Returns assistants information.",
           "summary": "Get Assistants",
@@ -34920,6 +35817,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-address-auto-update/wireless-points-bulk-validate",
           "method": "post",
+          "tags": [
+            "Automatic Location Updates"
+          ],
           "method2": "post",
           "description": "Validates wireless points before creation or update. The maximum number of wireless points per request is 10 000.",
           "summary": "Validate Multiple Wireless Points",
@@ -34947,6 +35847,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/meeting-configuration/profile-image",
           "method": "post",
+          "tags": [
+            "Meeting Configuration"
+          ],
           "method2": "post",
           "description": "Uploads profile picture for user meetings.",
           "summary": "Upload User Meeting Profile Image",
@@ -34971,6 +35874,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/park",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Parks a call to a virtual location from where it can further be retrieved by any user from any phone of the system. The call session and call party identifiers should be specified in path. Currently the users can park only their own incoming calls. Up to 50 calls can be parked simultaneously. Park location starts with asterisk (*) and ranges 801-899.",
           "summary": "Call Park",
@@ -34997,6 +35903,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/flip",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Performs call flip procedure by holding opposite party and calling to the specified target",
           "summary": "Call Flip on Party",
@@ -35021,6 +35930,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/hold",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Puts the party to stand-alone mode and starts to play Hold Music according to configuration & state to peers. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back.",
           "summary": "Hold Call Party",
@@ -35045,6 +35957,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number",
           "method": "get",
+          "tags": [
+            "Call Forwarding"
+          ],
           "method2": "list",
           "description": "Returns the list of extension phone numbers used for call forwarding and call flip. The returned list contains all the extension phone numbers used for call forwarding and call flip.",
           "summary": "Get Forwarding Number List",
@@ -35061,6 +35976,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number",
           "method": "post",
+          "tags": [
+            "Call Forwarding"
+          ],
           "method2": "post",
           "description": "Adds a new forwarding number to the forwarding number list.",
           "summary": "Create Forwarding Number",
@@ -35077,6 +35995,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
           "method": "get",
+          "tags": [
+            "Call Forwarding"
+          ],
           "method2": "get",
           "description": "Returns a specific forwarding number.",
           "summary": "Get Forwarding Number",
@@ -35092,6 +36013,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
           "method": "put",
+          "tags": [
+            "Call Forwarding"
+          ],
           "method2": "put",
           "description": "Updates the existing forwarding number from the forwarding number list.",
           "summary": "Update Forwarding Number",
@@ -35108,6 +36032,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/forwarding-number/{forwardingNumberId}",
           "method": "delete",
+          "tags": [
+            "Call Forwarding"
+          ],
           "method2": "delete",
           "description": "Deletes a forwarding number from the forwarding number list by its ID.",
           "summary": "Delete Forwarding Number",
@@ -35133,6 +36060,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/reply",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Replies with text/pattern without picking up a call.",
           "summary": "Reply with Text",
@@ -35160,6 +36090,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/pickup",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Picks up a call parked to the specified park location.",
           "summary": "Pickup Call",
@@ -35187,6 +36120,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/answer",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Answers a call on a certain device by passing the corresponding device ID in request body. Supported for call forwarding, call transfer, call flip and call queues.",
           "summary": "Answer Call Party",
@@ -35214,6 +36150,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/bridge",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Allows the user to connect multiple call session participants over a conference call bridge. The current active call session ID and party ID of the user within this session should be specified in path; the bridged call session ID and party ID of the user within that session should be specified in request body. Thus the user connects participants of two sessions into one conference call using his/her own party IDs from both sessions.",
           "summary": "Bridge Call Party",
@@ -35241,6 +36180,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/ignore",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Ignores a call to a call queue agent in `Setup` or `Proceeding` state.",
           "summary": "Ignore Call in Queue",
@@ -35265,6 +36207,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/reject",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Rejects an inbound call in a \"Setup\" or \"Proceeding\" state",
           "summary": "Reject Call Party",
@@ -35288,6 +36233,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/unhold",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Brings a party back into a call and stops to play Hold Music. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back.",
           "summary": "Unhold Call Party",
@@ -35314,6 +36262,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/forward",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Forwards a non-answered incoming call to the specified call party. Applicable for a call session in \"Setup\" or \"Proceeding\" state.",
           "summary": "Forward Call Party",
@@ -35341,6 +36292,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/transfer",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Transfers an answered call to the specified call party. Applicable for a call session in \"Answered\" or \"Hold\" state.",
           "summary": "Transfer Call Party",
@@ -35368,6 +36322,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/supervise",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Allows to monitor a call party in 'Listen' mode. Input parameters are extension number of a monitored user and internal identifier of a supervisor's device. Call session and party identifiers should be specified in path. Please note that for this method dual channel audio flow is supported, which means that you need to make one more request for monitoring the second participant of a call. And as a result of each monitoring request the client recieves SIP invite with the following header `p-rc-api-monitoring-ids` containing IDs of the monitored party and session. The flow is supported for calls with no more than 2 participants. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
           "summary": "Supervise Call Party",
@@ -35394,6 +36351,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers",
           "method": "get",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "list",
           "description": "Returns the lists of blocked and allowed phone numbers.",
           "summary": "Get Blocked/Allowed Phone Numbers",
@@ -35410,6 +36370,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers",
           "method": "post",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "post",
           "description": "Updates either blocked or allowed phone number list with a new phone number.",
           "summary": "Add Blocked/Allowed Number",
@@ -35426,6 +36389,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
           "method": "get",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "get",
           "description": "Returns blocked or allowed phone number(s) by their ID(s). Batch request is supported.",
           "summary": "Get Blocked/Allowed Number",
@@ -35441,6 +36407,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
           "method": "put",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "put",
           "description": "Updates blocked or allowed phone number(s) by their ID(s). Batch request is supported.",
           "summary": "Update Blocked/Allowed Number",
@@ -35457,6 +36426,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/caller-blocking/phone-numbers/{blockedNumberId}",
           "method": "delete",
+          "tags": [
+            "Call Blocking"
+          ],
           "method2": "delete",
           "description": "Deletes blocked or allowed phone number(s) by their ID(s). Batch request is supported.",
           "summary": "Delete Blocked/Allowed Number",
@@ -35481,6 +36453,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}/content/{attachmentId}",
           "method": "get",
+          "tags": [
+            "Message Store"
+          ],
           "method2": "get",
           "description": "Returns a specific message attachment data as media stream.",
           "summary": "Get Message Content",
@@ -35511,6 +36486,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/recordings",
           "method": "post",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "post",
           "description": "Starts a new call recording for the party",
           "summary": "Create Recording",
@@ -35522,6 +36500,9 @@
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/recordings/{recordingId}",
           "method": "patch",
+          "tags": [
+            "Call Control"
+          ],
           "method2": "patch",
           "description": "Pause/resume recording",
           "summary": "Pause/Resume Recording",

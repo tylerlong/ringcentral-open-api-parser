@@ -27,6 +27,7 @@ export type ResponseSchema = {
 export type Operation = {
   endpoint: string;
   method: string;
+  tags?: string[];
   method2: string;
   description?: string;
   summary?: string;

@@ -128,6 +128,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         path.operations.push({
           endpoint,
           method,
+          tags: operation.tags,
           method2: method,
           description: operation.description,
           summary: operation.summary,
