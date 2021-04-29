@@ -28882,7 +28882,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserSearchResponse"
+            "$ref": "UserSearchResponse"
           },
           "queryParameters": "searchViaGet2Parameters"
         },
@@ -28896,7 +28896,7 @@
           "appPermission": "EditAccounts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserResponse"
+            "$ref": "UserResponse"
           },
           "bodyParameters": "createUser"
         },
@@ -28910,7 +28910,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserResponse"
+            "$ref": "UserResponse"
           }
         },
         {
@@ -28923,7 +28923,7 @@
           "appPermission": "EditAccounts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserResponse"
+            "$ref": "UserResponse"
           },
           "bodyParameters": "user"
         },
@@ -28947,7 +28947,7 @@
           "appPermission": "EditAccounts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserResponse"
+            "$ref": "UserResponse"
           },
           "bodyParameters": "userPatch"
         }
@@ -28971,7 +28971,7 @@
           "rateLimitGroup": "Auth",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/TokenInfo"
+            "$ref": "TokenInfo"
           },
           "bodyParameters": "getTokenRequest",
           "formUrlEncoded": true
@@ -28993,7 +28993,7 @@
           "rateLimitGroup": "NoThrottling",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetVersionsResponse"
+            "$ref": "GetVersionsResponse"
           }
         },
         {
@@ -29006,7 +29006,7 @@
           "rateLimitGroup": "NoThrottling",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetVersionResponse"
+            "$ref": "GetVersionResponse"
           }
         }
       ],
@@ -29051,7 +29051,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserSearchResponse"
+            "$ref": "UserSearchResponse"
           },
           "bodyParameters": "searchRequest"
         }
@@ -29096,7 +29096,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEveryoneInfo"
+            "$ref": "GlipEveryoneInfo"
           }
         },
         {
@@ -29111,7 +29111,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEveryoneInfo"
+            "$ref": "GlipEveryoneInfo"
           },
           "bodyParameters": "updateGlipEveryoneRequest"
         }
@@ -29136,7 +29136,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
+            "$ref": "GlipChatsListWithoutNavigation"
           },
           "queryParameters": "listFavoriteChatsParameters"
         }
@@ -29157,7 +29157,7 @@
           "rateLimitGroup": "NoThrottling",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ServiceProviderConfig"
+            "$ref": "ServiceProviderConfig"
           }
         }
       ]
@@ -29181,7 +29181,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPreferencesInfo"
+            "$ref": "GlipPreferencesInfo"
           }
         }
       ]
@@ -29206,7 +29206,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipChatsListWithoutNavigation"
+            "$ref": "GlipChatsListWithoutNavigation"
           },
           "queryParameters": "listRecentChatsParameters"
         }
@@ -29229,7 +29229,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetLocationListResponse"
+            "$ref": "GetLocationListResponse"
           },
           "queryParameters": "listLocationsParameters"
         }
@@ -29253,7 +29253,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetAccountInfoResponse"
+            "$ref": "GetAccountInfoResponse"
           }
         }
       ],
@@ -29277,7 +29277,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ParsePhoneNumberResponse"
+            "$ref": "ParsePhoneNumberResponse"
           },
           "queryParameters": "parsePhoneNumberParameters",
           "bodyParameters": "parsePhoneNumberRequest"
@@ -29301,7 +29301,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTaskInfo"
+            "$ref": "GlipTaskInfo"
           }
         },
         {
@@ -29324,7 +29324,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTaskList"
+            "$ref": "GlipTaskList"
           },
           "bodyParameters": "glipUpdateTask"
         }
@@ -29350,7 +29350,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetGlipNoteInfo"
+            "$ref": "GetGlipNoteInfo"
           }
         },
         {
@@ -29377,7 +29377,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipNoteInfo"
+            "$ref": "GlipNoteInfo"
           },
           "bodyParameters": "glipNoteCreate"
         }
@@ -29403,7 +29403,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTeamsList"
+            "$ref": "GlipTeamsList"
           },
           "queryParameters": "listGlipTeamsParameters"
         },
@@ -29419,7 +29419,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTeamInfo"
+            "$ref": "GlipTeamInfo"
           },
           "bodyParameters": "glipPostTeamBody"
         },
@@ -29435,7 +29435,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTeamInfo"
+            "$ref": "GlipTeamInfo"
           }
         },
         {
@@ -29462,7 +29462,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTeamInfo"
+            "$ref": "GlipTeamInfo"
           },
           "bodyParameters": "glipPatchTeamBody"
         }
@@ -29488,7 +29488,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipChatsList"
+            "$ref": "GlipChatsList"
           },
           "queryParameters": "listGlipChatsParameters"
         },
@@ -29504,7 +29504,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipChatInfo"
+            "$ref": "GlipChatInfo"
           }
         }
       ],
@@ -29529,7 +29529,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventsInfo"
+            "$ref": "GlipEventsInfo"
           },
           "queryParameters": "readGlipEventsParameters"
         },
@@ -29545,7 +29545,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventInfo"
+            "$ref": "GlipEventInfo"
           },
           "bodyParameters": "glipEventCreate"
         },
@@ -29561,7 +29561,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventInfo"
+            "$ref": "GlipEventInfo"
           }
         },
         {
@@ -29576,7 +29576,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventInfo"
+            "$ref": "GlipEventInfo"
           },
           "bodyParameters": "glipEventCreate"
         },
@@ -29614,7 +29614,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPersonInfo"
+            "$ref": "GlipPersonInfo"
           }
         }
       ],
@@ -29725,7 +29725,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ListFaxCoverPagesResponse"
+            "$ref": "ListFaxCoverPagesResponse"
           },
           "queryParameters": "listFaxCoverPagesParameters"
         }
@@ -29749,7 +29749,7 @@
           "appPermission": "VoipCalling",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CreateSipRegistrationResponse"
+            "$ref": "CreateSipRegistrationResponse"
           },
           "bodyParameters": "createSipRegistrationRequest"
         }
@@ -29774,7 +29774,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipWebhookList"
+            "$ref": "GlipWebhookList"
           }
         },
         {
@@ -29789,7 +29789,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipWebhookList"
+            "$ref": "GlipWebhookList"
           }
         },
         {
@@ -29825,7 +29825,7 @@
           "rateLimitGroup": "Heavy",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTaskList"
+            "$ref": "GlipTaskList"
           },
           "queryParameters": "listChatTasksParameters"
         },
@@ -29839,7 +29839,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipTaskInfo"
+            "$ref": "GlipTaskInfo"
           },
           "bodyParameters": "glipCreateTask"
         }
@@ -29865,7 +29865,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipNotesInfo"
+            "$ref": "GlipNotesInfo"
           },
           "queryParameters": "listChatNotesParameters"
         },
@@ -29881,7 +29881,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipNoteInfo"
+            "$ref": "GlipNoteInfo"
           },
           "bodyParameters": "glipNoteCreate"
         }
@@ -29927,7 +29927,7 @@
           "appPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/DataExportTaskList"
+            "$ref": "DataExportTaskList"
           },
           "queryParameters": "listDataExportTasksParameters"
         },
@@ -29942,7 +29942,7 @@
           "appPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/DataExportTask"
+            "$ref": "DataExportTask"
           },
           "bodyParameters": "createDataExportTaskRequest"
         },
@@ -29957,7 +29957,7 @@
           "appPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/DataExportTask"
+            "$ref": "DataExportTask"
           }
         }
       ],
@@ -29980,7 +29980,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetStateListResponse"
+            "$ref": "GetStateListResponse"
           },
           "queryParameters": "listStatesParameters"
         },
@@ -29994,7 +29994,7 @@
           "rateLimitGroup": "Light",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetStateInfoResponse"
+            "$ref": "GetStateInfoResponse"
           }
         }
       ],
@@ -30019,7 +30019,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipCompany"
+            "$ref": "GlipCompany"
           }
         }
       ],
@@ -30154,7 +30154,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipConversationsList"
+            "$ref": "GlipConversationsList"
           },
           "queryParameters": "listGlipConversationsParameters"
         },
@@ -30170,7 +30170,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipConversationInfo"
+            "$ref": "GlipConversationInfo"
           },
           "bodyParameters": "createGlipConversationRequest"
         },
@@ -30186,7 +30186,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipConversationInfo"
+            "$ref": "GlipConversationInfo"
           }
         }
       ],
@@ -30211,7 +30211,7 @@
           "userPermission": "ReadUserInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomCompanyGreetingInfo"
+            "$ref": "CustomCompanyGreetingInfo"
           },
           "bodyParameters": "createCompanyGreetingRequest",
           "multipart": true
@@ -30259,7 +30259,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventInfo"
+            "$ref": "GlipEventInfo"
           }
         },
         {
@@ -30274,7 +30274,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipEventInfo"
+            "$ref": "GlipEventInfo"
           },
           "bodyParameters": "glipEventCreate"
         }
@@ -30321,7 +30321,7 @@
           "userPermission": "ReadPresenceStatus",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountPresenceInfo"
+            "$ref": "AccountPresenceInfo"
           },
           "queryParameters": "readAccountPresenceParameters"
         }
@@ -30365,7 +30365,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/RecordsCollectionResourceSubscriptionResponse"
+            "$ref": "RecordsCollectionResourceSubscriptionResponse"
           }
         },
         {
@@ -30378,7 +30378,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/SubscriptionInfo"
+            "$ref": "SubscriptionInfo"
           },
           "bodyParameters": "createSubscriptionRequest"
         },
@@ -30392,7 +30392,7 @@
           "rateLimitGroup": "Light",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/SubscriptionInfo"
+            "$ref": "SubscriptionInfo"
           }
         },
         {
@@ -30405,7 +30405,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/SubscriptionInfo"
+            "$ref": "SubscriptionInfo"
           },
           "bodyParameters": "modifySubscriptionRequest"
         },
@@ -30439,7 +30439,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetCountryListResponse"
+            "$ref": "GetCountryListResponse"
           },
           "queryParameters": "listCountriesParameters"
         },
@@ -30453,7 +30453,7 @@
           "rateLimitGroup": "Light",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetCountryInfoDictionaryResponse"
+            "$ref": "GetCountryInfoDictionaryResponse"
           }
         }
       ],
@@ -30479,7 +30479,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipWebhookList"
+            "$ref": "GlipWebhookList"
           }
         },
         {
@@ -30494,7 +30494,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipWebhookInfo"
+            "$ref": "GlipWebhookInfo"
           }
         }
       ]
@@ -30538,7 +30538,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetTimezoneListResponse"
+            "$ref": "GetTimezoneListResponse"
           },
           "queryParameters": "listTimezonesParameters"
         },
@@ -30552,7 +30552,7 @@
           "rateLimitGroup": "Light",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetTimezoneInfoResponse"
+            "$ref": "GetTimezoneInfoResponse"
           },
           "queryParameters": "readTimezoneParameters"
         }
@@ -30576,7 +30576,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/LanguageList"
+            "$ref": "LanguageList"
           }
         },
         {
@@ -30589,7 +30589,7 @@
           "rateLimitGroup": "Light",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/LanguageInfo"
+            "$ref": "LanguageInfo"
           }
         }
       ],
@@ -30614,7 +30614,7 @@
           "userPermission": "ReadServicePlanInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetServiceInfoResponse"
+            "$ref": "GetServiceInfoResponse"
           }
         }
       ]
@@ -30638,7 +30638,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyActiveCallsResponse"
+            "$ref": "CompanyActiveCallsResponse"
           },
           "queryParameters": "listCompanyActiveCallsParameters"
         }
@@ -30661,7 +30661,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/DictionaryGreetingList"
+            "$ref": "DictionaryGreetingList"
           },
           "queryParameters": "listStandardGreetingsParameters"
         },
@@ -30675,7 +30675,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/DictionaryGreetingInfo"
+            "$ref": "DictionaryGreetingInfo"
           }
         }
       ],
@@ -30700,7 +30700,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountCallLogSyncResponse"
+            "$ref": "AccountCallLogSyncResponse"
           },
           "queryParameters": "syncAccountCallLogParameters"
         }
@@ -30747,7 +30747,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallRecordingSettingsResource"
+            "$ref": "CallRecordingSettingsResource"
           }
         },
         {
@@ -30762,7 +30762,7 @@
           "userPermission": "EditCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallRecordingSettingsResource"
+            "$ref": "CallRecordingSettingsResource"
           },
           "bodyParameters": "callRecordingSettingsResource"
         }
@@ -30787,7 +30787,7 @@
           "userPermission": "ReadUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyBusinessHours"
+            "$ref": "CompanyBusinessHours"
           }
         },
         {
@@ -30802,7 +30802,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyBusinessHours"
+            "$ref": "CompanyBusinessHours"
           },
           "bodyParameters": "companyBusinessHoursUpdateRequest"
         }
@@ -30850,7 +30850,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPostsList"
+            "$ref": "GlipPostsList"
           },
           "queryParameters": "readGlipPostsParameters"
         },
@@ -30866,7 +30866,7 @@
           "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPostInfo"
+            "$ref": "GlipPostInfo"
           },
           "bodyParameters": "glipPostPostBody"
         },
@@ -30882,7 +30882,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPostInfo"
+            "$ref": "GlipPostInfo"
           }
         },
         {
@@ -30909,7 +30909,7 @@
           "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GlipPostInfo"
+            "$ref": "GlipPostInfo"
           },
           "bodyParameters": "glipPatchPostBody"
         }
@@ -30933,7 +30933,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/SubscriptionInfo"
+            "$ref": "SubscriptionInfo"
           }
         }
       ]
@@ -30957,7 +30957,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountBusinessAddressResource"
+            "$ref": "AccountBusinessAddressResource"
           }
         },
         {
@@ -30972,7 +30972,7 @@
           "userPermission": "EditCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountBusinessAddressResource"
+            "$ref": "AccountBusinessAddressResource"
           },
           "bodyParameters": "modifyAccountBusinessAddressRequest"
         }
@@ -30997,7 +30997,7 @@
           "appPermission": "A2PSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/OptOutListResponse"
+            "$ref": "OptOutListResponse"
           },
           "queryParameters": "readA2PSMSOptOutsParameters"
         }
@@ -31022,7 +31022,7 @@
           "userPermission": "ReadCompanyDevices",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetDeviceInfoResponse"
+            "$ref": "GetDeviceInfoResponse"
           },
           "queryParameters": "readDeviceParameters"
         },
@@ -31038,7 +31038,7 @@
           "userPermission": "EditCompanyDevices",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetDeviceInfoResponse"
+            "$ref": "GetDeviceInfoResponse"
           },
           "queryParameters": "updateDeviceParameters",
           "bodyParameters": "accountDeviceUpdate"
@@ -31065,7 +31065,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallSession"
+            "$ref": "CallSession"
           },
           "bodyParameters": "makeCallOutRequest"
         }
@@ -31090,7 +31090,7 @@
           "userPermission": "MeetingsRecordings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
+            "$ref": "ListMeetingRecordingsResponse"
           },
           "queryParameters": "listAccountMeetingRecordingsParameters"
         }
@@ -31115,7 +31115,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallSessionObject"
+            "$ref": "CallSessionObject"
           }
         }
       ]
@@ -31140,7 +31140,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/FederationResource"
+            "$ref": "FederationResource"
           }
         }
       ]
@@ -31164,7 +31164,7 @@
           "userPermission": "EditExtensionInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionBulkUpdateTaskResource"
+            "$ref": "ExtensionBulkUpdateTaskResource"
           },
           "bodyParameters": "extensionBulkUpdateRequest"
         }
@@ -31189,7 +31189,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueues"
+            "$ref": "CallQueues"
           },
           "queryParameters": "listCallQueuesParameters"
         },
@@ -31205,7 +31205,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueueDetails"
+            "$ref": "CallQueueDetails"
           }
         },
         {
@@ -31220,7 +31220,7 @@
           "userPermission": "EditUserInfo",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueueDetails"
+            "$ref": "CallQueueDetails"
           },
           "bodyParameters": "callQueueUpdateDetails"
         }
@@ -31246,7 +31246,7 @@
           "userPermission": "AutoReceptionist",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/IVRMenuInfo"
+            "$ref": "IVRMenuInfo"
           },
           "bodyParameters": "iVRMenuInfo"
         },
@@ -31262,7 +31262,7 @@
           "userPermission": "AutoReceptionist",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/IVRMenuInfo"
+            "$ref": "IVRMenuInfo"
           }
         },
         {
@@ -31277,7 +31277,7 @@
           "userPermission": "AutoReceptionist",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/IVRMenuInfo"
+            "$ref": "IVRMenuInfo"
           },
           "bodyParameters": "iVRMenuInfo"
         }
@@ -31303,7 +31303,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserTemplates"
+            "$ref": "UserTemplates"
           },
           "queryParameters": "listUserTemplatesParameters"
         },
@@ -31319,7 +31319,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/TemplateInfo"
+            "$ref": "TemplateInfo"
           }
         }
       ],
@@ -31344,7 +31344,7 @@
           "userPermission": "ReadCompanyGreetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/IVRPrompts"
+            "$ref": "IVRPrompts"
           }
         },
         {
@@ -31359,7 +31359,7 @@
           "userPermission": "EditCompanyGreetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PromptInfo"
+            "$ref": "PromptInfo"
           },
           "bodyParameters": "createIVRPromptRequest",
           "multipart": true
@@ -31376,7 +31376,7 @@
           "userPermission": "ReadCompanyGreetings",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/PromptInfo"
+            "$ref": "PromptInfo"
           }
         },
         {
@@ -31391,7 +31391,7 @@
           "userPermission": "EditCompanyGreetings",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/PromptInfo"
+            "$ref": "PromptInfo"
           },
           "bodyParameters": "updateIVRPromptRequest"
         },
@@ -31429,7 +31429,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionListResponse"
+            "$ref": "GetExtensionListResponse"
           },
           "queryParameters": "listExtensionsParameters"
         },
@@ -31445,7 +31445,7 @@
           "userPermission": "AddRemoveUsers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionCreationResponse"
+            "$ref": "ExtensionCreationResponse"
           },
           "bodyParameters": "extensionCreationRequest"
         },
@@ -31461,7 +31461,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionInfoResponse"
+            "$ref": "GetExtensionInfoResponse"
           }
         },
         {
@@ -31476,7 +31476,7 @@
           "userPermission": "EditUserInfo OR EditUserCredentials",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionInfoResponse"
+            "$ref": "GetExtensionInfoResponse"
           },
           "bodyParameters": "extensionUpdateRequest"
         },
@@ -31517,7 +31517,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountLockedSettingResponse"
+            "$ref": "AccountLockedSettingResponse"
           }
         }
       ]
@@ -31541,7 +31541,7 @@
           "userPermission": "ReadUserInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomFieldsResource"
+            "$ref": "CustomFieldsResource"
           }
         },
         {
@@ -31556,7 +31556,7 @@
           "userPermission": "Users",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomFieldResource"
+            "$ref": "CustomFieldResource"
           },
           "bodyParameters": "customFieldCreateRequest"
         },
@@ -31572,7 +31572,7 @@
           "userPermission": "Users",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomFieldResource"
+            "$ref": "CustomFieldResource"
           },
           "bodyParameters": "customFieldUpdateRequest"
         },
@@ -31610,7 +31610,7 @@
           "userPermission": "ReadCallRecording",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetCallRecordingResponse"
+            "$ref": "GetCallRecordingResponse"
           }
         }
       ],
@@ -31635,7 +31635,7 @@
           "userPermission": "FullCompanyCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountCallLogResponse"
+            "$ref": "AccountCallLogResponse"
           },
           "queryParameters": "readCompanyCallLogParameters"
         },
@@ -31651,7 +31651,7 @@
           "userPermission": "FullCompanyCallLog",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyCallLogRecord"
+            "$ref": "CompanyCallLogRecord"
           },
           "queryParameters": "readCompanyCallRecordParameters"
         }
@@ -31677,7 +31677,7 @@
           "appPermission": "A2PSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CreateMessageBatchResponse"
+            "$ref": "CreateMessageBatchResponse"
           },
           "bodyParameters": "createSMSMessageBatchRequest"
         },
@@ -31692,7 +31692,7 @@
           "appPermission": "A2PSMS",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageBatchResponse"
+            "$ref": "MessageBatchResponse"
           }
         }
       ],
@@ -31717,7 +31717,7 @@
           "userPermission": "ReadCompanyAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyAnsweringRuleList"
+            "$ref": "CompanyAnsweringRuleList"
           },
           "queryParameters": "listCompanyAnsweringRulesParameters"
         },
@@ -31733,7 +31733,7 @@
           "userPermission": "EditCompanyAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+            "$ref": "CompanyAnsweringRuleInfo"
           },
           "bodyParameters": "companyAnsweringRuleRequest"
         },
@@ -31749,7 +31749,7 @@
           "userPermission": "ReadCompanyAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+            "$ref": "CompanyAnsweringRuleInfo"
           }
         },
         {
@@ -31764,7 +31764,7 @@
           "userPermission": "EditCompanyAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyAnsweringRuleInfo"
+            "$ref": "CompanyAnsweringRuleInfo"
           },
           "bodyParameters": "companyAnsweringRuleUpdate"
         },
@@ -31802,7 +31802,7 @@
           "userPermission": "EditPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AddressBookBulkUploadResponse"
+            "$ref": "AddressBookBulkUploadResponse"
           },
           "bodyParameters": "addressBookBulkUploadRequest"
         }
@@ -31829,7 +31829,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/DirectoryResource"
+            "$ref": "DirectoryResource"
           },
           "bodyParameters": "searchDirectoryEntriesRequest"
         }
@@ -31855,7 +31855,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallRecordingExtensions"
+            "$ref": "CallRecordingExtensions"
           }
         }
       ]
@@ -31928,7 +31928,7 @@
           "userPermission": "AccountAdministration",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageStoreConfiguration"
+            "$ref": "MessageStoreConfiguration"
           }
         },
         {
@@ -31943,7 +31943,7 @@
           "userPermission": "AccountAdministration",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageStoreConfiguration"
+            "$ref": "MessageStoreConfiguration"
           },
           "bodyParameters": "messageStoreConfiguration"
         }
@@ -31969,7 +31969,7 @@
           "userPermission": "OutboundFaxes",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/FaxResponse"
+            "$ref": "FaxResponse"
           },
           "bodyParameters": "createFaxMessageRequest",
           "multipart": true
@@ -31996,7 +31996,7 @@
           "userPermission": "OutboundSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
+            "$ref": "GetSMSMessageInfoResponse"
           },
           "bodyParameters": "CreateMMSMessage",
           "multipart": true
@@ -32023,7 +32023,7 @@
           "userPermission": "OutboundSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetSMSMessageInfoResponse"
+            "$ref": "GetSMSMessageInfoResponse"
           },
           "bodyParameters": "CreateSMSMessage",
           "multipart": true
@@ -32049,7 +32049,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/DirectoryResource"
+            "$ref": "DirectoryResource"
           },
           "queryParameters": "listDirectoryEntriesParameters"
         },
@@ -32064,7 +32064,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/ContactResource"
+            "$ref": "ContactResource"
           }
         }
       ],
@@ -32089,7 +32089,7 @@
           "userPermission": "ReadCompanyPhoneNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AccountPhoneNumbers"
+            "$ref": "AccountPhoneNumbers"
           },
           "queryParameters": "listAccountPhoneNumbersParameters"
         },
@@ -32105,7 +32105,7 @@
           "userPermission": "ReadCompanyPhoneNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CompanyPhoneNumberInfo"
+            "$ref": "CompanyPhoneNumberInfo"
           }
         }
       ],
@@ -32130,7 +32130,7 @@
           "appPermission": "A2PSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageListResponse"
+            "$ref": "MessageListResponse"
           },
           "queryParameters": "listA2PSMSParameters"
         },
@@ -32145,7 +32145,7 @@
           "appPermission": "A2PSMS",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageDetailsResponse"
+            "$ref": "MessageDetailsResponse"
           }
         }
       ],
@@ -32171,7 +32171,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueueMembers"
+            "$ref": "CallQueueMembers"
           },
           "queryParameters": "listCallQueueMembersParameters"
         }
@@ -32197,7 +32197,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionGrantListResponse"
+            "$ref": "GetExtensionGrantListResponse"
           },
           "queryParameters": "listExtensionGrantsParameters"
         }
@@ -32222,7 +32222,7 @@
           "userPermission": "Users",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageStoreReport"
+            "$ref": "MessageStoreReport"
           },
           "bodyParameters": "createMessageStoreReportRequest"
         },
@@ -32238,7 +32238,7 @@
           "userPermission": "Users",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageStoreReport"
+            "$ref": "MessageStoreReport"
           }
         }
       ],
@@ -32264,7 +32264,7 @@
           "userPermission": "ReadUserDevices",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionDevicesResponse"
+            "$ref": "GetExtensionDevicesResponse"
           },
           "queryParameters": "listExtensionDevicesParameters"
         }
@@ -32315,7 +32315,7 @@
           "appPermission": "ReadPresence",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueuePresence"
+            "$ref": "CallQueuePresence"
           }
         },
         {
@@ -32329,7 +32329,7 @@
           "appPermission": "EditPresence",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallQueuePresence"
+            "$ref": "CallQueuePresence"
           },
           "bodyParameters": "callQueueUpdatePresence"
         }
@@ -32381,7 +32381,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/FeatureList"
+            "$ref": "FeatureList"
           },
           "queryParameters": "readUserFeaturesParameters"
         }
@@ -32406,7 +32406,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallMonitoringGroups"
+            "$ref": "CallMonitoringGroups"
           },
           "queryParameters": "listCallMonitoringGroupsParameters"
         },
@@ -32422,7 +32422,7 @@
           "userPermission": "Groups",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallMonitoringGroup"
+            "$ref": "CallMonitoringGroup"
           },
           "bodyParameters": "createCallMonitoringGroupRequest"
         },
@@ -32438,7 +32438,7 @@
           "userPermission": "Groups",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallMonitoringGroup"
+            "$ref": "CallMonitoringGroup"
           },
           "bodyParameters": "createCallMonitoringGroupRequest"
         },
@@ -32476,7 +32476,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/EmergencyLocationList"
+            "$ref": "EmergencyLocationList"
           },
           "queryParameters": "listEmergencyLocationsParameters"
         },
@@ -32504,7 +32504,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/EmergencyLocationInfo"
+            "$ref": "EmergencyLocationInfo"
           }
         },
         {
@@ -32519,7 +32519,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/EmergencyLocationInfo"
+            "$ref": "EmergencyLocationInfo"
           },
           "bodyParameters": "emergencyLocationInfoRequest"
         },
@@ -32559,7 +32559,7 @@
           "userPermission": "ReadPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/FavoriteContactList"
+            "$ref": "FavoriteContactList"
           }
         },
         {
@@ -32574,7 +32574,7 @@
           "userPermission": "EditPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/FavoriteContactList"
+            "$ref": "FavoriteContactList"
           },
           "bodyParameters": "favoriteCollection"
         }
@@ -32600,7 +32600,7 @@
           "userPermission": "ReadPresenceStatus",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetPresenceInfo"
+            "$ref": "GetPresenceInfo"
           },
           "queryParameters": "readUserPresenceStatusParameters"
         },
@@ -32615,7 +32615,7 @@
           "appPermission": "EditPresence",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PresenceInfoResponse"
+            "$ref": "PresenceInfoResponse"
           },
           "bodyParameters": "presenceInfoRequest"
         }
@@ -32664,7 +32664,7 @@
           "userPermission": "ReadCallerIDSettings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionCallerIdInfo"
+            "$ref": "ExtensionCallerIdInfo"
           }
         },
         {
@@ -32679,7 +32679,7 @@
           "userPermission": "EditCallerIDSettings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionCallerIdInfo"
+            "$ref": "ExtensionCallerIdInfo"
           },
           "bodyParameters": "extensionCallerIdInfo"
         }
@@ -32705,7 +32705,7 @@
           "userPermission": "JoinLeaveCallQueue",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserCallQueues"
+            "$ref": "UserCallQueues"
           },
           "bodyParameters": "userCallQueues"
         }
@@ -32731,7 +32731,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AutomaticLocationUpdatesUserList"
+            "$ref": "AutomaticLocationUpdatesUserList"
           },
           "queryParameters": "listAutomaticLocationUpdatesUsersParameters"
         }
@@ -32757,7 +32757,7 @@
           "userPermission": "EditExtensionInfo",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionBulkUpdateTaskResource"
+            "$ref": "ExtensionBulkUpdateTaskResource"
           }
         }
       ],
@@ -32783,7 +32783,7 @@
           "userPermission": "OrganizeConference",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetConferencingInfoResponse"
+            "$ref": "GetConferencingInfoResponse"
           },
           "queryParameters": "readConferencingSettingsParameters"
         },
@@ -32799,7 +32799,7 @@
           "userPermission": "OrganizeConference",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetConferencingInfoResponse"
+            "$ref": "GetConferencingInfoResponse"
           },
           "bodyParameters": "updateConferencingInfoRequest"
         }
@@ -32825,7 +32825,7 @@
           "userPermission": "ReadUserPhoneNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionPhoneNumbersResponse"
+            "$ref": "GetExtensionPhoneNumbersResponse"
           },
           "queryParameters": "listExtensionPhoneNumbersParameters"
         }
@@ -32851,7 +32851,7 @@
           "userPermission": "ReadMessages",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetMessageSyncResponse"
+            "$ref": "GetMessageSyncResponse"
           },
           "queryParameters": "syncMessagesParameters"
         }
@@ -32877,7 +32877,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserActiveCallsResponse"
+            "$ref": "UserActiveCallsResponse"
           },
           "queryParameters": "listExtensionActiveCallsParameters"
         }
@@ -32901,7 +32901,7 @@
           "rateLimitGroup": "Medium",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AuthProfileResource"
+            "$ref": "AuthProfileResource"
           }
         }
       ]
@@ -32926,7 +32926,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ListDevicesAutomaticLocationUpdates"
+            "$ref": "ListDevicesAutomaticLocationUpdates"
           },
           "queryParameters": "listDevicesAutomaticLocationUpdatesParameters"
         }
@@ -32952,7 +32952,7 @@
           "userPermission": "InternalSMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetInternalTextMessageInfoResponse"
+            "$ref": "GetInternalTextMessageInfoResponse"
           },
           "bodyParameters": "createInternalTextMessageRequest"
         }
@@ -32978,7 +32978,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallLogSync"
+            "$ref": "CallLogSync"
           },
           "queryParameters": "syncUserCallLogParameters"
         }
@@ -33004,7 +33004,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetUserBusinessHoursResponse"
+            "$ref": "GetUserBusinessHoursResponse"
           }
         },
         {
@@ -33019,7 +33019,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserBusinessHoursUpdateResponse"
+            "$ref": "UserBusinessHoursUpdateResponse"
           },
           "bodyParameters": "userBusinessHoursUpdateRequest"
         }
@@ -33044,7 +33044,7 @@
           "appPermission": "CallControl",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallSessionObject"
+            "$ref": "CallSessionObject"
           },
           "queryParameters": "readCallSessionStatusParameters"
         },
@@ -33082,7 +33082,7 @@
           "userPermission": "EditPersonalContacts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/AddressBookBulkUploadResponse"
+            "$ref": "AddressBookBulkUploadResponse"
           }
         }
       ],
@@ -33108,7 +33108,7 @@
           "userPermission": "ReadBlockedNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallerBlockingSettings"
+            "$ref": "CallerBlockingSettings"
           }
         },
         {
@@ -33123,7 +33123,7 @@
           "userPermission": "EditBlockedNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallerBlockingSettings"
+            "$ref": "CallerBlockingSettings"
           },
           "bodyParameters": "callerBlockingSettingsUpdate"
         }
@@ -33149,7 +33149,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallMonitoringGroupMemberList"
+            "$ref": "CallMonitoringGroupMemberList"
           },
           "queryParameters": "listCallMonitoringGroupMembersParameters"
         }
@@ -33175,7 +33175,7 @@
           "userPermission": "ReadPresenceStatus",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UnifiedPresence"
+            "$ref": "UnifiedPresence"
           }
         },
         {
@@ -33190,7 +33190,7 @@
           "userPermission": "EditPresenceStatus",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UnifiedPresence"
+            "$ref": "UnifiedPresence"
           },
           "bodyParameters": "updateUnifiedPresence"
         }
@@ -33216,7 +33216,7 @@
           "userPermission": "ReadPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AddressBookSync"
+            "$ref": "AddressBookSync"
           },
           "queryParameters": "syncAddressBookParameters"
         }
@@ -33242,7 +33242,7 @@
           "userPermission": "MeetingsRecordings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ListMeetingRecordingsResponse"
+            "$ref": "ListMeetingRecordingsResponse"
           },
           "queryParameters": "listUserMeetingRecordingsParameters"
         }
@@ -33267,7 +33267,7 @@
           "rateLimitGroup": "Light",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AuthProfileCheckResource"
+            "$ref": "AuthProfileCheckResource"
           },
           "queryParameters": "checkUserPermissionParameters"
         }
@@ -33293,7 +33293,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserVideoConfiguration"
+            "$ref": "UserVideoConfiguration"
           }
         },
         {
@@ -33307,7 +33307,7 @@
           "appPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserVideoConfiguration"
+            "$ref": "UserVideoConfiguration"
           },
           "bodyParameters": "userVideoConfiguration"
         }
@@ -33332,7 +33332,7 @@
           "appPermission": "ReadAccounts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserEmergencyLocationList"
+            "$ref": "UserEmergencyLocationList"
           }
         }
       ]
@@ -33357,7 +33357,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingsResource"
+            "$ref": "MeetingsResource"
           }
         },
         {
@@ -33372,7 +33372,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingResponseResource"
+            "$ref": "MeetingResponseResource"
           },
           "bodyParameters": "meetingRequestResource"
         },
@@ -33388,7 +33388,7 @@
           "userPermission": "Meetings",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingResponseResource"
+            "$ref": "MeetingResponseResource"
           }
         },
         {
@@ -33403,7 +33403,7 @@
           "userPermission": "Meetings",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingResponseResource"
+            "$ref": "MeetingResponseResource"
           },
           "bodyParameters": "meetingRequestResource"
         },
@@ -33441,7 +33441,7 @@
           "appPermission": "ReadPresence",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
+            "$ref": "ExtensionCallQueuePresenceList"
           },
           "queryParameters": "readExtensionCallQueuePresenceParameters"
         },
@@ -33456,7 +33456,7 @@
           "appPermission": "EditPresence",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ExtensionCallQueuePresenceList"
+            "$ref": "ExtensionCallQueuePresenceList"
           },
           "bodyParameters": "extensionCallQueueUpdatePresenceList"
         }
@@ -33481,7 +33481,7 @@
           "appPermission": "RingOut",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetRingOutStatusResponse"
+            "$ref": "GetRingOutStatusResponse"
           },
           "bodyParameters": "makeRingOutRequest"
         },
@@ -33496,7 +33496,7 @@
           "appPermission": "RingOut",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetRingOutStatusResponse"
+            "$ref": "GetRingOutStatusResponse"
           }
         },
         {
@@ -33556,7 +33556,7 @@
           "userPermission": "ReadUserInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PagingOnlyGroupUsers"
+            "$ref": "PagingOnlyGroupUsers"
           },
           "queryParameters": "listPagingGroupUsersParameters"
         }
@@ -33582,7 +33582,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/AutomaticLocationUpdatesTaskInfo"
+            "$ref": "AutomaticLocationUpdatesTaskInfo"
           }
         }
       ],
@@ -33609,7 +33609,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingServiceInfoResource"
+            "$ref": "MeetingServiceInfoResource"
           }
         },
         {
@@ -33624,7 +33624,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingServiceInfoResource"
+            "$ref": "MeetingServiceInfoResource"
           },
           "bodyParameters": "meetingServiceInfoRequest"
         }
@@ -33650,7 +33650,7 @@
           "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallRecordingCustomGreetings"
+            "$ref": "CallRecordingCustomGreetings"
           },
           "queryParameters": "listCallRecordingCustomGreetingsParameters"
         },
@@ -33701,7 +33701,7 @@
           "userPermission": "ReadMessagesNotificationsSettings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/NotificationSettings"
+            "$ref": "NotificationSettings"
           }
         },
         {
@@ -33716,7 +33716,7 @@
           "userPermission": "EditMessagesNotificationsSettings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/NotificationSettings"
+            "$ref": "NotificationSettings"
           },
           "bodyParameters": "notificationSettingsUpdateRequest"
         }
@@ -33743,7 +33743,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MeetingUserSettingsResponse"
+            "$ref": "MeetingUserSettingsResponse"
           }
         }
       ]
@@ -33768,7 +33768,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomUserGreetingInfo"
+            "$ref": "CustomUserGreetingInfo"
           },
           "queryParameters": "createCustomUserGreetingParameters",
           "bodyParameters": "createCustomUserGreetingRequest",
@@ -33786,7 +33786,7 @@
           "userPermission": "ReadUserInfo",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomUserGreetingInfo"
+            "$ref": "CustomUserGreetingInfo"
           }
         }
       ],
@@ -33812,7 +33812,7 @@
           "userPermission": "ReadCompanyDevices",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PagingOnlyGroupDevices"
+            "$ref": "PagingOnlyGroupDevices"
           },
           "queryParameters": "listPagingGroupDevicesParameters"
         }
@@ -33885,7 +33885,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserCallLogResponse"
+            "$ref": "UserCallLogResponse"
           },
           "queryParameters": "readUserCallLogParameters"
         },
@@ -33914,7 +33914,7 @@
           "userPermission": "ReadCallLog",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserCallLogRecord"
+            "$ref": "UserCallLogRecord"
           },
           "queryParameters": "readUserCallRecordParameters"
         }
@@ -33941,7 +33941,7 @@
           "userPermission": "ReadUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UserAnsweringRuleList"
+            "$ref": "UserAnsweringRuleList"
           },
           "queryParameters": "listAnsweringRulesParameters"
         },
@@ -33957,7 +33957,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CustomAnsweringRuleInfo"
+            "$ref": "CustomAnsweringRuleInfo"
           },
           "bodyParameters": "createAnsweringRuleRequest"
         },
@@ -33973,7 +33973,7 @@
           "userPermission": "ReadUserAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/AnsweringRuleInfo"
+            "$ref": "AnsweringRuleInfo"
           },
           "queryParameters": "readAnsweringRuleParameters"
         },
@@ -33989,7 +33989,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/AnsweringRuleInfo"
+            "$ref": "AnsweringRuleInfo"
           },
           "bodyParameters": "updateAnsweringRuleRequest"
         },
@@ -34028,7 +34028,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/SuperviseCallSession"
+            "$ref": "SuperviseCallSession"
           },
           "bodyParameters": "superviseCallSessionRequest"
         }
@@ -34125,7 +34125,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/SwitchesList"
+            "$ref": "SwitchesList"
           },
           "queryParameters": "listAccountSwitchesParameters"
         },
@@ -34141,7 +34141,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/SwitchInfo"
+            "$ref": "SwitchInfo"
           },
           "bodyParameters": "createSwitchInfo"
         },
@@ -34157,7 +34157,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/SwitchInfo"
+            "$ref": "SwitchInfo"
           }
         },
         {
@@ -34172,7 +34172,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/SwitchInfo"
+            "$ref": "SwitchInfo"
           },
           "bodyParameters": "updateSwitchInfo"
         },
@@ -34235,7 +34235,7 @@
           "userPermission": "Users",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/MessageStoreReportArchive"
+            "$ref": "MessageStoreReportArchive"
           }
         },
         {
@@ -34277,7 +34277,7 @@
           "userPermission": "ReadMessages",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetMessageList"
+            "$ref": "GetMessageList"
           },
           "queryParameters": "listMessagesParameters"
         },
@@ -34306,7 +34306,7 @@
           "userPermission": "ReadMessages",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetMessageInfoResponse"
+            "$ref": "GetMessageInfoResponse"
           }
         },
         {
@@ -34321,7 +34321,7 @@
           "userPermission": "EditMessages",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetMessageInfoResponse"
+            "$ref": "GetMessageInfoResponse"
           },
           "queryParameters": "updateMessageParameters",
           "bodyParameters": "updateMessageRequest"
@@ -34385,7 +34385,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UpdateMultipleSwitchesResponse"
+            "$ref": "UpdateMultipleSwitchesResponse"
           },
           "bodyParameters": "updateMultipleSwitchesRequest"
         }
@@ -34411,7 +34411,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CreateMultipleSwitchesResponse"
+            "$ref": "CreateMultipleSwitchesResponse"
           },
           "bodyParameters": "createMultipleSwitchesRequest"
         }
@@ -34437,7 +34437,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/NetworksList"
+            "$ref": "NetworksList"
           }
         },
         {
@@ -34452,7 +34452,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/NetworkInfo"
+            "$ref": "NetworkInfo"
           },
           "bodyParameters": "createNetworkRequest"
         },
@@ -34468,7 +34468,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/NetworkInfo"
+            "$ref": "NetworkInfo"
           }
         },
         {
@@ -34519,7 +34519,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ValidateMultipleSwitchesResponse"
+            "$ref": "ValidateMultipleSwitchesResponse"
           },
           "bodyParameters": "validateMultipleSwitchesRequest"
         }
@@ -34546,7 +34546,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PublicMeetingInvitationResponse"
+            "$ref": "PublicMeetingInvitationResponse"
           }
         }
       ]
@@ -34571,7 +34571,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/WirelessPointsList"
+            "$ref": "WirelessPointsList"
           },
           "queryParameters": "listWirelessPointsParameters"
         },
@@ -34587,7 +34587,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/WirelessPointInfo"
+            "$ref": "WirelessPointInfo"
           },
           "bodyParameters": "createWirelessPoint"
         },
@@ -34603,7 +34603,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/WirelessPointInfo"
+            "$ref": "WirelessPointInfo"
           }
         },
         {
@@ -34618,7 +34618,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/WirelessPointInfo"
+            "$ref": "WirelessPointInfo"
           },
           "bodyParameters": "updateWirelessPoint"
         },
@@ -34658,7 +34658,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AssistedUsersResource"
+            "$ref": "AssistedUsersResource"
           }
         }
       ]
@@ -34684,7 +34684,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "addPartyRequest"
         }
@@ -34711,7 +34711,7 @@
           "userPermission": "ReadPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ContactList"
+            "$ref": "ContactList"
           },
           "queryParameters": "listContactsParameters"
         },
@@ -34727,7 +34727,7 @@
           "userPermission": "EditPersonalContacts",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PersonalContactResource"
+            "$ref": "PersonalContactResource"
           },
           "queryParameters": "createContactParameters",
           "bodyParameters": "personalContactRequest"
@@ -34744,7 +34744,7 @@
           "userPermission": "ReadPersonalContacts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/PersonalContactResource"
+            "$ref": "PersonalContactResource"
           }
         },
         {
@@ -34759,7 +34759,7 @@
           "userPermission": "EditPersonalContacts",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/PersonalContactResource"
+            "$ref": "PersonalContactResource"
           },
           "queryParameters": "updateContactParameters",
           "bodyParameters": "personalContactRequest"
@@ -34799,7 +34799,7 @@
           "appPermission": "CallControl",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           }
         },
         {
@@ -34824,7 +34824,7 @@
           "appPermission": "CallControl",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "partyUpdateRequest"
         }
@@ -34851,7 +34851,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/UpdateMultipleWirelessPointsResponse"
+            "$ref": "UpdateMultipleWirelessPointsResponse"
           },
           "bodyParameters": "updateMultipleWirelessPointsRequest"
         }
@@ -34877,7 +34877,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CreateMultipleWirelessPointsResponse"
+            "$ref": "CreateMultipleWirelessPointsResponse"
           },
           "bodyParameters": "createMultipleWirelessPointsRequest"
         }
@@ -34904,7 +34904,7 @@
           "userPermission": "Meetings",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/AssistantsResource"
+            "$ref": "AssistantsResource"
           }
         }
       ]
@@ -34929,7 +34929,7 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ValidateMultipleWirelessPointsResponse"
+            "$ref": "ValidateMultipleWirelessPointsResponse"
           },
           "bodyParameters": "validateMultipleWirelessPointsRequest"
         }
@@ -34979,7 +34979,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           }
         }
       ]
@@ -35029,7 +35029,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           }
         }
       ]
@@ -35054,7 +35054,7 @@
           "userPermission": "ReadUserForwardingFlipNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/GetExtensionForwardingNumberListResponse"
+            "$ref": "GetExtensionForwardingNumberListResponse"
           },
           "queryParameters": "listForwardingNumbersParameters"
         },
@@ -35070,7 +35070,7 @@
           "userPermission": "EditUserForwardingFlipNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ForwardingNumberInfo"
+            "$ref": "ForwardingNumberInfo"
           },
           "bodyParameters": "createForwardingNumberRequest"
         },
@@ -35086,7 +35086,7 @@
           "userPermission": "ReadUserForwardingFlipNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/ForwardingNumberInfo"
+            "$ref": "ForwardingNumberInfo"
           }
         },
         {
@@ -35101,7 +35101,7 @@
           "userPermission": "EditUserForwardingFlipNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/ForwardingNumberInfo"
+            "$ref": "ForwardingNumberInfo"
           },
           "bodyParameters": "updateForwardingNumberRequest"
         },
@@ -35141,7 +35141,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/ReplyParty"
+            "$ref": "ReplyParty"
           },
           "bodyParameters": "callPartyReply"
         }
@@ -35168,7 +35168,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "pickupTarget"
         }
@@ -35195,7 +35195,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "answerTarget"
         }
@@ -35222,7 +35222,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "bridgeTargetRequest"
         }
@@ -35296,7 +35296,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           }
         }
       ]
@@ -35322,7 +35322,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "forwardTarget"
         }
@@ -35349,7 +35349,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallParty"
+            "$ref": "CallParty"
           },
           "bodyParameters": "transferTarget"
         }
@@ -35376,7 +35376,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/PartySuperviseResponse"
+            "$ref": "PartySuperviseResponse"
           },
           "bodyParameters": "partySuperviseRequest"
         }
@@ -35403,7 +35403,7 @@
           "userPermission": "ReadBlockedNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/BlockedAllowedPhoneNumbersList"
+            "$ref": "BlockedAllowedPhoneNumbersList"
           },
           "queryParameters": "listBlockedAllowedNumbersParameters"
         },
@@ -35419,7 +35419,7 @@
           "userPermission": "EditBlockedNumbers",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+            "$ref": "BlockedAllowedPhoneNumberInfo"
           },
           "bodyParameters": "addBlockedAllowedPhoneNumber"
         },
@@ -35435,7 +35435,7 @@
           "userPermission": "ReadBlockedNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+            "$ref": "BlockedAllowedPhoneNumberInfo"
           }
         },
         {
@@ -35450,7 +35450,7 @@
           "userPermission": "EditBlockedNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/BlockedAllowedPhoneNumberInfo"
+            "$ref": "BlockedAllowedPhoneNumberInfo"
           },
           "bodyParameters": "addBlockedAllowedPhoneNumber"
         },
@@ -35530,7 +35530,7 @@
           "appPermission": "CallControl",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "#/components/schemas/CallRecording"
+            "$ref": "CallRecording"
           },
           "queryParameters": "pauseResumeCallRecordingParameters",
           "bodyParameters": "callRecordingUpdate"

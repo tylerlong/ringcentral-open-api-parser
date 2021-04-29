@@ -78,6 +78,9 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         if (responseContent && !R.isEmpty(responseContent)) {
           responseSchema =
             responseContent[Object.keys(responseContent)[0]].schema;
+          if (responseSchema?.$ref) {
+            responseSchema.$ref = R.last(responseSchema?.$ref.split('/'));
+          }
         }
 
         // queryParameters
