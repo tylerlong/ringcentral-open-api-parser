@@ -17108,7 +17108,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if the number is primary or not",
+          "description": "Specifies if the number is primary, i.e. displayed as 'main number' and called by default",
           "example": false,
           "name": "primary"
         },
