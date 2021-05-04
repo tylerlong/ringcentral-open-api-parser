@@ -7,9 +7,7 @@ import {lowerCaseFirstLetter} from './utils';
 export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
   const doc = R.clone(_doc);
   let result: Path[] = [];
-  const paths = Object.keys(doc.paths).sort((item1, item2) =>
-    item1.length > item2.length ? 1 : -1
-  );
+  const paths = Object.keys(doc.paths);
   for (const item of paths) {
     const pathContent = doc.paths[item]! as {
       [key: string]: OpenAPIV3.OperationObject & {[key: string]: string};
@@ -163,5 +161,8 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
       }
     }
   }
-  return [...result, ...bridgePaths];
+
+  return [...result, ...bridgePaths].sort((path1, path2) =>
+    path1.paths.join('/').length > path2.paths.join('/').length ? 1 : -1
+  );
 };
