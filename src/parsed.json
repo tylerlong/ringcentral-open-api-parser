@@ -215,6 +215,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an extension",
           "name": "id"
         },
@@ -4803,6 +4804,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of the contact",
           "example": 623045004,
           "name": "id"
@@ -5157,6 +5159,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "name": "id"
         },
         {
@@ -6048,6 +6051,41 @@
         {
           "$ref": "SharedLinesInfo",
           "name": "sharedLines"
+        },
+        {
+          "$ref": "MissedCallInfo",
+          "name": "missedCall"
+        }
+      ]
+    },
+    {
+      "name": "MissedCallInfo",
+      "description": "Specifies behaviour for the missed call scenario. Returned only if `enabled` parameter of a voicemail is set to 'false'",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Specifies the action that should be executed on a missed call. It can either be playing greeting message and disconnection, or sending call to a calling group. If 'ConnectToExtension' is set, then calling group extension should be specified",
+          "enum": [
+            "PlayGreetingAndDisconnect",
+            "ConnectToExtension"
+          ],
+          "name": "actionType"
+        },
+        {
+          "type": "object",
+          "$ref": "MissedCallExtensionInfo",
+          "name": "extension"
+        }
+      ]
+    },
+    {
+      "name": "MissedCallExtensionInfo",
+      "description": "Specifies an extension (a calling group) which should be used for missed call transfer. Returned only if the `actionType` is set to 'ConnectToExtension'",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension which should be used for missed call transfer",
+          "name": "id"
         }
       ]
     },
@@ -7916,6 +7954,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a recipient extension",
           "name": "id"
         }
@@ -8045,7 +8084,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Phone number to which the call is forwarded. In addition to common e.164 format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx; where xxxxxxxxxxx is a phone number in e.164 format (without '+' sign)",
+          "description": "Phone number to which the call is forwarded. In addition to common e.164 format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in e.164 format (without '+' sign) and yyyy is an external short extension number. Max number of digits is 15",
           "name": "phoneNumber"
         },
         {
@@ -10499,6 +10538,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an extension",
           "name": "id"
         },
@@ -10919,6 +10959,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Box billing identifier of a device. Applicable only for HardPhones. It is an alternative way to identify the device to be ordered. EitherT? model  structure, or  boxBillingId  must be specified forT?HardPhone",
           "name": "boxBillingId"
         },
@@ -11111,6 +11152,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an extension",
           "name": "id"
         },
@@ -11423,6 +11465,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a phone number",
           "name": "id"
         },
@@ -11682,7 +11725,8 @@
         },
         {
           "type": "integer",
-          "description": "Box billing identifier of a device. Applicable only for HardPhones. It is an alternative way to identify the device to be ordered. EitherT? model  structure, or  boxBillingId  must be specified forT?HardPhone",
+          "format": "int64",
+          "description": "Box billing identifier of a device. Applicable only for HardPhones. It is an alternative way to identify the device to be ordered. Either model  structure, or  boxBillingId  must be specified for HardPhone",
           "name": "boxBillingId"
         },
         {
@@ -12258,7 +12302,8 @@
         },
         {
           "type": "integer",
-          "description": "Box billing identifier of a device. Applicable only for HardPhones. It is an alternative way to identify the device to be ordered. EitherT? model  structure, or  boxBillingId  must be specified forT?HardPhone",
+          "format": "int64",
+          "description": "Box billing identifier of a device. Applicable only for HardPhones. It is an alternative way to identify the device to be ordered. Either model  structure, or  boxBillingId  must be specified for HardPhone",
           "name": "boxBillingId"
         },
         {
@@ -12981,6 +13026,7 @@
         },
         {
           "type": "string",
+          "format": "int64",
           "name": "id"
         },
         {
@@ -14322,6 +14368,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a message",
           "name": "id"
         },
@@ -14355,6 +14402,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "SMS and Pager only. Identifier of a conversation the message belongs to",
           "name": "conversationId"
         },
@@ -14509,6 +14557,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a message",
           "name": "id"
         },
@@ -14537,6 +14586,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "SMS and Pager only. Identifier of a conversation that the message belongs to",
           "name": "conversationId"
         },
@@ -14637,6 +14687,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a message",
           "name": "id"
         },
@@ -14665,6 +14716,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "SMS and Pager only. Identifier of a conversation that the message belongs to",
           "name": "conversationId"
         },
@@ -14823,6 +14875,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "SMS and Pager only. Identifier of a conversation the message belongs to",
           "name": "conversationId"
         },
@@ -15120,6 +15173,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a message attachment",
           "name": "id"
         },
@@ -16627,13 +16681,29 @@
       "fields": [
         {
           "type": "string",
-          "description": "Starting time for collecting messages. The default value equals to the current time minus 24 hours",
-          "name": "dateFrom"
+          "description": "Only messages created before the date will be collected. The default value is current time",
+          "name": "dateTo"
         },
         {
           "type": "string",
-          "description": "Ending time for collecting messages. The default value is the current time",
-          "name": "dateTo"
+          "description": "Only messages created after (or including) the date will be collected. The default value is current time minus 24 hours",
+          "name": "dateFrom"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Type of resulting messages. If not specified, all messages without message type filtering will be returned. Multiple values are accepted",
+            "enum": [
+              "EMail",
+              "Fax",
+              "SMS",
+              "VoiceMail",
+              "Pager",
+              "Text"
+            ]
+          },
+          "name": "messageTypes"
         }
       ]
     },
@@ -16686,13 +16756,29 @@
         },
         {
           "type": "string",
-          "description": "Ending time for collecting messages",
+          "description": "Only messages created before the date will be collected. The default value is current time",
           "name": "dateTo"
         },
         {
           "type": "string",
-          "description": "Starting time for collecting messages",
+          "description": "Only messages created after (or including) the date will be collected. The default value is current time minus 24 hours",
           "name": "dateFrom"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Type of resulting messages. If not specified, all messages without message type filtering will be returned. Multiple values are accepted",
+            "enum": [
+              "EMail",
+              "Fax",
+              "SMS",
+              "VoiceMail",
+              "Pager",
+              "Text"
+            ]
+          },
+          "name": "messageTypes"
         }
       ]
     },
@@ -17064,6 +17150,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a phone number",
           "name": "id"
         },
@@ -17174,6 +17261,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a phone number",
           "name": "id"
         },
@@ -17362,6 +17450,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an extension",
           "name": "id"
         },
@@ -17911,6 +18000,11 @@
           "type": "string",
           "description": "For User extension type only. Extension user last name",
           "name": "lastName"
+        },
+        {
+          "type": "string",
+          "description": "Extension user name (first name and last name)",
+          "name": "name"
         },
         {
           "type": "string",
@@ -18727,7 +18821,7 @@
           "name": "hidden"
         },
         {
-          "$ref": "AutomaticLocationUpdatesSiteInfo",
+          "$ref": "AutomaticLocationUpdatesSiteInfoRequest",
           "name": "site"
         },
         {
@@ -19402,6 +19496,11 @@
           "name": "emailAddresses"
         },
         {
+          "type": "boolean",
+          "description": "Specifies if managers' emails are included in the list of emails to which notifications are sent",
+          "name": "includeManagers"
+        },
+        {
           "type": "array",
           "description": "List of notification recipient email addresses",
           "items": {
@@ -19527,6 +19626,11 @@
         {
           "$ref": "MissedCallsInfo",
           "name": "missedCalls"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if managers' emails are included in the list of emails to which notifications are sent",
+          "name": "includeManagers"
         }
       ]
     },
@@ -19715,6 +19819,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an account",
           "name": "id"
         },
@@ -20645,7 +20750,8 @@
       "description": "Currency information",
       "fields": [
         {
-          "type": "string",
+          "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a currency",
           "name": "id"
         },
@@ -20682,6 +20788,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an operator extension",
           "name": "id"
         },
@@ -21747,6 +21854,7 @@
         },
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a call queue member",
           "name": "id"
         },
@@ -22619,6 +22727,7 @@
       "fields": [
         {
           "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a phone number",
           "name": "id"
         },
@@ -22656,6 +22765,16 @@
             ]
           },
           "name": "features"
+        }
+      ]
+    },
+    {
+      "name": "AutomaticLocationUpdatesSiteInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a site",
+          "name": "id"
         }
       ]
     },
@@ -26550,7 +26669,8 @@
         {
           "name": "pageId",
           "description": "Internal identifier of a page. It can be obtained from the 'nextPageId' parameter passed in response body",
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         }
       ]
     },
@@ -27883,7 +28003,8 @@
         {
           "name": "conversationId",
           "description": "Internal identifier of a message thread",
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         }
       ]
     },
@@ -27910,7 +28031,8 @@
         {
           "name": "conversationId",
           "description": "Conversation identifier for the resulting messages. Meaningful for SMS and Pager messages only.",
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         },
         {
           "name": "dateFrom",
@@ -28451,7 +28573,8 @@
         {
           "name": "countryId",
           "description": "Internal identifier of a country",
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         },
         {
           "name": "page",
@@ -28506,6 +28629,24 @@
           "description": "Indicates the page size (number of items)",
           "type": "string",
           "default": "100"
+        }
+      ]
+    },
+    {
+      "name": "ListDomesticCountriesParameters",
+      "description": "Query parameters for operation listDomesticCountries",
+      "fields": [
+        {
+          "name": "page",
+          "description": "Indicates the page number to retrieve. Only positive number values are accepted",
+          "type": "integer",
+          "default": 1
+        },
+        {
+          "name": "perPage",
+          "description": "Indicates the page size (number of items)",
+          "type": "integer",
+          "default": 100
         }
       ]
     },
@@ -30009,6 +30150,14 @@
           "formUrlEncoded": true
         }
       ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "dictionary",
+        "brand"
+      ],
+      "operations": []
     },
     {
       "paths": [
@@ -34558,6 +34707,34 @@
         }
       ],
       "parameter": "forwardingNumberId"
+    },
+    {
+      "paths": [
+        "restapi",
+        "dictionary",
+        "brand",
+        "contracted-country"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/dictionary/brand/{brandId}/contracted-country/{contractedCountryId}",
+          "method": "get",
+          "tags": [
+            "Company"
+          ],
+          "method2": "get",
+          "description": "Returns the list of domestic countries by contracted country and brand of the account.",
+          "summary": "Get Domestic Country List",
+          "operationId": "listDomesticCountries",
+          "rateLimitGroup": "Light",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "GetCountryListResponse"
+          },
+          "queryParameters": "listDomesticCountriesParameters"
+        }
+      ],
+      "parameter": "contractedCountryId"
     },
     {
       "paths": [
