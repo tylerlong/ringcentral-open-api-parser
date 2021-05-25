@@ -11,7 +11,7 @@
     "prepublishOnly": "tsc"
   },
   "dependencies": {
-    "openapi-types": "^9.0.0",
+    "openapi-types": "8.0.0",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
