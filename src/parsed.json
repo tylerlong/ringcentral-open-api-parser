@@ -9940,6 +9940,26 @@
         {
           "type": "string",
           "name": "reasonDescription"
+        },
+        {
+          "type": "string",
+          "description": "Internal type of a call",
+          "enum": [
+            "Local",
+            "LongDistance",
+            "International",
+            "Sip",
+            "RingMe",
+            "RingOut",
+            "Usual",
+            "TollFreeNumber",
+            "VerificationNumber",
+            "Vma",
+            "LocalNumber",
+            "ImsOutgoing",
+            "ImsIncoming"
+          ],
+          "name": "internalType"
         }
       ]
     },
@@ -10529,6 +10549,26 @@
           "type": "string",
           "description": "Telephony identifier of a call session",
           "name": "telephonySessionId"
+        },
+        {
+          "type": "string",
+          "description": "Internal type of a call",
+          "enum": [
+            "Local",
+            "LongDistance",
+            "International",
+            "Sip",
+            "RingMe",
+            "RingOut",
+            "Usual",
+            "TollFreeNumber",
+            "VerificationNumber",
+            "Vma",
+            "LocalNumber",
+            "ImsOutgoing",
+            "ImsIncoming"
+          ],
+          "name": "internalType"
         }
       ]
     },
@@ -10807,6 +10847,26 @@
           "description": "For 'Detailed' view only. The datetime when the call log record was modified in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601] format including timezone, for example 2016-03-10T18:07:52.534Z",
           "format": "date-time",
           "name": "lastModifiedTime"
+        },
+        {
+          "type": "string",
+          "description": "Internal type of a call",
+          "enum": [
+            "Local",
+            "LongDistance",
+            "International",
+            "Sip",
+            "RingMe",
+            "RingOut",
+            "Usual",
+            "TollFreeNumber",
+            "VerificationNumber",
+            "Vma",
+            "LocalNumber",
+            "ImsOutgoing",
+            "ImsIncoming"
+          ],
+          "name": "internalType"
         }
       ]
     },
@@ -14542,7 +14602,7 @@
         },
         {
           "type": "integer",
-          "description": "Cover page identifier. For the list of available cover page identifiers please call the Fax Cover Pages method",
+          "description": "Cover page identifier. If coverIndex is set to '0' (zero) cover page is not attached. For the list of available cover page identifiers (1-13) please call the Fax Cover Pages method. If not specified, the default cover page is attached (which is configured in 'Outbound Fax Settings')",
           "name": "coverIndex"
         },
         {
@@ -15466,7 +15526,7 @@
         },
         {
           "type": "integer",
-          "description": "Cover page identifier. For the list of available cover page identifiers please call the Fax Cover Pages method",
+          "description": "Cover page identifier. If coverIndex is set to '0' (zero) cover page is not attached. For the list of available cover page identifiers (1-13) please call the Fax Cover Pages method. If not specified, the default cover page is attached (which is configured in 'Outbound Fax Settings')",
           "name": "coverIndex"
         },
         {
@@ -17228,8 +17288,7 @@
             "ContactCenterNumber",
             "ConferencingNumber",
             "NumberPool",
-            "BusinessMobileNumber",
-            "ExternalMobileNumber"
+            "BusinessMobileNumber"
           ],
           "name": "usageType"
         },
@@ -17330,8 +17389,7 @@
             "ConferencingNumber",
             "MeetingsNumber",
             "NumberPool",
-            "BusinessMobileNumber",
-            "ExternalMobileNumber"
+            "BusinessMobileNumber"
           ],
           "name": "usageType"
         },
@@ -27786,7 +27844,7 @@
         },
         {
           "type": "integer",
-          "description": "Cover page identifier. For the list of available cover page identifiers please call the method Fax Cover Pages. If not specified, the default cover page which is configured in 'Outbound Fax Settings' is attached",
+          "description": "Cover page identifier. If coverIndex is set to '0' (zero) cover page is not attached. For the list of available cover page identifiers (1-13) please call the Fax Cover Pages method. If not specified, the default cover page is attached (which is configured in 'Outbound Fax Settings')",
           "format": "int32",
           "name": "coverIndex",
           "required": false
@@ -28150,8 +28208,7 @@
               "CompanyFaxNumber",
               "ForwardedNumber",
               "ForwardedCompanyNumber",
-              "BusinessMobileNumber",
-              "ExternalMobileNumber"
+              "BusinessMobileNumber"
             ]
           }
         },
@@ -28685,8 +28742,7 @@
               "ContactCenterNumber",
               "ConferencingNumber",
               "MeetingsNumber",
-              "BusinessMobileNumber",
-              "ExternalMobileNumber"
+              "BusinessMobileNumber"
             ]
           }
         },
@@ -33548,7 +33604,7 @@
           "summary": "Update User Call Queues",
           "operationId": "updateUserCallQueues",
           "rateLimitGroup": "Medium",
-          "appPermission": "Accounts",
+          "appPermission": "EditAccounts",
           "userPermission": "JoinLeaveCallQueue",
           "withParameter": false,
           "responseSchema": {
