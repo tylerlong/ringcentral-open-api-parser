@@ -13,7 +13,7 @@ describe('index', () => {
   test('default', async () => {
     const parsed = parse(doc);
     const jsonStr = JSON.stringify(parsed, null, 2);
-    fs.writeFileSync(path.join(__dirname, '..', 'src', 'parsed.json'), jsonStr);
+    fs.writeFileSync(path.join(__dirname, 'parsed.json'), jsonStr);
     expect(parsed.models).toBeDefined();
     expect(parsed.models.length).toBeGreaterThan(0);
     expect(parsed.paths).toBeDefined();
