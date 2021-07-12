@@ -22,3 +22,8 @@ npm publish
 ```
 
 Parsed content is in [./src/parsed.json](./src/parsed.json) file.
+
+
+## Debug mode
+
+`process.env.API_PARSER_DEBUG === 'true` to enable debug mode

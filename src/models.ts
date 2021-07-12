@@ -26,6 +26,9 @@ const normalizeSchema = (
   name: string,
   schema: OpenAPIV3.SchemaObject
 ): Model => {
+  if (process.env.API_PARSER_DEBUG === 'true') {
+    console.debug('normalizeSchema', name);
+  }
   const properties = schema.properties as SchemaDict;
   const fields = Object.keys(properties)
     .map(k => ({
