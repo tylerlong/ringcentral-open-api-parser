@@ -160,11 +160,20 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         !R.find(r => R.equals(r.paths, subPaths), bridgePaths) &&
         !R.find(r => R.equals(r.paths, subPaths), result)
       ) {
+        let parameter: string | undefined = undefined;
+        let defaultParameter: string | undefined = undefined;
+        if (R.last(subPaths) === 'scim') {
+          parameter = 'version';
+          defaultParameter = 'v2';
+        } else if (R.last(subPaths) === 'rcvideo') {
+          parameter = 'version';
+          defaultParameter = 'v1';
+        }
         bridgePaths.push({
           paths: subPaths,
           operations: [],
-          parameter: R.last(subPaths) === 'scim' ? 'version' : undefined,
-          defaultParameter: R.last(subPaths) === 'scim' ? 'v2' : undefined,
+          parameter,
+          defaultParameter,
         });
       }
     }
