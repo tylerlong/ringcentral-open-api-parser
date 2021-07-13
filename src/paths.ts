@@ -17,6 +17,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
     const endpoint = item
       .replace(/\/restapi\/v1\.0\//, '/restapi/{apiVersion}/')
       .replace(/\/scim\/v2/, '/scim/{version}')
+      .replace(/\/rcvideo\/v1/, '/rcvideo/{version}')
       .replace(/\/\.search/, '/dotSearch');
     const path: Path = {
       paths: endpoint.split('/').filter(t => t !== '' && !t.startsWith('{')),
@@ -67,13 +68,15 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
 
         // responseSchema
         const responses = operation.responses!;
-        const responseContent = ((responses[200] ||
-          responses[201] ||
-          responses[202] ||
-          responses[204] ||
-          responses[205] ||
-          responses[302] ||
-          responses.default) as OpenAPIV3.ResponseObject).content;
+        const responseContent = (
+          (responses[200] ||
+            responses[201] ||
+            responses[202] ||
+            responses[204] ||
+            responses[205] ||
+            responses[302] ||
+            responses.default) as OpenAPIV3.ResponseObject
+        ).content;
         let responseSchema: ResponseSchema | undefined = undefined;
         if (responseContent && !R.isEmpty(responseContent)) {
           responseSchema =
@@ -98,8 +101,9 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         let formUrlEncoded: boolean | undefined = undefined;
         let multipart: boolean | undefined = undefined;
         if (operation.requestBody) {
-          const requestContent = (operation.requestBody as OpenAPIV3.RequestBodyObject)
-            .content;
+          const requestContent = (
+            operation.requestBody as OpenAPIV3.RequestBodyObject
+          ).content;
           const mediaTypeObject =
             requestContent['application/x-www-form-urlencoded'] ||
             requestContent['multipart/form-data'];
@@ -118,8 +122,10 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           } else {
             bodyParameters = lowerCaseFirstLetter(
               R.last(
-                (requestContent[Object.keys(requestContent)[0]]
-                  .schema as OpenAPIV3.ReferenceObject).$ref!.split('/')
+                (
+                  requestContent[Object.keys(requestContent)[0]]
+                    .schema as OpenAPIV3.ReferenceObject
+                ).$ref!.split('/')
               )!
             );
           }
