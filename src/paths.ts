@@ -168,6 +168,15 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         } else if (R.last(subPaths) === 'rcvideo') {
           parameter = 'version';
           defaultParameter = 'v1';
+        } else if (R.last(subPaths) === 'groups') {
+          // /restapi/{apiVersion}/glip/groups/{groupId}
+          parameter = 'groupId';
+        } else if (R.last(subPaths) === 'paging-only-groups') {
+          // /restapi/{apiVersion}/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}
+          parameter = 'pagingOnlyGroupId';
+        } else if (R.last(subPaths) === 'brand') {
+          // /restapi/{apiVersion}/dictionary/brand/{brandId}
+          parameter = 'brandId';
         }
         bridgePaths.push({
           paths: subPaths,

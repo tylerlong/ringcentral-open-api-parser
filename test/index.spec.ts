@@ -18,5 +18,9 @@ describe('index', () => {
     expect(parsed.models.length).toBeGreaterThan(0);
     expect(parsed.paths).toBeDefined();
     expect(parsed.paths.length).toBeGreaterThan(0);
+    const groupPath = parsed.paths.find(
+      path => path.paths.join('-') === 'restapi-glip-groups'
+    )!;
+    expect(groupPath.parameter).toBe('groupId');
   });
 });
