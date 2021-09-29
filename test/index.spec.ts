@@ -22,5 +22,13 @@ describe('index', () => {
       path => path.paths.join('-') === 'restapi-glip-groups'
     )!;
     expect(groupPath.parameter).toBe('groupId');
+    const pagingOnlyGroupPath = parsed.paths.find(
+      path => path.paths.join('-') === 'restapi-account-paging-only-groups'
+    )!;
+    expect(pagingOnlyGroupPath.parameter).toBe('pagingOnlyGroupId');
+    const brandPath = parsed.paths.find(
+      path => path.paths.join('-') === 'restapi-dictionary-brand'
+    )!;
+    expect(brandPath.parameter).toBe('brandId');
   });
 });
