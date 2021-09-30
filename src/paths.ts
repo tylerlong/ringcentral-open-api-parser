@@ -160,23 +160,23 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         !R.find(r => R.equals(r.paths, subPaths), bridgePaths) &&
         !R.find(r => R.equals(r.paths, subPaths), result)
       ) {
+        const lastToken = R.last(subPaths);
+        const endpoint = item.operations[0].endpoint;
+        const match = endpoint.match(new RegExp(`/${lastToken}/\\{(.+?)\\}`));
         let parameter: string | undefined = undefined;
         let defaultParameter: string | undefined = undefined;
-        if (R.last(subPaths) === 'scim') {
-          parameter = 'version';
-          defaultParameter = 'v2';
-        } else if (R.last(subPaths) === 'rcvideo') {
-          parameter = 'version';
-          defaultParameter = 'v1';
-        } else if (R.last(subPaths) === 'groups') {
-          // /restapi/{apiVersion}/glip/groups/{groupId}
-          parameter = 'groupId';
-        } else if (R.last(subPaths) === 'paging-only-groups') {
-          // /restapi/{apiVersion}/account/{accountId}/paging-only-groups/{pagingOnlyGroupId}
-          parameter = 'pagingOnlyGroupId';
-        } else if (R.last(subPaths) === 'brand') {
-          // /restapi/{apiVersion}/dictionary/brand/{brandId}
-          parameter = 'brandId';
+        if (match !== null) {
+          parameter = match[1];
+          switch (lastToken) {
+            case 'scim': {
+              defaultParameter = 'v2';
+              break;
+            }
+            case 'rcvideo': {
+              defaultParameter = 'v1';
+              break;
+            }
+          }
         }
         bridgePaths.push({
           paths: subPaths,
