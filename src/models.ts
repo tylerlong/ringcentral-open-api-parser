@@ -133,18 +133,19 @@ export const parseModels = (_doc: OpenAPIV3.Document): Model[] => {
     });
   });
 
-  const PerformanceCallsAggregatesResponse = models.find(
-    model => model.name === 'PerformanceCallsAggregatesResponse'
-  )!;
-  const field = PerformanceCallsAggregatesResponse.fields.find(
-    f => f.$ref === 'MapPerformanceCallsData'
-  )!;
-  field.type = 'dict';
-  field.items = {
-    name: 'dummy name',
-    $ref: 'PerformanceCallsData',
-  };
-  delete field.$ref;
+  // const PerformanceCallsAggregatesResponse = models.find(
+  //   model => model.name === 'PerformanceCallsAggregatesResponse'
+  // )!;
+  // const field = PerformanceCallsAggregatesResponse.fields.find(
+  //   f => f.$ref === 'MapPerformanceCallsData'
+  // )!;
+  // field.type = 'dict';
+  // field.items = {
+  //   name: 'dummy name',
+  //   $ref: 'PerformanceCallsData',
+  // };
+  // delete field.$ref;
 
-  return models.filter(model => model.name !== 'MapPerformanceCallsData');
+  // return models.filter(model => model.name !== 'MapPerformanceCallsData');
+  return models;
 };
