@@ -43,6 +43,8 @@ export type Operation = {
   multipart?: boolean;
 };
 
+export type OneOf = { $ref: string };
+
 export type Field = {
   name: string;
   type?: string;
@@ -56,6 +58,7 @@ export type Field = {
   minimum?: number;
   maximum?: number;
   required?: boolean;
+  oneOf?: OneOf[];
 };
 
 export type SchemaDict = {

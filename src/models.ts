@@ -5,8 +5,13 @@ import {Field, Model, SchemaDict} from './types';
 import {capitalizeFirstLetter} from './utils';
 
 const normalizeField = (field: Field): Field => {
+  const normalizeRef = (ref: string) => ref.split('/').slice(-1)[0];
+
   if (field.$ref) {
-    field.$ref = field.$ref.split('/').slice(-1)[0];
+    field.$ref = normalizeRef(field.$ref);
+  }
+  if (field.oneOf) {
+    field.oneOf = field.oneOf.map(o => ({ $ref: normalizeRef(o.$ref) }))
   }
   if (
     field.type === 'file' ||
