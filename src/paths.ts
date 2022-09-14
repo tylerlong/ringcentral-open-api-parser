@@ -61,10 +61,12 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
       }
       result = result.filter(r => !R.equals(r.paths, path.paths));
     }
-    result.push(path);
     for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
       if (method in pathContent) {
         const operation = pathContent[method];
+        if (operation.deprecated === true) {
+          continue;
+        }
 
         // responseSchema
         const responses = operation.responses!;
@@ -150,6 +152,9 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
           multipart,
         });
       }
+    }
+    if (path.operations.length > 0) {
+      result.push(path);
     }
   }
   const bridgePaths: Path[] = [];

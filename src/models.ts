@@ -30,7 +30,7 @@ const normalizeSchema = (
     console.debug('normalizeSchema', name);
   }
   const properties = schema.properties as SchemaDict;
-  const fields = Object.keys(properties)
+  const fields = Object.keys(properties || {})
     .map(k => ({
       ...(properties[k] as Field),
       name: k,
