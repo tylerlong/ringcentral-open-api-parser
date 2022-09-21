@@ -129,14 +129,16 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
               bodyParameters = `${operation.operationId}Request`;
             }
           } else {
-            bodyParameters = lowerCaseFirstLetter(
-              R.last(
-                (
-                  requestContent[Object.keys(requestContent)[0]]
-                    .schema as OpenAPIV3.ReferenceObject
-                ).$ref!.split('/')
-              )!
-            );
+            const refObj = requestContent[Object.keys(requestContent)[0]]
+              .schema as OpenAPIV3.ReferenceObject;
+            if (refObj.$ref) {
+              bodyParameters = lowerCaseFirstLetter(
+                R.last(refObj.$ref!.split('/'))!
+              );
+            } else {
+              // inline json request body schema
+              bodyParameters = `${operation.operationId}Request`;
+            }
           }
         }
 
