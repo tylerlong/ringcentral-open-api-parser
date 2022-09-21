@@ -118,7 +118,10 @@ const adjust = (doc: any) => {
   );
   for (const pathKey of Object.keys(doc.paths)) {
     const path = doc.paths[pathKey];
-    for (const operationKey of Object.keys(path)) {
+    for (const operationKey of ['get', 'post', 'put', 'delete', 'patch']) {
+      if (path[operationKey] === undefined) {
+        continue;
+      }
       const operation = path[operationKey];
       // responses
       for (const responseKey of Object.keys(operation.responses)) {
