@@ -11,6 +11,9 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
     item1.length > item2.length ? 1 : -1
   );
   for (const item of paths) {
+    if (process.env.API_PARSER_DEBUG === 'true') {
+      console.debug('processing endpoint', item);
+    }
     const pathContent = doc.paths[item]! as {
       [key: string]: OpenAPIV3.OperationObject & {[key: string]: string};
     };
@@ -66,6 +69,10 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
         const operation = pathContent[method];
         if (operation.deprecated === true) {
           continue;
+        }
+
+        if (process.env.API_PARSER_DEBUG === 'true') {
+          console.debug('processing HTTP', method);
         }
 
         // responseSchema
