@@ -113,6 +113,9 @@ const adjust = (doc: any) => {
   // https://jira.ringcentral.com/browse/PLD-592
   // array as schemas
   // or string as schemas
+  // special case: string + array
+  doc.components.schemas.SearchDirectoryExtensionTypes.items =
+    doc.components.schemas.SearchDirectoryExtensionType;
   const specialTypes = Object.keys(doc.components.schemas).filter(key =>
     ['array', 'string'].includes(doc.components.schemas[key].type)
   );
