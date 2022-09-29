@@ -190,17 +190,22 @@ const adjust = (doc: any) => {
   );
 
   // https://jira.ringcentral.com/browse/PLD-881
-  doc.paths['/restapi/oauth/authorize'].post.requestBody.content[
-    'application/x-www-form-urlencoded'
-  ].schema.properties.discovery = {
+  doc.components.schemas.AuthorizeRequest.properties.discovery = {
     type: 'boolean',
     default: false,
   };
+  // doc.paths['/restapi/oauth/authorize'].post.requestBody.content[
+  //   'application/x-www-form-urlencoded'
+  // ].schema.properties.discovery = {
+  //   type: 'boolean',
+  //   default: false,
+  // };
 
   const grantTypes =
-    doc.paths['/restapi/oauth/token'].post.requestBody.content[
-      'application/x-www-form-urlencoded'
-    ].schema.properties.grant_type.enum;
+    doc.components.schemas.GetTokenRequest.properties.grant_type.enum;
+  // doc.paths['/restapi/oauth/token'].post.requestBody.content[
+  //   'application/x-www-form-urlencoded'
+  // ].schema.properties.grant_type.enum;
   // https://wiki.ringcentral.com/display/PLAT/Partner+JWT+Authorization
   grantTypes.push('partner_jwt');
 
