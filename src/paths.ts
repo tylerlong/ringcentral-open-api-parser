@@ -20,6 +20,8 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
     const endpoint = item
       .replace(/\/restapi\/v1\.0\//, '/restapi/{apiVersion}/')
       .replace(/\/scim\/v2/, '/scim/{version}')
+      .replace(/\/team-messaging\/v1/, '/team-messaging/{version}')
+      .replace(/\/analytics\/calls\/v1/, '/analytics/calls/{version}')
       .replace(/\/rcvideo\/v1/, '/rcvideo/{version}')
       .replace(/\/\.search/, '/dotSearch');
     const path: Path = {
@@ -187,6 +189,14 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
               break;
             }
             case 'rcvideo': {
+              defaultParameter = 'v1';
+              break;
+            }
+            case 'team-messaging': {
+              defaultParameter = 'v1';
+              break;
+            }
+            case 'calls': {
               defaultParameter = 'v1';
               break;
             }
