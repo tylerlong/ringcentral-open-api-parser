@@ -19,10 +19,10 @@ describe('index', () => {
     expect(parsed.paths).toBeDefined();
     expect(parsed.paths.length).toBeGreaterThan(0);
 
-    const groupPath = parsed.paths.find(
-      path => path.paths.join('-') === 'restapi-glip-groups'
+    const extensionPath = parsed.paths.find(
+      path => path.paths.join('-') === 'restapi-account-extension'
     )!;
-    expect(groupPath.parameter).toBe('groupId');
+    expect(extensionPath.parameter).toBe('extensionId');
 
     const pagingOnlyGroupPath = parsed.paths.find(
       path => path.paths.join('-') === 'restapi-account-paging-only-groups'

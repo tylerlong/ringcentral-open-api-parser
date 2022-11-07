@@ -275,22 +275,6 @@ const adjust = (doc: any) => {
   delete backgroundImageProp.anyOf;
   delete backgroundImageProp.oneOf;
 
-  // https://jira.ringcentral.com/browse/PLD-1177
-  doc.paths['/restapi/v1.0/glip/files'].post.requestBody.content = {
-    'multipart/form-data': {
-      schema: {
-        required: ['body'],
-        properties: {
-          body: {
-            type: 'string',
-            description: 'The file (binary or multipart/form-data) to upload',
-            format: 'binary',
-          },
-        },
-      },
-    },
-  };
-
   return doc;
 };
 
