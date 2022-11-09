@@ -252,8 +252,8 @@ const adjust = (doc: any) => {
 
   const verticalContentAlignment =
     doc.components.schemas.VerticalContentAlignment;
-  doc.components.schemas.GlipAdaptiveCardInfo.properties.verticalContentAlignment =
-    doc.components.schemas.GlipAdaptiveCardRequest.properties.verticalContentAlignment =
+  doc.components.schemas.AdaptiveCardInfo.properties.verticalContentAlignment =
+    doc.components.schemas.AdaptiveCardRequest.properties.verticalContentAlignment =
       {
         type: 'string',
         description: verticalContentAlignment.description,
@@ -263,16 +263,14 @@ const adjust = (doc: any) => {
 
   // https://jira.ringcentral.com/browse/PLD-1073
   let backgroundImageProp =
-    doc.components.schemas.GlipAdaptiveCardRequest.properties.backgroundImage;
+    doc.components.schemas.AdaptiveCardRequest.properties.backgroundImage;
   backgroundImageProp.type = 'object';
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
-  delete backgroundImageProp.anyOf;
   delete backgroundImageProp.oneOf;
   backgroundImageProp =
-    doc.components.schemas.GlipAdaptiveCardInfo.properties.backgroundImage;
+    doc.components.schemas.AdaptiveCardInfo.properties.backgroundImage;
   backgroundImageProp.type = 'object';
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
-  delete backgroundImageProp.anyOf;
   delete backgroundImageProp.oneOf;
 
   return doc;
