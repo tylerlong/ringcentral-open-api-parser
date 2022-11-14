@@ -86,6 +86,7 @@ export const parsePaths = (_doc: OpenAPIV3.Document): Path[] => {
             responses[204] ||
             responses[205] ||
             responses[302] ||
+            responses[501] ||
             responses.default) as OpenAPIV3.ResponseObject
         ).content;
         let responseSchema: ResponseSchema | undefined = undefined;
