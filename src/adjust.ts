@@ -1,4 +1,8 @@
 // This file is copied from the consolidate-api-specs project
+
+import {OpenAPIV3} from 'openapi-types';
+import R from 'ramda';
+
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
   // remove duplicate scim endpoints
@@ -225,6 +229,7 @@ const adjust = (doc: any) => {
   };
 
   // https://jira.ringcentral.com/browse/PLD-1072
+  // fix anyOf
   const backgroundImage = doc.components.schemas.BackgroundImage;
   const imageFillMode = doc.components.schemas.ImageFillMode;
   backgroundImage.properties.fillMode = {
@@ -233,7 +238,6 @@ const adjust = (doc: any) => {
     enum: imageFillMode.anyOf[0].enum,
   };
   delete doc.components.schemas.ImageFillMode;
-
   const horizontalAlignment = doc.components.schemas.HorizontalAlignment;
   backgroundImage.properties.horizontalAlignment = {
     type: 'string',
@@ -241,7 +245,6 @@ const adjust = (doc: any) => {
     enum: horizontalAlignment.anyOf[0].enum,
   };
   delete doc.components.schemas.HorizontalAlignment;
-
   const verticalAlignment = doc.components.schemas.VerticalAlignment;
   backgroundImage.properties.verticalAlignment = {
     type: 'string',
@@ -249,7 +252,6 @@ const adjust = (doc: any) => {
     enum: verticalAlignment.anyOf[0].enum,
   };
   delete doc.components.schemas.VerticalAlignment;
-
   const verticalContentAlignment =
     doc.components.schemas.VerticalContentAlignment;
   doc.components.schemas.AdaptiveCardInfo.properties.verticalContentAlignment =
@@ -272,6 +274,38 @@ const adjust = (doc: any) => {
   backgroundImageProp.type = 'object';
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
   delete backgroundImageProp.oneOf;
+
+  // oneOf to allOf, as a workaround
+  schemas['Grouping'].allOf = schemas['Grouping'].oneOf;
+  delete schemas['Grouping'].oneOf;
+
+  // merge allOf
+  const mergeAllOf = (
+    schema: OpenAPIV3.SchemaObject
+  ): OpenAPIV3.SchemaObject => {
+    if (!schema.allOf) {
+      return schema;
+    }
+    let properties = {};
+    for (const item of schema.allOf) {
+      if ('$ref' in item) {
+        const refName = R.last(item.$ref.split('/'))!;
+        properties = Object.assign(
+          properties,
+          mergeAllOf(schemas[refName]).properties
+        );
+      } else {
+        properties = Object.assign(
+          properties,
+          (item as OpenAPIV3.SchemaObject).properties
+        );
+      }
+    }
+    return {type: 'object', properties};
+  };
+  for (const name of Object.keys(schemas)) {
+    schemas[name] = mergeAllOf(schemas[name]);
+  }
 
   return doc;
 };
