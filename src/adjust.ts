@@ -213,15 +213,6 @@ const adjust = (doc: any) => {
   // https://wiki.ringcentral.com/display/PLAT/Partner+JWT+Authorization
   grantTypes.push('partner_jwt');
 
-  // definition without properties
-  const schemas = doc.components.schemas;
-  for (const key of Object.keys(schemas)) {
-    if (schemas[key].properties === undefined) {
-      console.warn(`‼️ warning: ${key} has no properties.`);
-      schemas[key].properties = {};
-    }
-  }
-
   // https://jira.ringcentral.com/browse/PLD-1029
   doc.components.schemas.MessageStatusCounts.properties.errorCodeCounts = {
     type: 'integer',
@@ -275,6 +266,8 @@ const adjust = (doc: any) => {
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
   delete backgroundImageProp.oneOf;
 
+  const schemas = doc.components.schemas;
+
   // oneOf to allOf, as a workaround
   schemas['Grouping'].allOf = schemas['Grouping'].oneOf;
   delete schemas['Grouping'].oneOf;
@@ -305,6 +298,14 @@ const adjust = (doc: any) => {
   };
   for (const name of Object.keys(schemas)) {
     schemas[name] = mergeAllOf(schemas[name]);
+  }
+
+  // definition without properties
+  for (const key of Object.keys(schemas)) {
+    if (schemas[key].properties === undefined) {
+      console.warn(`‼️ warning: ${key} has no properties.`);
+      schemas[key].properties = {};
+    }
   }
 
   return doc;
