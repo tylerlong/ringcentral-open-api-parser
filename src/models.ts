@@ -44,8 +44,41 @@ const normalizeSchema = (
   };
 };
 
+// convert allOf to plain properties
+const normalizeDoc = (doc: OpenAPIV3.Document): OpenAPIV3.Document => {
+  const schemas = doc.components?.schemas as SchemaDict;
+  const mergeAllOf = (
+    schema: OpenAPIV3.SchemaObject
+  ): OpenAPIV3.SchemaObject => {
+    if (!schema.allOf) {
+      return schema;
+    }
+    let properties = {};
+    for (const item of schema.allOf) {
+      if ('$ref' in item) {
+        const refName = R.last(item.$ref.split('/'))!;
+        properties = Object.assign(
+          properties,
+          mergeAllOf(schemas[refName]).properties
+        );
+      } else {
+        properties = Object.assign(
+          properties,
+          (item as OpenAPIV3.SchemaObject).properties
+        );
+      }
+    }
+    return {type: 'object', properties};
+  };
+  for (const name of Object.keys(schemas)) {
+    schemas[name] = mergeAllOf(schemas[name]);
+  }
+  doc.components!.schemas = schemas;
+  return doc;
+};
+
 export const parseModels = (_doc: OpenAPIV3.Document): Model[] => {
-  const doc = R.clone(_doc);
+  const doc = normalizeDoc(R.clone(_doc));
   const schemas = doc.components?.schemas as SchemaDict;
   const models: Model[] = [];
 
