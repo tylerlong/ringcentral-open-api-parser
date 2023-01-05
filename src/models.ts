@@ -130,7 +130,17 @@ export const parseModels = (_doc: OpenAPIV3.Document): Model[] => {
 
       // query parameters schemas
       const queryParameters = operation.parameters
-        ?.map(p => p as OpenAPIV3.ParameterObject)
+        ?.map(p => {
+          // make $ref parameters inline
+          if ('$ref' in p && p['$ref'].indexOf('/parameters/') !== -1) {
+            const pName = R.last(p['$ref'].split('/'))!;
+            return doc.components!.parameters![
+              pName
+            ] as OpenAPIV3.ParameterObject;
+          } else {
+            return p as OpenAPIV3.ParameterObject;
+          }
+        })
         .filter(p => p.in === 'query');
       if (queryParameters && queryParameters?.length > 0) {
         const name =
