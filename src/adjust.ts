@@ -168,6 +168,10 @@ const adjust = (doc: any) => {
       const rName = R.last(p.schema.$ref.split('/'));
       p.schema = doc.components.schemas[rName];
     }
+    if (p.schema.items?.$ref) {
+      const rName = R.last(p.schema.items?.$ref.split('/'));
+      p.schema.items = doc.components.schemas[rName];
+    }
   }
   // schema properties
   for (const schema of Object.values<any>(doc.components.schemas)) {

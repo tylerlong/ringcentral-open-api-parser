@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "ringcentral-open-api-parser",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "engines": {
     "node": ">=14.0.0"
   },
