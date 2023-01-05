@@ -162,6 +162,13 @@ const adjust = (doc: any) => {
       }
     }
   }
+  // global parameters
+  for (const p of Object.values<any>(doc.components.parameters)) {
+    if (p.schema.$ref) {
+      const rName = R.last(p.schema.$ref.split('/'));
+      p.schema = doc.components.schemas[rName];
+    }
+  }
   // schema properties
   for (const schema of Object.values<any>(doc.components.schemas)) {
     const properties = schema.properties || {};
@@ -198,18 +205,9 @@ const adjust = (doc: any) => {
     type: 'boolean',
     default: false,
   };
-  // doc.paths['/restapi/oauth/authorize'].post.requestBody.content[
-  //   'application/x-www-form-urlencoded'
-  // ].schema.properties.discovery = {
-  //   type: 'boolean',
-  //   default: false,
-  // };
 
   const grantTypes =
     doc.components.schemas.GetTokenRequest.properties.grant_type.enum;
-  // doc.paths['/restapi/oauth/token'].post.requestBody.content[
-  //   'application/x-www-form-urlencoded'
-  // ].schema.properties.grant_type.enum;
   // https://wiki.ringcentral.com/display/PLAT/Partner+JWT+Authorization
   grantTypes.push('partner_jwt');
 
