@@ -141,7 +141,7 @@ export const parseModels = (_doc: OpenAPIV3.Document): Model[] => {
             return p as OpenAPIV3.ParameterObject;
           }
         })
-        .filter(p => p.in !== 'path');
+        .filter(p => p.in !== 'path' && p.in !== 'header');
       if (queryParameters && queryParameters?.length > 0) {
         const name =
           capitalizeFirstLetter(operation.operationId!) + 'Parameters';
