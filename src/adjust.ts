@@ -310,6 +310,30 @@ const adjust = (doc: any) => {
     }
   }
 
+  // convert requestBody.$ref to inline
+  for (const pathKey of Object.keys(doc.paths)) {
+    const path = doc.paths[pathKey];
+    for (const operationKey of ['get', 'post', 'put', 'delete', 'patch']) {
+      if (path[operationKey] === undefined) {
+        continue;
+      }
+      const operation = path[operationKey];
+      if (
+        operation.requestBody &&
+        (operation.requestBody as OpenAPIV3.ReferenceObject).$ref
+      ) {
+        operation.requestBody =
+          doc.components!.requestBodies![
+            R.last(
+              (operation.requestBody as OpenAPIV3.ReferenceObject).$ref.split(
+                '/'
+              )
+            )!
+          ];
+      }
+    }
+  }
+
   return doc;
 };
 
