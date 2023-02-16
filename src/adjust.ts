@@ -168,6 +168,25 @@ const adjust = (doc: any) => {
           }
         }
       }
+      // request body
+      if (operation.requestBody && operation.requestBody.content) {
+        const contentTypes = Object.keys(operation.requestBody.content);
+        for (const contentType of contentTypes) {
+          const content = operation.requestBody.content[contentType];
+          if (content.schema && content.schema.properties) {
+            const properties = content.schema.properties;
+            const keys = Object.keys(properties);
+            for (const key of keys) {
+              const st = specialTypes.find(
+                st => properties[key].$ref === `#/components/schemas/${st}`
+              );
+              if (st) {
+                properties[key] = doc.components.schemas[st];
+              }
+            }
+          }
+        }
+      }
     }
   }
   // global parameters
