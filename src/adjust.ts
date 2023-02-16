@@ -158,6 +158,14 @@ const adjust = (doc: any) => {
           if (st) {
             parameter.schema = doc.components.schemas[st];
           }
+          if (parameter.schema.type === 'array') {
+            const st = specialTypes.find(
+              st => parameter.schema.items.$ref === `#/components/schemas/${st}`
+            );
+            if (st) {
+              parameter.schema.items = doc.components.schemas[st];
+            }
+          }
         }
       }
     }
