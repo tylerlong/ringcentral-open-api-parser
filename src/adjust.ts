@@ -163,6 +163,12 @@ const adjust = (doc: any) => {
               }
             }
           }
+          if (content.schema?.$ref) {
+            const st = specialTypes.find((st) => content.schema?.$ref === `#/components/schemas/${st}`);
+            if (st) {
+              content.schema = doc.components.schemas[st];
+            }
+          }
         }
       }
     }
