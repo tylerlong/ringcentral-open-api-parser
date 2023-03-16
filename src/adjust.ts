@@ -227,9 +227,9 @@ const adjust = (doc: any) => {
 
   // https://jira.ringcentral.com/browse/PLD-749
   // Add "WebSocket" to NotificationDeliveryModeRequest.transportType
-  doc.components.schemas.NotificationDeliveryMode.properties.transportType.enum.push(
-    'WebSocket'
-  );
+  // doc.components.schemas.NotificationDeliveryMode.properties.transportType.enum.push(
+  //   'WebSocket'
+  // );
 
   // https://jira.ringcentral.com/browse/PLD-881
   doc.components.schemas.AuthorizeRequest.properties.discovery = {
@@ -297,19 +297,19 @@ const adjust = (doc: any) => {
 
   const schemas = doc.components.schemas;
 
-  // oneOf to allOf, as a workaround
-  schemas['Grouping'].allOf = schemas['Grouping'].oneOf;
-  delete schemas['Grouping'].oneOf;
+  // // oneOf to allOf, as a workaround
+  // schemas['Grouping'].allOf = schemas['Grouping'].oneOf;
+  // delete schemas['Grouping'].oneOf;
 
-  // merge allOf
+  // merge allOf, oneOf and anyOf
   const mergeAllOf = (
     schema: OpenAPIV3.SchemaObject
   ): OpenAPIV3.SchemaObject => {
-    if (!schema.allOf) {
+    if (!(schema.allOf ?? schema.oneOf ?? schema.anyOf ?? false)) {
       return schema;
     }
     let properties = {};
-    for (const item of schema.allOf) {
+    for (const item of schema.allOf ?? schema.oneOf ?? schema.anyOf ?? []) {
       if ('$ref' in item) {
         const refName = R.last(item.$ref.split('/'))!;
         properties = Object.assign(
