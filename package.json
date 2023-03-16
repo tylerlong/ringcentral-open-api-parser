@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "eslint --fix '**/*.{ts,tsx,js,jsx}' && prettier --write .",
     "test": "jest -w 1 --detectOpenHandles -c ./test/jest.config.ts",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc src/index.ts --declaration --outDir lib"
   },
   "name": "ringcentral-open-api-parser",
   "main": "lib/index.js",
