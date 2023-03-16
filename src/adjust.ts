@@ -1,7 +1,7 @@
 // This file is copied from the consolidate-api-specs project
 
-import {OpenAPIV3} from 'openapi-types';
-import R from 'ramda';
+import { OpenAPIV3 } from 'openapi-types';
+import * as R from 'ramda';
 
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
@@ -22,14 +22,15 @@ const adjust = (doc: any) => {
 
   // Support multiple attachments: https://git.ringcentral.com/platform/api-metadata-specs/issues/21
   const schema =
-    doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/fax']
-      .post.requestBody.content['multipart/form-data'].schema;
+    doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/fax'].post.requestBody.content[
+      'multipart/form-data'
+    ].schema;
   const sendFaxProps = schema.properties;
   schema.required = ['attachments', 'to'];
   const faxAttachment = sendFaxProps.attachment;
   faxAttachment.type = 'array';
   faxAttachment.collectionFormat = 'multi';
-  faxAttachment.items = {type: 'file'};
+  faxAttachment.items = { type: 'file' };
   faxAttachment.name = 'attachments';
   sendFaxProps.attachments = sendFaxProps.attachment;
   delete sendFaxProps.attachment;
@@ -58,21 +59,14 @@ const adjust = (doc: any) => {
 
   // https://git.ringcentral.com/platform/api-metadata-specs/issues/48
   const p1 = doc.paths['/restapi/v1.0/account/{accountId}/greeting'].post;
-  p1.parameters = p1.parameters.filter(
-    (p: any) => p.name !== 'answeringRuleId'
-  );
+  p1.parameters = p1.parameters.filter((p: any) => p.name !== 'answeringRuleId');
   p1.parameters.push({
     name: 'answeringRule',
     in: 'formData',
     $ref: '#/components/schemas/CustomCompanyGreetingAnsweringRuleInfo',
   });
-  const p2 =
-    doc.paths[
-      '/restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting'
-    ].post;
-  p2.parameters = p2.parameters.filter(
-    (p: any) => p.name !== 'answeringRuleId'
-  );
+  const p2 = doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting'].post;
+  p2.parameters = p2.parameters.filter((p: any) => p.name !== 'answeringRuleId');
   p2.parameters.push({
     name: 'answeringRule',
     in: 'formData',
@@ -101,9 +95,7 @@ const adjust = (doc: any) => {
         property = property.items;
       }
       if (property.properties) {
-        const newSchemaName = `${dKey}${
-          pKey.charAt(0).toUpperCase() + pKey.slice(1)
-        }`;
+        const newSchemaName = `${dKey}${pKey.charAt(0).toUpperCase() + pKey.slice(1)}`;
         doc.components.schemas[newSchemaName] = {
           type: 'object',
           properties: property.properties,
@@ -118,10 +110,9 @@ const adjust = (doc: any) => {
   // array as schemas
   // or string as schemas
   // special case: string + array
-  doc.components.schemas.SearchDirectoryExtensionTypes.items =
-    doc.components.schemas.SearchDirectoryExtensionType;
-  const specialTypes = Object.keys(doc.components.schemas).filter(key =>
-    ['array', 'string'].includes(doc.components.schemas[key].type)
+  doc.components.schemas.SearchDirectoryExtensionTypes.items = doc.components.schemas.SearchDirectoryExtensionType;
+  const specialTypes = Object.keys(doc.components.schemas).filter((key) =>
+    ['array', 'string'].includes(doc.components.schemas[key].type),
   );
   for (const pathKey of Object.keys(doc.paths)) {
     const path = doc.paths[pathKey];
@@ -133,35 +124,24 @@ const adjust = (doc: any) => {
       // responses
       for (const responseKey of Object.keys(operation.responses)) {
         const response = operation.responses[responseKey];
-        if (
-          response.content &&
-          response.content['application/json'] &&
-          response.content['application/json'].schema
-        ) {
+        if (response.content?.['application/json']?.schema) {
           const st = specialTypes.find(
-            st =>
-              response.content['application/json'].schema.$ref ===
-              `#/components/schemas/${st}`
+            (st) => response.content['application/json'].schema.$ref === `#/components/schemas/${st}`,
           );
           if (st) {
-            response.content['application/json'].schema =
-              doc.components.schemas[st];
+            response.content['application/json'].schema = doc.components.schemas[st];
           }
         }
       }
       // parameters
       for (const parameter of operation.parameters ?? []) {
         if (parameter.schema) {
-          const st = specialTypes.find(
-            st => parameter.schema.$ref === `#/components/schemas/${st}`
-          );
+          const st = specialTypes.find((st) => parameter.schema.$ref === `#/components/schemas/${st}`);
           if (st) {
             parameter.schema = doc.components.schemas[st];
           }
           if (parameter.schema.type === 'array') {
-            const st = specialTypes.find(
-              st => parameter.schema.items.$ref === `#/components/schemas/${st}`
-            );
+            const st = specialTypes.find((st) => parameter.schema.items.$ref === `#/components/schemas/${st}`);
             if (st) {
               parameter.schema.items = doc.components.schemas[st];
             }
@@ -169,17 +149,15 @@ const adjust = (doc: any) => {
         }
       }
       // request body
-      if (operation.requestBody && operation.requestBody.content) {
+      if (operation.requestBody?.content) {
         const contentTypes = Object.keys(operation.requestBody.content);
         for (const contentType of contentTypes) {
           const content = operation.requestBody.content[contentType];
-          if (content.schema && content.schema.properties) {
+          if (content.schema?.properties) {
             const properties = content.schema.properties;
             const keys = Object.keys(properties);
             for (const key of keys) {
-              const st = specialTypes.find(
-                st => properties[key].$ref === `#/components/schemas/${st}`
-              );
+              const st = specialTypes.find((st) => properties[key].$ref === `#/components/schemas/${st}`);
               if (st) {
                 properties[key] = doc.components.schemas[st];
               }
@@ -205,16 +183,12 @@ const adjust = (doc: any) => {
     const properties = schema.properties || {};
     for (const propertyName of Object.keys(properties)) {
       const property = properties[propertyName];
-      const st = specialTypes.find(
-        st => property.$ref === `#/components/schemas/${st}`
-      );
+      const st = specialTypes.find((st) => property.$ref === `#/components/schemas/${st}`);
       if (st) {
         properties[propertyName] = doc.components.schemas[st];
       }
       if (property.type === 'array') {
-        const st = specialTypes.find(
-          st => property.items.$ref === `#/components/schemas/${st}`
-        );
+        const st = specialTypes.find((st) => property.items.$ref === `#/components/schemas/${st}`);
         if (st) {
           property.items = doc.components.schemas[st];
         }
@@ -237,8 +211,7 @@ const adjust = (doc: any) => {
     default: false,
   };
 
-  const grantTypes =
-    doc.components.schemas.GetTokenRequest.properties.grant_type.enum;
+  const grantTypes = doc.components.schemas.GetTokenRequest.properties.grant_type.enum;
   // https://wiki.ringcentral.com/display/PLAT/Partner+JWT+Authorization
   grantTypes.push('partner_jwt');
 
@@ -272,25 +245,21 @@ const adjust = (doc: any) => {
     enum: verticalAlignment.anyOf[0].enum,
   };
   delete doc.components.schemas.VerticalAlignment;
-  const verticalContentAlignment =
-    doc.components.schemas.VerticalContentAlignment;
+  const verticalContentAlignment = doc.components.schemas.VerticalContentAlignment;
   doc.components.schemas.AdaptiveCardInfo.properties.verticalContentAlignment =
-    doc.components.schemas.AdaptiveCardRequest.properties.verticalContentAlignment =
-      {
-        type: 'string',
-        description: verticalContentAlignment.description,
-        enum: verticalContentAlignment.anyOf[0].enum,
-      };
+    doc.components.schemas.AdaptiveCardRequest.properties.verticalContentAlignment = {
+      type: 'string',
+      description: verticalContentAlignment.description,
+      enum: verticalContentAlignment.anyOf[0].enum,
+    };
   delete doc.components.schemas.VerticalContentAlignment;
 
   // https://jira.ringcentral.com/browse/PLD-1073
-  let backgroundImageProp =
-    doc.components.schemas.AdaptiveCardRequest.properties.backgroundImage;
+  let backgroundImageProp = doc.components.schemas.AdaptiveCardRequest.properties.backgroundImage;
   backgroundImageProp.type = 'object';
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
   delete backgroundImageProp.oneOf;
-  backgroundImageProp =
-    doc.components.schemas.AdaptiveCardInfo.properties.backgroundImage;
+  backgroundImageProp = doc.components.schemas.AdaptiveCardInfo.properties.backgroundImage;
   backgroundImageProp.type = 'object';
   backgroundImageProp.$ref = '#/components/schemas/BackgroundImage';
   delete backgroundImageProp.oneOf;
@@ -302,9 +271,7 @@ const adjust = (doc: any) => {
   // delete schemas['Grouping'].oneOf;
 
   // merge allOf, oneOf and anyOf
-  const mergeAllOf = (
-    schema: OpenAPIV3.SchemaObject
-  ): OpenAPIV3.SchemaObject => {
+  const mergeAllOf = (schema: OpenAPIV3.SchemaObject): OpenAPIV3.SchemaObject => {
     if (!(schema.allOf ?? schema.oneOf ?? schema.anyOf ?? false)) {
       return schema;
     }
@@ -312,18 +279,12 @@ const adjust = (doc: any) => {
     for (const item of schema.allOf ?? schema.oneOf ?? schema.anyOf ?? []) {
       if ('$ref' in item) {
         const refName = R.last(item.$ref.split('/'))!;
-        properties = Object.assign(
-          properties,
-          mergeAllOf(schemas[refName]).properties
-        );
+        properties = Object.assign(properties, mergeAllOf(schemas[refName]).properties);
       } else {
-        properties = Object.assign(
-          properties,
-          (item as OpenAPIV3.SchemaObject).properties
-        );
+        properties = Object.assign(properties, (item as OpenAPIV3.SchemaObject).properties);
       }
     }
-    return {type: 'object', properties};
+    return { type: 'object', properties };
   };
   for (const name of Object.keys(schemas)) {
     schemas[name] = mergeAllOf(schemas[name]);
@@ -345,18 +306,9 @@ const adjust = (doc: any) => {
         continue;
       }
       const operation = path[operationKey];
-      if (
-        operation.requestBody &&
-        (operation.requestBody as OpenAPIV3.ReferenceObject).$ref
-      ) {
+      if (operation.requestBody && (operation.requestBody as OpenAPIV3.ReferenceObject).$ref) {
         operation.requestBody =
-          doc.components!.requestBodies![
-            R.last(
-              (operation.requestBody as OpenAPIV3.ReferenceObject).$ref.split(
-                '/'
-              )
-            )!
-          ];
+          doc.components!.requestBodies![R.last((operation.requestBody as OpenAPIV3.ReferenceObject).$ref.split('/'))!];
       }
     }
   }
