@@ -1,48 +1,26 @@
 // This file is copied from the consolidate-api-specs project
-
 import { OpenAPIV3 } from 'openapi-types';
 import * as R from 'ramda';
 
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
-  // remove duplicate scim endpoints
-  delete doc.paths['/scim/health'];
-  delete doc.paths['/scim/Users'];
-  delete doc.paths['/scim/ServiceProviderConfig'];
-
-  // MMS
-  doc.components.schemas.CreateMMSMessage.properties.attachments = {
-    description: 'Files to send',
-    type: 'array',
-    collectionFormat: 'multi',
-    items: {
-      type: 'file',
-    },
-  };
-
-  // Support multiple attachments: https://git.ringcentral.com/platform/api-metadata-specs/issues/21
+  // https://jira.ringcentral.com/browse/PLD-1239
   const schema =
     doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/fax'].post.requestBody.content[
       'multipart/form-data'
     ].schema;
   const sendFaxProps = schema.properties;
   schema.required = ['attachments', 'to'];
-  const faxAttachment = sendFaxProps.attachment;
-  faxAttachment.type = 'array';
-  faxAttachment.collectionFormat = 'multi';
-  faxAttachment.items = { type: 'file' };
-  faxAttachment.name = 'attachments';
-  sendFaxProps.attachments = sendFaxProps.attachment;
+  sendFaxProps.attachments = {
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+  };
   delete sendFaxProps.attachment;
   const faxTo = sendFaxProps.to;
   if (faxTo.items.type === 'string') {
     delete faxTo.items.type;
     faxTo.items.$ref = '#/components/schemas/MessageStoreCalleeInfoRequest';
   }
-
-  // https://jira.ringcentral.com/browse/PLD-337
-  // https://github.com/ringcentral/RingCentral.Net/issues/12
-  // Fax to name
   doc.components.schemas.MessageStoreCalleeInfoRequest = {
     type: 'object',
     properties: {
