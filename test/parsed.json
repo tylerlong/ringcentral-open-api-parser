@@ -88,8 +88,7 @@
             "refresh_token",
             "client_credentials",
             "urn:ietf:params:oauth:grant-type:jwt-bearer",
-            "urn:ietf:params:oauth:grant-type:device_code",
-            "partner_jwt"
+            "urn:ietf:params:oauth:grant-type:device_code"
           ],
           "name": "grant_type",
           "required": true
@@ -389,12 +388,6 @@
             "S256"
           ],
           "name": "code_challenge_method",
-          "required": false
-        },
-        {
-          "type": "boolean",
-          "default": false,
-          "name": "discovery",
           "required": false
         }
       ]

@@ -110,22 +110,6 @@ const adjust = (doc: any) => {
     delete doc.components.schemas[specialType];
   }
 
-  // https://jira.ringcentral.com/browse/PLD-749
-  // Add "WebSocket" to NotificationDeliveryModeRequest.transportType
-  // doc.components.schemas.NotificationDeliveryMode.properties.transportType.enum.push(
-  //   'WebSocket'
-  // );
-
-  // https://jira.ringcentral.com/browse/PLD-881
-  doc.components.schemas.AuthorizeRequest.properties.discovery = {
-    type: 'boolean',
-    default: false,
-  };
-
-  const grantTypes = doc.components.schemas.GetTokenRequest.properties.grant_type.enum;
-  // https://wiki.ringcentral.com/display/PLAT/Partner+JWT+Authorization
-  grantTypes.push('partner_jwt');
-
   // https://jira.ringcentral.com/browse/PLD-1029
   doc.components.schemas.MessageStatusCounts.properties.errorCodeCounts = {
     type: 'integer',
