@@ -177,10 +177,6 @@ const adjust = (doc: any) => {
 
   const schemas = doc.components.schemas;
 
-  // // oneOf to allOf, as a workaround
-  // schemas['Grouping'].allOf = schemas['Grouping'].oneOf;
-  // delete schemas['Grouping'].oneOf;
-
   // merge allOf, oneOf and anyOf
   const mergeAllOf = (schema: OpenAPIV3.SchemaObject): OpenAPIV3.SchemaObject => {
     if (!(schema.allOf ?? schema.oneOf ?? schema.anyOf ?? false)) {
@@ -199,14 +195,6 @@ const adjust = (doc: any) => {
   };
   for (const name of Object.keys(schemas)) {
     schemas[name] = mergeAllOf(schemas[name]);
-  }
-
-  // definition without properties
-  for (const key of Object.keys(schemas)) {
-    if (schemas[key].properties === undefined) {
-      console.warn(`‼️ warning: ${key} has no properties.`);
-      schemas[key].properties = {};
-    }
   }
 
   // convert requestBody.$ref to inline
