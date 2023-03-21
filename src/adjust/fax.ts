@@ -3,6 +3,8 @@ import { OpenAPIV3 } from 'openapi-types';
 /**
  * fix fax sending
  * https://jira.ringcentral.com/browse/PLD-1239
+ * 1. should allow multiple attachments
+ * 2. to parameters is an object instead of string
  * @param doc the OpenAPI document
  */
 export const fixFax = (doc: OpenAPIV3.Document) => {

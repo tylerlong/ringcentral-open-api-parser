@@ -3,35 +3,13 @@ import * as R from 'ramda';
 
 import { fixFax } from './fax';
 import { fixGreeting } from './greeting';
+import { fixInline } from './inline';
 
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
   fixFax(doc);
   fixGreeting(doc);
-
-  // https://jira.ringcentral.com/browse/PLD-696
-  // anonymous schemas
-  for (const dKey of Object.keys(doc.components.schemas)) {
-    const properties = doc.components.schemas[dKey].properties;
-    if (!properties) {
-      continue;
-    }
-    for (const pKey of Object.keys(properties)) {
-      let property = properties[pKey];
-      if (!property.properties && property.items && property.items.properties) {
-        property = property.items;
-      }
-      if (property.properties) {
-        const newSchemaName = `${dKey}${pKey.charAt(0).toUpperCase() + pKey.slice(1)}`;
-        doc.components.schemas[newSchemaName] = {
-          type: 'object',
-          properties: property.properties,
-        };
-        delete property.properties;
-        property.$ref = `#/components/schemas/${newSchemaName}`;
-      }
-    }
-  }
+  fixInline(doc);
 
   // https://jira.ringcentral.com/browse/PLD-592
   // array as schemas
