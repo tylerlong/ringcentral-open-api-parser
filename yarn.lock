@@ -977,10 +977,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.35.tgz#42c953a4e2b18ab931f72477e7012172f4ffa313"
   integrity sha512-Lt+wj8NVPx0zUmUwumiVXapmaLUcAk3yPuHCFVXras9k5VT9TdhJqKqGVUQCD60OTMCl0qxJ57OiTL0Mic3Iag==
 
-"@types/node@^18.15.3":
-  version "18.15.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.3.tgz#f0b991c32cfc6a4e7f3399d6cb4b8cf9a0315014"
-  integrity sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==
+"@types/node@^18.15.5":
+  version "18.15.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.5.tgz#3af577099a99c61479149b716183e70b5239324a"
+  integrity sha512-Ark2WDjjZO7GmvsyFFf81MXuGTA/d6oP38anyxWOL6EREyBKAxKoFHwBhaZxCfLRLpO8JgVXwqOwSwa7jRcjew==
 
 "@types/prettier@^2.1.5":
   version "2.4.2"
@@ -2882,10 +2882,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.8.5:
-  version "2.8.5"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.5.tgz#3dd8ae1ebddc4f6aa419c9b64d8c8319a7e0d982"
-  integrity sha512-3gzuxrHbKUePRBB4ZeU08VNkUcqEHaUaouNt0m7LGP4Hti/NuB07C7PPTM/LkWqXoJYJn2McEo5+kxPNrtQkLQ==
+prettier@^2.8.6:
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.6.tgz#5c174b29befd507f14b83e3c19f83fdc0e974b71"
+  integrity sha512-mtuzdiBbHwPEgl7NxWlqOkithPyp4VN93V7VeHVWBF+ad3I5avc0RVDT4oImXQy9H/AqxA2NSQH8pSxHW6FYbQ==
 
 pretty-format@^29.0.0, pretty-format@^29.0.3:
   version "29.0.3"
@@ -3248,10 +3248,10 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-ttpt@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/ttpt/-/ttpt-0.4.1.tgz#a46e0436d666333ad600a1880ab3c0b6f77c7b12"
-  integrity sha512-Lw2A08ss/Jpq9VirpypIJTP6WmVYgp1TXYFUU6/TxF6JzrUNfzje8JUE/4S3Mv4EPvgTflBFRxnwm4U5snS2hw==
+ttpt@^0.4.7:
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/ttpt/-/ttpt-0.4.7.tgz#93f4ed3497fdf7a547edb6c016d1d9be3a7bd617"
+  integrity sha512-p1YOCcaSgUm6r5ObLHwgNeUjTH8j28nR7ycNAjGGltcVy7n5/to/JW/RjkB72MskFv5K5eI75DrQmIidkjnsFw==
   dependencies:
     lodash "^4.17.21"
     shell-commands "^0.1.2"

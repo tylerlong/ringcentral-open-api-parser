@@ -4,24 +4,25 @@ import * as R from 'ramda';
 
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
+  // fix fax sending
   // https://jira.ringcentral.com/browse/PLD-1239
   const schema =
     doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/fax'].post.requestBody.content[
       'multipart/form-data'
     ].schema;
   const sendFaxProps = schema.properties;
+  // fix attachments
   schema.required = ['attachments', 'to'];
   sendFaxProps.attachments = {
     type: 'array',
     items: { type: 'string', format: 'binary' },
   };
   delete sendFaxProps.attachment;
+  // fix "to"
   const faxTo = sendFaxProps.to;
-  if (faxTo.items.type === 'string') {
-    delete faxTo.items.type;
-    faxTo.items.$ref = '#/components/schemas/MessageStoreCalleeInfoRequest';
-  }
-  doc.components.schemas.MessageStoreCalleeInfoRequest = {
+  delete faxTo.items.type;
+  faxTo.items.$ref = '#/components/schemas/FaxCallee';
+  doc.components.schemas.FaxCallee = {
     type: 'object',
     properties: {
       phoneNumber: {
@@ -35,30 +36,26 @@ const adjust = (doc: any) => {
     },
   };
 
+  // fix creation of greeting
   // https://git.ringcentral.com/platform/api-metadata-specs/issues/48
-  const p1 = doc.paths['/restapi/v1.0/account/{accountId}/greeting'].post;
-  p1.parameters = p1.parameters.filter((p: any) => p.name !== 'answeringRuleId');
-  p1.parameters.push({
-    name: 'answeringRule',
-    in: 'formData',
-    $ref: '#/components/schemas/CustomCompanyGreetingAnsweringRuleInfo',
-  });
-  const p2 = doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting'].post;
-  p2.parameters = p2.parameters.filter((p: any) => p.name !== 'answeringRuleId');
-  p2.parameters.push({
-    name: 'answeringRule',
-    in: 'formData',
-    $ref: '#/components/schemas/CustomGreetingAnsweringRuleInfoRequest',
-  });
-  doc.components.schemas.CustomCompanyGreetingAnsweringRuleInfo =
-    doc.components.schemas.CustomGreetingAnsweringRuleInfoRequest = {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'string',
-        },
-      },
+  for (const endpoint of [
+    '/restapi/v1.0/account/{accountId}/greeting',
+    '/restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting',
+  ]) {
+    const props = doc.paths[endpoint].post.requestBody.content['multipart/form-data'].schema.properties;
+    delete props.answeringRuleId;
+    props.answeringRule = {
+      $ref: '#/components/schemas/GreetingAnsweringRuleId',
     };
+  }
+  doc.components.schemas.GreetingAnsweringRuleId = {
+    type: 'object',
+    properties: {
+      id: {
+        type: 'string',
+      },
+    },
+  };
 
   // https://jira.ringcentral.com/browse/PLD-696
   // anonymous schemas
