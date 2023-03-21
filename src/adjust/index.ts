@@ -1,61 +1,13 @@
-// This file is copied from the consolidate-api-specs project
 import { OpenAPIV3 } from 'openapi-types';
 import * as R from 'ramda';
 
+import { fixFax } from './fax';
+import { fixGreeting } from './greeting';
+
 // Adjust swagger spec, because it is not 100% correct
 const adjust = (doc: any) => {
-  // fix fax sending
-  // https://jira.ringcentral.com/browse/PLD-1239
-  const schema =
-    doc.paths['/restapi/v1.0/account/{accountId}/extension/{extensionId}/fax'].post.requestBody.content[
-      'multipart/form-data'
-    ].schema;
-  const sendFaxProps = schema.properties;
-  // fix attachments
-  schema.required = ['attachments', 'to'];
-  sendFaxProps.attachments = {
-    type: 'array',
-    items: { type: 'string', format: 'binary' },
-  };
-  delete sendFaxProps.attachment;
-  // fix "to"
-  const faxTo = sendFaxProps.to;
-  delete faxTo.items.type;
-  faxTo.items.$ref = '#/components/schemas/FaxCallee';
-  doc.components.schemas.FaxCallee = {
-    type: 'object',
-    properties: {
-      phoneNumber: {
-        type: 'string',
-        description: 'Phone number in E.164 format',
-      },
-      name: {
-        type: 'string',
-        description: 'Name of the callee',
-      },
-    },
-  };
-
-  // fix creation of greeting
-  // https://git.ringcentral.com/platform/api-metadata-specs/issues/48
-  for (const endpoint of [
-    '/restapi/v1.0/account/{accountId}/greeting',
-    '/restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting',
-  ]) {
-    const props = doc.paths[endpoint].post.requestBody.content['multipart/form-data'].schema.properties;
-    delete props.answeringRuleId;
-    props.answeringRule = {
-      $ref: '#/components/schemas/GreetingAnsweringRuleId',
-    };
-  }
-  doc.components.schemas.GreetingAnsweringRuleId = {
-    type: 'object',
-    properties: {
-      id: {
-        type: 'string',
-      },
-    },
-  };
+  fixFax(doc);
+  fixGreeting(doc);
 
   // https://jira.ringcentral.com/browse/PLD-696
   // anonymous schemas
