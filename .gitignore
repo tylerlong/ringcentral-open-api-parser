@@ -1,6 +1,5 @@
 node_modules/
 lib/
 .env
-parsed.json
 dev-notes.md
 rc-platform.yml
