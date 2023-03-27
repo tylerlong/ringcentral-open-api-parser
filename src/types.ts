@@ -51,6 +51,7 @@ export interface Operation {
   responseSchema?: ResponseSchema;
   queryParameters?: string;
   bodyParameters?: string;
+  bodyType?: string;
   formUrlEncoded?: boolean;
   multipart?: boolean;
 }
