@@ -4,7 +4,7 @@ const normalizeField = (field: Field): Field => {
   if (field.$ref) {
     field.$ref = field.$ref.split('/').slice(-1)[0];
   }
-  if (field.type === 'file' || (field.type === 'string' && field.format === 'binary')) {
+  if (field.type === 'string' && field.format === 'binary') {
     field.$ref = 'Attachment';
     delete field.type;
     delete field.format;
