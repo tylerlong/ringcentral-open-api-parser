@@ -11,10 +11,10 @@
           "required": false
         },
         {
+          "type": "byte[]",
           "description": "Binary content of the file",
           "name": "content",
-          "required": true,
-          "$ref": "Attachment"
+          "required": true
         },
         {
           "type": "string",

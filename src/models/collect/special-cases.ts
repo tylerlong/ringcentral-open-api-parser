@@ -12,8 +12,7 @@ export const handleSpecialCases = () => {
         description: 'Filename with extension, such as "image.png"',
       },
       content: {
-        type: 'string',
-        format: 'binary',
+        type: 'byte[]' as any,
         description: 'Binary content of the file',
       },
       contentType: {
