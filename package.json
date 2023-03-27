@@ -1,6 +1,6 @@
 {
   "name": "ringcentral-open-api-parser",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {

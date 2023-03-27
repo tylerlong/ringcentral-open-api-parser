@@ -60,3 +60,8 @@ export interface ResponseSchema {
   type?: string;
   format?: string;
 }
+
+export interface ParseResult {
+  models: Model[];
+  paths: Path[];
+}
