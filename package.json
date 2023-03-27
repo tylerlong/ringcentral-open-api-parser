@@ -1,13 +1,13 @@
 {
+  "name": "ringcentral-open-api-parser",
+  "version": "0.9.6",
   "license": "MIT",
-  "version": "0.9.5",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "eslint --fix '**/*.{ts,tsx,js,jsx}' && prettier --write . && sort-package-json",
-    "test": "jest -c ./test/jest.config.ts",
-    "prepublishOnly": "tsc src/index.ts --declaration --outDir lib"
+    "prepublishOnly": "tsc src/index.ts --declaration --outDir lib",
+    "test": "jest -c ./test/jest.config.ts"
   },
-  "name": "ringcentral-open-api-parser",
-  "main": "lib/index.js",
   "dependencies": {
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/js-yaml": "^4.0.5",
-    "@types/lodash": "^4.14.191",
+    "@types/lodash": "^4.14.192",
     "@types/node": "^18.15.10",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
