@@ -1,3 +1,5 @@
 --ignore-file=match:/^yarn\.lock$/
 --ignore-file=match:/parsed\.json$/
 --ignore-directory=lib
+--ignore-dir=node_modules
+--ignore-file=match:/^rc-public-openapi\.yml$/

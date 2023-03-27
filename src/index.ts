@@ -1,14 +1,10 @@
-import { OpenAPIV3 } from 'openapi-types';
+import { prepareModels } from './models';
+import { preparePaths } from './paths';
+import { getRawData } from './raw-data';
 
-import { ParseResult } from './types';
-import { parseModels } from './models';
-import { parsePaths } from './paths';
-import adjust from './adjust/index';
-
-export const parse = (_doc: OpenAPIV3.Document): ParseResult => {
-  const doc = adjust(_doc);
-  return {
-    models: parseModels(doc),
-    paths: parsePaths(doc),
-  };
+export const prepareSpec = (filePath: string) => {
+  const { doc, operations } = getRawData(filePath);
+  const models = prepareModels(doc, operations);
+  const paths = preparePaths(doc);
+  return { models, paths };
 };

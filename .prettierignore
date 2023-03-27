@@ -1,3 +1,4 @@
 node_modules/
 lib/
-rc-platform.yml
+rc-public-openapi.yml
+parsed.json

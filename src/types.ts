@@ -1,8 +1,11 @@
 import { OpenAPIV3 } from 'openapi-types';
 
-export interface ParseResult {
-  models: Model[];
-  paths: Path[];
+export type NamedSchema = OpenAPIV3.SchemaObject & { name: string };
+
+export interface RawOperation {
+  operationId?: string;
+  parameters?: OpenAPIV3.ParameterObject[];
+  requestBody?: OpenAPIV3.RequestBodyObject;
 }
 
 export interface Model {
@@ -11,17 +14,26 @@ export interface Model {
   fields: Field[];
 }
 
+export interface Field {
+  name: string;
+  type?: string;
+  $ref?: string;
+  description?: string;
+  enum?: string[];
+  example?: string;
+  format?: string;
+  items?: Field;
+  default?: string | boolean;
+  minimum?: number;
+  maximum?: number;
+  required?: boolean;
+}
+
 export interface Path {
   paths: string[];
   parameter?: string;
   defaultParameter?: string;
   operations: Operation[];
-}
-
-export interface ResponseSchema {
-  $ref?: string;
-  type?: string;
-  format?: string;
 }
 
 export interface Operation {
@@ -43,21 +55,8 @@ export interface Operation {
   multipart?: boolean;
 }
 
-export interface Field {
-  name: string;
-  type?: string;
+export interface ResponseSchema {
   $ref?: string;
-  description?: string;
-  enum?: string[];
-  example?: string;
+  type?: string;
   format?: string;
-  items?: Field;
-  default?: string | boolean;
-  minimum?: number;
-  maximum?: number;
-  required?: boolean;
-}
-
-export interface SchemaDict {
-  [key: string]: OpenAPIV3.SchemaObject;
 }
