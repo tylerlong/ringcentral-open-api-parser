@@ -128,7 +128,6 @@ const getResponseSchema = (responses: OpenAPIV3.ResponsesObject) => {
 };
 
 const getBodyParameters = (operation: OpenAPIV3.OperationObject) => {
-  // bodyParameters
   let bodyParameters: string | undefined;
   let formUrlEncoded: boolean | undefined;
   let multipart: boolean | undefined;
@@ -136,26 +135,22 @@ const getBodyParameters = (operation: OpenAPIV3.OperationObject) => {
     const requestContent = (operation.requestBody as OpenAPIV3.RequestBodyObject).content;
     const mediaTypeObject =
       requestContent['application/x-www-form-urlencoded'] || requestContent['multipart/form-data'];
+    let refObj: OpenAPIV3.ReferenceObject;
     if (mediaTypeObject) {
       if (requestContent['application/x-www-form-urlencoded']) {
         formUrlEncoded = true;
       } else {
         multipart = true;
       }
-      const refObj = mediaTypeObject.schema as OpenAPIV3.ReferenceObject;
-      if (refObj.$ref) {
-        bodyParameters = refObj.$ref.split('/').pop();
-      } else {
-        bodyParameters = `${operation.operationId}Request`;
-      }
+      refObj = mediaTypeObject.schema as OpenAPIV3.ReferenceObject;
     } else {
-      const refObj = requestContent[Object.keys(requestContent)[0]].schema as OpenAPIV3.ReferenceObject;
-      if (refObj.$ref) {
-        bodyParameters = lowerCaseFirstLetter(refObj.$ref!.split('/').pop()!);
-      } else {
-        // inline json request body schema
-        bodyParameters = `${operation.operationId}Request`;
-      }
+      refObj = requestContent[Object.keys(requestContent)[0]].schema as OpenAPIV3.ReferenceObject;
+    }
+    if (refObj.$ref) {
+      bodyParameters = lowerCaseFirstLetter(refObj.$ref!.split('/').pop()!);
+    } else {
+      // inline json request body schema
+      bodyParameters = `${operation.operationId}Request`;
     }
   }
   return { bodyParameters, formUrlEncoded, multipart };
