@@ -35827,11 +35827,26 @@
       "name": "AggregationResponseOptionsCountersAllCalls",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35840,11 +35855,26 @@
       "name": "AggregationResponseOptionsCountersCallsByDirection",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35853,11 +35883,26 @@
       "name": "AggregationResponseOptionsCountersCallsByOrigin",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35866,11 +35911,26 @@
       "name": "AggregationResponseOptionsCountersCallsByResponse",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35879,11 +35939,26 @@
       "name": "AggregationResponseOptionsCountersCallsSegments",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35892,11 +35967,26 @@
       "name": "AggregationResponseOptionsCountersCallsByResult",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35905,11 +35995,26 @@
       "name": "AggregationResponseOptionsCountersCallsByCompanyHours",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35918,11 +36023,26 @@
       "name": "AggregationResponseOptionsCountersCallsByQueueSla",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35931,11 +36051,26 @@
       "name": "AggregationResponseOptionsCountersCallsByActions",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35944,11 +36079,26 @@
       "name": "AggregationResponseOptionsCountersCallsByType",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35957,7 +36107,11 @@
       "name": "AggregationResponseOptionsCountersQueueOpportunities",
       "fields": [
         {
-          "$ref": "QueueOpportunitiesAggregationType",
+          "type": "string",
+          "description": "Counter aggregation type for queue opportunities, limited to `Sum` only.",
+          "enum": [
+            "Sum"
+          ],
           "name": "aggregationType"
         }
       ]
@@ -35966,11 +36120,26 @@
       "name": "AggregationResponseOptionsTimersAllCallsDuration",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35979,11 +36148,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByDirection",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -35992,11 +36176,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByOrigin",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36005,11 +36204,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByResponse",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36018,11 +36232,26 @@
       "name": "AggregationResponseOptionsTimersCallsSegmentsDuration",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36031,11 +36260,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByResult",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36044,11 +36288,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByCompanyHours",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36057,11 +36316,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByQueueSla",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]
@@ -36070,11 +36344,26 @@
       "name": "AggregationResponseOptionsTimersCallsDurationByType",
       "fields": [
         {
-          "$ref": "AggregationType",
+          "type": "string",
+          "description": "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`",
+          "enum": [
+            "Sum",
+            "Average",
+            "Max",
+            "Min",
+            "Percent"
+          ],
           "name": "aggregationType"
         },
         {
-          "$ref": "AggregationInterval",
+          "type": "string",
+          "description": "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`",
+          "enum": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month"
+          ],
           "name": "aggregationInterval"
         }
       ]

@@ -10,8 +10,8 @@ import { ref } from './ref';
 
 export const adjust = (_schemas: NamedSchema[], doc: OpenAPIV3.Document): NamedSchema[] => {
   let schemas = mergeOf(_schemas);
-  schemas = deRef(schemas, doc);
   schemas = ref(schemas);
+  schemas = deRef(schemas, doc);
   schemas = fixFax(schemas);
   schemas = fixGreeting(schemas);
   schemas = fixMiscellaneous(schemas);
