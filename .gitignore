@@ -2,3 +2,4 @@ node_modules/
 lib/
 .env
 dev-notes.md
+rc-private-openapi.yml
