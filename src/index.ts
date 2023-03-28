@@ -5,6 +5,6 @@ import { getRawData } from './raw-data';
 export const prepareSpec = (filePath: string) => {
   const { doc, operations } = getRawData(filePath);
   const models = prepareModels(doc, operations);
-  const paths = preparePaths(doc);
+  const paths = preparePaths(doc, models);
   return { models, paths };
 };

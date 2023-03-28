@@ -1,10 +1,10 @@
 import { isEqual, last, remove, isEmpty } from 'lodash';
 import { OpenAPIV3 } from 'openapi-types';
 
-import { Path, ResponseSchema } from '../types';
-import { lowerCaseFirstLetter } from '../utils';
+import { Model, Path, ResponseSchema } from '../types';
+import { capitalizeFirstLetter, lowerCaseFirstLetter } from '../utils';
 
-export const getEndpointPaths = (doc: OpenAPIV3.Document) => {
+export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
   const entries = Object.entries(doc.paths).sort((item1, item2) => (item1[0].length > item2[0].length ? 1 : -1));
 
   const result: Path[] = [];
@@ -64,8 +64,10 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document) => {
 
       // queryParameters
       let queryParameters: string | undefined;
-      if (operation.parameters?.some((p) => (p as OpenAPIV3.ParameterObject).in === 'query')) {
-        queryParameters = `${operation.operationId}Parameters`;
+      if (
+        models.find((m) => m.name === capitalizeFirstLetter(operation.operationId ?? 'doesNotExist') + 'Parameters')
+      ) {
+        queryParameters = operation.operationId + 'Parameters';
       }
 
       // bodyParameters
