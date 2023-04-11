@@ -1,6 +1,7 @@
 import { mergeWith, isArray, uniq } from 'lodash';
 
 import { NamedSchema } from '../../types';
+import { OpenAPIV3 } from 'openapi-types';
 
 /**
  * How to merge arrays
@@ -21,8 +22,11 @@ function customizer(objValue: string[], srcValue: string[]) {
  */
 export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
   const mergeOne = (schema: NamedSchema) => {
-    const multi = schema.allOf ?? schema.anyOf ?? schema.oneOf;
+    let multi = schema.allOf ?? schema.anyOf ?? schema.oneOf;
     if (multi) {
+      // todo: we cannot handle CaiErrorResponse properly
+      // workaround is to ignore error response for now.
+      multi = multi.filter((m) => !(m as OpenAPIV3.ReferenceObject).$ref?.endsWith('schemas/CaiErrorResponse'));
       for (const item of multi) {
         if ('$ref' in item) {
           const name = (item.$ref as string).split('/').pop()!;
@@ -34,6 +38,9 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
       delete schema.allOf;
       delete schema.anyOf;
       delete schema.oneOf;
+    }
+    for (const val of Object.values(schema.properties ?? {})) {
+      mergeOne(val as NamedSchema);
     }
     return schema;
   };

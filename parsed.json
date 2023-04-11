@@ -774,13 +774,13 @@
       "fields": [
         {
           "name": "syncType",
-          "description": "Type of call log synchronization request",
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/CallLogSyncTypeEnum"
-            }
-          ],
-          "default": "FSync"
+          "description": "Type of call log synchronization request: full or incremental sync",
+          "default": "FSync",
+          "type": "string",
+          "enum": [
+            "FSync",
+            "ISync"
+          ]
         },
         {
           "name": "syncToken",
@@ -2207,13 +2207,13 @@
       "fields": [
         {
           "name": "syncType",
-          "description": "Type of call log synchronization request",
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/CallLogSyncTypeEnum"
-            }
-          ],
-          "default": "FSync"
+          "description": "Type of call log synchronization request: full or incremental sync",
+          "default": "FSync",
+          "type": "string",
+          "enum": [
+            "FSync",
+            "ISync"
+          ]
         },
         {
           "name": "syncToken",
@@ -35039,15 +35039,8 @@
           "name": "status"
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/SpeakerIdentificationObject"
-            },
-            {
-              "$ref": "#/components/schemas/CaiErrorResponse"
-            }
-          ],
-          "name": "response"
+          "name": "response",
+          "$ref": "SpeakerIdentifyApiResponseResponse"
         }
       ]
     },
@@ -35101,15 +35094,8 @@
           "name": "status"
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/DiarizedObject"
-            },
-            {
-              "$ref": "#/components/schemas/CaiErrorResponse"
-            }
-          ],
-          "name": "response"
+          "name": "response",
+          "$ref": "DiarizeApiResponseResponse"
         }
       ]
     },
@@ -35166,14 +35152,10 @@
           "name": "status"
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/EmotionObject"
-            },
-            {
-              "$ref": "#/components/schemas/CaiErrorResponse"
-            }
-          ],
+          "type": "array",
+          "items": {
+            "$ref": "EmotionSegment"
+          },
           "name": "response"
         }
       ]
@@ -35234,13 +35216,6 @@
             "$ref": "SummaryOutputUnit"
           },
           "name": "summaries"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "CaiErrorCodeResponse"
-          },
-          "name": "errors"
         }
       ]
     },
@@ -35254,14 +35229,6 @@
           },
           "name": "texts",
           "required": true
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "CaiErrorCodeResponse"
-          },
-          "name": "errors",
-          "required": false
         }
       ]
     },
@@ -35324,15 +35291,8 @@
           "name": "status"
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/TranscribedObject"
-            },
-            {
-              "$ref": "#/components/schemas/CaiErrorResponse"
-            }
-          ],
-          "name": "response"
+          "name": "response",
+          "$ref": "AsrApiResponseResponse"
         }
       ]
     },
@@ -35348,15 +35308,8 @@
           "name": "status"
         },
         {
-          "oneOf": [
-            {
-              "$ref": "#/components/schemas/InteractionObject"
-            },
-            {
-              "$ref": "#/components/schemas/CaiErrorResponse"
-            }
-          ],
-          "name": "response"
+          "name": "response",
+          "$ref": "InteractionApiResponseResponse"
         }
       ]
     },
@@ -38800,10 +38753,10 @@
           "required": false
         },
         {
-          "description": "Specifies the background image of a card",
-          "$ref": "BackgroundImage",
+          "description": "Specifies a background image oa a card. Acceptable formats are PNG, JPEG, and GIF",
+          "required": false,
           "name": "backgroundImage",
-          "required": false
+          "$ref": "BackgroundImage"
         },
         {
           "type": "string",
@@ -39200,9 +39153,9 @@
           "name": "fallbackText"
         },
         {
-          "description": "Specifies the background image of a card",
-          "$ref": "BackgroundImage",
-          "name": "backgroundImage"
+          "description": "Specifies a background image oa a card. Acceptable formats are PNG, JPEG, and GIF",
+          "name": "backgroundImage",
+          "$ref": "BackgroundImage"
         },
         {
           "type": "string",
@@ -41857,6 +41810,89 @@
       ]
     },
     {
+      "name": "SpeakerIdentifyApiResponseResponse",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "DiarizeSegment"
+          },
+          "name": "utterances"
+        }
+      ]
+    },
+    {
+      "name": "DiarizeApiResponseResponse",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int32",
+          "example": 3,
+          "name": "speakerCount"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "DiarizeSegment"
+          },
+          "name": "utterances"
+        }
+      ]
+    },
+    {
+      "name": "AsrApiResponseResponse",
+      "fields": [
+        {
+          "type": "integer",
+          "description": "The number of speakers detected. Field is set only when enableSpeakerDiarization is true.",
+          "format": "int32",
+          "example": 3,
+          "name": "speakerCount"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "WordSegment"
+          },
+          "name": "words"
+        },
+        {
+          "type": "number",
+          "description": "Overall transcription confidence.",
+          "format": "float",
+          "name": "confidence"
+        },
+        {
+          "type": "string",
+          "description": "The entire transcript with/without punctuations according to the input.",
+          "name": "transcript"
+        }
+      ]
+    },
+    {
+      "name": "InteractionApiResponseResponse",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "UtteranceInsightsObject"
+          },
+          "name": "utteranceInsights"
+        },
+        {
+          "$ref": "SpeakerInsightsObject",
+          "name": "speakerInsights"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "ConversationalInsightsUnit"
+          },
+          "name": "conversationalInsights"
+        }
+      ]
+    },
+    {
       "name": "TMUpdateTaskRequestAssignees",
       "fields": [
         {
@@ -42045,6 +42081,112 @@
           "description": "The end date of periodic task in UTC time zone.",
           "format": "date-time",
           "name": "endingOn"
+        }
+      ]
+    },
+    {
+      "name": "AdaptiveCardRequestBackgroundImage",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "BackgroundImage"
+          ],
+          "description": "Must be `BackgroundImage`",
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL/data URL of an image to be used as a background of a card. Acceptable formats are PNG, JPEG, and GIF",
+          "name": "url"
+        },
+        {
+          "description": "Describes how the image should fill the area",
+          "name": "fillMode",
+          "type": "string",
+          "enum": [
+            "cover",
+            "repeatHorizontally",
+            "repeatVertically",
+            "repeat"
+          ],
+          "pattern": "^([c|C][o|O][v|V][e|E][r|R])|([r|R][e|E][p|P][e|E][a|A][t|T][h|H][o|O][r|R][i|I][z|Z][o|O][n|N][t|T][a|A][l|L][l|L][y|Y])|([r|R][e|E][p|P][e|E][a|A][t|T][v|V][e|E][r|R][t|T][i|I][c|C][a|A][l|L][l|L][y|Y])|([r|R][e|E][p|P][e|E][a|A][t|T])$"
+        },
+        {
+          "description": "Describes how the image should be aligned if it must be cropped or if using repeat fill mode",
+          "name": "horizontalAlignment",
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "pattern": "^([l|L][e|E][f|F][t|T])|([c|C][e|E][n|N][t|T][e|E][r|R])|([r|R][i|I][g|G][h|H][t|T])$"
+        },
+        {
+          "description": "Describes how the image should be aligned if it must be cropped or if using repeat fill mode",
+          "name": "verticalAlignment",
+          "type": "string",
+          "enum": [
+            "top",
+            "center",
+            "bottom"
+          ],
+          "pattern": "^([t|T][o|O][p|P])|([c|C][e|E][n|N][t|T][e|E][r|R])|([b|B][o|O][t|T][t|T][o|O][m|M])$"
+        }
+      ]
+    },
+    {
+      "name": "AdaptiveCardInfoBackgroundImage",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "BackgroundImage"
+          ],
+          "description": "Must be `BackgroundImage`",
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL/data URL of an image to be used as a background of a card. Acceptable formats are PNG, JPEG, and GIF",
+          "name": "url"
+        },
+        {
+          "description": "Describes how the image should fill the area",
+          "name": "fillMode",
+          "type": "string",
+          "enum": [
+            "cover",
+            "repeatHorizontally",
+            "repeatVertically",
+            "repeat"
+          ],
+          "pattern": "^([c|C][o|O][v|V][e|E][r|R])|([r|R][e|E][p|P][e|E][a|A][t|T][h|H][o|O][r|R][i|I][z|Z][o|O][n|N][t|T][a|A][l|L][l|L][y|Y])|([r|R][e|E][p|P][e|E][a|A][t|T][v|V][e|E][r|R][t|T][i|I][c|C][a|A][l|L][l|L][y|Y])|([r|R][e|E][p|P][e|E][a|A][t|T])$"
+        },
+        {
+          "description": "Describes how the image should be aligned if it must be cropped or if using repeat fill mode",
+          "name": "horizontalAlignment",
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "pattern": "^([l|L][e|E][f|F][t|T])|([c|C][e|E][n|N][t|T][e|E][r|R])|([r|R][i|I][g|G][h|H][t|T])$"
+        },
+        {
+          "description": "Describes how the image should be aligned if it must be cropped or if using repeat fill mode",
+          "name": "verticalAlignment",
+          "type": "string",
+          "enum": [
+            "top",
+            "center",
+            "bottom"
+          ],
+          "pattern": "^([t|T][o|O][p|P])|([c|C][e|E][n|N][t|T][e|E][r|R])|([b|B][o|O][t|T][t|T][o|O][m|M])$"
         }
       ]
     },
