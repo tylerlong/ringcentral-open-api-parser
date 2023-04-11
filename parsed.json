@@ -8853,14 +8853,12 @@
         {
           "type": "array",
           "items": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/RcwResourceIdModel"
-              },
-              {
-                "$ref": "#/components/schemas/UpdateInviteeRequest"
-              }
-            ]
+            "name": "RcwResourceIdModel",
+            "description": "The attribute declaration to indicate webinar session participant/invitee role",
+            "required": [
+              "role"
+            ],
+            "$ref": "BulkUpdateInviteesRequestUpdatedInvitees"
           },
           "name": "updatedInvitees"
         },
@@ -41671,6 +41669,81 @@
           "description": "Indicates that work email address is required for registration.",
           "default": false,
           "name": "workEmailRequired"
+        }
+      ]
+    },
+    {
+      "name": "BulkUpdateInviteesRequestUpdatedInvitees",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal object ID",
+          "minLength": 1,
+          "maxLength": 20,
+          "example": "78654321",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "First (given) name",
+          "maxLength": 64,
+          "example": "John",
+          "x-sensitive-data": "masked",
+          "name": "firstName"
+        },
+        {
+          "type": "string",
+          "description": "Last (family) name",
+          "maxLength": 64,
+          "example": "Doe",
+          "x-sensitive-data": "masked",
+          "name": "lastName"
+        },
+        {
+          "type": "string",
+          "format": "email",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "john.doe@example.com",
+          "description": "User's contact email",
+          "x-sensitive-data": "normalized-anonymized",
+          "name": "email"
+        },
+        {
+          "type": "string",
+          "description": "Job title",
+          "maxLength": 64,
+          "x-sensitive-data": "masked",
+          "example": "Product Manager",
+          "name": "jobTitle"
+        },
+        {
+          "type": "string",
+          "description": "The role of the webinar session participant/invitee.\nSee also: [Understanding Webinar Roles](https://support.ringcentral.com/webinar/getting-started/understanding-ringcentral-webinar-roles.html)\n",
+          "enum": [
+            "Panelist",
+            "CoHost",
+            "Host",
+            "Attendee"
+          ],
+          "example": "Panelist",
+          "name": "role"
+        },
+        {
+          "type": "string",
+          "description": "The type of the webinar invitee",
+          "enum": [
+            "User",
+            "Room"
+          ],
+          "default": "User",
+          "name": "type"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if invite/cancellation emails have to be sent to this invitee.\nFor \"Host\" it cannot be set to false.\nIf it is true it can't be changed back to false.\n",
+          "default": true,
+          "name": "sendInvite"
         }
       ]
     },
