@@ -103,9 +103,6 @@ const getEndpoint = (key: string) =>
   key
     .replace(/\/restapi\/v1\.0\//, '/restapi/{apiVersion}/')
     .replace(/\/scim\/v2/, '/scim/{version}')
-    .replace(/\/team-messaging\/v1/, '/team-messaging/{version}')
-    .replace(/\/analytics\/calls\/v1/, '/analytics/calls/{version}')
-    .replace(/\/rcvideo\/v1/, '/rcvideo/{version}')
     .replace(/\/\.search/, '/dotSearch');
 
 const getResponseSchema = (responses: OpenAPIV3.ResponsesObject) => {

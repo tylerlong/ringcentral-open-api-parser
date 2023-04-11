@@ -43016,6 +43016,13 @@
     {
       "paths": [
         "rcvideo",
+        "v1"
+      ],
+      "operations": []
+    },
+    {
+      "paths": [
+        "rcvideo",
         "v2"
       ],
       "operations": []
@@ -43225,31 +43232,12 @@
       "paths": [
         "team-messaging"
       ],
-      "operations": [],
-      "parameter": "version",
-      "defaultParameter": "v1"
-    },
-    {
-      "paths": [
-        "rcvideo",
-        "account"
-      ],
-      "operations": [],
-      "parameter": "accountId"
+      "operations": []
     },
     {
       "paths": [
         "analytics",
         "calls"
-      ],
-      "operations": [],
-      "parameter": "version",
-      "defaultParameter": "v1"
-    },
-    {
-      "paths": [
-        "rcvideo",
-        "history"
       ],
       "operations": []
     },
@@ -43290,14 +43278,6 @@
     },
     {
       "paths": [
-        "rcvideo",
-        "accounts"
-      ],
-      "operations": [],
-      "parameter": "accountId"
-    },
-    {
-      "paths": [
         "ai",
         "text",
         "v1",
@@ -43311,6 +43291,13 @@
         "audio",
         "v1",
         "async"
+      ],
+      "operations": []
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1"
       ],
       "operations": []
     },
@@ -43350,6 +43337,31 @@
       ],
       "operations": [],
       "parameter": "accountId"
+    },
+    {
+      "paths": [
+        "rcvideo",
+        "v1",
+        "account"
+      ],
+      "operations": [],
+      "parameter": "accountId"
+    },
+    {
+      "paths": [
+        "analytics",
+        "calls",
+        "v1"
+      ],
+      "operations": []
+    },
+    {
+      "paths": [
+        "rcvideo",
+        "v1",
+        "history"
+      ],
+      "operations": []
     },
     {
       "paths": [
@@ -43468,6 +43480,15 @@
         }
       ],
       "parameter": "type"
+    },
+    {
+      "paths": [
+        "rcvideo",
+        "v1",
+        "accounts"
+      ],
+      "operations": [],
+      "parameter": "accountId"
     },
     {
       "paths": [
@@ -43609,289 +43630,6 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "tasks"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/tasks/{taskId}",
-          "method": "get",
-          "tags": [
-            "Tasks"
-          ],
-          "method2": "get",
-          "description": "Returns information about the specified task(s) by ID(s).",
-          "summary": "Get Task",
-          "operationId": "readTaskNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMTaskInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/tasks/{taskId}",
-          "method": "delete",
-          "tags": [
-            "Tasks"
-          ],
-          "method2": "delete",
-          "description": "Deletes the specified task.",
-          "summary": "Delete Task",
-          "operationId": "deleteTaskNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        },
-        {
-          "endpoint": "/team-messaging/{version}/tasks/{taskId}",
-          "method": "patch",
-          "tags": [
-            "Tasks"
-          ],
-          "method2": "patch",
-          "description": "Updates the specified task by ID.",
-          "summary": "Update Task",
-          "operationId": "patchTaskNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMTaskList"
-          },
-          "bodyParameters": "tMUpdateTaskRequest"
-        }
-      ],
-      "parameter": "taskId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "chats"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/chats",
-          "method": "get",
-          "tags": [
-            "Chats"
-          ],
-          "method2": "list",
-          "description": "Returns the list of chats where the user is a member and also public teams that can be joined.\n\nAll records in response are sorted by creation time of a chat in ascending order.\n\n**Chat types**\n\nThere are multiple types of chats, including:\n\n* **Personal** - each user is given a dedicated \"personal chat\" in which they are the only member.\n* **Direct** - a chat between two individuals.\n* **Group** - a chat between three or more named individuals. A \"group\" chat has no name.\n* **Team** - a chat related to a specific topic. Members can come and go freely from this chat type.\n* **Everyone** - a special chat containing every individual in a company.\n",
-          "summary": "List Chats",
-          "operationId": "listGlipChatsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMChatList"
-          },
-          "queryParameters": "listGlipChatsNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}",
-          "method": "get",
-          "tags": [
-            "Chats"
-          ],
-          "method2": "get",
-          "description": "Returns information about a chat by ID.\n\n**Note** 'Chat' is a general name for all types of threads including *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"\n",
-          "summary": "Get Chat",
-          "operationId": "readGlipChatNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMChatInfo"
-          }
-        }
-      ],
-      "parameter": "chatId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "teams"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/teams",
-          "method": "get",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "list",
-          "description": "Returns the list of teams where the user is a member (both archived and active) combined with a list of public teams that can be joined by the current user. All records in response are sorted by creation time of a chat in ascending order. A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
-          "summary": "List Teams",
-          "operationId": "listGlipTeamsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMTeamList"
-          },
-          "queryParameters": "listGlipTeamsNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/teams",
-          "method": "post",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "post",
-          "description": "Creates a team, and adds a list of people to the team.",
-          "summary": "Create Team",
-          "operationId": "createGlipTeamNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMTeamInfo"
-          },
-          "bodyParameters": "tMCreateTeamRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}",
-          "method": "get",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "get",
-          "description": "Returns information about the specified team.",
-          "summary": "Get Team",
-          "operationId": "readGlipTeamNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMTeamInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}",
-          "method": "delete",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "delete",
-          "description": "Deletes the specified team.",
-          "summary": "Delete Team",
-          "operationId": "deleteGlipTeamNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        },
-        {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}",
-          "method": "patch",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "patch",
-          "description": "Updates the name and description of the specified team.",
-          "summary": "Update Team",
-          "operationId": "patchGlipTeamNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMTeamInfo"
-          },
-          "bodyParameters": "tMUpdateTeamRequest"
-        }
-      ],
-      "parameter": "chatId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "notes"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}",
-          "method": "get",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "get",
-          "description": "Returns the specified note(s). It is possible to fetch up to 50 notes per request.",
-          "summary": "Get Note",
-          "operationId": "readUserNoteNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMNoteWithBodyInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}",
-          "method": "delete",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "delete",
-          "description": "Deletes the specified note.",
-          "summary": "Delete Note",
-          "operationId": "deleteNoteNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        },
-        {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}",
-          "method": "patch",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "patch",
-          "description": "Edits a note. Notes can be edited by any user if posted to a chat. the user belongs to.",
-          "summary": "Update Note",
-          "operationId": "patchNoteNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMNoteInfo"
-          },
-          "queryParameters": "patchNoteNewParameters",
-          "bodyParameters": "tMCreateNoteRequest"
-        }
-      ],
-      "parameter": "noteId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "files"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/files",
-          "method": "post",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "post",
-          "description": "Posts a file.",
-          "summary": "Upload File",
-          "operationId": "createGlipFileNew",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMAddFileRequest"
-          },
-          "queryParameters": "createGlipFileNewParameters",
-          "bodyParameters": "createGlipFileNewRequest",
-          "multipart": true
-        }
-      ]
-    },
-    {
-      "paths": [
         "scim",
         "Users",
         "dotSearch"
@@ -43950,14 +43688,6 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "groups"
-      ],
-      "operations": [],
-      "parameter": "groupId"
-    },
-    {
-      "paths": [
         "webinar",
         "configuration"
       ],
@@ -43967,13 +43697,6 @@
       "paths": [
         "restapi",
         "number-parser"
-      ],
-      "operations": []
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "recent"
       ],
       "operations": []
     },
@@ -44077,100 +43800,6 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "events"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/events",
-          "method": "get",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "list",
-          "description": "Returns all calendar events created by the current user.",
-          "summary": "List User Events",
-          "operationId": "readGlipEventsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMEventList"
-          },
-          "queryParameters": "readGlipEventsNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/events",
-          "method": "post",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "post",
-          "description": "Creates a new calendar event.",
-          "summary": "Create Event",
-          "operationId": "createEventNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMEventInfo"
-          },
-          "bodyParameters": "tMCreateEventRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/events/{eventId}",
-          "method": "get",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "get",
-          "description": "Returns the specified calendar event(s) by ID(s).",
-          "summary": "Get Event",
-          "operationId": "readEventNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMEventInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/events/{eventId}",
-          "method": "put",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "put",
-          "description": "Updates the specified calendar event.",
-          "summary": "Update Event",
-          "operationId": "updateEventNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMEventInfo"
-          },
-          "bodyParameters": "tMCreateEventRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/events/{eventId}",
-          "method": "delete",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "delete",
-          "description": "Deletes the specified calendar event.",
-          "summary": "Delete Event",
-          "operationId": "deleteEventNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        }
-      ],
-      "parameter": "eventId"
-    },
-    {
-      "paths": [
         "rcvideo",
         "v2",
         "bridges",
@@ -44226,32 +43855,6 @@
         }
       ],
       "parameter": "deviceId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "persons"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/persons/{personId}",
-          "method": "get",
-          "tags": [
-            "Profile"
-          ],
-          "method2": "get",
-          "description": "Returns a user or multiple users by their ID(s). Batch request is supported.",
-          "summary": "Get Person",
-          "operationId": "readGlipPersonNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMPersonInfo"
-          }
-        }
-      ],
-      "parameter": "personId"
     },
     {
       "paths": [
@@ -44368,102 +43971,261 @@
     {
       "paths": [
         "team-messaging",
-        "webhooks"
+        "v1",
+        "tasks"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/webhooks",
+          "endpoint": "/team-messaging/v1/tasks/{taskId}",
           "method": "get",
           "tags": [
-            "Incoming Webhooks"
-          ],
-          "method2": "list",
-          "description": "Returns the list of all webhooks associated with the current account.",
-          "summary": "List Webhooks",
-          "operationId": "listGlipWebhooksNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMWebhookList"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/webhooks/{webhookId}",
-          "method": "get",
-          "tags": [
-            "Incoming Webhooks"
+            "Tasks"
           ],
           "method2": "get",
-          "description": "Returns webhooks(s) with the specified id(s).",
-          "summary": "Get Webhook",
-          "operationId": "readGlipWebhookNew",
+          "description": "Returns information about the specified task(s) by ID(s).",
+          "summary": "Get Task",
+          "operationId": "readTaskNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "TMWebhookList"
+            "$ref": "TMTaskInfo"
           }
         },
         {
-          "endpoint": "/team-messaging/{version}/webhooks/{webhookId}",
+          "endpoint": "/team-messaging/v1/tasks/{taskId}",
           "method": "delete",
           "tags": [
-            "Incoming Webhooks"
+            "Tasks"
           ],
           "method2": "delete",
-          "description": "Deletes a webhook by ID.",
-          "summary": "Delete Webhook",
-          "operationId": "deleteGlipWebhookNew",
+          "description": "Deletes the specified task.",
+          "summary": "Delete Task",
+          "operationId": "deleteTaskNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": true
+        },
+        {
+          "endpoint": "/team-messaging/v1/tasks/{taskId}",
+          "method": "patch",
+          "tags": [
+            "Tasks"
+          ],
+          "method2": "patch",
+          "description": "Updates the specified task by ID.",
+          "summary": "Update Task",
+          "operationId": "patchTaskNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMTaskList"
+          },
+          "bodyParameters": "tMUpdateTaskRequest"
         }
       ],
-      "parameter": "webhookId"
+      "parameter": "taskId"
     },
     {
       "paths": [
         "team-messaging",
-        "everyone"
+        "v1",
+        "chats"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/everyone",
+          "endpoint": "/team-messaging/v1/chats",
+          "method": "get",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "list",
+          "description": "Returns the list of chats where the user is a member and also public teams that can be joined.\n\nAll records in response are sorted by creation time of a chat in ascending order.\n\n**Chat types**\n\nThere are multiple types of chats, including:\n\n* **Personal** - each user is given a dedicated \"personal chat\" in which they are the only member.\n* **Direct** - a chat between two individuals.\n* **Group** - a chat between three or more named individuals. A \"group\" chat has no name.\n* **Team** - a chat related to a specific topic. Members can come and go freely from this chat type.\n* **Everyone** - a special chat containing every individual in a company.\n",
+          "summary": "List Chats",
+          "operationId": "listGlipChatsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMChatList"
+          },
+          "queryParameters": "listGlipChatsNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}",
+          "method": "get",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "get",
+          "description": "Returns information about a chat by ID.\n\n**Note** 'Chat' is a general name for all types of threads including *Personal* (user's own me-chat), *Direct* (one on one chat), *Group* (chat of 3-15 participants without specific name), *Team* (chat of 2 and more participants, with a specific name), *Everyone* (company chat including all employees, with a specific name).\"\n",
+          "summary": "Get Chat",
+          "operationId": "readGlipChatNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMChatInfo"
+          }
+        }
+      ],
+      "parameter": "chatId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "teams"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/teams",
+          "method": "get",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "list",
+          "description": "Returns the list of teams where the user is a member (both archived and active) combined with a list of public teams that can be joined by the current user. All records in response are sorted by creation time of a chat in ascending order. A team is a chat between 2 and more (unlimited number) participants assigned with specific name.",
+          "summary": "List Teams",
+          "operationId": "listGlipTeamsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMTeamList"
+          },
+          "queryParameters": "listGlipTeamsNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/teams",
+          "method": "post",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "post",
+          "description": "Creates a team, and adds a list of people to the team.",
+          "summary": "Create Team",
+          "operationId": "createGlipTeamNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMTeamInfo"
+          },
+          "bodyParameters": "tMCreateTeamRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}",
           "method": "get",
           "tags": [
             "Teams"
           ],
           "method2": "get",
-          "description": "Returns information about \"Everyone\" chat (a company level chat which includes all employees).",
-          "summary": "Get Everyone Chat",
-          "operationId": "readGlipEveryoneNew",
+          "description": "Returns information about the specified team.",
+          "summary": "Get Team",
+          "operationId": "readGlipTeamNew",
           "rateLimitGroup": "Light",
           "appPermission": "TeamMessaging",
-          "withParameter": false,
+          "withParameter": true,
           "responseSchema": {
-            "$ref": "EveryoneTeamInfo"
+            "$ref": "TMTeamInfo"
           }
         },
         {
-          "endpoint": "/team-messaging/{version}/everyone",
+          "endpoint": "/team-messaging/v1/teams/{chatId}",
+          "method": "delete",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "delete",
+          "description": "Deletes the specified team.",
+          "summary": "Delete Team",
+          "operationId": "deleteGlipTeamNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true
+        },
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}",
           "method": "patch",
           "tags": [
             "Teams"
           ],
           "method2": "patch",
-          "description": "Updates \"Everyone\" chat information.",
-          "summary": "Update Everyone Chat",
-          "operationId": "patchGlipEveryoneNew",
+          "description": "Updates the name and description of the specified team.",
+          "summary": "Update Team",
+          "operationId": "patchGlipTeamNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "withParameter": false,
+          "withParameter": true,
           "responseSchema": {
-            "$ref": "EveryoneTeamInfo"
+            "$ref": "TMTeamInfo"
           },
-          "bodyParameters": "updateEveryoneTeamRequest"
+          "bodyParameters": "tMUpdateTeamRequest"
         }
-      ]
+      ],
+      "parameter": "chatId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "notes"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/notes/{noteId}",
+          "method": "get",
+          "tags": [
+            "Notes"
+          ],
+          "method2": "get",
+          "description": "Returns the specified note(s). It is possible to fetch up to 50 notes per request.",
+          "summary": "Get Note",
+          "operationId": "readUserNoteNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMNoteWithBodyInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/notes/{noteId}",
+          "method": "delete",
+          "tags": [
+            "Notes"
+          ],
+          "method2": "delete",
+          "description": "Deletes the specified note.",
+          "summary": "Delete Note",
+          "operationId": "deleteNoteNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true
+        },
+        {
+          "endpoint": "/team-messaging/v1/notes/{noteId}",
+          "method": "patch",
+          "tags": [
+            "Notes"
+          ],
+          "method2": "patch",
+          "description": "Edits a note. Notes can be edited by any user if posted to a chat. the user belongs to.",
+          "summary": "Update Note",
+          "operationId": "patchNoteNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMNoteInfo"
+          },
+          "queryParameters": "patchNoteNewParameters",
+          "bodyParameters": "tMCreateNoteRequest"
+        }
+      ],
+      "parameter": "noteId"
     },
     {
       "paths": [
@@ -44504,6 +44266,35 @@
     },
     {
       "paths": [
+        "team-messaging",
+        "v1",
+        "files"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/files",
+          "method": "post",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "post",
+          "description": "Posts a file.",
+          "summary": "Upload File",
+          "operationId": "createGlipFileNew",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMAddFileRequest"
+          },
+          "queryParameters": "createGlipFileNewParameters",
+          "bodyParameters": "createGlipFileNewRequest",
+          "multipart": true
+        }
+      ]
+    },
+    {
+      "paths": [
         "restapi",
         "dictionary",
         "brand"
@@ -44521,18 +44312,26 @@
     },
     {
       "paths": [
-        "analytics",
-        "calls",
-        "accounts"
+        "team-messaging",
+        "v1",
+        "groups"
       ],
       "operations": [],
-      "parameter": "accountId"
+      "parameter": "groupId"
     },
     {
       "paths": [
         "webinar",
         "configuration",
         "v1"
+      ],
+      "operations": []
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "recent"
       ],
       "operations": []
     },
@@ -44686,133 +44485,98 @@
     },
     {
       "paths": [
-        "rcvideo",
-        "history",
-        "meetings"
+        "team-messaging",
+        "v1",
+        "events"
       ],
       "operations": [
         {
-          "endpoint": "/rcvideo/{version}/history/meetings",
+          "endpoint": "/team-messaging/v1/events",
           "method": "get",
           "tags": [
-            "Meetings History"
+            "Calendar Events"
           ],
           "method2": "list",
-          "description": "Returns the list of user meetings.",
-          "summary": "List Video Meetings",
-          "operationId": "listVideoMeetings",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "MeetingPage"
-          },
-          "queryParameters": "listVideoMeetingsParameters"
-        },
-        {
-          "endpoint": "/rcvideo/{version}/history/meetings/{meetingId}",
-          "method": "get",
-          "tags": [
-            "Meetings History"
-          ],
-          "method2": "get",
-          "description": "Returns a user meeting by ID.",
-          "summary": "Get Video Meeting",
-          "operationId": "getVideoMeeting",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "Meeting"
-          }
-        }
-      ],
-      "parameter": "meetingId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "companies"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/companies/{companyId}",
-          "method": "get",
-          "tags": [
-            "Profile"
-          ],
-          "method2": "get",
-          "description": "Returns information about one or more companies by their IDs.",
-          "summary": "Get Company Info",
-          "operationId": "readTMCompanyInfoNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMCompanyInfo"
-          }
-        }
-      ],
-      "parameter": "companyId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "teams",
-        "add"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/add",
-          "method": "post",
-          "tags": [
-            "Teams"
-          ],
-          "method2": "post",
-          "description": "Adds members to the specified team.",
-          "summary": "Add Team Members",
-          "operationId": "addGlipTeamMembersNew",
+          "description": "Returns all calendar events created by the current user.",
+          "summary": "List User Events",
+          "operationId": "readGlipEventsNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false,
-          "bodyParameters": "tMAddTeamMembersRequest"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "favorites"
-      ],
-      "operations": [
+          "responseSchema": {
+            "$ref": "TMEventList"
+          },
+          "queryParameters": "readGlipEventsNewParameters"
+        },
         {
-          "endpoint": "/team-messaging/{version}/favorites",
-          "method": "get",
+          "endpoint": "/team-messaging/v1/events",
+          "method": "post",
           "tags": [
-            "Chats"
+            "Calendar Events"
           ],
-          "method2": "get",
-          "description": "Returns a list of the current user's favorite chats.",
-          "summary": "List Favorite Chats",
-          "operationId": "listFavoriteChatsNew",
-          "rateLimitGroup": "Light",
+          "method2": "post",
+          "description": "Creates a new calendar event.",
+          "summary": "Create Event",
+          "operationId": "createEventNew",
+          "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "TMChatListWithoutNavigation"
+            "$ref": "TMEventInfo"
           },
-          "queryParameters": "listFavoriteChatsNewParameters"
+          "bodyParameters": "tMCreateEventRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/events/{eventId}",
+          "method": "get",
+          "tags": [
+            "Calendar Events"
+          ],
+          "method2": "get",
+          "description": "Returns the specified calendar event(s) by ID(s).",
+          "summary": "Get Event",
+          "operationId": "readEventNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMEventInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/events/{eventId}",
+          "method": "put",
+          "tags": [
+            "Calendar Events"
+          ],
+          "method2": "put",
+          "description": "Updates the specified calendar event.",
+          "summary": "Update Event",
+          "operationId": "updateEventNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMEventInfo"
+          },
+          "bodyParameters": "tMCreateEventRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/events/{eventId}",
+          "method": "delete",
+          "tags": [
+            "Calendar Events"
+          ],
+          "method2": "delete",
+          "description": "Deletes the specified calendar event.",
+          "summary": "Delete Event",
+          "operationId": "deleteEventNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true
         }
-      ]
-    },
-    {
-      "paths": [
-        "rcvideo",
-        "account",
-        "extension"
       ],
-      "operations": [],
-      "parameter": "extensionId"
+      "parameter": "eventId"
     },
     {
       "paths": [
@@ -45219,48 +44983,29 @@
     {
       "paths": [
         "team-messaging",
-        "teams",
-        "join"
+        "v1",
+        "persons"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/join",
-          "method": "post",
+          "endpoint": "/team-messaging/v1/persons/{personId}",
+          "method": "get",
           "tags": [
-            "Teams"
+            "Profile"
           ],
-          "method2": "post",
-          "description": "Adds the current user to the specified team.",
-          "summary": "Join Team",
-          "operationId": "joinGlipTeamNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "notes",
-        "lock"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}/lock",
-          "method": "post",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "post",
-          "description": "Locks a note providing the user with the unique write access for 5 hours.",
-          "summary": "Lock Note",
-          "operationId": "lockNoteNew",
+          "method2": "get",
+          "description": "Returns a user or multiple users by their ID(s). Batch request is supported.",
+          "summary": "Get Person",
+          "operationId": "readGlipPersonNew",
           "rateLimitGroup": "Light",
           "appPermission": "TeamMessaging",
-          "withParameter": false
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMPersonInfo"
+          }
         }
-      ]
+      ],
+      "parameter": "personId"
     },
     {
       "paths": [
@@ -45270,53 +45015,6 @@
         "company"
       ],
       "operations": []
-    },
-    {
-      "paths": [
-        "rcvideo",
-        "account",
-        "recordings"
-      ],
-      "operations": [
-        {
-          "endpoint": "/rcvideo/{version}/account/{accountId}/recordings",
-          "method": "get",
-          "tags": [
-            "Meeting Recordings",
-            "Account Administration"
-          ],
-          "method2": "list",
-          "description": "Returns the list of meeting recordings belonging to all account users.",
-          "summary": "List Account Recordings",
-          "operationId": "getAccountRecordings",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CloudRecordings"
-          },
-          "queryParameters": "getAccountRecordingsParameters"
-        },
-        {
-          "endpoint": "/rcvideo/{version}/account/{accountId}/recordings/{recordingId}",
-          "method": "get",
-          "tags": [
-            "Meeting Recordings",
-            "Account Administration"
-          ],
-          "method2": "get",
-          "description": "Returns the information about particular recording.",
-          "summary": "Get Account Recording",
-          "operationId": "getAccountRecording",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "CloudRecording"
-          }
-        }
-      ],
-      "parameter": "recordingId"
     },
     {
       "paths": [
@@ -45342,101 +45040,6 @@
           }
         }
       ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "chats",
-        "posts"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/posts",
-          "method": "get",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "list",
-          "description": "Returns a list of posts from the specified chat.",
-          "summary": "List Posts",
-          "operationId": "readGlipPostsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMPostsList"
-          },
-          "queryParameters": "readGlipPostsNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/posts",
-          "method": "post",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "post",
-          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
-          "summary": "Create Post",
-          "operationId": "createGlipPostNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMPostInfo"
-          },
-          "bodyParameters": "tMCreatePostRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/posts/{postId}",
-          "method": "get",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "get",
-          "description": "Returns information about the specified post.",
-          "summary": "Get Post",
-          "operationId": "readGlipPostNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMPostInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/posts/{postId}",
-          "method": "delete",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "delete",
-          "description": "Deletes the specified post from the chat.",
-          "summary": "Delete Post",
-          "operationId": "deleteGlipPostNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/posts/{postId}",
-          "method": "patch",
-          "tags": [
-            "Posts"
-          ],
-          "method2": "patch",
-          "description": "Updates a specific post within a chat.",
-          "summary": "Update Post",
-          "operationId": "patchGlipPostNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMPostInfo"
-          },
-          "bodyParameters": "tMUpdatePostRequest"
-        }
-      ],
-      "parameter": "postId"
     },
     {
       "paths": [
@@ -45484,180 +45087,60 @@
     {
       "paths": [
         "team-messaging",
-        "chats",
-        "tasks"
+        "v1",
+        "webhooks"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/tasks",
+          "endpoint": "/team-messaging/v1/webhooks",
           "method": "get",
           "tags": [
-            "Tasks"
-          ],
-          "method2": "get",
-          "description": "Returns the list of tasks of the specified chat.",
-          "summary": "List Chat Tasks",
-          "operationId": "listChatTasksNew",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMTaskList"
-          },
-          "queryParameters": "listChatTasksNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/tasks",
-          "method": "post",
-          "tags": [
-            "Tasks"
-          ],
-          "method2": "post",
-          "description": "Creates a task in the specified chat.",
-          "summary": "Create Task",
-          "operationId": "createTaskNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMTaskInfo"
-          },
-          "bodyParameters": "tMCreateTaskRequest"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "chats",
-        "notes"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/notes",
-          "method": "get",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "get",
-          "description": "Returns the list of chat notes.",
-          "summary": "List Notes",
-          "operationId": "listChatNotesNew",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMNoteList"
-          },
-          "queryParameters": "listChatNotesNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/notes",
-          "method": "post",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "post",
-          "description": "Creates a new note in the specified chat.",
-          "summary": "Create Note",
-          "operationId": "createChatNoteNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMNoteInfo"
-          },
-          "bodyParameters": "tMCreateNoteRequest"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "data-export"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/data-export",
-          "method": "get",
-          "tags": [
-            "Compliance Exports"
+            "Incoming Webhooks"
           ],
           "method2": "list",
-          "description": "Returns the list of Glip data export tasks.",
-          "summary": "List Data Export Tasks",
-          "operationId": "listDataExportTasksNew",
+          "description": "Returns the list of all webhooks associated with the current account.",
+          "summary": "List Webhooks",
+          "operationId": "listGlipWebhooksNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "userPermission": "Glip",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "DataExportTaskList"
-          },
-          "queryParameters": "listDataExportTasksNewParameters"
+            "$ref": "TMWebhookList"
+          }
         },
         {
-          "endpoint": "/team-messaging/{version}/data-export",
-          "method": "post",
-          "tags": [
-            "Compliance Exports"
-          ],
-          "method2": "post",
-          "description": "Creates a task for Glip data export and returns a link at which the exported data will be available in future once the task is implemented. The exported data can be downloaded by calling Get Data Export Task method with the specified task ID. Simultaneously no more than 2 tasks per company can be created.",
-          "summary": "Create Data Export Task",
-          "operationId": "createDataExportTaskNew",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "TeamMessaging",
-          "userPermission": "Glip",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "DataExportTask"
-          },
-          "bodyParameters": "createDataExportTaskRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/data-export/{taskId}",
+          "endpoint": "/team-messaging/v1/webhooks/{webhookId}",
           "method": "get",
           "tags": [
-            "Compliance Exports"
+            "Incoming Webhooks"
           ],
           "method2": "get",
-          "description": "Returns the links for downloading Glip data exported within the specified task. If the export task is still in progress, then only the task status will be returned. If the data is ready for downloading, then the list of URLs will be returned.",
-          "summary": "Get Data Export Task",
-          "operationId": "readDataExportTaskNew",
+          "description": "Returns webhooks(s) with the specified id(s).",
+          "summary": "Get Webhook",
+          "operationId": "readGlipWebhookNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "userPermission": "Glip",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "DataExportTask"
+            "$ref": "TMWebhookList"
           }
-        }
-      ],
-      "parameter": "taskId"
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "teams",
-        "leave"
-      ],
-      "operations": [
+        },
         {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/leave",
-          "method": "post",
+          "endpoint": "/team-messaging/v1/webhooks/{webhookId}",
+          "method": "delete",
           "tags": [
-            "Teams"
+            "Incoming Webhooks"
           ],
-          "method2": "post",
-          "description": "Removes the current user from the specified team.",
-          "summary": "Leave Team",
-          "operationId": "leaveGlipTeamNew",
+          "method2": "delete",
+          "description": "Deletes a webhook by ID.",
+          "summary": "Delete Webhook",
+          "operationId": "deleteGlipWebhookNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "withParameter": false
+          "withParameter": true
         }
-      ]
+      ],
+      "parameter": "webhookId"
     },
     {
       "paths": [
@@ -45776,12 +45259,57 @@
     },
     {
       "paths": [
-        "rcvideo",
-        "accounts",
-        "extensions"
+        "team-messaging",
+        "v1",
+        "everyone"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/everyone",
+          "method": "get",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "get",
+          "description": "Returns information about \"Everyone\" chat (a company level chat which includes all employees).",
+          "summary": "Get Everyone Chat",
+          "operationId": "readGlipEveryoneNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "EveryoneTeamInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/everyone",
+          "method": "patch",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "patch",
+          "description": "Updates \"Everyone\" chat information.",
+          "summary": "Update Everyone Chat",
+          "operationId": "patchGlipEveryoneNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "EveryoneTeamInfo"
+          },
+          "bodyParameters": "updateEveryoneTeamRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "analytics",
+        "calls",
+        "v1",
+        "accounts"
       ],
       "operations": [],
-      "parameter": "extensionId"
+      "parameter": "accountId"
     },
     {
       "paths": [
@@ -46115,48 +45643,99 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "teams",
-        "remove"
+        "rcvideo",
+        "v1",
+        "history",
+        "meetings"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/remove",
+          "endpoint": "/rcvideo/v1/history/meetings",
+          "method": "get",
+          "tags": [
+            "Meetings History"
+          ],
+          "method2": "list",
+          "description": "Returns the list of user meetings.",
+          "summary": "List Video Meetings",
+          "operationId": "listVideoMeetings",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MeetingPage"
+          },
+          "queryParameters": "listVideoMeetingsParameters"
+        },
+        {
+          "endpoint": "/rcvideo/v1/history/meetings/{meetingId}",
+          "method": "get",
+          "tags": [
+            "Meetings History"
+          ],
+          "method2": "get",
+          "description": "Returns a user meeting by ID.",
+          "summary": "Get Video Meeting",
+          "operationId": "getVideoMeeting",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "Meeting"
+          }
+        }
+      ],
+      "parameter": "meetingId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "companies"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/companies/{companyId}",
+          "method": "get",
+          "tags": [
+            "Profile"
+          ],
+          "method2": "get",
+          "description": "Returns information about one or more companies by their IDs.",
+          "summary": "Get Company Info",
+          "operationId": "readTMCompanyInfoNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMCompanyInfo"
+          }
+        }
+      ],
+      "parameter": "companyId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "teams",
+        "add"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}/add",
           "method": "post",
           "tags": [
             "Teams"
           ],
           "method2": "post",
-          "description": "Removes members from the specified team.",
-          "summary": "Remove Team Members",
-          "operationId": "removeGlipTeamMembersNew",
+          "description": "Adds members to the specified team.",
+          "summary": "Add Team Members",
+          "operationId": "addGlipTeamMembersNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false,
-          "bodyParameters": "tMRemoveTeamMembersRequest"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "notes",
-        "unlock"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}/unlock",
-          "method": "post",
-          "tags": [
-            "Notes"
-          ],
-          "method2": "post",
-          "description": "Unlocks a note letting other users edit this note. Once the note is locked (by another user) it cannot be unlocked during 5 hours since the lock datetime.",
-          "summary": "Unlock Note",
-          "operationId": "unlockNoteNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": false
+          "bodyParameters": "tMAddTeamMembersRequest"
         }
       ]
     },
@@ -46245,33 +45824,6 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "recent",
-        "chats"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/recent/chats",
-          "method": "get",
-          "tags": [
-            "Chats"
-          ],
-          "method2": "get",
-          "description": "Returns recent chats where the user is a member. All records in response are sorted by the `lastModifiedTime` in descending order (the latest changed chat is displayed first on page)",
-          "summary": "List Recent Chats",
-          "operationId": "listRecentChatsNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMChatListWithoutNavigation"
-          },
-          "queryParameters": "listRecentChatsNewParameters"
-        }
-      ]
-    },
-    {
-      "paths": [
         "webinar",
         "history",
         "v1",
@@ -46297,6 +45849,43 @@
           "queryParameters": "rcwHistoryListAllSessionsParameters"
         }
       ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "favorites"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/favorites",
+          "method": "get",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "get",
+          "description": "Returns a list of the current user's favorite chats.",
+          "summary": "List Favorite Chats",
+          "operationId": "listFavoriteChatsNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMChatListWithoutNavigation"
+          },
+          "queryParameters": "listFavoriteChatsNewParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "rcvideo",
+        "v1",
+        "account",
+        "extension"
+      ],
+      "operations": [],
+      "parameter": "extensionId"
     },
     {
       "paths": [
@@ -46456,126 +46045,21 @@
     {
       "paths": [
         "team-messaging",
-        "groups",
-        "events"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/groups/{groupId}/events",
-          "method": "get",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "get",
-          "description": "Returns a list of calendar events available for the current user within the specified group. Users can only see their personal tasks and public tasks.",
-          "summary": "List Group Events",
-          "operationId": "listGroupEventsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMEventInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/groups/{groupId}/events",
-          "method": "post",
-          "tags": [
-            "Calendar Events"
-          ],
-          "method2": "post",
-          "description": "Creates a new calendar event within the specified group.",
-          "summary": "Create Event by Group ID",
-          "operationId": "createEventByGroupIdNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMEventInfo"
-          },
-          "bodyParameters": "tMCreateEventRequest"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "team-messaging",
-        "conversations"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/conversations",
-          "method": "get",
-          "tags": [
-            "Conversations"
-          ],
-          "method2": "list",
-          "description": "Returns the list of conversations where the user is a member. All records in response are sorted by creation time of a conversation in ascending order. Conversation is a chat of the *Group* type.",
-          "summary": "List Conversations",
-          "operationId": "listGlipConversationsNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMConversationList"
-          },
-          "queryParameters": "listGlipConversationsNewParameters"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/conversations",
-          "method": "post",
-          "tags": [
-            "Conversations"
-          ],
-          "method2": "post",
-          "description": "Creates a new conversation or opens the existing one. If the conversation already exists, then its ID will be returned in response. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation (group), it creates a whole new conversation.",
-          "summary": "Create/Open Conversation",
-          "operationId": "createGlipConversationNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMConversationInfo"
-          },
-          "bodyParameters": "createConversationRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/conversations/{chatId}",
-          "method": "get",
-          "tags": [
-            "Conversations"
-          ],
-          "method2": "get",
-          "description": "Returns information about the specified conversation, including the list of conversation participants. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation, it creates a whole new conversation.",
-          "summary": "Get Conversation",
-          "operationId": "readGlipConversationNew",
-          "rateLimitGroup": "Light",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "TMConversationInfo"
-          }
-        }
-      ],
-      "parameter": "chatId"
-    },
-    {
-      "paths": [
-        "team-messaging",
+        "v1",
         "teams",
-        "archive"
+        "join"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/archive",
+          "endpoint": "/team-messaging/v1/teams/{chatId}/join",
           "method": "post",
           "tags": [
             "Teams"
           ],
           "method2": "post",
-          "description": "Changes the status of the specified team to 'Archived'.",
-          "summary": "Archive Team",
-          "operationId": "archiveGlipTeamNew",
+          "description": "Adds the current user to the specified team.",
+          "summary": "Join Team",
+          "operationId": "joinGlipTeamNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false
@@ -46585,26 +46069,24 @@
     {
       "paths": [
         "team-messaging",
+        "v1",
         "notes",
-        "publish"
+        "lock"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/notes/{noteId}/publish",
+          "endpoint": "/team-messaging/v1/notes/{noteId}/lock",
           "method": "post",
           "tags": [
             "Notes"
           ],
           "method2": "post",
-          "description": "Publishes a note making it visible to other users.",
-          "summary": "Publish Note",
-          "operationId": "publishNoteNew",
-          "rateLimitGroup": "Medium",
+          "description": "Locks a note providing the user with the unique write access for 5 hours.",
+          "summary": "Lock Note",
+          "operationId": "lockNoteNew",
+          "rateLimitGroup": "Light",
           "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMNoteInfo"
-          }
+          "withParameter": false
         }
       ]
     },
@@ -46809,6 +46291,54 @@
     },
     {
       "paths": [
+        "rcvideo",
+        "v1",
+        "account",
+        "recordings"
+      ],
+      "operations": [
+        {
+          "endpoint": "/rcvideo/v1/account/{accountId}/recordings",
+          "method": "get",
+          "tags": [
+            "Meeting Recordings",
+            "Account Administration"
+          ],
+          "method2": "list",
+          "description": "Returns the list of meeting recordings belonging to all account users.",
+          "summary": "List Account Recordings",
+          "operationId": "getAccountRecordings",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CloudRecordings"
+          },
+          "queryParameters": "getAccountRecordingsParameters"
+        },
+        {
+          "endpoint": "/rcvideo/v1/account/{accountId}/recordings/{recordingId}",
+          "method": "get",
+          "tags": [
+            "Meeting Recordings",
+            "Account Administration"
+          ],
+          "method2": "get",
+          "description": "Returns the information about particular recording.",
+          "summary": "Get Account Recording",
+          "operationId": "getAccountRecording",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "CloudRecording"
+          }
+        }
+      ],
+      "parameter": "recordingId"
+    },
+    {
+      "paths": [
         "restapi",
         "dictionary",
         "permission"
@@ -46849,6 +46379,102 @@
         }
       ],
       "parameter": "permissionId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "posts"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/posts",
+          "method": "get",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "list",
+          "description": "Returns a list of posts from the specified chat.",
+          "summary": "List Posts",
+          "operationId": "readGlipPostsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMPostsList"
+          },
+          "queryParameters": "readGlipPostsNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/posts",
+          "method": "post",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "post",
+          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
+          "summary": "Create Post",
+          "operationId": "createGlipPostNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMPostInfo"
+          },
+          "bodyParameters": "tMCreatePostRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/posts/{postId}",
+          "method": "get",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "get",
+          "description": "Returns information about the specified post.",
+          "summary": "Get Post",
+          "operationId": "readGlipPostNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMPostInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/posts/{postId}",
+          "method": "delete",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "delete",
+          "description": "Deletes the specified post from the chat.",
+          "summary": "Delete Post",
+          "operationId": "deleteGlipPostNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/posts/{postId}",
+          "method": "patch",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "patch",
+          "description": "Updates a specific post within a chat.",
+          "summary": "Update Post",
+          "operationId": "patchGlipPostNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMPostInfo"
+          },
+          "bodyParameters": "tMUpdatePostRequest"
+        }
+      ],
+      "parameter": "postId"
     },
     {
       "paths": [
@@ -46955,44 +46581,179 @@
     {
       "paths": [
         "team-messaging",
-        "tasks",
-        "complete"
+        "v1",
+        "chats",
+        "tasks"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/tasks/{taskId}/complete",
+          "endpoint": "/team-messaging/v1/chats/{chatId}/tasks",
+          "method": "get",
+          "tags": [
+            "Tasks"
+          ],
+          "method2": "get",
+          "description": "Returns the list of tasks of the specified chat.",
+          "summary": "List Chat Tasks",
+          "operationId": "listChatTasksNew",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMTaskList"
+          },
+          "queryParameters": "listChatTasksNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/tasks",
           "method": "post",
           "tags": [
             "Tasks"
           ],
           "method2": "post",
-          "description": "Completes a task in the specified chat.",
-          "summary": "Complete Task",
-          "operationId": "completeTaskNew",
+          "description": "Creates a task in the specified chat.",
+          "summary": "Create Task",
+          "operationId": "createTaskNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false,
-          "bodyParameters": "tMCompleteTaskRequest"
+          "responseSchema": {
+            "$ref": "TMTaskInfo"
+          },
+          "bodyParameters": "tMCreateTaskRequest"
         }
       ]
     },
     {
       "paths": [
         "team-messaging",
+        "v1",
         "chats",
-        "favorite"
+        "notes"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/favorite",
+          "endpoint": "/team-messaging/v1/chats/{chatId}/notes",
+          "method": "get",
+          "tags": [
+            "Notes"
+          ],
+          "method2": "get",
+          "description": "Returns the list of chat notes.",
+          "summary": "List Notes",
+          "operationId": "listChatNotesNew",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMNoteList"
+          },
+          "queryParameters": "listChatNotesNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/notes",
           "method": "post",
           "tags": [
-            "Chats"
+            "Notes"
           ],
           "method2": "post",
-          "description": "Adds the specified chat to the users's list of favorite chats.",
-          "summary": "Add Chat to Favorites",
-          "operationId": "favoriteGlipChatNew",
+          "description": "Creates a new note in the specified chat.",
+          "summary": "Create Note",
+          "operationId": "createChatNoteNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMNoteInfo"
+          },
+          "bodyParameters": "tMCreateNoteRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "data-export"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/data-export",
+          "method": "get",
+          "tags": [
+            "Compliance Exports"
+          ],
+          "method2": "list",
+          "description": "Returns the list of Glip data export tasks.",
+          "summary": "List Data Export Tasks",
+          "operationId": "listDataExportTasksNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "userPermission": "Glip",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "DataExportTaskList"
+          },
+          "queryParameters": "listDataExportTasksNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/data-export",
+          "method": "post",
+          "tags": [
+            "Compliance Exports"
+          ],
+          "method2": "post",
+          "description": "Creates a task for Glip data export and returns a link at which the exported data will be available in future once the task is implemented. The exported data can be downloaded by calling Get Data Export Task method with the specified task ID. Simultaneously no more than 2 tasks per company can be created.",
+          "summary": "Create Data Export Task",
+          "operationId": "createDataExportTaskNew",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "TeamMessaging",
+          "userPermission": "Glip",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "DataExportTask"
+          },
+          "bodyParameters": "createDataExportTaskRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/data-export/{taskId}",
+          "method": "get",
+          "tags": [
+            "Compliance Exports"
+          ],
+          "method2": "get",
+          "description": "Returns the links for downloading Glip data exported within the specified task. If the export task is still in progress, then only the task status will be returned. If the data is ready for downloading, then the list of URLs will be returned.",
+          "summary": "Get Data Export Task",
+          "operationId": "readDataExportTaskNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "userPermission": "Glip",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "DataExportTask"
+          }
+        }
+      ],
+      "parameter": "taskId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "teams",
+        "leave"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}/leave",
+          "method": "post",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "post",
+          "description": "Removes the current user from the specified team.",
+          "summary": "Leave Team",
+          "operationId": "leaveGlipTeamNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false
@@ -47001,61 +46762,13 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "adaptive-cards"
+        "rcvideo",
+        "v1",
+        "accounts",
+        "extensions"
       ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/adaptive-cards/{cardId}",
-          "method": "get",
-          "tags": [
-            "Adaptive Cards"
-          ],
-          "method2": "get",
-          "description": "Returns adaptive card(s) with given id(s).",
-          "summary": "Get Adaptive Card",
-          "operationId": "getGlipAdaptiveCardNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "AdaptiveCardInfo"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/adaptive-cards/{cardId}",
-          "method": "put",
-          "tags": [
-            "Adaptive Cards"
-          ],
-          "method2": "put",
-          "description": "Updates an adaptive card.",
-          "summary": "Update Adaptive Card",
-          "operationId": "updateGlipAdaptiveCardNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "AdaptiveCardShortInfo"
-          },
-          "bodyParameters": "adaptiveCardRequest"
-        },
-        {
-          "endpoint": "/team-messaging/{version}/adaptive-cards/{cardId}",
-          "method": "delete",
-          "tags": [
-            "Adaptive Cards"
-          ],
-          "method2": "delete",
-          "description": "Deletes an adaptive card by ID.",
-          "summary": "Delete Adaptive Card",
-          "operationId": "deleteGlipAdaptiveCardNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": true
-        }
-      ],
-      "parameter": "cardId"
+      "operations": [],
+      "parameter": "extensionId"
     },
     {
       "paths": [
@@ -47252,66 +46965,77 @@
     {
       "paths": [
         "team-messaging",
-        "groups",
-        "webhooks"
+        "v1",
+        "teams",
+        "remove"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/groups/{groupId}/webhooks",
-          "method": "get",
-          "tags": [
-            "Incoming Webhooks"
-          ],
-          "method2": "get",
-          "description": "Returns webhooks which are available for the current user by group ID.",
-          "summary": "List Webhooks in Group",
-          "operationId": "listGlipGroupWebhooksNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMWebhookList"
-          }
-        },
-        {
-          "endpoint": "/team-messaging/{version}/groups/{groupId}/webhooks",
+          "endpoint": "/team-messaging/v1/teams/{chatId}/remove",
           "method": "post",
           "tags": [
-            "Incoming Webhooks"
+            "Teams"
           ],
           "method2": "post",
-          "description": "Creates a new webhook.",
-          "summary": "Create Webhook in Group",
-          "operationId": "createGlipGroupWebhookNew",
+          "description": "Removes members from the specified team.",
+          "summary": "Remove Team Members",
+          "operationId": "removeGlipTeamMembersNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false,
-          "responseSchema": {
-            "$ref": "TMWebhookInfo"
-          }
+          "bodyParameters": "tMRemoveTeamMembersRequest"
         }
       ]
     },
     {
       "paths": [
         "team-messaging",
-        "teams",
-        "unarchive"
+        "v1",
+        "notes",
+        "unlock"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/teams/{chatId}/unarchive",
+          "endpoint": "/team-messaging/v1/notes/{noteId}/unlock",
           "method": "post",
           "tags": [
-            "Teams"
+            "Notes"
           ],
           "method2": "post",
-          "description": "Changes the status of the specified team to 'Active'.",
-          "summary": "Unarchive Team",
-          "operationId": "unarchiveGlipTeamNew",
-          "rateLimitGroup": "Medium",
+          "description": "Unlocks a note letting other users edit this note. Once the note is locked (by another user) it cannot be unlocked during 5 hours since the lock datetime.",
+          "summary": "Unlock Note",
+          "operationId": "unlockNoteNew",
+          "rateLimitGroup": "Light",
           "appPermission": "TeamMessaging",
           "withParameter": false
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "recent",
+        "chats"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/recent/chats",
+          "method": "get",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "get",
+          "description": "Returns recent chats where the user is a member. All records in response are sorted by the `lastModifiedTime` in descending order (the latest changed chat is displayed first on page)",
+          "summary": "List Recent Chats",
+          "operationId": "listRecentChatsNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMChatListWithoutNavigation"
+          },
+          "queryParameters": "listRecentChatsNewParameters"
         }
       ]
     },
@@ -47439,20 +47163,129 @@
     {
       "paths": [
         "team-messaging",
-        "webhooks",
-        "suspend"
+        "v1",
+        "groups",
+        "events"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/webhooks/{webhookId}/suspend",
+          "endpoint": "/team-messaging/v1/groups/{groupId}/events",
+          "method": "get",
+          "tags": [
+            "Calendar Events"
+          ],
+          "method2": "get",
+          "description": "Returns a list of calendar events available for the current user within the specified group. Users can only see their personal tasks and public tasks.",
+          "summary": "List Group Events",
+          "operationId": "listGroupEventsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMEventInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/groups/{groupId}/events",
           "method": "post",
           "tags": [
-            "Incoming Webhooks"
+            "Calendar Events"
           ],
           "method2": "post",
-          "description": "Suspends a webhook by ID.",
-          "summary": "Suspend Webhook",
-          "operationId": "suspendGlipWebhookNew",
+          "description": "Creates a new calendar event within the specified group.",
+          "summary": "Create Event by Group ID",
+          "operationId": "createEventByGroupIdNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMEventInfo"
+          },
+          "bodyParameters": "tMCreateEventRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "conversations"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/conversations",
+          "method": "get",
+          "tags": [
+            "Conversations"
+          ],
+          "method2": "list",
+          "description": "Returns the list of conversations where the user is a member. All records in response are sorted by creation time of a conversation in ascending order. Conversation is a chat of the *Group* type.",
+          "summary": "List Conversations",
+          "operationId": "listGlipConversationsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMConversationList"
+          },
+          "queryParameters": "listGlipConversationsNewParameters"
+        },
+        {
+          "endpoint": "/team-messaging/v1/conversations",
+          "method": "post",
+          "tags": [
+            "Conversations"
+          ],
+          "method2": "post",
+          "description": "Creates a new conversation or opens the existing one. If the conversation already exists, then its ID will be returned in response. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation (group), it creates a whole new conversation.",
+          "summary": "Create/Open Conversation",
+          "operationId": "createGlipConversationNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMConversationInfo"
+          },
+          "bodyParameters": "createConversationRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/conversations/{chatId}",
+          "method": "get",
+          "tags": [
+            "Conversations"
+          ],
+          "method2": "get",
+          "description": "Returns information about the specified conversation, including the list of conversation participants. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation, it creates a whole new conversation.",
+          "summary": "Get Conversation",
+          "operationId": "readGlipConversationNew",
+          "rateLimitGroup": "Light",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "TMConversationInfo"
+          }
+        }
+      ],
+      "parameter": "chatId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "teams",
+        "archive"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}/archive",
+          "method": "post",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "post",
+          "description": "Changes the status of the specified team to 'Archived'.",
+          "summary": "Archive Team",
+          "operationId": "archiveGlipTeamNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
           "withParameter": false
@@ -47462,23 +47295,27 @@
     {
       "paths": [
         "team-messaging",
-        "chats",
-        "unfavorite"
+        "v1",
+        "notes",
+        "publish"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/unfavorite",
+          "endpoint": "/team-messaging/v1/notes/{noteId}/publish",
           "method": "post",
           "tags": [
-            "Chats"
+            "Notes"
           ],
           "method2": "post",
-          "description": "Removes the specified chat from the users's list of favorite chats.",
-          "summary": "Remove Chat from Favorites",
-          "operationId": "unfavoriteGlipChatNew",
+          "description": "Publishes a note making it visible to other users.",
+          "summary": "Publish Note",
+          "operationId": "publishNoteNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMNoteInfo"
+          }
         }
       ]
     },
@@ -47690,29 +47527,6 @@
     },
     {
       "paths": [
-        "team-messaging",
-        "webhooks",
-        "activate"
-      ],
-      "operations": [
-        {
-          "endpoint": "/team-messaging/{version}/webhooks/{webhookId}/activate",
-          "method": "post",
-          "tags": [
-            "Incoming Webhooks"
-          ],
-          "method2": "post",
-          "description": "Activates a webhook by ID.",
-          "summary": "Activate Webhook",
-          "operationId": "activateGlipWebhookNew",
-          "rateLimitGroup": "Medium",
-          "appPermission": "TeamMessaging",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "paths": [
         "webinar",
         "registration",
         "v1",
@@ -47759,6 +47573,114 @@
     },
     {
       "paths": [
+        "team-messaging",
+        "v1",
+        "tasks",
+        "complete"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/tasks/{taskId}/complete",
+          "method": "post",
+          "tags": [
+            "Tasks"
+          ],
+          "method2": "post",
+          "description": "Completes a task in the specified chat.",
+          "summary": "Complete Task",
+          "operationId": "completeTaskNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "bodyParameters": "tMCompleteTaskRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "favorite"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/favorite",
+          "method": "post",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "post",
+          "description": "Adds the specified chat to the users's list of favorite chats.",
+          "summary": "Add Chat to Favorites",
+          "operationId": "favoriteGlipChatNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "adaptive-cards"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/adaptive-cards/{cardId}",
+          "method": "get",
+          "tags": [
+            "Adaptive Cards"
+          ],
+          "method2": "get",
+          "description": "Returns adaptive card(s) with given id(s).",
+          "summary": "Get Adaptive Card",
+          "operationId": "getGlipAdaptiveCardNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "AdaptiveCardInfo"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/adaptive-cards/{cardId}",
+          "method": "put",
+          "tags": [
+            "Adaptive Cards"
+          ],
+          "method2": "put",
+          "description": "Updates an adaptive card.",
+          "summary": "Update Adaptive Card",
+          "operationId": "updateGlipAdaptiveCardNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "AdaptiveCardShortInfo"
+          },
+          "bodyParameters": "adaptiveCardRequest"
+        },
+        {
+          "endpoint": "/team-messaging/v1/adaptive-cards/{cardId}",
+          "method": "delete",
+          "tags": [
+            "Adaptive Cards"
+          ],
+          "method2": "delete",
+          "description": "Deletes an adaptive card by ID.",
+          "summary": "Delete Adaptive Card",
+          "operationId": "deleteGlipAdaptiveCardNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": true
+        }
+      ],
+      "parameter": "cardId"
+    },
+    {
+      "paths": [
         "ai",
         "audio",
         "v1",
@@ -47786,15 +47708,6 @@
           "bodyParameters": "asrInput"
         }
       ]
-    },
-    {
-      "paths": [
-        "analytics",
-        "calls",
-        "accounts",
-        "timeline"
-      ],
-      "operations": []
     },
     {
       "paths": [
@@ -48050,6 +47963,74 @@
         }
       ],
       "parameter": "webinarId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "groups",
+        "webhooks"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/groups/{groupId}/webhooks",
+          "method": "get",
+          "tags": [
+            "Incoming Webhooks"
+          ],
+          "method2": "get",
+          "description": "Returns webhooks which are available for the current user by group ID.",
+          "summary": "List Webhooks in Group",
+          "operationId": "listGlipGroupWebhooksNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMWebhookList"
+          }
+        },
+        {
+          "endpoint": "/team-messaging/v1/groups/{groupId}/webhooks",
+          "method": "post",
+          "tags": [
+            "Incoming Webhooks"
+          ],
+          "method2": "post",
+          "description": "Creates a new webhook.",
+          "summary": "Create Webhook in Group",
+          "operationId": "createGlipGroupWebhookNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMWebhookInfo"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "teams",
+        "unarchive"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/teams/{chatId}/unarchive",
+          "method": "post",
+          "tags": [
+            "Teams"
+          ],
+          "method2": "post",
+          "description": "Changes the status of the specified team to 'Active'.",
+          "summary": "Unarchive Team",
+          "operationId": "unarchiveGlipTeamNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false
+        }
+      ]
     },
     {
       "paths": [
@@ -48570,6 +48551,54 @@
     },
     {
       "paths": [
+        "team-messaging",
+        "v1",
+        "webhooks",
+        "suspend"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/webhooks/{webhookId}/suspend",
+          "method": "post",
+          "tags": [
+            "Incoming Webhooks"
+          ],
+          "method2": "post",
+          "description": "Suspends a webhook by ID.",
+          "summary": "Suspend Webhook",
+          "operationId": "suspendGlipWebhookNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false
+        }
+      ]
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "unfavorite"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/unfavorite",
+          "method": "post",
+          "tags": [
+            "Chats"
+          ],
+          "method2": "post",
+          "description": "Removes the specified chat from the users's list of favorite chats.",
+          "summary": "Remove Chat from Favorites",
+          "operationId": "unfavoriteGlipChatNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false
+        }
+      ]
+    },
+    {
+      "paths": [
         "ai",
         "audio",
         "v1",
@@ -48808,27 +48837,24 @@
     {
       "paths": [
         "team-messaging",
-        "chats",
-        "adaptive-cards"
+        "v1",
+        "webhooks",
+        "activate"
       ],
       "operations": [
         {
-          "endpoint": "/team-messaging/{version}/chats/{chatId}/adaptive-cards",
+          "endpoint": "/team-messaging/v1/webhooks/{webhookId}/activate",
           "method": "post",
           "tags": [
-            "Adaptive Cards"
+            "Incoming Webhooks"
           ],
           "method2": "post",
-          "description": "Creates a new adaptive card in the chat specified in path.",
-          "summary": "Create Adaptive Card",
-          "operationId": "createGlipAdaptiveCardNew",
+          "description": "Activates a webhook by ID.",
+          "summary": "Activate Webhook",
+          "operationId": "activateGlipWebhookNew",
           "rateLimitGroup": "Medium",
           "appPermission": "TeamMessaging",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "AdaptiveCardShortInfo"
-          },
-          "bodyParameters": "adaptiveCardRequest"
+          "withParameter": false
         }
       ]
     },
@@ -48865,56 +48891,11 @@
       "paths": [
         "analytics",
         "calls",
+        "v1",
         "accounts",
-        "aggregation"
+        "timeline"
       ],
       "operations": []
-    },
-    {
-      "paths": [
-        "rcvideo",
-        "account",
-        "extension",
-        "recordings"
-      ],
-      "operations": [
-        {
-          "endpoint": "/rcvideo/{version}/account/{accountId}/extension/{extensionId}/recordings",
-          "method": "get",
-          "tags": [
-            "Meeting Recordings"
-          ],
-          "method2": "list",
-          "description": "Returns the list of meeting recordings belonging to particular user.",
-          "summary": "List User Recordings",
-          "operationId": "getExtensionRecordings",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CloudRecordings"
-          },
-          "queryParameters": "getExtensionRecordingsParameters"
-        },
-        {
-          "endpoint": "/rcvideo/{version}/account/{accountId}/extension/{extensionId}/recordings/{recordingId}",
-          "method": "get",
-          "tags": [
-            "Meeting Recordings"
-          ],
-          "method2": "get",
-          "description": "Returns the information about particular user's recording.",
-          "summary": "Get User Recording",
-          "operationId": "getExtensionRecording",
-          "rateLimitGroup": "Light",
-          "appPermission": "Video",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "CloudRecording"
-          }
-        }
-      ],
-      "parameter": "recordingId"
     },
     {
       "paths": [
@@ -49398,34 +49379,6 @@
     },
     {
       "paths": [
-        "rcvideo",
-        "accounts",
-        "extensions",
-        "delegators"
-      ],
-      "operations": [
-        {
-          "endpoint": "/rcvideo/{version}/accounts/{accountId}/extensions/{extensionId}/delegators",
-          "method": "get",
-          "tags": [
-            "Delegation Management"
-          ],
-          "method2": "get",
-          "description": "Returns the list of users who can delegate bridge/meeting creation to the given user.",
-          "summary": "Get Delegators",
-          "operationId": "rcvListDelegators",
-          "rateLimitGroup": "Medium",
-          "appPermission": "Video",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "DelegatorsListResult"
-          },
-          "queryParameters": "rcvListDelegatorsParameters"
-        }
-      ]
-    },
-    {
-      "paths": [
         "restapi",
         "dictionary",
         "permission-category"
@@ -49670,6 +49623,44 @@
     },
     {
       "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "adaptive-cards"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/adaptive-cards",
+          "method": "post",
+          "tags": [
+            "Adaptive Cards"
+          ],
+          "method2": "post",
+          "description": "Creates a new adaptive card in the chat specified in path.",
+          "summary": "Create Adaptive Card",
+          "operationId": "createGlipAdaptiveCardNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "AdaptiveCardShortInfo"
+          },
+          "bodyParameters": "adaptiveCardRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "analytics",
+        "calls",
+        "v1",
+        "accounts",
+        "aggregation"
+      ],
+      "operations": []
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -49888,6 +49879,53 @@
     },
     {
       "paths": [
+        "rcvideo",
+        "v1",
+        "account",
+        "extension",
+        "recordings"
+      ],
+      "operations": [
+        {
+          "endpoint": "/rcvideo/v1/account/{accountId}/extension/{extensionId}/recordings",
+          "method": "get",
+          "tags": [
+            "Meeting Recordings"
+          ],
+          "method2": "list",
+          "description": "Returns the list of meeting recordings belonging to particular user.",
+          "summary": "List User Recordings",
+          "operationId": "getExtensionRecordings",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CloudRecordings"
+          },
+          "queryParameters": "getExtensionRecordingsParameters"
+        },
+        {
+          "endpoint": "/rcvideo/v1/account/{accountId}/extension/{extensionId}/recordings/{recordingId}",
+          "method": "get",
+          "tags": [
+            "Meeting Recordings"
+          ],
+          "method2": "get",
+          "description": "Returns the information about particular user's recording.",
+          "summary": "Get User Recording",
+          "operationId": "getExtensionRecording",
+          "rateLimitGroup": "Light",
+          "appPermission": "Video",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "CloudRecording"
+          }
+        }
+      ],
+      "parameter": "recordingId"
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -50041,36 +50079,6 @@
           "userPermission": "Groups",
           "withParameter": false,
           "bodyParameters": "callQueueBulkAssignResource"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "analytics",
-        "calls",
-        "accounts",
-        "timeline",
-        "fetch"
-      ],
-      "operations": [
-        {
-          "endpoint": "/analytics/calls/{version}/accounts/{accountId}/timeline/fetch",
-          "method": "post",
-          "tags": [
-            "Line Of Business Analytics"
-          ],
-          "method2": "post",
-          "description": "Returns time-value data aggregations filtered by parameters specified",
-          "summary": "Calls Timeline Data",
-          "operationId": "analyticsCallsTimelineFetch",
-          "rateLimitGroup": "Light",
-          "appPermission": "Analytics",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TimelineResponse"
-          },
-          "queryParameters": "analyticsCallsTimelineFetchParameters",
-          "bodyParameters": "timelineRequest"
         }
       ]
     },
@@ -50390,6 +50398,35 @@
     },
     {
       "paths": [
+        "rcvideo",
+        "v1",
+        "accounts",
+        "extensions",
+        "delegators"
+      ],
+      "operations": [
+        {
+          "endpoint": "/rcvideo/v1/accounts/{accountId}/extensions/{extensionId}/delegators",
+          "method": "get",
+          "tags": [
+            "Delegation Management"
+          ],
+          "method2": "get",
+          "description": "Returns the list of users who can delegate bridge/meeting creation to the given user.",
+          "summary": "Get Delegators",
+          "operationId": "rcvListDelegators",
+          "rateLimitGroup": "Medium",
+          "appPermission": "Video",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "DelegatorsListResult"
+          },
+          "queryParameters": "rcvListDelegatorsParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "call-recording",
@@ -50662,29 +50699,30 @@
       "paths": [
         "analytics",
         "calls",
+        "v1",
         "accounts",
-        "aggregation",
+        "timeline",
         "fetch"
       ],
       "operations": [
         {
-          "endpoint": "/analytics/calls/{version}/accounts/{accountId}/aggregation/fetch",
+          "endpoint": "/analytics/calls/v1/accounts/{accountId}/timeline/fetch",
           "method": "post",
           "tags": [
             "Line Of Business Analytics"
           ],
           "method2": "post",
-          "description": "Returns call aggregations filtered by parameters specified",
-          "summary": "Calls Aggregation Data",
-          "operationId": "analyticsCallsAggregationFetch",
+          "description": "Returns time-value data aggregations filtered by parameters specified",
+          "summary": "Calls Timeline Data",
+          "operationId": "analyticsCallsTimelineFetch",
           "rateLimitGroup": "Light",
           "appPermission": "Analytics",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "AggregationResponse"
+            "$ref": "TimelineResponse"
           },
-          "queryParameters": "analyticsCallsAggregationFetchParameters",
-          "bodyParameters": "aggregationRequest"
+          "queryParameters": "analyticsCallsTimelineFetchParameters",
+          "bodyParameters": "timelineRequest"
         }
       ]
     },
@@ -51562,6 +51600,37 @@
             "$ref": "AuthProfileCheckResource"
           },
           "queryParameters": "checkUserPermissionParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "analytics",
+        "calls",
+        "v1",
+        "accounts",
+        "aggregation",
+        "fetch"
+      ],
+      "operations": [
+        {
+          "endpoint": "/analytics/calls/v1/accounts/{accountId}/aggregation/fetch",
+          "method": "post",
+          "tags": [
+            "Line Of Business Analytics"
+          ],
+          "method2": "post",
+          "description": "Returns call aggregations filtered by parameters specified",
+          "summary": "Calls Aggregation Data",
+          "operationId": "analyticsCallsAggregationFetch",
+          "rateLimitGroup": "Light",
+          "appPermission": "Analytics",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "AggregationResponse"
+          },
+          "queryParameters": "analyticsCallsAggregationFetchParameters",
+          "bodyParameters": "aggregationRequest"
         }
       ]
     },
