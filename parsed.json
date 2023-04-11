@@ -4349,6 +4349,30 @@
       ]
     },
     {
+      "name": "MovePartiesRequest",
+      "description": "Request body for operation moveParties",
+      "fields": [
+        {
+          "$ref": "RCCInfo",
+          "name": "rcc"
+        },
+        {
+          "type": "array",
+          "description": "Array of parties to drop from session",
+          "items": {
+            "type": "string",
+            "description": "Party identifier"
+          },
+          "name": "dropParties"
+        },
+        {
+          "type": "string",
+          "description": "RCV token for Server Based Conferencing",
+          "name": "rcvToken"
+        }
+      ]
+    },
+    {
       "name": "CreateIVRPromptRequest",
       "description": "Request body for operation createIVRPrompt",
       "fields": [

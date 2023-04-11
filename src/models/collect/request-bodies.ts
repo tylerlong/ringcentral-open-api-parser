@@ -3,19 +3,21 @@ import { OpenAPIV3 } from 'openapi-types';
 import { NamedSchema, RawOperation } from '../../types';
 import { capitalizeFirstLetter } from '../../utils';
 
-export const collectForms = (operations: RawOperation[]) => {
+export const collectRequestBodies = (operations: RawOperation[]) => {
   const schemas: NamedSchema[] = [];
   for (const operation of operations) {
     const requestBody = operation.requestBody as OpenAPIV3.RequestBodyObject;
     if (!requestBody) {
       continue;
     }
-    const form =
-      requestBody.content?.['application/x-www-form-urlencoded'] || requestBody.content?.['multipart/form-data'];
-    if (!form) {
+    const bodyContent =
+      requestBody.content?.['application/x-www-form-urlencoded'] ||
+      requestBody.content?.['multipart/form-data'] ||
+      requestBody.content?.['application/json'];
+    if (!bodyContent) {
       continue;
     }
-    const schema = form.schema as NamedSchema;
+    const schema = bodyContent.schema as NamedSchema;
     if (!schema) {
       continue;
     }
