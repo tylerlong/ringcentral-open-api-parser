@@ -5848,7 +5848,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -6037,11 +6039,6 @@
       ]
     },
     {
-      "name": "RecordingSharedStatusModel",
-      "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
-      "fields": []
-    },
-    {
       "name": "SessionMinimalModel",
       "fields": [
         {
@@ -6111,7 +6108,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -6807,7 +6806,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -6885,7 +6886,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -7015,7 +7018,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -7193,7 +7198,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
@@ -7280,7 +7287,9 @@
           "required": false
         },
         {
-          "$ref": "RecordingSharedStatusModel",
+          "type": "boolean",
+          "description": "Indicates if Host or Admin has shared a recording.\nCan be set to true only then recording status is 'Available'.\n",
+          "example": true,
           "name": "shared",
           "required": false
         },
