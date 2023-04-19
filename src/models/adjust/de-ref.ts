@@ -3,7 +3,13 @@ import { OpenAPIV3 } from 'openapi-types';
 import { NamedSchema } from '../../types';
 
 const shouldBeInline = (schema: NamedSchema): boolean => {
-  if (schema.type === 'string' || schema.type === 'array') {
+  if (
+    schema.type === 'boolean' ||
+    schema.type === 'number' ||
+    schema.type === 'integer' ||
+    schema.type === 'string' ||
+    schema.type === 'array'
+  ) {
     return true;
   }
   // array
