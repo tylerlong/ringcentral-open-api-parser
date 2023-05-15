@@ -12461,6 +12461,7 @@
           "items": {
             "$ref": "ApiError"
           },
+          "type": "array",
           "name": "bulkItemErrors",
           "required": false
         }

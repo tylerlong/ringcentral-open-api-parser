@@ -7,6 +7,7 @@ import { fixGreeting } from './greeting';
 import { mergeOf } from './merge-of';
 import { fixMiscellaneous } from './miscellaneous';
 import { ref } from './ref';
+import { implicitArray } from './implicit-array';
 
 export const adjust = (_schemas: NamedSchema[], doc: OpenAPIV3.Document): NamedSchema[] => {
   let schemas = mergeOf(_schemas);
@@ -15,5 +16,6 @@ export const adjust = (_schemas: NamedSchema[], doc: OpenAPIV3.Document): NamedS
   schemas = fixFax(schemas);
   schemas = fixGreeting(schemas);
   schemas = fixMiscellaneous(schemas);
+  schemas = implicitArray(schemas);
   return schemas;
 };
