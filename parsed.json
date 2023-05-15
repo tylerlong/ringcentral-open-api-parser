@@ -43348,6 +43348,41 @@
       ]
     },
     {
+      "name": "GetBulkAddTaskResultsV2Response",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 1,
+          "description": "List of account phone numbers",
+          "items": {
+            "$ref": "AddPhoneNumbersResponseItem"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a task",
+          "name": "id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Task creation time in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
+          "name": "creationTime",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Task status",
+          "example": "Accepted",
+          "name": "status",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "SubscriptionInfoBlacklistedData",
       "fields": [
         {
@@ -53253,14 +53288,7 @@
           "userPermission": "EditCompanyPhoneNumbers",
           "withParameter": true,
           "responseSchema": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AddPhoneNumbersResponse"
-              },
-              {
-                "$ref": "#/components/schemas/AddPhoneNumbersTask"
-              }
-            ]
+            "$ref": "GetBulkAddTaskResultsV2Response"
           }
         }
       ],
