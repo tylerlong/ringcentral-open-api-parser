@@ -23,6 +23,7 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
       const name = last(path.paths);
       switch (name) {
         case 'account':
+        case 'accounts':
         case 'extension':
           path.defaultParameter = '~';
           break;

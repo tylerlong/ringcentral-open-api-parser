@@ -45739,7 +45739,8 @@
           }
         }
       ],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "defaultParameter": "~"
     },
     {
       "paths": [
