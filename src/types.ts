@@ -34,6 +34,9 @@ export interface Path {
   parameter?: string;
   defaultParameter?: string;
   operations: Operation[];
+  // means its parent path has no parameter
+  // for example: /restapi/v2/accounts, v2 is not a parameter
+  noParentParameter?: boolean;
 }
 
 export interface Operation {

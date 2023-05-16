@@ -45132,7 +45132,8 @@
       "paths": [
         "ai"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45140,26 +45141,30 @@
       ],
       "operations": [],
       "parameter": "version",
-      "defaultParameter": "v2"
+      "defaultParameter": "v2",
+      "noParentParameter": true
     },
     {
       "paths": [
         "rcvideo"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "webinar"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "ai",
         "text"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45207,41 +45212,47 @@
         "ai",
         "audio"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "analytics"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "ai",
         "status"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "rcvideo",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "restapi",
         "v2"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "rcvideo",
         "v2"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45249,7 +45260,8 @@
         "text",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45368,7 +45380,8 @@
         "ai",
         "insights"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45376,7 +45389,8 @@
         "audio",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45384,7 +45398,8 @@
         "status",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45434,7 +45449,8 @@
         "restapi",
         "oauth"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45442,27 +45458,31 @@
         "insights",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "team-messaging"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "analytics",
         "calls"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "webinar",
         "history"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45499,7 +45519,8 @@
         "v1",
         "async"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45508,14 +45529,16 @@
         "v1",
         "async"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "team-messaging",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45552,7 +45575,8 @@
         "account"
       ],
       "operations": [],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45560,7 +45584,8 @@
         "calls",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45569,7 +45594,8 @@
         "account"
       ],
       "operations": [],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45577,14 +45603,16 @@
         "v1",
         "history"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "restapi",
         "dictionary"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -45592,7 +45620,8 @@
         "history",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45704,14 +45733,16 @@
         "accounts"
       ],
       "operations": [],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "noParentParameter": true
     },
     {
       "paths": [
         "restapi",
         "client-info"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -45774,7 +45805,8 @@
         "webinar",
         "registration"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45783,7 +45815,8 @@
         "v1",
         "async"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -45929,21 +45962,24 @@
         "webinar",
         "notifications"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "webinar",
         "configuration"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
         "restapi",
         "number-parser"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -46050,7 +46086,8 @@
         "bridges",
         "pin"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46107,7 +46144,8 @@
         "account",
         "a2p-sms"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -46115,7 +46153,8 @@
         "registration",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46545,7 +46584,8 @@
         "brand"
       ],
       "operations": [],
-      "parameter": "brandId"
+      "parameter": "brandId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46553,7 +46593,8 @@
         "notifications",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46562,7 +46603,8 @@
         "groups"
       ],
       "operations": [],
-      "parameter": "groupId"
+      "parameter": "groupId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46570,7 +46612,8 @@
         "configuration",
         "v1"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46578,7 +46621,8 @@
         "v1",
         "recent"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -46829,7 +46873,8 @@
         "account",
         "directory"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -46837,7 +46882,8 @@
         "account",
         "telephony"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -47259,7 +47305,8 @@
         "v1",
         "company"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -47554,7 +47601,8 @@
         "accounts"
       ],
       "operations": [],
-      "parameter": "accountId"
+      "parameter": "accountId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -47562,7 +47610,8 @@
         "account",
         "audit-trail"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -47571,7 +47620,8 @@
         "accounts",
         "devices"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -48139,7 +48189,8 @@
         "extension"
       ],
       "operations": [],
-      "parameter": "extensionId"
+      "parameter": "extensionId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -48149,7 +48200,8 @@
         "extension"
       ],
       "operations": [],
-      "parameter": "extensionId"
+      "parameter": "extensionId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -49032,7 +49084,8 @@
         "extensions"
       ],
       "operations": [],
-      "parameter": "extensionId"
+      "parameter": "extensionId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -50511,7 +50564,8 @@
         "paging-only-groups"
       ],
       "operations": [],
-      "parameter": "pagingOnlyGroupId"
+      "parameter": "pagingOnlyGroupId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -51256,7 +51310,8 @@
         "accounts",
         "timeline"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -51706,7 +51761,8 @@
         "extension",
         "address-book"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -51717,7 +51773,8 @@
         "devices"
       ],
       "operations": [],
-      "parameter": "deviceId"
+      "parameter": "deviceId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -51726,7 +51783,8 @@
         "accounts",
         "batch-provisioning"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -52169,7 +52227,8 @@
         "accounts",
         "aggregation"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -53989,7 +54048,8 @@
         "account",
         "emergency-address-auto-update"
       ],
-      "operations": []
+      "operations": [],
+      "noParentParameter": false
     },
     {
       "paths": [

@@ -11,6 +11,8 @@ export const getBridgePaths = (result: Path[]): Path[] => {
         const lastToken = last(subPaths);
         const endpoint = item.operations[0].endpoint;
         const match = endpoint.match(new RegExp(`/${lastToken}/\\{(.+?)\\}`));
+        const match2 = endpoint.match(new RegExp(`/\\{(.+?)\\}/${lastToken}`));
+        const noParentParameter = match2 === null;
         let parameter: string | undefined;
         let defaultParameter: string | undefined;
         if (match !== null) {
@@ -39,6 +41,7 @@ export const getBridgePaths = (result: Path[]): Path[] => {
           operations: [],
           parameter,
           defaultParameter,
+          noParentParameter,
         });
       }
     }
