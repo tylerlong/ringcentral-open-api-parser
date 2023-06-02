@@ -21,3 +21,9 @@ npm publish
 ```
 
 Parsed content is in [./parsed.json](./parsed.json) file.
+
+
+## Todo
+
+- JobStatusResponse
+  - nested oneOf, anyOf, allOf
