@@ -4,6 +4,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { Model, Path, ResponseSchema } from '../types';
 import { capitalizeFirstLetter, lowerCaseFirstLetter } from '../utils';
 
+// eslint-disable-next-line complexity
 export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
   const entries = Object.entries(doc.paths).sort((item1, item2) => (item1[0].length > item2[0].length ? 1 : -1));
 
@@ -13,6 +14,14 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
     const pathContent = value as {
       [key: string]: OpenAPIV3.OperationObject & { [key: string]: string };
     };
+    for (const method of ['get', 'post', 'put', 'delete', 'patch']) {
+      if (!(method in pathContent)) {
+        continue;
+      }
+      if (pathContent[method].deprecated === true) {
+        delete pathContent[method];
+      }
+    }
     const endpoint = getEndpoint(key);
     const path: Path = {
       paths: endpoint.split('/').filter((t) => t !== '' && !t.startsWith('{')),

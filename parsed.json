@@ -54341,7 +54341,7 @@
           "tags": [
             "User Settings"
           ],
-          "method2": "list",
+          "method2": "get",
           "description": "Returns a profile image of an extension.\n",
           "summary": "Get User Profile Image",
           "operationId": "readUserProfileImageLegacy",
