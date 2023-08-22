@@ -526,6 +526,64 @@
       ]
     },
     {
+      "name": "RcwConfigListAllCompanySessionsParameters",
+      "description": "Query parameters for operation rcwConfigListAllCompanySessions",
+      "fields": [
+        {
+          "name": "status",
+          "description": "Session status (for the purposes of Configuration service)",
+          "explode": true,
+          "example": "Scheduled",
+          "type": "string",
+          "enum": [
+            "Scheduled",
+            "Active",
+            "Finished"
+          ]
+        },
+        {
+          "name": "endTimeFrom",
+          "description": "The beginning of the time window by 'endTime' (it is calculated as scheduledStartTime+scheduledDuration)",
+          "explode": false,
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "name": "hostUserId",
+          "description": "Identifier of the user who hosts a webinar (if omitted, webinars hosted by all company users will be returned)",
+          "explode": false,
+          "example": [
+            "77777777"
+          ],
+          "type": "array",
+          "maxItems": 10,
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        {
+          "name": "pageToken",
+          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
+          "explode": false,
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "RcwConfigListAllSessionsParameters",
       "description": "Query parameters for operation rcwConfigListAllSessions",
       "fields": [
@@ -743,6 +801,8 @@
               "MainCompanyNumber",
               "DirectNumber",
               "Inventory",
+              "InventoryPartnerBusinessMobileNumber",
+              "PartnerBusinessMobileNumber",
               "AdditionalCompanyNumber",
               "CompanyNumber",
               "PhoneLine",
@@ -1019,12 +1079,12 @@
         {
           "name": "syncType",
           "description": "Type of call log synchronization request: full or incremental sync",
-          "default": "FSync",
           "type": "string",
           "enum": [
             "FSync",
             "ISync"
-          ]
+          ],
+          "default": "FSync"
         },
         {
           "name": "syncToken",
@@ -1800,11 +1860,15 @@
         },
         {
           "name": "perPage",
-          "description": "Records count to be returned per one page. The default value is 1000. Specific keyword values: `all` - all records are returned in one page; `max` - maximum count of records that can be returned in one page",
-          "maximum": 2000,
-          "type": "integer",
+          "description": "Records count to be returned per one page. It can be either integer or string with the specific keyword values: \n- `all` - all records are returned in one page\n- `max` - maximum count of records that can be returned in one page\n",
+          "type": "string",
           "format": "int32",
-          "default": 1000
+          "default": 1000,
+          "maximum": 2000,
+          "enum": [
+            "max",
+            "all"
+          ]
         },
         {
           "name": "siteId",
@@ -1843,8 +1907,31 @@
         },
         {
           "name": "extensionType",
-          "description": "Extension types",
+          "description": "Type of extension to filter the contacts",
           "type": "string",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "ProxyAdmin",
+            "DelegatedLinesGroup",
+            "FlexibleUser",
+            "GroupCallPickup",
+            "RoomConnector"
+          ],
           "example": "User"
         }
       ]
@@ -2450,12 +2537,12 @@
         {
           "name": "syncType",
           "description": "Type of call log synchronization request: full or incremental sync",
-          "default": "FSync",
           "type": "string",
           "enum": [
             "FSync",
             "ISync"
-          ]
+          ],
+          "default": "FSync"
         },
         {
           "name": "syncToken",
@@ -2676,6 +2763,16 @@
       ]
     },
     {
+      "name": "ReadAuthorizationProfileParameters",
+      "description": "Query parameters for operation readAuthorizationProfile",
+      "fields": [
+        {
+          "name": "targetExtensionId",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "CheckUserPermissionParameters",
       "description": "Query parameters for operation checkUserPermission",
       "fields": [
@@ -2807,12 +2904,12 @@
       "fields": [
         {
           "name": "detailedTelephonyState",
-          "description": "Whether to return detailed telephony state",
+          "description": "Specifies whether to return a detailed telephony state or not",
           "type": "boolean"
         },
         {
           "name": "sipData",
-          "description": "Whether to return SIP data",
+          "description": "Specifies whether to return SIP data or not",
           "type": "boolean"
         }
       ]
@@ -3136,22 +3233,6 @@
       ]
     },
     {
-      "name": "ReadMessageContentParameters",
-      "description": "Query parameters for operation readMessageContent",
-      "fields": [
-        {
-          "name": "contentDisposition",
-          "description": "Content disposition of a response",
-          "type": "string",
-          "default": "Inline",
-          "enum": [
-            "Inline",
-            "Attachment"
-          ]
-        }
-      ]
-    },
-    {
       "name": "CreateCustomUserGreetingParameters",
       "description": "Query parameters for operation createCustomUserGreeting",
       "fields": [
@@ -3265,6 +3346,7 @@
               "ForwardedNumber",
               "ForwardedCompanyNumber",
               "BusinessMobileNumber",
+              "PartnerBusinessMobileNumber",
               "IntegrationNumber"
             ]
           }
@@ -3562,6 +3644,7 @@
               "ConferencingNumber",
               "MeetingsNumber",
               "BusinessMobileNumber",
+              "PartnerBusinessMobileNumber",
               "IntegrationNumber"
             ]
           }
@@ -4703,7 +4786,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "RC/APNS",
             "RC/GCM"
@@ -4741,7 +4824,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "RC/APNS",
             "RC/GCM"
@@ -4801,7 +4884,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "WebHook"
           ],
@@ -4811,14 +4894,14 @@
         {
           "type": "string",
           "format": "uri",
-          "description": "(Only for a \"WebHook\" transport, required) URL of a subscriber's web service\n",
+          "description": "The URL to which notifications should be delivered. This is only applicable for the `WebHook` transport type, for which it is a required field.\n",
           "example": "https://acme.com/myservice/webhook",
           "name": "address",
           "required": true
         },
         {
           "type": "string",
-          "description": "(Only for a \"WebHook\" transport, optional) Subscription verification token",
+          "description": "An optional validation token used to verify the authenticity of the incoming webhook. Applicable only for the `WebHook` transport type.",
           "writeOnly": true,
           "name": "verificationToken",
           "required": false
@@ -4841,6 +4924,20 @@
           "description": "User-friendly error message",
           "example": "Something went wrong",
           "name": "message",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "WebSocketDeliveryMode",
+      "fields": [
+        {
+          "type": "string",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
+          "enum": [
+            "WebSocket"
+          ],
+          "name": "transportType",
           "required": true
         }
       ]
@@ -4873,7 +4970,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "PubNub"
           ],
@@ -4933,7 +5030,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "PubNub"
           ],
@@ -4967,7 +5064,7 @@
           "type": "integer",
           "format": "int32",
           "minimum": 1,
-          "description": "Subscription lifetime in seconds.\n- For \"WebHook\" transport type max value might be set up to 315360000 seconds (10 years).\n- For \"RC/APNS\" and \"RC/GSM\" transport types max subscription lifetime is 7776000 seconds (90 days).\n- For \"PubNub\" transport type the max value is 900 seconds (15 minutes)\n",
+          "description": "Subscription lifetime in seconds. The maximum subscription lifetime depends upon the specified `transportType`:\n\n| Transport type      | Maximum permitted lifetime     |\n| ------------------- | ------------------------------ |\n| `WebHook`           | 315360000 seconds (10 years)   |\n| `RC/APNS`, `RC/GSM` | 7776000 seconds (90 days)      |\n| `PubNub`            | 900 seconds (15 minutes)       |\n| `WebSocket`         | n/a (the parameter is ignored) |\n",
           "name": "expiresIn",
           "required": false
         }
@@ -4991,7 +5088,7 @@
           "type": "integer",
           "format": "int32",
           "minimum": 1,
-          "description": "Subscription lifetime in seconds.\n- For \"WebHook\" transport type max value might be set up to 315360000 seconds (10 years).\n- For \"RC/APNS\" and \"RC/GSM\" transport types max subscription lifetime is 7776000 seconds (90 days).\n- For \"PubNub\" transport type the max value is 900 seconds (15 minutes)\n",
+          "description": "Subscription lifetime in seconds. The maximum subscription lifetime depends upon the specified `transportType`:\n\n| Transport type      | Maximum permitted lifetime     |\n| ------------------- | ------------------------------ |\n| `WebHook`           | 315360000 seconds (10 years)   |\n| `RC/APNS`, `RC/GSM` | 7776000 seconds (90 days)      |\n| `PubNub`            | 900 seconds (15 minutes)       |\n| `WebSocket`         | n/a (the parameter is ignored) |\n",
           "name": "expiresIn",
           "required": false
         },
@@ -5099,7 +5196,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "WebHook"
           ],
@@ -5109,7 +5206,7 @@
         {
           "type": "string",
           "format": "uri",
-          "description": "(Only for a \"WebHook\" transport, required) URL of a subscriber's web service\n",
+          "description": "The URL to which notifications should be delivered. This is only applicable for the `WebHook` transport type, for which it is a required field.\n",
           "example": "https://acme.com/myservice/webhook",
           "name": "address",
           "required": true
@@ -5132,12 +5229,13 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "WebHook",
             "RC/APNS",
             "RC/GCM",
-            "PubNub"
+            "PubNub",
+            "WebSocket"
           ],
           "name": "transportType",
           "required": true
@@ -5920,6 +6018,13 @@
           ],
           "example": "Initialized",
           "name": "previousLivestreamStatus",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Time at which the session started to publish media to livestream service provider.",
+          "format": "date-time",
+          "name": "livestreamStartTime",
           "required": false
         },
         {
@@ -7959,6 +8064,7 @@
         },
         {
           "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
           "format": "ipv4",
           "description": "IP address of the registrant's user agent",
           "name": "ipAddress",
@@ -8009,6 +8115,7 @@
         },
         {
           "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
           "description": "Answer text",
           "name": "answerText",
           "required": true
@@ -8147,6 +8254,7 @@
         },
         {
           "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
           "format": "ipv4",
           "description": "IP address of the registrant's user agent",
           "name": "ipAddress",
@@ -8278,6 +8386,7 @@
         },
         {
           "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
           "format": "ipv4",
           "description": "IP address of the registrant's user agent",
           "name": "ipAddress",
@@ -8348,6 +8457,7 @@
         },
         {
           "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
           "description": "Answer text",
           "name": "answerText",
           "required": true
@@ -8642,8 +8752,8 @@
         {
           "type": "boolean",
           "description": "Indicate if the moderated Q&A enabled for webinar",
-          "default": true,
-          "name": "moderatedQnAEnabled"
+          "default": false,
+          "name": "moderatedQnaEnabled"
         }
       ]
     },
@@ -8758,15 +8868,6 @@
           "example": "America/New_York",
           "name": "timeZone",
           "required": true
-        },
-        {
-          "type": "string",
-          "description": "Session locale code. Can't be blank or null",
-          "maxLength": 8,
-          "minLength": 2,
-          "example": "en-US",
-          "name": "localeCode",
-          "required": false
         },
         {
           "type": "integer",
@@ -8925,6 +9026,59 @@
           "required": true
         },
         {
+          "type": "integer",
+          "format": "int32",
+          "description": "The time offset (positive, in seconds) indicating how much in advance\n(comparing to \"scheduledStartTime\") panel members should join for the pre-webinar team sync\n",
+          "minimum": 0,
+          "default": 0,
+          "example": 900,
+          "name": "panelJoinTimeOffset",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Session title. Can be left blank - then Webinar title should be used for presentation.",
+          "maxLength": 512,
+          "minLength": 0,
+          "x-sensitive-data": "masked",
+          "example": "Live Broadcasting US",
+          "name": "title",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "User-friendly description of the Session. Can be left blank - then Webinar title should be used for presentation.",
+          "maxLength": 4096,
+          "minLength": 0,
+          "x-sensitive-data": "masked",
+          "example": "Live session for US-based participants",
+          "name": "description",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Session status (for the purposes of Configuration service)",
+          "enum": [
+            "Scheduled",
+            "Active",
+            "Finished"
+          ],
+          "example": "Scheduled",
+          "name": "status",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true,
+          "maxLength": 256,
+          "minLength": 5,
+          "description": "The URI to join the webinar as a host",
+          "example": "https://v.ringcentral.com/w/join/de7yd8ew7yfsdfjh899843rgj",
+          "name": "hostJoinUri",
+          "required": false
+        },
+        {
           "type": "string",
           "description": "Session locale code. Can't be blank or null",
           "maxLength": 8,
@@ -8932,6 +9086,83 @@
           "example": "en-US",
           "name": "localeCode",
           "required": false
+        },
+        {
+          "type": "string",
+          "description": "The RCV bridge id",
+          "readOnly": true,
+          "example": "839874770",
+          "name": "videoBridgeId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "password",
+          "readOnly": true,
+          "x-sensitive-data": "masked",
+          "description": "The RCV bridge password. Returned only if requested by Host/Co-host/Panelist and a password for the bridge is set.",
+          "example": "abc123",
+          "name": "videoBridgePassword",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "password",
+          "readOnly": true,
+          "x-sensitive-data": "masked",
+          "description": "The RCV bridge PSTN password. Returned only if requested by Host/Co-host/Panelist and a PSTN password for the bridge is set.",
+          "example": "abc123",
+          "name": "videoBridgePstnPassword",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true,
+          "maxLength": 256,
+          "minLength": 5,
+          "description": "The URI for attendees to join the Webinar (if it is a public webinar)",
+          "example": "https://v.ringcentral.com/w/a/join/iuyef77fsj473wn10ashjfk34",
+          "name": "attendeeJoinUri",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "Calculated attribute indicating if there are any unsent/deferred invites to session participants",
+          "name": "hasUnsentInvites",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "WcsSessionWithLocaleCodeModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Session scheduled start time.",
+          "format": "date-time",
+          "name": "scheduledStartTime",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 43200,
+          "description": "The duration of the Session in seconds.",
+          "example": 1800,
+          "name": "scheduledDuration",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "IANA-compatible time zone name (see https://www.iana.org/time-zones).",
+          "maxLength": 64,
+          "minLength": 3,
+          "example": "America/New_York",
+          "name": "timeZone",
+          "required": true
         },
         {
           "type": "integer",
@@ -8988,48 +9219,11 @@
         },
         {
           "type": "string",
-          "description": "The RCV bridge id",
-          "readOnly": true,
-          "example": "839874770",
-          "name": "videoBridgeId",
-          "required": false
-        },
-        {
-          "type": "string",
-          "format": "password",
-          "readOnly": true,
-          "x-sensitive-data": "masked",
-          "description": "The RCV bridge password. Returned only if requested by Host/Co-host/Panelist and a password for the bridge is set.",
-          "example": "abc123",
-          "name": "videoBridgePassword",
-          "required": false
-        },
-        {
-          "type": "string",
-          "format": "password",
-          "readOnly": true,
-          "x-sensitive-data": "masked",
-          "description": "The RCV bridge PSTN password. Returned only if requested by Host/Co-host/Panelist and a PSTN password for the bridge is set.",
-          "example": "abc123",
-          "name": "videoBridgePstnPassword",
-          "required": false
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "readOnly": true,
-          "maxLength": 256,
-          "minLength": 5,
-          "description": "The URI for attendees to join the Webinar (if it is a public webinar)",
-          "example": "https://v.ringcentral.com/w/a/join/iuyef77fsj473wn10ashjfk34",
-          "name": "attendeeJoinUri",
-          "required": false
-        },
-        {
-          "type": "boolean",
-          "readOnly": true,
-          "description": "Calculated attribute indicating if there are any unsent/deferred invites to session participants",
-          "name": "hasUnsentInvites",
+          "description": "Session locale code. Can't be blank or null",
+          "maxLength": 8,
+          "minLength": 2,
+          "example": "en-US",
+          "name": "localeCode",
           "required": false
         }
       ]
@@ -9600,6 +9794,45 @@
       ]
     },
     {
+      "name": "WcsWebinarRefModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal object ID",
+          "minLength": 1,
+          "maxLength": 20,
+          "example": "78654321",
+          "name": "id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Webinar title",
+          "minLength": 1,
+          "maxLength": 512,
+          "x-sensitive-data": "masked",
+          "example": "All-Hands Webinar",
+          "name": "title",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "User-friendly description of the Webinar",
+          "minLength": 0,
+          "maxLength": 4096,
+          "x-sensitive-data": "masked",
+          "example": "Quarterly All-hands event to present recent news about our company to employees",
+          "name": "description",
+          "required": false
+        },
+        {
+          "$ref": "RcwLinkedUserModel",
+          "name": "host",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "SessionGlobalListEntry",
       "fields": [
         {
@@ -9660,15 +9893,6 @@
           "required": true
         },
         {
-          "type": "string",
-          "description": "Session locale code. Can't be blank or null",
-          "maxLength": 8,
-          "minLength": 2,
-          "example": "en-US",
-          "name": "localeCode",
-          "required": false
-        },
-        {
           "type": "integer",
           "format": "int32",
           "description": "The time offset (positive, in seconds) indicating how much in advance\n(comparing to \"scheduledStartTime\") panel members should join for the pre-webinar team sync\n",
@@ -9720,44 +9944,14 @@
           "example": "https://v.ringcentral.com/w/join/de7yd8ew7yfsdfjh899843rgj",
           "name": "hostJoinUri",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "WcsWebinarRefModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal object ID",
-          "minLength": 1,
-          "maxLength": 20,
-          "example": "78654321",
-          "name": "id",
-          "required": false
         },
         {
           "type": "string",
-          "description": "Webinar title",
-          "minLength": 1,
-          "maxLength": 512,
-          "x-sensitive-data": "masked",
-          "example": "All-Hands Webinar",
-          "name": "title",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "User-friendly description of the Webinar",
-          "minLength": 0,
-          "maxLength": 4096,
-          "x-sensitive-data": "masked",
-          "example": "Quarterly All-hands event to present recent news about our company to employees",
-          "name": "description",
-          "required": false
-        },
-        {
-          "$ref": "RcwLinkedUserModel",
-          "name": "host",
+          "description": "Session locale code. Can't be blank or null",
+          "maxLength": 8,
+          "minLength": 2,
+          "example": "en-US",
+          "name": "localeCode",
           "required": false
         }
       ]
@@ -10657,7 +10851,8 @@
             "partner_jwt",
             "guest",
             "personal_jwt",
-            "otp"
+            "otp",
+            "ivr_pin"
           ],
           "name": "grant_type",
           "required": true
@@ -10765,6 +10960,12 @@
         {
           "type": "string",
           "name": "device_code",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `ivr_pin` grant type only. IVR pin.",
+          "name": "ivr_pin",
           "required": false
         }
       ]
@@ -11727,6 +11928,8 @@
             "MainCompanyNumber",
             "DirectNumber",
             "Inventory",
+            "InventoryPartnerBusinessMobileNumber",
+            "PartnerBusinessMobileNumber",
             "AdditionalCompanyNumber",
             "CompanyNumber",
             "PhoneLine",
@@ -11826,9 +12029,12 @@
         },
         {
           "type": "string",
-          "description": "Only \"Inventory\" is supported now.\nLater we may support other values like \"ForwardedNumber\" etc.\n",
+          "description": "Usage type of a phone number. Currently we support the following three enum values: 'Inventory', 'InventoryPartnerBusinessMobileNumber' and 'PartnerBusinessMobileNumber'.\nLater we may support other values like 'ForwardedNumber' etc.\n",
+          "default": "Inventory",
           "enum": [
-            "Inventory"
+            "Inventory",
+            "InventoryPartnerBusinessMobileNumber",
+            "PartnerBusinessMobileNumber"
           ],
           "name": "usageType",
           "required": true
@@ -12222,6 +12428,13 @@
           },
           "name": "devices",
           "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\n",
+          "default": true,
+          "name": "sendWelcomeEmail",
+          "required": false
         }
       ]
     },
@@ -12456,12 +12669,12 @@
           "required": false
         },
         {
+          "type": "array",
           "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccess` is false\n",
           "minItems": 1,
           "items": {
             "$ref": "ApiError"
           },
-          "type": "array",
           "name": "bulkItemErrors",
           "required": false
         }
@@ -12867,6 +13080,13 @@
           "type": "boolean",
           "description": "Updates 'Send Marketing Information' flag on web interface\n",
           "name": "marketingAccepted"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of account creation",
+          "example": "2023-03-10T18:07:52.534Z",
+          "name": "creationTime"
         }
       ]
     },
@@ -12961,7 +13181,7 @@
     },
     {
       "name": "ServiceInfo",
-      "description": "Account service information, including brand, service plan and\nbilling plan\n",
+      "description": "Account service information, including brand, sub-brand, service plan and\nbilling plan\n",
       "fields": [
         {
           "type": "string",
@@ -12988,6 +13208,10 @@
         {
           "$ref": "CountryInfoShortModel",
           "name": "contractedCountry"
+        },
+        {
+          "$ref": "UBrandInfo",
+          "name": "uBrand"
         }
       ]
     },
@@ -13064,6 +13288,24 @@
           "type": "string",
           "description": "Date until which an account will get deleted. The default\nvalue is 30 days since the current date\n",
           "name": "till"
+        }
+      ]
+    },
+    {
+      "name": "UBrandInfo",
+      "description": "Account sub-brand information",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Sub-brand unique ID",
+          "example": "111.222",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Sub-brand name",
+          "example": "Sub-brand name",
+          "name": "name"
         }
       ]
     },
@@ -13389,6 +13631,184 @@
           "type": "string",
           "description": "Internal identifier of a tax",
           "name": "taxId"
+        }
+      ]
+    },
+    {
+      "name": "DeviceEmergencyAddressDefault",
+      "description": "Automatically determined emergency address. If `emergencyAddressState`\nvalue is 'Assigned', then this address is assigned to the current device.\nIf `emergencyAddressState` value is 'Unconfirmed', then the specified address\nmust be confirmed by the user before being registered as emergency address\nfor the current device. In all other cases the value is null\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company name, c/o",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building, floor, etc.",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        }
+      ]
+    },
+    {
+      "name": "DeviceEmergencyAddressFr",
+      "description": "Automatically determined emergency address. If `emergencyAddressState`\nvalue is 'Assigned', then this address is assigned to the current device.\nIf `emergencyAddressState` value is 'Unconfirmed', then the specified address\nmust be confirmed by the user before being registered as emergency address\nfor the current device. In all other cases the value is null   \n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company name, c/o",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building, floor, etc.",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
         }
       ]
     },
@@ -13864,90 +14284,6 @@
       ]
     },
     {
-      "name": "DeviceEmergencyAddress",
-      "description": "Automatically determined emergency address. If `emergencyAddressState`\nvalue is 'Assigned', then this address is assigned to the current device.\nIf `emergencyAddressState` value is 'Unconfirmed', then the specified address\nmust be confirmed by the user before being registered as emergency address\nfor the current device. In all other cases the value is null\n",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Name of a customer",
-          "name": "customerName"
-        },
-        {
-          "type": "string",
-          "description": "Street address, line 1 - street address, P.O. box, company name, c/o",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Street address, line 2 - apartment, suite, unit, building, floor, etc.",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "Zip code",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "description": "State/province name",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
-          "enum": [
-            "Verified",
-            "Updated",
-            "Deleted",
-            "NotRequired",
-            "Unsupported",
-            "Failed"
-          ],
-          "name": "syncStatus"
-        }
-      ]
-    },
-    {
       "name": "UpdateDevicePhoneInfo",
       "fields": [
         {
@@ -14123,12 +14459,112 @@
       ]
     },
     {
+      "name": "DeviceEmergencyAddressAu",
+      "description": "Automatically determined emergency address. If `emergencyAddressState`\nvalue is 'Assigned', then this address is assigned to the current device.\nIf `emergencyAddressState` value is 'Unconfirmed', then the specified address\nmust be confirmed by the user before being registered as emergency address\nfor the current device. In all other cases the value is null    \n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company name, c/o",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building, floor, etc.",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        }
+      ]
+    },
+    {
       "name": "DeviceEmergencyInfo",
       "description": "Device emergency settings",
       "fields": [
         {
-          "$ref": "DeviceEmergencyAddress",
-          "name": "address"
+          "description": "Automatically determined emergency address. If `emergencyAddressState`\nvalue is 'Assigned', then this address is assigned to the current device.\nIf `emergencyAddressState` value is 'Unconfirmed', then the specified address\nmust be confirmed by the user before being registered as emergency address\nfor the current device. In all other cases the value is null    \n",
+          "name": "address",
+          "$ref": "DeviceEmergencyInfoAddress"
         },
         {
           "$ref": "DeviceEmergencyLocationInfo",
@@ -14358,6 +14794,11 @@
           "type": "string",
           "description": "Location name",
           "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
         }
       ]
     },
@@ -14816,6 +15257,13 @@
           "$ref": "MakeCallOutCallerInfoRequestTo",
           "name": "to",
           "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Optional. Dialing plan country data. If not specified, then extension home country is applied by default.",
+          "name": "countryId",
+          "required": false
         }
       ]
     },
@@ -15119,7 +15567,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Phone number in E.164 format",
+          "description": "Phone number in E.164 format, short codes (*67, *86), emergency (911, 112) or special (988) numbers",
           "example": "+16502223366",
           "name": "phoneNumber"
         },
@@ -15152,31 +15600,6 @@
       ]
     },
     {
-      "name": "CallSessionStatusInfo",
-      "fields": [
-        {
-          "type": "string",
-          "name": "code"
-        },
-        {
-          "type": "string",
-          "name": "reason"
-        },
-        {
-          "type": "string",
-          "name": "parkData"
-        },
-        {
-          "$ref": "PeerInfo",
-          "name": "peerId"
-        },
-        {
-          "$ref": "MobilePickupData",
-          "name": "mobilePickupData"
-        }
-      ]
-    },
-    {
       "name": "CallPartyInfo",
       "fields": [
         {
@@ -15193,40 +15616,6 @@
           "type": "string",
           "description": "Internal identifier of a call party extensionId",
           "name": "extensionId"
-        }
-      ]
-    },
-    {
-      "name": "ExtensionTelephonySessionsEvent",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Universally unique identifier of a notification",
-          "name": "uuid"
-        },
-        {
-          "type": "string",
-          "description": "Event filter URI",
-          "name": "event"
-        },
-        {
-          "type": "string",
-          "description": "Datetime of sending a notification in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*",
-          "name": "timestamp"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a subscription",
-          "name": "subscriptionId"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a subscription owner extension",
-          "name": "ownerId"
-        },
-        {
-          "$ref": "TelephonySessionsEventBody",
-          "name": "body"
         }
       ]
     },
@@ -15306,6 +15695,65 @@
             "$ref": "TelephonySessionsEventPartyInfo"
           },
           "name": "parties"
+        }
+      ]
+    },
+    {
+      "name": "CallSessionStatusInfo",
+      "fields": [
+        {
+          "type": "string",
+          "name": "code"
+        },
+        {
+          "type": "string",
+          "name": "reason"
+        },
+        {
+          "type": "string",
+          "name": "parkData"
+        },
+        {
+          "$ref": "PeerInfo",
+          "name": "peerId"
+        },
+        {
+          "$ref": "MobilePickupData",
+          "name": "mobilePickupData"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionTelephonySessionsEvent",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Universally unique identifier of a notification",
+          "name": "uuid"
+        },
+        {
+          "type": "string",
+          "description": "Event filter URI",
+          "name": "event"
+        },
+        {
+          "type": "string",
+          "description": "Datetime of sending a notification in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*",
+          "name": "timestamp"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a subscription",
+          "name": "subscriptionId"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a subscription owner extension",
+          "name": "ownerId"
+        },
+        {
+          "$ref": "TelephonySessionsEventBody",
+          "name": "body"
         }
       ]
     },
@@ -15563,6 +16011,52 @@
       ]
     },
     {
+      "name": "PartySuperviseRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Supervising mode",
+          "example": "Listen",
+          "enum": [
+            "Listen"
+          ],
+          "name": "mode",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a supervisor's device",
+          "example": "191888004",
+          "name": "supervisorDeviceId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Mailbox ID of a user that will be monitored",
+          "example": "400378008008",
+          "name": "agentExtensionId",
+          "required": true
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
+          "default": true,
+          "name": "autoAnswer",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Specifies session description protocol (SDP) setting. The possible values are 'sendOnly' (only sending) meaning one-way audio streaming; and 'sendRecv' (sending/receiving) meaning two-way audio streaming",
+          "enum": [
+            "sendOnly",
+            "sendRecv"
+          ],
+          "name": "mediaSDP",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "PartySuperviseResponse",
       "fields": [
         {
@@ -15614,52 +16108,6 @@
         {
           "$ref": "CallStatusInfo",
           "name": "status"
-        }
-      ]
-    },
-    {
-      "name": "PartySuperviseRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Supervising mode",
-          "example": "Listen",
-          "enum": [
-            "Listen"
-          ],
-          "name": "mode",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a supervisor's device",
-          "example": "191888004",
-          "name": "supervisorDeviceId",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Mailbox ID of a user that will be monitored",
-          "example": "400378008008",
-          "name": "agentExtensionId",
-          "required": true
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
-          "default": true,
-          "name": "autoAnswer",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Specifies session description protocol (SDP) setting. The possible values are 'sendOnly' (only sending) meaning one-way audio streaming; and 'sendRecv' (sending/receiving) meaning two-way audio streaming",
-          "enum": [
-            "sendOnly",
-            "sendRecv"
-          ],
-          "name": "mediaSDP",
-          "required": false
         }
       ]
     },
@@ -15726,6 +16174,23 @@
       ]
     },
     {
+      "name": "HoldCallPartyRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Protocol for hold mode initiation",
+          "default": "Auto",
+          "enum": [
+            "Auto",
+            "RC",
+            "BroadWorks",
+            "DisconnectHolder"
+          ],
+          "name": "proto"
+        }
+      ]
+    },
+    {
       "name": "PickupTarget",
       "fields": [
         {
@@ -15755,6 +16220,52 @@
           "type": "string",
           "description": "Extension short number",
           "name": "extensionNumber"
+        }
+      ]
+    },
+    {
+      "name": "SuperviseCallSessionRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Supervising mode",
+          "example": "Listen",
+          "enum": [
+            "Listen"
+          ],
+          "name": "mode",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a supervisor's device which will be used for call session monitoring",
+          "example": "191888004",
+          "name": "supervisorDeviceId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Extension identifier of the user that will be monitored",
+          "example": "400378008008",
+          "name": "agentExtensionId",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
+          "default": true,
+          "name": "autoAnswer",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Specifies session description protocol setting",
+          "enum": [
+            "sendOnly",
+            "sendRecv"
+          ],
+          "name": "mediaSDP",
+          "required": false
         }
       ]
     },
@@ -15814,48 +16325,55 @@
       ]
     },
     {
-      "name": "SuperviseCallSessionRequest",
+      "name": "AccountServiceInfoRequest",
+      "description": "Account service information, including brand, service plan and billing plan\n",
       "fields": [
         {
           "type": "string",
-          "description": "Supervising mode",
-          "example": "Listen",
-          "enum": [
-            "Listen"
-          ],
-          "name": "mode",
-          "required": true
+          "format": "uri",
+          "description": "Canonical URI of the account Service Info resource",
+          "name": "uri"
         },
         {
           "type": "string",
-          "description": "Internal identifier of a supervisor's device which will be used for call session monitoring",
-          "example": "191888004",
-          "name": "supervisorDeviceId",
-          "required": true
+          "description": "Account Service Plan name",
+          "name": "servicePlanName"
         },
         {
-          "type": "string",
-          "description": "Extension identifier of the user that will be monitored",
-          "example": "400378008008",
-          "name": "agentExtensionId",
-          "required": false
+          "$ref": "BrandInfo",
+          "name": "brand"
         },
         {
-          "type": "boolean",
-          "description": "Specifies if auto-answer SIP header should be sent. If auto-answer is set to 'True', the call is automatically answered by the supervising party, if set to 'False' - then the supervising party has to accept or decline the monitored call",
-          "default": true,
-          "name": "autoAnswer",
-          "required": false
+          "$ref": "CountryInfoShortModel",
+          "name": "contractedCountry"
         },
         {
-          "type": "string",
-          "description": "Specifies session description protocol setting",
-          "enum": [
-            "sendOnly",
-            "sendRecv"
-          ],
-          "name": "mediaSDP",
-          "required": false
+          "$ref": "ServicePlanInfo",
+          "name": "servicePlan"
+        },
+        {
+          "$ref": "TargetServicePlanInfo",
+          "name": "targetServicePlan"
+        },
+        {
+          "$ref": "BillingPlanInfo",
+          "name": "billingPlan"
+        },
+        {
+          "type": "array",
+          "description": "Service features information, see Service Feature List",
+          "items": {
+            "$ref": "ServiceFeatureInfo"
+          },
+          "name": "serviceFeatures"
+        },
+        {
+          "$ref": "AccountLimits",
+          "name": "limits"
+        },
+        {
+          "$ref": "PackageInfo",
+          "name": "package"
         }
       ]
     },
@@ -15924,6 +16442,10 @@
         {
           "$ref": "PackageInfo",
           "name": "package"
+        },
+        {
+          "$ref": "UBrandInfo",
+          "name": "uBrand"
         }
       ]
     },
@@ -16356,62 +16878,8 @@
     },
     {
       "name": "CallLogRecordLegInfo",
-      "description": "Base schema for CallLogRecord and CallLogRecordLegInfo",
+      "description": "Call leg record",
       "fields": [
-        {
-          "type": "string",
-          "description": "Leg type",
-          "enum": [
-            "SipForwarding",
-            "ServiceMinus2",
-            "ServiceMinus3",
-            "PstnToSip",
-            "Accept",
-            "FindMe",
-            "FollowMe",
-            "TestCall",
-            "FaxSent",
-            "CallBack",
-            "CallingCard",
-            "RingDirectly",
-            "RingOutWebToSubscriber",
-            "RingOutWebToCaller",
-            "SipToPstnMetered",
-            "RingOutClientToSubscriber",
-            "RingOutClientToCaller",
-            "RingMe",
-            "TransferCall",
-            "SipToPstnUnmetered",
-            "RingOutDeviceToSubscriber",
-            "RingOutDeviceToCaller",
-            "RingOutOneLegToCaller",
-            "ExtensionToExtension",
-            "CallPark",
-            "PagingServer",
-            "Hunting",
-            "OutgoingFreeSpDl",
-            "ParkLocation",
-            "ConferenceCall",
-            "MobileApp",
-            "MoveToConference",
-            "Unknown",
-            "MeetingsCall",
-            "SilentMonitoring",
-            "Monitoring",
-            "Pickup",
-            "ImsCall",
-            "JoinCall",
-            "TextRelay"
-          ],
-          "name": "legType",
-          "required": true
-        },
-        {
-          "type": "boolean",
-          "description": "Returned for 'Detailed' call log. Specifies if the leg is master-leg",
-          "name": "master",
-          "required": false
-        },
         {
           "$ref": "ExtensionInfoCallLog",
           "name": "extension",
@@ -16699,33 +17167,78 @@
           ],
           "name": "internalType",
           "required": false
+        },
+        {
+          "type": "string",
+          "description": "Leg type",
+          "enum": [
+            "SipForwarding",
+            "ServiceMinus2",
+            "ServiceMinus3",
+            "PstnToSip",
+            "Accept",
+            "FindMe",
+            "FollowMe",
+            "TestCall",
+            "FaxSent",
+            "CallBack",
+            "CallingCard",
+            "RingDirectly",
+            "RingOutWebToSubscriber",
+            "RingOutWebToCaller",
+            "SipToPstnMetered",
+            "RingOutClientToSubscriber",
+            "RingOutClientToCaller",
+            "RingMe",
+            "TransferCall",
+            "SipToPstnUnmetered",
+            "RingOutDeviceToSubscriber",
+            "RingOutDeviceToCaller",
+            "RingOutOneLegToCaller",
+            "ExtensionToExtension",
+            "CallPark",
+            "PagingServer",
+            "Hunting",
+            "OutgoingFreeSpDl",
+            "ParkLocation",
+            "ConferenceCall",
+            "MobileApp",
+            "MoveToConference",
+            "Unknown",
+            "MeetingsCall",
+            "SilentMonitoring",
+            "Monitoring",
+            "Pickup",
+            "ImsCall",
+            "JoinCall",
+            "TextRelay"
+          ],
+          "name": "legType",
+          "required": true
+        },
+        {
+          "type": "boolean",
+          "description": "Returned for 'Detailed' call log. Specifies if the leg is master-leg",
+          "name": "master",
+          "required": false
         }
       ]
     },
     {
       "name": "BaseCallLogFromParty",
-      "description": "Sender/initiator caller info",
+      "description": "Sender/initiator caller information",
       "fields": [
         {
           "type": "string",
-          "description": "The dialer phone number without modifications. Returned for inbound calls and Overlay accounts",
+          "description": "Dialer phone number without any format modifications. Returned for inbound calls",
           "name": "dialerPhoneNumber"
         }
       ]
     },
     {
       "name": "CallLogParty",
-      "description": "Base schema for call log parties and history call log parties",
+      "description": "Base schema for CallLogFromParty and CallLogToParty",
       "fields": [
-        {
-          "type": "string",
-          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
-          "name": "location"
-        },
-        {
-          "$ref": "CallLogRecordDeviceInfo",
-          "name": "device"
-        },
         {
           "type": "string",
           "description": "Phone number of a party. Usually it is a plain number including country and area code like 18661234567. But sometimes it could be returned from database with some formatting applied, for example (866)123-4567. This property is filled in all cases where parties communicate by means of global phone numbers, for example when calling to direct numbers or sending/receiving SMS",
@@ -16745,6 +17258,15 @@
           "type": "string",
           "description": "Symbolic name associated with a party. If the phone does not belong to the known extension, only the location is returned, the name is not determined then",
           "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
+          "name": "location"
+        },
+        {
+          "$ref": "CallLogRecordDeviceInfo",
+          "name": "device"
         }
       ]
     },
@@ -16804,17 +17326,8 @@
     },
     {
       "name": "CallLogToParty",
-      "description": "Target caller info",
+      "description": "Target caller information",
       "fields": [
-        {
-          "type": "string",
-          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
-          "name": "location"
-        },
-        {
-          "$ref": "CallLogRecordDeviceInfo",
-          "name": "device"
-        },
         {
           "type": "string",
           "description": "Phone number of a party. Usually it is a plain number including country and area code like 18661234567. But sometimes it could be returned from database with some formatting applied, for example (866)123-4567. This property is filled in all cases where parties communicate by means of global phone numbers, for example when calling to direct numbers or sending/receiving SMS",
@@ -16837,7 +17350,16 @@
         },
         {
           "type": "string",
-          "description": "The dialed phone number without modifications. Returned for outbound calls and Overlay accounts",
+          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
+          "name": "location"
+        },
+        {
+          "$ref": "CallLogRecordDeviceInfo",
+          "name": "device"
+        },
+        {
+          "type": "string",
+          "description": "Dialed phone number without any format modifications. Returned for outbound calls",
           "name": "dialedPhoneNumber"
         }
       ]
@@ -16926,17 +17448,8 @@
     },
     {
       "name": "CallLogFromParty",
-      "description": "Sender/initiator caller info",
+      "description": "Sender/initiator caller information",
       "fields": [
-        {
-          "type": "string",
-          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
-          "name": "location"
-        },
-        {
-          "$ref": "CallLogRecordDeviceInfo",
-          "name": "device"
-        },
         {
           "type": "string",
           "description": "Phone number of a party. Usually it is a plain number including country and area code like 18661234567. But sometimes it could be returned from database with some formatting applied, for example (866)123-4567. This property is filled in all cases where parties communicate by means of global phone numbers, for example when calling to direct numbers or sending/receiving SMS",
@@ -16959,67 +17472,35 @@
         },
         {
           "type": "string",
-          "description": "The dialer phone number without modifications. Returned for inbound calls and Overlay accounts",
+          "description": "Contains party location (city, state) if one can be determined from phoneNumber. This property is filled only when phoneNumber is not empty and server can calculate location information from it (for example, this information is unavailable for US toll-free numbers)",
+          "name": "location"
+        },
+        {
+          "$ref": "CallLogRecordDeviceInfo",
+          "name": "device"
+        },
+        {
+          "type": "string",
+          "description": "Dialer phone number without any format modifications. Returned for inbound calls",
           "name": "dialerPhoneNumber"
         }
       ]
     },
     {
       "name": "BaseCallLogToParty",
-      "description": "Target caller info",
+      "description": "Target caller information",
       "fields": [
         {
           "type": "string",
-          "description": "The dialed phone number without modifications. Returned for outbound calls and Overlay accounts",
+          "description": "Dialed phone number without any format modifications. Returned for outbound calls",
           "name": "dialedPhoneNumber"
         }
       ]
     },
     {
       "name": "CallLogRecord",
-      "description": "Base schema for CallLogRecord and CallLogRecordLegInfo",
+      "description": "Call log record",
       "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a call log record",
-          "name": "id",
-          "required": true
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a call log record",
-          "name": "uri",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a call session",
-          "name": "sessionId",
-          "required": true
-        },
-        {
-          "type": "boolean",
-          "description": "Indicates whether the record is deleted. Returned for deleted records, for ISync requests",
-          "name": "deleted",
-          "required": false
-        },
-        {
-          "type": "array",
-          "description": "For 'Detailed' view only. Leg description",
-          "items": {
-            "$ref": "CallLogRecordLegInfo"
-          },
-          "name": "legs",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "For 'Detailed' view only. The datetime when the call log record\nwas modified in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601] format\nincluding timezone, for example *2016-03-10T18:07:52.534Z*\n",
-          "format": "date-time",
-          "name": "lastModifiedTime",
-          "required": false
-        },
         {
           "$ref": "ExtensionInfoCallLog",
           "name": "extension",
@@ -17307,6 +17788,47 @@
           ],
           "name": "internalType",
           "required": false
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a call log record",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a call log record",
+          "name": "uri",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a call session",
+          "name": "sessionId",
+          "required": true
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates whether the record is deleted. Returned for deleted records, for ISync requests",
+          "name": "deleted",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "For 'Detailed' view only. Leg description",
+          "items": {
+            "$ref": "CallLogRecordLegInfo"
+          },
+          "name": "legs",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For 'Detailed' view only. The datetime when the call log record\nwas modified in (ISO 8601)[https://en.wikipedia.org/wiki/ISO_8601] format\nincluding timezone, for example *2016-03-10T18:07:52.534Z*\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": false
         }
       ]
     },
@@ -17350,7 +17872,7 @@
         },
         {
           "type": "array",
-          "description": "List of call log records with synchronization information.\nFor `ISync` the total number of returned records is limited to 250; this\nincludes both new records and the old ones, specified by the recordCount\nparameter\n",
+          "description": "List of call log records with synchronization information. For `ISync` the total number of returned records is limited to 250;\nthis includes both new records and the old ones, specified by the recordCount parameter\n",
           "items": {
             "$ref": "CallLogRecord"
           },
@@ -17864,7 +18386,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a welcome/activation email is sent to\nthe new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\"\n",
+          "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\n",
           "name": "sendWelcomeEmail"
         }
       ]
@@ -20042,52 +20564,87 @@
       ]
     },
     {
-      "name": "EmergencyLocationInfoRequest",
+      "name": "EmergencyLocationAddressInfoFr",
       "fields": [
         {
           "type": "string",
-          "description": "Internal identifier of an emergency response location\n",
-          "name": "id"
-        },
-        {
-          "$ref": "EmergencyLocationAddressInfo",
-          "name": "address"
+          "description": "Country name",
+          "name": "country"
         },
         {
           "type": "string",
-          "description": "Emergency response location name",
-          "name": "name"
-        },
-        {
-          "$ref": "ShortSiteInfo",
-          "name": "site"
+          "description": "Internal identifier of a country",
+          "name": "countryId"
         },
         {
           "type": "string",
-          "description": "Emergency address status",
-          "enum": [
-            "Valid",
-            "Invalid"
-          ],
-          "name": "addressStatus"
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
         },
         {
           "type": "string",
-          "description": "Status of an emergency response location usage.",
-          "enum": [
-            "Active",
-            "Inactive"
-          ],
-          "name": "usageStatus"
+          "description": "Full name of a country",
+          "name": "countryName"
         },
         {
           "type": "string",
-          "description": "Visibility of an emergency response location. If `Private`\nis set, then a location is visible only for restricted number of users,\nspecified in `owners` array\n",
-          "default": "Public",
-          "enum": [
-            "Public"
-          ],
-          "name": "visibility"
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilised as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
         }
       ]
     },
@@ -20101,8 +20658,8 @@
           "name": "id"
         },
         {
-          "$ref": "EmergencyLocationAddressInfo",
-          "name": "address"
+          "name": "address",
+          "$ref": "EmergencyLocationResourceAddress"
         },
         {
           "type": "string",
@@ -20171,6 +20728,11 @@
             "$ref": "LocationOwnerInfo"
           },
           "name": "owners"
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
         }
       ]
     },
@@ -20216,16 +20778,6 @@
       ]
     },
     {
-      "name": "LocationOwnerInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a user - private location owner\n",
-          "name": "id"
-        }
-      ]
-    },
-    {
       "name": "EmergencyLocationsResource",
       "fields": [
         {
@@ -20242,22 +20794,97 @@
       ]
     },
     {
-      "name": "ShortSiteInfo",
+      "name": "EmergencyLocationAddressInfoAu",
       "fields": [
         {
           "type": "string",
-          "description": "Internal identifier of a site extension",
-          "name": "id"
+          "description": "Country name",
+          "name": "country"
         },
         {
           "type": "string",
-          "description": "Extension user first name",
-          "name": "name"
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilised as 'streetName' field for Au addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
         }
       ]
     },
     {
-      "name": "EmergencyLocationAddressInfo",
+      "name": "EmergencyLocationAddressInfoDefault",
       "fields": [
         {
           "type": "string",
@@ -20323,6 +20950,86 @@
           "type": "string",
           "description": "Customer name",
           "name": "customerName"
+        }
+      ]
+    },
+    {
+      "name": "EmergencyLocationInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an emergency response location\n",
+          "name": "id"
+        },
+        {
+          "name": "address",
+          "$ref": "EmergencyLocationInfoRequestAddress"
+        },
+        {
+          "type": "string",
+          "description": "Emergency response location name",
+          "name": "name"
+        },
+        {
+          "$ref": "ShortSiteInfo",
+          "name": "site"
+        },
+        {
+          "type": "string",
+          "description": "Emergency address status",
+          "enum": [
+            "Valid",
+            "Invalid"
+          ],
+          "name": "addressStatus"
+        },
+        {
+          "type": "string",
+          "description": "Status of an emergency response location usage.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "usageStatus"
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
+        },
+        {
+          "type": "string",
+          "description": "Visibility of an emergency response location. If `Private`\nis set, then a location is visible only for restricted number of users,\nspecified in `owners` array\n",
+          "default": "Public",
+          "enum": [
+            "Public"
+          ],
+          "name": "visibility"
+        }
+      ]
+    },
+    {
+      "name": "LocationOwnerInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a user - private location owner\n",
+          "name": "id"
+        }
+      ]
+    },
+    {
+      "name": "ShortSiteInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a site extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Extension user first name",
+          "name": "name"
         }
       ]
     },
@@ -21199,12 +21906,22 @@
         },
         {
           "type": "boolean",
-          "description": "If 'True' enables other extensions to see the extension presence status",
+          "description": "If set to 'True' - enables other extensions to see the extension presence status",
           "name": "allowSeeMyPresence"
         },
         {
           "type": "string",
-          "description": "Extended DnD (Do not Disturb) status. Cannot be set for Department/Announcement/Voicemail (Take Messages Only)/Fax User/Shared Lines Group/Paging Only Group/IVR Menu/Application Extension/Park Location extensions. The 'DoNotAcceptDepartmentCalls' and 'TakeDepartmentCallsOnly' values are applicable only for extensions - members of a Department; if these values are set for department outsiders, the 400 Bad Request error code is returned. The 'TakeDepartmentCallsOnly' status can be set through the old RingCentral user interface and is available for some migrated accounts only.",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to 'True', \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "enum": [
+            "All",
+            "None",
+            "PermittedUsers"
+          ],
+          "name": "callerIdVisibility"
+        },
+        {
+          "type": "string",
+          "description": "Extended DnD (Do not Disturb) status. Cannot be set for Department/Announcement/Voicemail\n(Take Messages Only)/Fax User/Shared Lines Group/Paging Only Group/IVR\nMenu/Application Extension/Park Location extensions. The 'DoNotAcceptDepartmentCalls'\nand 'TakeDepartmentCallsOnly' values are applicable only for extensions\n- members of a Department; if these values are set for department outsiders,\nthe 400 Bad Request error code is returned. The 'TakeDepartmentCallsOnly'\nstatus can be set through the old RingCentral user interface and is available\nfor some migrated accounts only.\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptAnyCalls",
@@ -21687,6 +22404,17 @@
       ]
     },
     {
+      "name": "ForwardAllCompanyCallsRequest",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Indicates whether the *Forward All Company Calls* feature is enabled or disabled for an account",
+          "name": "enabled",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "ForwardAllCallsReason",
       "fields": [
         {
@@ -21710,7 +22438,7 @@
       "fields": [
         {
           "type": "boolean",
-          "description": "Indicates whether the Forward All Company Calls feature is enabled or disabled for account",
+          "description": "Indicates whether the *Forward All Company Calls* feature is enabled or disabled for an account",
           "name": "enabled"
         },
         {
@@ -22884,6 +23612,7 @@
             "DelegatedLinesGroup",
             "GroupCallPickup",
             "External",
+            "RoomConnector",
             "Unknown"
           ],
           "name": "type",
@@ -23205,26 +23934,26 @@
         },
         {
           "type": "string",
-          "description": "Type of extension to filter the contacts",
+          "description": "Type of directory contact to filter",
           "enum": [
             "User",
             "Department",
             "Announcement",
             "Voicemail",
-            "DigitalUser",
-            "VirtualUser",
-            "FaxUser",
-            "PagingOnly",
             "SharedLinesGroup",
-            "IvrMenu",
-            "ApplicationExtension",
+            "PagingOnly",
             "ParkLocation",
+            "IvrMenu",
             "Limited",
+            "ApplicationExtension",
             "Site",
+            "Bot",
+            "Room",
             "DelegatedLinesGroup",
-            "FlexibleUser"
+            "GroupCallPickup",
+            "External"
           ],
-          "example": "FaxUser",
+          "example": "User",
           "name": "extensionType"
         },
         {
@@ -23299,11 +24028,16 @@
               "ApplicationExtension",
               "ParkLocation",
               "Limited",
+              "Bot",
               "Site",
+              "Room",
+              "ProxyAdmin",
               "DelegatedLinesGroup",
-              "FlexibleUser"
+              "FlexibleUser",
+              "GroupCallPickup",
+              "RoomConnector"
             ],
-            "example": "FaxUser"
+            "example": "User"
           },
           "name": "extensionTypes"
         },
@@ -24665,6 +25399,10 @@
           "type": "boolean",
           "description": "Hides an extension from showing in company directory. Supported\nfor extensions of 'User' type only\n",
           "name": "hidden"
+        },
+        {
+          "$ref": "AssignedCountryInfo",
+          "name": "assignedCountry"
         }
       ]
     },
@@ -24747,6 +25485,32 @@
           "type": "string",
           "description": "Reason for limitation of a particular service feature. Returned\nonly if the enabled parameter value is 'False', see Service Feature\nLimitations and Reasons. When retrieving service features for an extension,\nthe reasons for limitations, if any, are returned in response\n",
           "name": "reason"
+        }
+      ]
+    },
+    {
+      "name": "AssignedCountryInfo",
+      "description": "Information on a country assigned to an extension user. Returned for the User extension type only",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an assigned country",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Canonical URI of an assigned country resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)",
+          "name": "isoCode"
+        },
+        {
+          "type": "string",
+          "description": "Official name of a country",
+          "name": "name"
         }
       ]
     },
@@ -25106,6 +25870,10 @@
         {
           "$ref": "ProvisioningSiteInfo",
           "name": "site"
+        },
+        {
+          "$ref": "AssignedCountryInfo",
+          "name": "assignedCountry"
         }
       ]
     },
@@ -25457,7 +26225,7 @@
         },
         {
           "type": "string",
-          "description": "Specifies extension configuration wizard state (web service\nsetup).\n",
+          "description": "Specifies extension configuration wizard state (web service setup)",
           "default": "NotStarted",
           "enum": [
             "NotStarted",
@@ -25532,6 +26300,10 @@
         {
           "$ref": "ProvisioningSiteInfo",
           "name": "site"
+        },
+        {
+          "$ref": "AssignedCountryInfo",
+          "name": "assignedCountry"
         }
       ]
     },
@@ -26880,6 +27652,23 @@
       ]
     },
     {
+      "name": "TransferredExtension",
+      "description": "Transfer extension settings, set/returned if `callHandlingAction` is specified as `TransferToExtension`",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "readOnly": true,
+          "description": "Canonical URI of an extension resource",
+          "name": "uri"
+        }
+      ]
+    },
+    {
       "name": "RecipientInfo",
       "description": "Recipient data",
       "fields": [
@@ -26939,10 +27728,9 @@
     },
     {
       "name": "TransferredExtensionInfo",
-      "description": "Transfer settings applied for department (call queue) extension\ntype, returned if CallHandlingAction is set to `TransferToExtension`\n",
       "fields": [
         {
-          "$ref": "CallHandlingExtensionInfo",
+          "$ref": "TransferredExtension",
           "name": "extension"
         }
       ]
@@ -27080,11 +27868,18 @@
     },
     {
       "name": "TransferExtensionInfo",
+      "description": "Transfer extension settings, set/returned if `callHandlingAction` is specified as `TransferToExtension`",
       "fields": [
         {
           "type": "string",
-          "description": "Internal identifier of an extension the call is transferred to",
+          "description": "Internal identifier of an extension",
           "name": "id"
+        },
+        {
+          "type": "string",
+          "readOnly": true,
+          "description": "Canonical URI of an extension resource",
+          "name": "uri"
         },
         {
           "type": "string",
@@ -27133,7 +27928,8 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier"
+            "ExternalCarrier",
+            "ExtensionApps"
           ],
           "name": "type"
         }
@@ -27233,32 +28029,6 @@
           "type": "string",
           "description": "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in e.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15",
           "name": "phoneNumber"
-        }
-      ]
-    },
-    {
-      "name": "CallHandlingExtensionInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of an extension",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of an extension",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Number of extension",
-          "name": "extensionNumber"
-        },
-        {
-          "type": "string",
-          "description": "For Partner Applications Internal identifier of an extension\ncreated by partner. The RingCentral supports the mapping of accounts and\nstores the corresponding account ID/extension ID for each partner ID of\na client application. In request URIs partner IDs are accepted instead\nof regular RingCentral native IDs as path parameters using pid = XXX clause.\nThough in response URIs contain the corresponding account IDs and extension\nIDs. In all request and response bodies these values are reflected via\npartnerId attributes of account and extension\n",
-          "name": "partnerId"
         }
       ]
     },
@@ -27503,7 +28273,7 @@
           "type": "array",
           "description": "List of answering rules",
           "items": {
-            "$ref": "UserAnsweringRuleListRecord"
+            "$ref": "AnsweringRuleInfo"
           },
           "name": "records"
         },
@@ -27620,6 +28390,124 @@
       ]
     },
     {
+      "name": "AnsweringRuleInfo",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI to an answering rule resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an answering rule",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Type of an answering rule",
+          "enum": [
+            "BusinessHours",
+            "AfterHours",
+            "Custom"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Name of an answering rule specified by user",
+          "name": "name"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if an answering rule is active or inactive",
+          "name": "enabled"
+        },
+        {
+          "$ref": "ScheduleInfo",
+          "name": "schedule"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calling to selected number(s)",
+          "items": {
+            "$ref": "CalledNumberInfo"
+          },
+          "name": "calledNumbers"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calls are received from specified caller(s)",
+          "items": {
+            "$ref": "CallersInfo"
+          },
+          "name": "callers"
+        },
+        {
+          "type": "string",
+          "description": "Specifies how incoming calls are forwarded",
+          "enum": [
+            "ForwardCalls",
+            "UnconditionalForwarding",
+            "AgentQueue",
+            "TransferToExtension",
+            "TakeMessagesOnly",
+            "PlayAnnouncementOnly",
+            "SharedLines"
+          ],
+          "name": "callHandlingAction"
+        },
+        {
+          "$ref": "ForwardingInfo",
+          "name": "forwarding"
+        },
+        {
+          "$ref": "UnconditionalForwardingInfo",
+          "name": "unconditionalForwarding"
+        },
+        {
+          "$ref": "QueueInfo",
+          "name": "queue"
+        },
+        {
+          "$ref": "TransferredExtensionInfo",
+          "name": "transfer"
+        },
+        {
+          "$ref": "VoicemailInfo",
+          "name": "voicemail"
+        },
+        {
+          "type": "array",
+          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
+          "items": {
+            "$ref": "GreetingInfo"
+          },
+          "name": "greetings"
+        },
+        {
+          "type": "string",
+          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
+          "enum": [
+            "Off",
+            "NoCallerId",
+            "UnknownCallerId",
+            "Always"
+          ],
+          "default": "Off",
+          "name": "screening"
+        },
+        {
+          "$ref": "SharedLinesInfo",
+          "name": "sharedLines"
+        },
+        {
+          "$ref": "MissedCallInfo",
+          "name": "missedCall"
+        }
+      ]
+    },
+    {
       "name": "FixedOrderAgentsExtensionInfo",
       "fields": [
         {
@@ -27662,48 +28550,6 @@
         {
           "$ref": "MissedCallExtensionInfo",
           "name": "extension"
-        }
-      ]
-    },
-    {
-      "name": "UserAnsweringRuleListRecord",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI to an answering rule resource",
-          "example": "https://platform.ringcentral.com/restapi/v1.0/account/240913004/extension/240972004/answering-rule/business-hours-rule",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an answering rule",
-          "example": "business-hours-rule",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Type of an answering rule",
-          "enum": [
-            "BusinessHours",
-            "AfterHours",
-            "Custom"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of an answering rule specified by user",
-          "name": "name"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if an answering rule is active or inactive",
-          "name": "enabled"
-        },
-        {
-          "$ref": "SharedLinesInfo",
-          "name": "sharedLines"
         }
       ]
     },
@@ -27921,7 +28767,8 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier"
+            "ExternalCarrier",
+            "ExtensionApps"
           ],
           "name": "type"
         },
@@ -27934,124 +28781,6 @@
           "type": "string",
           "description": "Forwarding/Call flip number title",
           "name": "label"
-        }
-      ]
-    },
-    {
-      "name": "AnsweringRuleInfo",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI to an answering rule resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an answering rule",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Type of an answering rule",
-          "enum": [
-            "BusinessHours",
-            "AfterHours",
-            "Custom"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of an answering rule specified by user",
-          "name": "name"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if an answering rule is active or inactive",
-          "name": "enabled"
-        },
-        {
-          "$ref": "ScheduleInfo",
-          "name": "schedule"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calling to selected number(s)",
-          "items": {
-            "$ref": "CalledNumberInfo"
-          },
-          "name": "calledNumbers"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calls are received from specified caller(s)",
-          "items": {
-            "$ref": "CallersInfo"
-          },
-          "name": "callers"
-        },
-        {
-          "type": "string",
-          "description": "Specifies how incoming calls are forwarded",
-          "enum": [
-            "ForwardCalls",
-            "UnconditionalForwarding",
-            "AgentQueue",
-            "TransferToExtension",
-            "TakeMessagesOnly",
-            "PlayAnnouncementOnly",
-            "SharedLines"
-          ],
-          "name": "callHandlingAction"
-        },
-        {
-          "$ref": "ForwardingInfo",
-          "name": "forwarding"
-        },
-        {
-          "$ref": "UnconditionalForwardingInfo",
-          "name": "unconditionalForwarding"
-        },
-        {
-          "$ref": "QueueInfo",
-          "name": "queue"
-        },
-        {
-          "$ref": "TransferredExtensionInfo",
-          "name": "transfer"
-        },
-        {
-          "$ref": "VoicemailInfo",
-          "name": "voicemail"
-        },
-        {
-          "type": "array",
-          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
-          "items": {
-            "$ref": "GreetingInfo"
-          },
-          "name": "greetings"
-        },
-        {
-          "type": "string",
-          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
-          "enum": [
-            "Off",
-            "NoCallerId",
-            "UnknownCallerId",
-            "Always"
-          ],
-          "default": "Off",
-          "name": "screening"
-        },
-        {
-          "$ref": "SharedLinesInfo",
-          "name": "sharedLines"
-        },
-        {
-          "$ref": "MissedCallInfo",
-          "name": "missedCall"
         }
       ]
     },
@@ -28353,8 +29082,13 @@
           "name": "name"
         },
         {
-          "$ref": "EmergencyLocationAddressInfo",
-          "name": "address"
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
+        },
+        {
+          "name": "address",
+          "$ref": "CreateUserEmergencyLocationRequestAddress"
         }
       ]
     },
@@ -28475,9 +29209,15 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier"
+            "ExternalCarrier",
+            "ExtensionApps"
           ],
           "name": "type"
+        },
+        {
+          "description": "Extension information. Returned only if extension type is 'ExtensionApps'",
+          "$ref": "ForwardingNumberInfoExtension",
+          "name": "extension"
         }
       ]
     },
@@ -29670,6 +30410,16 @@
           "type": "boolean",
           "default": false,
           "name": "pickUpCallsOnHold"
+        },
+        {
+          "type": "string",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to 'True', \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "enum": [
+            "All",
+            "None",
+            "PermittedUsers"
+          ],
+          "name": "callerIdVisibility"
         }
       ]
     },
@@ -29882,6 +30632,16 @@
           "type": "boolean",
           "default": false,
           "name": "allowSeeMyPresence"
+        },
+        {
+          "type": "string",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to 'True', \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "enum": [
+            "All",
+            "None",
+            "PermittedUsers"
+          ],
+          "name": "callerIdVisibility"
         },
         {
           "type": "boolean",
@@ -33361,7 +34121,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if the number is primary, i.e. displayed as 'main number' and called by default",
+          "description": "Specifies if a phone number is primary, i.e. displayed as 'main number' and called by default",
           "example": false,
           "name": "primary"
         },
@@ -33412,6 +34172,7 @@
             "ConferencingNumber",
             "NumberPool",
             "BusinessMobileNumber",
+            "PartnerBusinessMobileNumber",
             "IntegrationNumber"
           ],
           "name": "usageType"
@@ -33572,6 +34333,11 @@
           "type": "string",
           "description": "Unique identifier of a network switch. Returned only for 'Switches Bulk Create' tasks",
           "name": "chassisId"
+        },
+        {
+          "type": "string",
+          "description": "Switch entity extension for better diversity. Should be used together with chassisId.",
+          "name": "port"
         },
         {
           "type": "string",
@@ -33737,7 +34503,99 @@
       ]
     },
     {
-      "name": "EmergencyAddressInfo",
+      "name": "EmergencyAddressAutoUpdateSiteInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a site",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name pf a site",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "CreateMultipleWirelessPointsResponse",
+      "fields": [
+        {
+          "$ref": "BulkTaskInfo",
+          "name": "task"
+        }
+      ]
+    },
+    {
+      "name": "CreateMultipleWirelessPointsRequest",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "CreateWirelessPoint"
+          },
+          "name": "records"
+        }
+      ]
+    },
+    {
+      "name": "CreateWirelessPoint",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Unique 48-bit identifier of wireless access point that follows MAC address conventions.  Mask: XX:XX:XX:XX:XX:XX, where X can be a symbol in the range of 0-9 or A-F",
+          "name": "bssid",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Wireless access point name",
+          "name": "name",
+          "required": true
+        },
+        {
+          "$ref": "EmergencyAddressAutoUpdateSiteInfo",
+          "name": "site",
+          "required": false
+        },
+        {
+          "$ref": "EmergencyAddressInfoDefault",
+          "name": "emergencyAddress",
+          "required": false
+        },
+        {
+          "$ref": "EmergencyLocationInfo",
+          "name": "emergencyLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "EmergencyLocationInfo",
+      "description": "Emergency response location information",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an emergency response location",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Emergency response location name",
+          "name": "name",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "EmergencyAddressInfoDefault",
       "description": "Emergency address information (or information assigned to the\nswitch or wireless point - in case of using them). Only one of a pair\n`emergencyAddress` or `emergencyLocationId` should be specified,\notherwise an error is returned\n",
       "fields": [
         {
@@ -33821,92 +34679,6 @@
       ]
     },
     {
-      "name": "EmergencyAddressAutoUpdateSiteInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a site",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Name pf a site",
-          "name": "name"
-        }
-      ]
-    },
-    {
-      "name": "CreateMultipleWirelessPointsResponse",
-      "fields": [
-        {
-          "$ref": "BulkTaskInfo",
-          "name": "task"
-        }
-      ]
-    },
-    {
-      "name": "CreateMultipleWirelessPointsRequest",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "CreateWirelessPoint"
-          },
-          "name": "records"
-        }
-      ]
-    },
-    {
-      "name": "CreateWirelessPoint",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Unique 48-bit identifier of wireless access point that follows MAC address conventions.  Mask: XX:XX:XX:XX:XX:XX, where X can be a symbol in the range of 0-9 or A-F",
-          "name": "bssid",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Wireless access point name",
-          "name": "name",
-          "required": true
-        },
-        {
-          "$ref": "EmergencyAddressAutoUpdateSiteInfo",
-          "name": "site",
-          "required": false
-        },
-        {
-          "$ref": "EmergencyAddressInfo",
-          "name": "emergencyAddress",
-          "required": false
-        },
-        {
-          "$ref": "EmergencyLocationInfo",
-          "name": "emergencyLocation",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "EmergencyLocationInfo",
-      "description": "Emergency response location information",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of an emergency response location",
-          "name": "id",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Emergency response location name",
-          "name": "name",
-          "required": false
-        }
-      ]
-    },
-    {
       "name": "BulkTaskInfo",
       "fields": [
         {
@@ -33950,6 +34722,11 @@
           "type": "string",
           "description": "Emergency response location name",
           "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
         }
       ]
     },
@@ -33975,77 +34752,6 @@
       ]
     },
     {
-      "name": "LocationUpdatesEmergencyAddressInfo",
-      "description": "Emergency address information (or information assigned to the switch or\nwireless point - in case of using them). Only one of a pair `emergencyAddress`\nor `emergencyLocationId` should be specified, otherwise an error is returned\n",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "Customer name",
-          "name": "customerName"
-        },
-        {
-          "type": "string",
-          "description": "State/Province name. Mandatory for the USA, the UK and Canada",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "First line address",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Second line address (apartment, suite, unit, building, floor, etc.)",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "Postal (Zip) code",
-          "name": "zip"
-        }
-      ]
-    },
-    {
       "name": "PrivateIpRangeInfo",
       "fields": [
         {
@@ -34066,8 +34772,9 @@
           "name": "name"
         },
         {
-          "$ref": "LocationUpdatesEmergencyAddressInfo",
-          "name": "emergencyAddress"
+          "description": "Emergency address information (or information assigned to the switch or\nwireless point - in case of using them). Only one of a pair `emergencyAddress`\nor `emergencyLocationId` should be specified, otherwise an error is returned\n",
+          "name": "emergencyAddress",
+          "$ref": "PrivateIpRangeInfoEmergencyAddress"
         },
         {
           "type": "string",
@@ -34185,6 +34892,87 @@
       ]
     },
     {
+      "name": "LocationUpdatesEmergencyAddressInfoFr",
+      "description": "Emergency address information (or information assigned to the switch or\nwireless point - in case of using them). Only one of a pair `emergencyAddress`\nor `emergencyLocationId` should be specified, otherwise an error is returned\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "First line address",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor, etc.)",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
       "name": "PrivateIpRangeInfoRequest",
       "fields": [
         {
@@ -34287,6 +35075,163 @@
       ]
     },
     {
+      "name": "LocationUpdatesEmergencyAddressInfoDefault",
+      "description": "Emergency address information (or information assigned to the switch or\nwireless point - in case of using them). Only one of a pair `emergencyAddress`\nor `emergencyLocationId` should be specified, otherwise an error is returned\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "First line address",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor, etc.)",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        }
+      ]
+    },
+    {
+      "name": "LocationUpdatesEmergencyAddressInfoAu",
+      "description": "Emergency address information (or information assigned to the switch or\nwireless point - in case of using them). Only one of a pair `emergencyAddress`\nor `emergencyLocationId` should be specified, otherwise an error is returned\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "First line address",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor, etc.)",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
       "name": "UpdateNetworkRequest",
       "fields": [
         {
@@ -34326,6 +35271,100 @@
           "$ref": "ERLLocationInfo",
           "name": "emergencyLocation",
           "required": false
+        }
+      ]
+    },
+    {
+      "name": "EmergencyAddressInfoFr",
+      "description": "Emergency address information (or information assigned to the\nswitch or wireless point - in case of using them). Only one of a pair\n`emergencyAddress` or `emergencyLocationId` should be specified,\notherwise an error is returned\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company\nname, c/o\n",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building,\nfloor, etc.\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
         }
       ]
     },
@@ -34389,6 +35428,11 @@
         },
         {
           "type": "string",
+          "description": "Switch entity extension for better diversity. Should be used together with chassisId.",
+          "name": "port"
+        },
+        {
+          "type": "string",
           "description": "Name of a network switch",
           "name": "name"
         },
@@ -34397,8 +35441,9 @@
           "name": "site"
         },
         {
-          "$ref": "EmergencyAddressInfo",
-          "name": "emergencyAddress"
+          "description": "Emergency address information (or information assigned to the\nswitch or wireless point - in case of using them). Only one of a pair\n`emergencyAddress` or `emergencyLocationId` should be specified,\notherwise an error is returned\n",
+          "name": "emergencyAddress",
+          "$ref": "SwitchInfoEmergencyAddress"
         },
         {
           "$ref": "EmergencyLocationInfo",
@@ -34441,6 +35486,11 @@
         },
         {
           "type": "string",
+          "description": "Switch entity extension for better diversity. Should be used together with chassisId.",
+          "name": "port"
+        },
+        {
+          "type": "string",
           "description": "Validation result status",
           "enum": [
             "Valid",
@@ -34458,6 +35508,105 @@
       ]
     },
     {
+      "name": "EmergencyAddressInfoAu",
+      "description": "Emergency address information (or information assigned to the\nswitch or wireless point - in case of using them). Only one of a pair\n`emergencyAddress` or `emergencyLocationId` should be specified,\notherwise an error is returned\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company\nname, c/o\n",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building,\nfloor, etc.\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        }
+      ]
+    },
+    {
       "name": "CreateSwitchInfo",
       "fields": [
         {
@@ -34465,6 +35614,12 @@
           "description": "Unique identifier of a network switch. The supported formats are: XX:XX:XX:XX:XX:XX (symbols 0-9 and A-F) for MAC address and X.X.X.X for IP address (symbols 0-255)",
           "name": "chassisId",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Switch entity extension for better diversity. Should be used together with chassisId.",
+          "name": "port",
+          "required": false
         },
         {
           "type": "string",
@@ -34478,7 +35633,7 @@
           "required": false
         },
         {
-          "$ref": "EmergencyAddressInfo",
+          "$ref": "EmergencyAddressInfoDefault",
           "name": "emergencyAddress",
           "required": false
         },
@@ -34525,6 +35680,11 @@
         },
         {
           "type": "string",
+          "description": "Switch entity extension for better diversity. Should be used together with chassisId.",
+          "name": "port"
+        },
+        {
+          "type": "string",
           "description": "Name of a network switch",
           "name": "name"
         },
@@ -34533,7 +35693,7 @@
           "name": "site"
         },
         {
-          "$ref": "EmergencyAddressInfo",
+          "$ref": "EmergencyAddressInfoDefault",
           "name": "emergencyAddress"
         }
       ]
@@ -34572,8 +35732,9 @@
           "required": false
         },
         {
-          "$ref": "EmergencyAddressInfo",
+          "description": "Emergency address information (or information assigned to the\nswitch or wireless point - in case of using them). Only one of a pair\n`emergencyAddress` or `emergencyLocationId` should be specified,\notherwise an error is returned\n",
           "name": "emergencyAddress",
+          "$ref": "WirelessPointInfoEmergencyAddress",
           "required": true
         },
         {
@@ -34586,61 +35747,6 @@
           "description": "Deprecated. Emergency response location (address) internal identifier. Only one of a pair `emergencyAddress` or `emergencyLocationId` should be specified, otherwise the error is returned",
           "name": "emergencyLocationId",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "WirelessPointsList",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Link to a wireless points resource",
-          "name": "uri"
-        },
-        {
-          "type": "array",
-          "description": "List of wireless points with assigned emergency addresses",
-          "items": {
-            "$ref": "WirelessPointInfo"
-          },
-          "name": "records"
-        },
-        {
-          "$ref": "PageNavigationModel",
-          "name": "navigation"
-        },
-        {
-          "$ref": "EnumeratedPagingModel",
-          "name": "paging"
-        }
-      ]
-    },
-    {
-      "name": "UpdateWirelessPoint",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a wireless point",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Unique 48-bit identifier of wireless access point that follows\nMAC address conventions. Mask: XX:XX:XX:XX:XX:XX, where X can be a symbol\nin the range of 0-9 or A-F\n",
-          "name": "bssid"
-        },
-        {
-          "type": "string",
-          "description": "Name of a wireless access point",
-          "name": "name"
-        },
-        {
-          "$ref": "EmergencyAddressAutoUpdateSiteInfo",
-          "name": "site"
-        },
-        {
-          "$ref": "EmergencyAddressInfo",
-          "name": "emergencyAddress"
         }
       ]
     },
@@ -34696,6 +35802,61 @@
             "$ref": "ValidationError"
           },
           "name": "errors"
+        }
+      ]
+    },
+    {
+      "name": "WirelessPointsList",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to a wireless points resource",
+          "name": "uri"
+        },
+        {
+          "type": "array",
+          "description": "List of wireless points with assigned emergency addresses",
+          "items": {
+            "$ref": "WirelessPointInfo"
+          },
+          "name": "records"
+        },
+        {
+          "$ref": "PageNavigationModel",
+          "name": "navigation"
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging"
+        }
+      ]
+    },
+    {
+      "name": "UpdateWirelessPoint",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a wireless point",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Unique 48-bit identifier of wireless access point that follows\nMAC address conventions. Mask: XX:XX:XX:XX:XX:XX, where X can be a symbol\nin the range of 0-9 or A-F\n",
+          "name": "bssid"
+        },
+        {
+          "type": "string",
+          "description": "Name of a wireless access point",
+          "name": "name"
+        },
+        {
+          "$ref": "EmergencyAddressAutoUpdateSiteInfo",
+          "name": "site"
+        },
+        {
+          "$ref": "EmergencyAddressInfoDefault",
+          "name": "emergencyAddress"
         }
       ]
     },
@@ -35020,6 +36181,7 @@
             "MeetingsNumber",
             "NumberPool",
             "BusinessMobileNumber",
+            "PartnerBusinessMobileNumber",
             "IntegrationNumber"
           ],
           "name": "usageType"
@@ -35036,6 +36198,11 @@
           "type": "string",
           "description": "Vanity pattern for this number. Returned only when vanity search option is requested. Vanity pattern corresponds to request parameters nxx plus line or numberPattern",
           "name": "vanityPattern"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if a phone number is primary, i.e. displayed as 'main number' and called by default",
+          "name": "primary"
         }
       ]
     },
@@ -35088,7 +36255,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Notifications transport type",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
           "enum": [
             "WebHook",
             "RC/APNS",
@@ -35101,14 +36268,14 @@
         {
           "type": "string",
           "format": "uri",
-          "description": "(Only for a \"WebHook\" transport, required) URL of a subscriber's web service\n",
+          "description": "The URL to which notifications should be delivered. This is only applicable for the `WebHook` transport type, for which it is a required field.\n",
           "example": "https://acme.com/myservice/webhook",
           "name": "address",
           "required": true
         },
         {
           "type": "string",
-          "description": "(Only for a \"WebHook\" transport, optional) Subscription verification token",
+          "description": "An optional validation token used to verify the authenticity of the incoming webhook. Applicable only for the `WebHook` transport type.",
           "writeOnly": true,
           "name": "verificationToken",
           "required": false
@@ -35153,7 +36320,7 @@
           "type": "integer",
           "format": "int32",
           "minimum": 1,
-          "description": "Subscription lifetime in seconds.\n- For \"WebHook\" transport type max value might be set up to 315360000 seconds (10 years).\n- For \"RC/APNS\" and \"RC/GSM\" transport types max subscription lifetime is 7776000 seconds (90 days).\n- For \"PubNub\" transport type the max value is 900 seconds (15 minutes)\n",
+          "description": "Subscription lifetime in seconds. The maximum subscription lifetime depends upon the specified `transportType`:\n\n| Transport type      | Maximum permitted lifetime     |\n| ------------------- | ------------------------------ |\n| `WebHook`           | 315360000 seconds (10 years)   |\n| `RC/APNS`, `RC/GSM` | 7776000 seconds (90 days)      |\n| `PubNub`            | 900 seconds (15 minutes)       |\n| `WebSocket`         | n/a (the parameter is ignored) |\n",
           "name": "expiresIn",
           "required": false
         },
@@ -35709,7 +36876,7 @@
         },
         {
           "type": "string",
-          "description": "Country code according to the ISO standard, see\n[ISO 3166](https://www.iso.org/iso-3166-country-codes.html)\n",
+          "description": "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)",
           "name": "isoCode"
         },
         {
@@ -35721,6 +36888,16 @@
           "type": "boolean",
           "description": "Indicates whether a language is available as UI language\n",
           "name": "ui"
+        },
+        {
+          "type": "string",
+          "description": "Time format",
+          "name": "timeFormat"
+        },
+        {
+          "type": "string",
+          "description": "Date format",
+          "name": "dateFormat"
         }
       ]
     },
@@ -36055,7 +37232,7 @@
           "name": "extension"
         },
         {
-          "$ref": "DeviceEmergencyServiceAddressResource",
+          "$ref": "DeviceEmergencyServiceAddressResourceDefault",
           "name": "emergencyServiceAddress"
         },
         {
@@ -36166,6 +37343,92 @@
             "VoiceOnly"
           ],
           "name": "type"
+        }
+      ]
+    },
+    {
+      "name": "DeviceEmergencyServiceAddressResourceAu",
+      "description": "Address for emergency cases. The same emergency address is assigned to all the numbers of one device",
+      "fields": [
+        {
+          "type": "string",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if emergency address is out of country",
+          "name": "outOfCountry"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
         }
       ]
     },
@@ -36287,8 +37550,9 @@
       "description": "Emergency response location settings of a device",
       "fields": [
         {
-          "$ref": "DeviceEmergencyServiceAddressResource",
-          "name": "address"
+          "description": "Address for emergency cases. The same emergency address is assigned to all the numbers of one device",
+          "name": "address",
+          "$ref": "SipRegistrationDeviceEmergencyInfoAddress"
         },
         {
           "$ref": "SipRegistrationDeviceLocationInfo",
@@ -36469,40 +37733,16 @@
           "type": "string",
           "description": "Emergency response location name",
           "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Address format id",
+          "name": "addressFormatId"
         }
       ]
     },
     {
-      "name": "DevicePhoneLinesInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a phone line",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Type of phone line",
-          "enum": [
-            "Standalone",
-            "StandaloneFree",
-            "BlaPrimary",
-            "BlaSecondary"
-          ],
-          "name": "lineType"
-        },
-        {
-          "$ref": "DevicePhoneLinesEmergencyAddressInfo",
-          "name": "emergencyAddress"
-        },
-        {
-          "$ref": "DevicePhoneNumberInfo",
-          "name": "phoneInfo"
-        }
-      ]
-    },
-    {
-      "name": "DeviceEmergencyServiceAddressResource",
+      "name": "DeviceEmergencyServiceAddressResourceDefault",
       "description": "Address for emergency cases. The same emergency address is assigned to all the numbers of one device",
       "fields": [
         {
@@ -36573,6 +37813,35 @@
       ]
     },
     {
+      "name": "DevicePhoneLinesInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a phone line",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Type of phone line",
+          "enum": [
+            "Standalone",
+            "StandaloneFree",
+            "BlaPrimary",
+            "BlaSecondary"
+          ],
+          "name": "lineType"
+        },
+        {
+          "$ref": "DevicePhoneLinesEmergencyAddressInfo",
+          "name": "emergencyAddress"
+        },
+        {
+          "$ref": "DevicePhoneNumberInfo",
+          "name": "phoneInfo"
+        }
+      ]
+    },
+    {
       "name": "DeviceAddonInfo",
       "fields": [
         {
@@ -36587,6 +37856,87 @@
           "type": "integer",
           "format": "int32",
           "name": "count"
+        }
+      ]
+    },
+    {
+      "name": "DeviceEmergencyServiceAddressResourceFr",
+      "description": "Address for emergency cases. The same emergency address is assigned to all the numbers of one device",
+      "fields": [
+        {
+          "type": "string",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if emergency address is out of country",
+          "name": "outOfCountry"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
         }
       ]
     },
@@ -36747,6 +38097,14 @@
         {
           "type": "array",
           "items": {
+            "$ref": "WordTimingsUnit"
+          },
+          "name": "wordTimings",
+          "required": false
+        },
+        {
+          "type": "array",
+          "items": {
             "$ref": "UtteranceInsightsUnit"
           },
           "name": "insights",
@@ -36835,6 +38193,28 @@
             "$ref": "SummaryOutputUnit"
           },
           "name": "summaries"
+        }
+      ]
+    },
+    {
+      "name": "WordTimingsUnit",
+      "fields": [
+        {
+          "type": "number",
+          "format": "float",
+          "example": 0.3,
+          "name": "start"
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "example": 5.1,
+          "name": "end"
+        },
+        {
+          "type": "string",
+          "example": "Hello",
+          "name": "word"
         }
       ]
     },
@@ -37267,6 +38647,48 @@
           "example": 5.1,
           "name": "end",
           "required": true
+        },
+        {
+          "type": "string",
+          "example": "0",
+          "name": "groupId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "JohnDoe",
+          "name": "speakerId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "Speaker",
+          "name": "assignee",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "NextStep",
+          "name": "category",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "All right, now let us go down to a CD settings.",
+          "name": "text",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "So so you want me to add it to the B D as well?",
+          "name": "question",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "Or or you can add another tab and have it resigned.",
+          "name": "answer",
+          "required": false
         }
       ]
     },
@@ -37283,7 +38705,9 @@
             "KeyPhrases",
             "Tasks",
             "Titles",
-            "QuestionsAsked"
+            "QuestionsAsked",
+            "OverallSentiment",
+            "Topics"
           ],
           "name": "name",
           "required": true
@@ -37384,7 +38808,15 @@
           "enum": [
             "Energy",
             "Pace",
-            "TalkToListenRatio"
+            "TalkToListenRatio",
+            "Patience",
+            "LongestMonologue",
+            "FillerWordRate",
+            "TalkingSpeed",
+            "TalkTime",
+            "QuestionsAsked",
+            "Tone",
+            "Interruptions"
           ],
           "name": "name",
           "required": true
@@ -39148,19 +40580,6 @@
       ]
     },
     {
-      "name": "Unauthorized",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "ErrorBody"
-          },
-          "description": "List of errors",
-          "name": "errors"
-        }
-      ]
-    },
-    {
       "name": "AdvancedTimeSettings",
       "description": "Allows more granular control over time included in the report",
       "fields": [
@@ -39565,19 +40984,6 @@
       ]
     },
     {
-      "name": "Forbidden",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "ErrorBody"
-          },
-          "description": "List of errors",
-          "name": "errors"
-        }
-      ]
-    },
-    {
       "name": "CallFilters",
       "description": "Optional filters that limit the scope of calls (joined via AND)",
       "fields": [
@@ -39741,19 +41147,6 @@
         {
           "$ref": "AggregationResponseOptionsTimers",
           "name": "timers"
-        }
-      ]
-    },
-    {
-      "name": "InternalError",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "ErrorBody"
-          },
-          "description": "List of errors",
-          "name": "errors"
         }
       ]
     },
@@ -40033,19 +41426,6 @@
           "format": "double",
           "name": "notConnected",
           "required": true
-        }
-      ]
-    },
-    {
-      "name": "BadRequest",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "ErrorBody"
-          },
-          "description": "List of errors",
-          "name": "errors"
         }
       ]
     },
@@ -40415,23 +41795,6 @@
           "$ref": "CallsCounters",
           "name": "counters",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "ErrorBody",
-      "fields": [
-        {
-          "type": "string",
-          "description": "ANL error code",
-          "name": "errorCode",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Detailed description of the error",
-          "name": "message",
-          "required": true
         }
       ]
     },
@@ -43876,6 +45239,104 @@
       ]
     },
     {
+      "name": "DeviceEmergencyInfoAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company name, c/o",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building, floor, etc.",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        }
+      ]
+    },
+    {
       "name": "BaseCallLogRecordTransferTarget",
       "fields": [
         {
@@ -43996,6 +45457,186 @@
       ]
     },
     {
+      "name": "EmergencyLocationResourceAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilised as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
+      "name": "EmergencyLocationInfoRequestAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilised as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
       "name": "ExtensionCreationResponseCostCenter",
       "fields": [
         {
@@ -44021,6 +45662,397 @@
       ]
     },
     {
+      "name": "CreateUserEmergencyLocationRequestAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilised as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
+      "name": "ForwardingNumberInfoExtension",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Number of an extension",
+          "name": "extensionNumber"
+        },
+        {
+          "type": "string",
+          "description": "Extension name",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "PrivateIpRangeInfoEmergencyAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "First line address",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor, etc.)",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
+      "name": "SwitchInfoEmergencyAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company\nname, c/o\n",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building,\nfloor, etc.\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
+      "name": "WirelessPointInfoEmergencyAddress",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a customer",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 1 - street address, P.O. box, company\nname, c/o\n",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Street address, line 2 - apartment, suite, unit, building,\nfloor, etc.\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "Zip code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto 'True'\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        }
+      ]
+    },
+    {
       "name": "ContractedCountryListResponseRecords",
       "fields": [
         {
@@ -44032,6 +46064,91 @@
           "type": "string",
           "description": "Official name of a country",
           "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "SipRegistrationDeviceEmergencyInfoAddress",
+      "fields": [
+        {
+          "type": "string",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "State/province name",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if emergency address is out of country",
+          "name": "outOfCountry"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
         }
       ]
     },
@@ -45847,7 +47964,7 @@
             "Subscriptions"
           ],
           "method2": "post",
-          "description": "Creates a new subscription for the current authorized user / client application.\nThe number of subscriptions per user extension is limited to 20.\n",
+          "description": "This API allows client applications to register a new subscription so that it\ncan be notified of events when they occur on the platform.\n\nA subscription relates to a set of events that a client application would like\nto be informed of and the delivery channel by which they will be notified of\nthose events. How subscriptions are established depends upon the notification\nchannel the client application would like to use to receive the event\nnotification. For example, to create a webhook a developer would create a\nsubscription via a REST API call, while specifying a list of events or \"event\nfilters\" to be notified of, a transport type of `WebHook`, and the address or\nURL to which they would like the webhook delivered.\n\nHowever, developers wishing to subscribe to a set of events via a WebSocket\nchannel, would first connect to the WebSocket gateway, and then issue their\nsubscription request over the WebSocket itself, as opposed to making a REST\nAPI call to this endpoint.\n\nWhile the protocol for establishing a subscription may vary depending upon\nthe delivery channel for that subscription, the schemas used for representing\na subscription are the same across all delivery modes.\n\nSubscriptions are currently limited to 20 subscriptions per user/extension (for particular application).\n\nRingCentral currently supports the following delivery modes for event subscriptions:\n\n* [WebHook](https://developers.ringcentral.com/guide/notifications/webhooks/quick-start) - to receive event notifications as an HTTP POST to a given URL\n* [WebSocket](https://developers.ringcentral.com/guide/notifications/websockets/quick-start) - to receive real-time events over a persistent WebSocket connection\n* [PubNub](https://developers.ringcentral.com/guide/notifications/push-notifications/quick-start) (deprecated) - to receive a push notification sent directly to a client application\n\nDevelopers should be aware that the PubNub delivery mode is currently\ndeprecated and will be removed in 2024. Developers are encouraged to\n[migrate their client applications to use WebSockets](https://developers.ringcentral.com/guide/notifications/websockets/migration/)\ninstead.\n",
           "summary": "Create Subscription",
           "operationId": "createSubscription",
           "rateLimitGroup": "Medium",
@@ -45880,7 +47997,7 @@
             "Subscriptions"
           ],
           "method2": "put",
-          "description": "Updates the existing subscription. The client application can extend/narrow\nthe list of events for which it receives notifications within this subscription.\nIf event filters are specified, calling this method modifies them for the\nexisting subscription. The method also allows to set the subscription expiration time.\nIf other than `events` and `expiresIn` parameters are passed in the request they will be ignored.\nIf the request body is empty then the specified subscription will be just renewed without any\nevent filter modifications and with default expiration time.\n",
+          "description": "Updates the existing subscription. The client application can extend or narrow\nthe list of events for which it receives notifications within the current subscription.\nIf event filters are specified, calling this method modifies them for the\nexisting subscription. The method also allows one to set an expiration time for the\nsubscription itself.\n\nIf parameters other than `events` and `expiresIn` are specified in the request they will be ignored.\nIf the request body is empty then the specified subscription will be renewed without any\nevent filter modifications and using the default expiration time.\n\nPlease note that `WebSocket` subscriptions cannot be updated via HTTP interface.\n",
           "summary": "Update Subscription",
           "operationId": "updateSubscription",
           "rateLimitGroup": "Medium",
@@ -46983,7 +49100,7 @@
             "User Settings"
           ],
           "method2": "put",
-          "description": "Updates the user settings.\n",
+          "description": "Updates the user settings.",
           "summary": "Update Extension",
           "operationId": "updateExtension",
           "rateLimitGroup": "Medium",
@@ -47322,7 +49439,7 @@
             "Subscriptions"
           ],
           "method2": "post",
-          "description": "Renews the existing subscription (this request comes with empty body).",
+          "description": "Renews the existing subscription (this request comes with empty body).\n\nPlease note that `WebSocket` subscriptions are renewed automatically while websocket session is alive.\n",
           "summary": "Renew Subscription",
           "operationId": "renewSubscription",
           "rateLimitGroup": "Light",
@@ -47638,7 +49755,7 @@
           ],
           "method2": "list",
           "description": "Returns the list of IVR prompts.",
-          "summary": "Get IVR Prompt List",
+          "summary": "List IVR Prompts",
           "operationId": "listIvrPrompts",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
@@ -47932,7 +50049,7 @@
             "Historical Webinars"
           ],
           "method2": "get",
-          "description": "Returns a historical webinar information by ID.",
+          "description": "Returns a historical webinar information by ID (host interface)",
           "summary": "Get Historical Webinar",
           "operationId": "rcwHistoryGetWebinar",
           "rateLimitGroup": "Heavy",
@@ -48877,8 +50994,7 @@
           "endpoint": "/rcvideo/v1/account/{accountId}/recordings",
           "method": "get",
           "tags": [
-            "Meeting Recordings",
-            "Account Administration"
+            "Meeting Recordings"
           ],
           "method2": "get",
           "description": "Returns the list of meeting recordings belonging to all account users.",
@@ -49667,6 +51783,16 @@
     },
     {
       "paths": [
+        "webinar",
+        "configuration",
+        "v1",
+        "company"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -50089,7 +52215,7 @@
             "Phone Numbers"
           ],
           "method2": "delete",
-          "description": "Method can only delete numbers that have `\"usageType\": \"Inventory\"`.\nIn other words, this method will not delete numbers which are in use on the account - extension direct numbers,\nmain number, etc. It is possible to indicate phone numbers to be deleted using their IDs or exact string values\nin e.164 format. However the same lookup method (by ID or by value) must be used for all numbers within the same API call.\n",
+          "description": "This method can only delete numbers that meet one of the following requirements:\n  - numbers that have `\"usageType\": \"Inventory\"`\n  - `\"Forwarded\"` numbers\n  - `\"Forwarded Company\"` numbers\n\nIn other words, this method will not delete numbers which are in use on the account - extension direct numbers,\nmain number, etc. It is possible to indicate phone numbers to be deleted using their IDs or exact string values\nin e.164 format. However the same lookup method (by ID or by value) must be used for all numbers within the same API call.\n",
           "summary": "Delete Numbers from Inventory",
           "operationId": "deleteNumbersFromInventoryV2",
           "rateLimitGroup": "Medium",
@@ -50108,7 +52234,7 @@
             "Phone Numbers"
           ],
           "method2": "patch",
-          "description": "Assigns or reassigns a phone number as a company or extension number.\n\nAssign scenarios supported:\n- from Inventory to company number\n- from Inventory to extension number.\n\nReassign scenarios supported:\n- from extension to another extension\n- from extension to company number\n- from company number to extension.\n",
+          "description": "Assigns or reassigns a phone number as a company or extension number.\n\nAssign scenarios supported:\n- from Inventory to a company number;\n- from Inventory to an extension number.\n\nReassign scenarios supported:\n- from an extension to another extension;\n- from an extension to a company number;\n- from a company number to an extension.\n",
           "summary": "Assign Phone Number",
           "operationId": "assignPhoneNumberV2",
           "rateLimitGroup": "Medium",
@@ -50237,7 +52363,7 @@
           "responseSchema": {
             "$ref": "ForwardAllCompanyCallsInfo"
           },
-          "bodyParameters": "forwardAllCompanyCallsInfo"
+          "bodyParameters": "forwardAllCompanyCallsRequest"
         }
       ]
     },
@@ -50847,7 +52973,7 @@
             "Presence"
           ],
           "method2": "get",
-          "description": "Returns presence status of an extension or several extensions by their ID(s). Batch request is supported. The 'presenceStatus' is returned as Offline (the parameters 'telephonyStatus', 'message', 'userStatus' and 'dndStatus' are not returned at all) for the following extension types: Department/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.If the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off. Batch request is supported. For batch requests the number of extensions in one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error code InvalidMultipartRequest and the corresponding message 'Extension Presence Info multipart request is limited to 30 extensions'.",
+          "description": "Returns the presence status of an extension or several extensions\nby their ID(s). Batch request is supported. The `presenceStatus` is returned\nas Offline (the parameters `telephonyStatus`, `message`, `userStatus`\nand `dndStatus` are not returned at all) for the following extension types:\nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging\nOnly Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.If\nthe user requests his/her own presence status, the response contains actual\npresence status even if the status publication is turned off. Batch request\nis supported. For batch requests the number of extensions in one request is\nlimited to 30. If more extensions are included in the request, the error code\n400 Bad Request is returned with the logical error code InvalidMultipartRequest\nand the corresponding message Extension Presence Info multipart request\nis limited to 30 extensions.\n",
           "summary": "Get User Presence Status",
           "operationId": "readUserPresenceStatus",
           "rateLimitGroup": "Light",
@@ -51195,35 +53321,6 @@
       "paths": [
         "restapi",
         "account",
-        "ivr-prompts",
-        "content"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}/content",
-          "method": "get",
-          "tags": [
-            "IVR"
-          ],
-          "method2": "get",
-          "description": "Returns media content of an IVR prompt by ID.",
-          "summary": "Get IVR Prompt Content",
-          "operationId": "readIVRPromptContent",
-          "rateLimitGroup": "Medium",
-          "appPermission": "ReadAccounts",
-          "userPermission": "ReadCompanyGreetings",
-          "withParameter": false,
-          "responseSchema": {
-            "type": "string",
-            "format": "binary"
-          }
-        }
-      ]
-    },
-    {
-      "paths": [
-        "restapi",
-        "account",
         "call-queues",
         "members"
       ],
@@ -51447,10 +53544,10 @@
           "endpoint": "/webinar/history/v1/webinars/{webinarId}/sessions/{sessionId}",
           "method": "get",
           "tags": [
-            "Historical Webinars with CoHost access"
+            "Historical Webinars"
           ],
           "method2": "get",
-          "description": "Returns a historical webinar Session by ID. Access allowed to participants with original role as CoHost.",
+          "description": "Returns a historical webinar Session by ID. Access allowed to participants with original role as Host or CoHost.",
           "summary": "Get Historical Webinar Session",
           "operationId": "rcwHistoryGetSession",
           "rateLimitGroup": "Heavy",
@@ -51581,7 +53678,7 @@
             "Devices"
           ],
           "method2": "post",
-          "description": "Adds BYOD devices to an account in bulk",
+          "description": "Adds multiple BYOD (customer provided) devices to an account.",
           "summary": "Add BYOD Devices",
           "operationId": "bulkAddDevicesV2",
           "rateLimitGroup": "Heavy",
@@ -52247,7 +54344,7 @@
           "method2": "list",
           "description": "Returns a profile image of an extension.\n",
           "summary": "Get User Profile Image",
-          "operationId": "readUserProfileImage",
+          "operationId": "readUserProfileImageLegacy",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadExtensions",
@@ -52305,25 +54402,6 @@
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
           "withParameter": false
-        },
-        {
-          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}",
-          "method": "get",
-          "tags": [
-            "User Settings"
-          ],
-          "method2": "get",
-          "description": "Returns the scaled profile image of an extension.\n",
-          "summary": "Get Scaled Profile Image",
-          "operationId": "readScaledProfileImage",
-          "rateLimitGroup": "Light",
-          "appPermission": "ReadAccounts",
-          "userPermission": "ReadExtensions",
-          "withParameter": true,
-          "responseSchema": {
-            "type": "string",
-            "format": "binary"
-          }
         }
       ],
       "parameter": "scaleSize"
@@ -52463,7 +54541,7 @@
             "Call Log"
           ],
           "method2": "get",
-          "description": "Synchronizes call log records",
+          "description": "Synchronizes the user call log records.",
           "summary": "Sync User Call Log",
           "operationId": "syncUserCallLog",
           "rateLimitGroup": "Heavy",
@@ -52528,7 +54606,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "AuthProfileResource"
-          }
+          },
+          "queryParameters": "readAuthorizationProfileParameters"
         }
       ]
     },
@@ -52651,7 +54730,7 @@
           ],
           "method2": "list",
           "description": "Returns call handling rules of an extension.",
-          "summary": "Get Call Handling Rules",
+          "summary": "List Call Handling Rules",
           "operationId": "listAnsweringRules",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
@@ -52994,7 +55073,7 @@
             "Phone Numbers"
           ],
           "method2": "post",
-          "description": "Replaces (swaps) phone numbers from inventory to main, company, direct or company fax numbers.\nUsed to replace temporary numbers when porting process is complete.\n",
+          "description": "Replaces (swaps) phone numbers from Inventory with the main, company, direct or company fax numbers.\nThis method is used to replace temporary numbers when the porting process is complete.\n",
           "summary": "Replace Phone Number",
           "operationId": "replacePhoneNumberV2",
           "rateLimitGroup": "Medium",
@@ -53087,6 +55166,35 @@
           "appPermission": "EditAccounts",
           "userPermission": "AccountAdministration",
           "withParameter": false
+        }
+      ]
+    },
+    {
+      "paths": [
+        "webinar",
+        "configuration",
+        "v1",
+        "company",
+        "sessions"
+      ],
+      "operations": [
+        {
+          "endpoint": "/webinar/configuration/v1/company/sessions",
+          "method": "get",
+          "tags": [
+            "Webinars and Sessions"
+          ],
+          "method2": "get",
+          "description": "Returns the list of Webinar Sessions hosted by all company users or particular user(s) sorted by\n'scheduledStartTime' or 'creationTime' (if 'scheduledStartTime' is not set) in the ascending ordered.\nThe user must have \"WebinarSettings\" permission granted otherwise the API returns HTTP 403.\n",
+          "summary": "List Sessions across Multiple Webinars/Hosts",
+          "operationId": "rcwConfigListAllCompanySessions",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadWebinars",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "WcsSessionGlobalListResource"
+          },
+          "queryParameters": "rcwConfigListAllCompanySessionsParameters"
         }
       ]
     },
@@ -53252,7 +55360,7 @@
           "responseSchema": {
             "$ref": "WcsSessionResource"
           },
-          "bodyParameters": "wcsSessionBaseModel"
+          "bodyParameters": "wcsSessionWithLocaleCodeModel"
         },
         {
           "endpoint": "/webinar/configuration/v1/webinars/{webinarId}/sessions/{sessionId}",
@@ -53301,7 +55409,7 @@
           "responseSchema": {
             "$ref": "WcsSessionResource"
           },
-          "bodyParameters": "wcsSessionBaseModel"
+          "bodyParameters": "wcsSessionWithLocaleCodeModel"
         }
       ],
       "parameter": "sessionId"
@@ -53322,7 +55430,7 @@
             "Phone Numbers"
           ],
           "method2": "post",
-          "description": "Adds phone numbers to the account inventory as unassigned.\nOnly \"Inventory\" usageType is supported. Later we may support other values like \"ForwardedNumber\" etc.\n",
+          "description": "Adds phone numbers to the account Inventory as unassigned. Currently we support the following three enum values: 'Inventory', \n'InventoryPartnerBusinessMobileNumber' and 'PartnerBusinessMobileNumber'. Later we may support some other values like 'ForwardedNumber', etc.\n",
           "summary": "Add Numbers to Inventory",
           "operationId": "addNumbersToInventoryV2",
           "rateLimitGroup": "Heavy",
@@ -53341,7 +55449,7 @@
             "Phone Numbers"
           ],
           "method2": "get",
-          "description": "Returns the result of asynchronous operation which added phone numbers to account inventory.\n",
+          "description": "Returns the result of asynchronous operation which adds phone numbers to the account Inventory.\n",
           "summary": "Get Add Numbers Task Results",
           "operationId": "getBulkAddTaskResultsV2",
           "rateLimitGroup": "Heavy",
@@ -53757,54 +55865,6 @@
       "paths": [
         "restapi",
         "account",
-        "message-store-report",
-        "archive"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive",
-          "method": "get",
-          "tags": [
-            "Message Exports"
-          ],
-          "method2": "list",
-          "description": "Returns the created report with message data not including attachments.",
-          "summary": "Get Message Store Report Archive",
-          "operationId": "readMessageStoreReportArchive",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "ReadMessages",
-          "userPermission": "Users",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "MessageStoreReportArchive"
-          }
-        },
-        {
-          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive/{archiveId}",
-          "method": "get",
-          "tags": [
-            "Message Exports"
-          ],
-          "method2": "get",
-          "description": "Returns one of the report archives with message contents in application/zip format.",
-          "summary": "Get Message Store Report Archive Content",
-          "operationId": "readMessageStoreReportArchiveContent",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "ReadMessages",
-          "userPermission": "Users",
-          "withParameter": true,
-          "responseSchema": {
-            "type": "string",
-            "format": "binary"
-          }
-        }
-      ],
-      "parameter": "archiveId"
-    },
-    {
-      "paths": [
-        "restapi",
-        "account",
         "extension",
         "administered-sites"
       ],
@@ -53959,6 +56019,34 @@
     },
     {
       "paths": [
+        "restapi",
+        "account",
+        "message-store-report",
+        "archive"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-report/{taskId}/archive",
+          "method": "get",
+          "tags": [
+            "Message Exports"
+          ],
+          "method2": "get",
+          "description": "Returns the created report with message data not including attachments.",
+          "summary": "Get Message Store Report Archive",
+          "operationId": "readMessageStoreReportArchive",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadMessages",
+          "userPermission": "Users",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageStoreReportArchive"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
         "webinar",
         "notifications",
         "v1",
@@ -54029,8 +56117,8 @@
             "User Settings"
           ],
           "method2": "post",
-          "description": "Creates user extensions with BYOD devices in bulk.\nIf \"extensionNumber\" is not specified, the next available extension number will be assigned.\n",
-          "summary": "Create User Extensions in Bulk",
+          "description": "Creates multiple user extensions with BYOD (customer provided) devices.\nIf \"extensionNumber\" is not specified, the next available extension number will be assigned.\n",
+          "summary": "Create Multiple User Extensions",
           "operationId": "postBatchProvisionUsers",
           "rateLimitGroup": "Heavy",
           "appPermission": "EditAccounts",
@@ -54168,7 +56256,7 @@
             "Historical Webinars"
           ],
           "method2": "list",
-          "description": "Returns the list of Invitees (co-hosts and panelists) of a given Webinar Session.\nAn implicit record created for a Webinar 'Host' is always returned.\n",
+          "description": "Returns the list of Invitees (co-hosts and panelists) of a given Webinar Session (host interface).\nAn implicit record created for a Webinar 'Host' is always returned.\n",
           "summary": "List Session Invitees",
           "operationId": "rcwHistoryListInvitees",
           "rateLimitGroup": "Heavy",
@@ -54186,7 +56274,7 @@
             "Historical Webinars"
           ],
           "method2": "get",
-          "description": "Returns a historical session invitee information by ID",
+          "description": "Returns a historical session invitee information by ID (host interface).",
           "summary": "Get Session Invitee",
           "operationId": "rcwHistoryGetInvitee",
           "rateLimitGroup": "Heavy",
@@ -54572,38 +56660,6 @@
       "paths": [
         "restapi",
         "account",
-        "extension",
-        "message-store",
-        "content"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}/content/{attachmentId}",
-          "method": "get",
-          "tags": [
-            "Message Store"
-          ],
-          "method2": "get",
-          "description": "Returns a specific message attachment data as media stream.",
-          "summary": "Get Message Content",
-          "operationId": "readMessageContent",
-          "rateLimitGroup": "Medium",
-          "appPermission": "ReadMessages",
-          "userPermission": "ReadMessageContent",
-          "withParameter": true,
-          "responseSchema": {
-            "type": "string",
-            "format": "binary"
-          },
-          "queryParameters": "readMessageContentParameters"
-        }
-      ],
-      "parameter": "attachmentId"
-    },
-    {
-      "paths": [
-        "restapi",
-        "account",
         "telephony",
         "sessions",
         "parties",
@@ -54681,7 +56737,8 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "CallParty"
-          }
+          },
+          "bodyParameters": "holdCallPartyRequest"
         }
       ]
     },
@@ -55040,7 +57097,7 @@
             "Historical Webinars"
           ],
           "method2": "get",
-          "description": "Returns the list of participants of a given Webinar Session.\n",
+          "description": "Returns the list of participants of a given Webinar Session (host interface).\n",
           "summary": "List Session Participants",
           "operationId": "rcwHistoryListParticipants",
           "rateLimitGroup": "Heavy",
@@ -55204,7 +57261,7 @@
             "Invitees"
           ],
           "method2": "patch",
-          "description": "Adds, updates and deletes Webinar Session invitees in bulk (co-hosts and panelists in phase 1\nand also invited attendees in subsequent phases).\nThe payload may contain multiple added, updated or deleted invitees.\nFor each added record either 'firstName'/'lastName'/'email' (for non-authenticated users)\nor 'linkedUser.*' (for authenticated users) must be specified, but not both.\nFor updated invitees 'id' must be specified, 'linkedUser' change is not supported.\nFor deleted invitees only there ids should be specified.\nThe response contains added/updated records (full) and deleted records (ids only).\n\nDeleting an invitee for a Session in 'Active' or 'Finished' status is prohibited.\n",
+          "description": "Adds, updates and deletes Webinar Session invitees in bulk (co-hosts and panelists in phase 1\nand also invited attendees in subsequent phases).\nThe payload may contain multiple added, updated or deleted invitees.\nFor each added record 'role' and either 'firstName'/'lastName'/'email' (for non-authenticated users)\nor 'linkedUser.*' (for authenticated users) must be specified, but not both.\nFor updated invitees 'id'  and 'role' must be specified, 'linkedUser' change is not supported.\nFor deleted invitees only there ids should be specified.\nThe response contains added/updated records (full) and deleted records (ids only).\n\nDeleting an invitee for a Session in 'Active' or 'Finished' status is prohibited.\n",
           "summary": "Bulk Add/Delete Session Invitees",
           "operationId": "rcwConfigUpdateInvitees",
           "rateLimitGroup": "Heavy",
@@ -55631,6 +57688,36 @@
         }
       ],
       "parameter": "switchId"
+    },
+    {
+      "paths": [
+        "webinar",
+        "history",
+        "v1",
+        "webinars",
+        "sessions",
+        "participants",
+        "self"
+      ],
+      "operations": [
+        {
+          "endpoint": "/webinar/history/v1/webinars/{webinarId}/sessions/{sessionId}/participants/self",
+          "method": "get",
+          "tags": [
+            "Historical Webinars"
+          ],
+          "method2": "get",
+          "description": "Returns the participant information specific to a webinar session. Accessible by any authenticated participant.\nFor a non-authenticated participant, API returns error.\n",
+          "summary": "Get Participant Information",
+          "operationId": "rcwHistoryGetParticipantInfo",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadWebinars",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ParticipantReducedModel"
+          }
+        }
+      ]
     },
     {
       "paths": [
