@@ -22,7 +22,6 @@ npm publish
 
 Parsed content is in [./parsed.json](./parsed.json) file.
 
-
 ## Todo
 
 - JobStatusResponse
