@@ -54341,7 +54341,7 @@
           "tags": [
             "User Settings"
           ],
-          "method2": "get",
+          "method2": "list",
           "description": "Returns a profile image of an extension.\n",
           "summary": "Get User Profile Image",
           "operationId": "readUserProfileImageLegacy",
@@ -54402,6 +54402,25 @@
           "appPermission": "EditExtensions",
           "userPermission": "EditUserInfo",
           "withParameter": false
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}",
+          "method": "get",
+          "tags": [
+            "User Settings"
+          ],
+          "method2": "get",
+          "description": "Returns the scaled profile image of an extension.\n",
+          "summary": "Get Scaled Profile Image",
+          "operationId": "readScaledProfileImageLegacy",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "userPermission": "ReadExtensions",
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          }
         }
       ],
       "parameter": "scaleSize"

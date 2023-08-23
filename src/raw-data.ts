@@ -16,6 +16,12 @@ export const getRawData = (filePath: string) => {
           (ops.requestBody.$ref as string).split('/').pop()!
         ] as OpenAPIV3.RequestBodyObject;
       }
+
+      // fix some temporary issues
+      if (ops.summary === 'Get Scaled Profile Image') {
+        ops.deprecated = false;
+      }
+
       operations.push(ops);
     });
   });

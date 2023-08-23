@@ -6,6 +6,8 @@ export interface RawOperation {
   operationId?: string;
   parameters?: OpenAPIV3.ParameterObject[];
   requestBody?: OpenAPIV3.RequestBodyObject;
+  deprecated?: boolean;
+  summary?: string;
 }
 
 export interface Model {
