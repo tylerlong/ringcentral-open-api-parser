@@ -633,6 +633,126 @@
       ]
     },
     {
+      "name": "ReadCallRecordingContentParameters",
+      "description": "Query parameters for operation readCallRecordingContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ReadAccountGreetingContentParameters",
+      "description": "Query parameters for operation readAccountGreetingContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ReadGreetingContentParameters",
+      "description": "Query parameters for operation readGreetingContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ReadScaledProfileImageParameters",
+      "description": "Query parameters for operation readScaledProfileImage",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ReadMessageContentParameters",
+      "description": "Query parameters for operation readMessageContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "ReadIVRPromptContentParameters",
+      "description": "Query parameters for operation readIVRPromptContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "GetBridgeByPstnPinParameters",
       "description": "Query parameters for operation getBridgeByPstnPin",
       "fields": [
@@ -11585,128 +11705,6 @@
       ]
     },
     {
-      "name": "BulkItemResultModel",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Indicates if this item was processed successfully during bulk operation.\nIf false, `bulkItemErrors` attribute contains the list of errors\n",
-          "example": true,
-          "name": "bulkItemSuccessful",
-          "required": true
-        },
-        {
-          "type": "array",
-          "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccessful` is false\n",
-          "minItems": 1,
-          "items": {
-            "$ref": "ApiError"
-          },
-          "name": "bulkItemErrors",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "AddForwardedNumbersRequest",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "AddForwardedNumberRequestItem"
-          },
-          "name": "records",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "AddForwardedNumberResponseItem",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Indicates if this item was processed successfully during bulk operation.\nIf false, `bulkItemErrors` attribute contains the list of errors\n",
-          "example": true,
-          "name": "bulkItemSuccessful",
-          "required": true
-        },
-        {
-          "type": "array",
-          "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccessful` is false\n",
-          "minItems": 1,
-          "items": {
-            "$ref": "ApiError"
-          },
-          "name": "bulkItemErrors",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Forwarded phone number ID. Returned only for successfully added numbers",
-          "name": "id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
-          "maxLength": 18,
-          "example": "+16501234567",
-          "name": "phoneNumber",
-          "required": true
-        },
-        {
-          "$ref": "BulkOperationExtensionReference",
-          "name": "extension",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "AddForwardedNumbersResponse",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "AddForwardedNumberResponseItem"
-          },
-          "name": "records",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "AddForwardedNumberRequestItem",
-      "fields": [
-        {
-          "type": "string",
-          "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
-          "maxLength": 18,
-          "example": "+16501234567",
-          "name": "phoneNumber",
-          "required": true
-        },
-        {
-          "$ref": "BulkOperationExtensionReference",
-          "name": "extension",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "BulkOperationExtensionReference",
-      "description": "Information about an extension this device is assigned to",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a RingCentral  extension",
-          "example": "12345",
-          "name": "id",
-          "required": true
-        }
-      ]
-    },
-    {
       "name": "DeletePhoneNumbersResponse",
       "fields": [
         {
@@ -11963,6 +11961,28 @@
           "required": false,
           "$ref": "AccountPhoneNumberInfoExtension",
           "name": "extension"
+        }
+      ]
+    },
+    {
+      "name": "BulkItemResultModel",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Indicates if this item was processed successfully during bulk operation.\nIf false, `bulkItemErrors` attribute contains the list of errors\n",
+          "example": true,
+          "name": "bulkItemSuccessful",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccessful` is false\n",
+          "minItems": 1,
+          "items": {
+            "$ref": "ApiError"
+          },
+          "name": "bulkItemErrors",
+          "required": false
         }
       ]
     },
@@ -12345,6 +12365,19 @@
           "type": "string",
           "description": "Phone number ID",
           "name": "phoneNumberId",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "BulkOperationExtensionReference",
+      "description": "Information about an extension this device is assigned to",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a RingCentral  extension",
+          "example": "12345",
+          "name": "id",
           "required": true
         }
       ]
@@ -24805,7 +24838,8 @@
         },
         {
           "type": "string",
-          "description": "Call recording file format. Supported format is audio/x-wav",
+          "description": "Call recording file MIME format. Supported format is `audio/wav` and `audio/mpeg`",
+          "example": "audio/wav",
           "name": "contentType",
           "required": true
         },
@@ -51824,6 +51858,35 @@
       "paths": [
         "restapi",
         "account",
+        "greeting",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/greeting/{greetingId}/content",
+          "method": "get",
+          "tags": [
+            "Greetings"
+          ],
+          "method2": "get",
+          "description": "Returns account-level greeting media contents.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Account Greeting Media Content",
+          "operationId": "readAccountGreetingContent",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "readAccountGreetingContentParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "a2p-sms",
         "messages"
       ],
@@ -52178,6 +52241,35 @@
           },
           "queryParameters": "caiSpeechToTextParameters",
           "bodyParameters": "asrInput"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "recording",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/recording/{recordingId}/content",
+          "method": "get",
+          "tags": [
+            "Call Recordings"
+          ],
+          "method2": "get",
+          "description": "Returns media content of a call recording (`audio/mpeg` or `audio/wav`)\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Call Recording Content",
+          "operationId": "readCallRecordingContent",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadCallRecording",
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "readCallRecordingContentParameters"
         }
       ]
     },
@@ -53321,6 +53413,35 @@
       "paths": [
         "restapi",
         "account",
+        "ivr-prompts",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-prompts/{promptId}/content",
+          "method": "get",
+          "tags": [
+            "IVR"
+          ],
+          "method2": "get",
+          "description": "Returns media content of an IVR prompt by ID.",
+          "summary": "Get IVR Prompt Content",
+          "operationId": "readIVRPromptContent",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "readIVRPromptContentParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "call-queues",
         "members"
       ],
@@ -53821,35 +53942,6 @@
         }
       ],
       "parameter": "recordingId"
-    },
-    {
-      "paths": [
-        "restapi",
-        "v2",
-        "accounts",
-        "forwarded-numbers"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/v2/accounts/{accountId}/forwarded-numbers",
-          "method": "post",
-          "tags": [
-            "Phone Numbers"
-          ],
-          "method2": "post",
-          "description": "Adds forwarded numbers to an account.\n\n**Flow #1. For Partners with their own number pool.**\n\nAdds forwarded (ported) phone number(s) in provisioned (activated) state,\nbut the Partner is responsible for all further calls on behalf of this number from fraud perspective.\nIf extension is specified in request body then the number will be added\nat extension level as `ForwardedNumber`. If extension is not specified in request,\na number is assigned directly to an account as `ForwardedCompanyNumber`.\nA forwarded number can be used as an outbound caller ID.\nOnce a number is finally ported it turns into ordinary (not forwarded) account/extension phone number.\n\n**Flow #2. For Partners with RingCentral-managed number pool.**\n\nAdds forwarded (ported) phone number(s) in non-activated state. A forwarded number should be activated\nvia separated RC support flow.\nIf extension is specified in request body then the number will be added\nat extension level as `ForwardedNumber`. If extension is not specified in request,\na number is assigned directly to an account as `ForwardedCompanyNumber`.\n",
-          "summary": "Add Forwarded Numbers",
-          "operationId": "addForwardedNumbersV2",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "EditAccounts",
-          "userPermission": "EditCompanyPhoneNumbers",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "AddForwardedNumbersResponse"
-          },
-          "bodyParameters": "addForwardedNumbersRequest"
-        }
-      ]
     },
     {
       "paths": [
@@ -54410,17 +54502,17 @@
             "User Settings"
           ],
           "method2": "get",
-          "description": "Returns the scaled profile image of an extension.\n",
+          "description": "Returns the scaled profile image of an extension.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
           "summary": "Get Scaled Profile Image",
-          "operationId": "readScaledProfileImageLegacy",
-          "rateLimitGroup": "Light",
+          "operationId": "readScaledProfileImage",
+          "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
-          "userPermission": "ReadExtensions",
           "withParameter": true,
           "responseSchema": {
             "type": "string",
             "format": "binary"
-          }
+          },
+          "queryParameters": "readScaledProfileImageParameters"
         }
       ],
       "parameter": "scaleSize"
@@ -55277,6 +55369,36 @@
         }
       ],
       "parameter": "partyId"
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "extension",
+        "greeting",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/greeting/{greetingId}/content",
+          "method": "get",
+          "tags": [
+            "Greetings"
+          ],
+          "method2": "get",
+          "description": "Returns extension-level greeting media contents.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Extension Greeting Media Content",
+          "operationId": "readGreetingContent",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "readGreetingContentParameters"
+        }
+      ]
     },
     {
       "paths": [
@@ -56674,6 +56796,37 @@
         }
       ],
       "parameter": "taskId"
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "extension",
+        "message-store",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store/{messageId}/content/{attachmentId}",
+          "method": "get",
+          "tags": [
+            "Message Store"
+          ],
+          "method2": "get",
+          "description": "Returns media content of a message attachment.\nThe content is typically an audio file (`audio/mpeg` or `audio/wav`) for voicemails,\nTIFF or PDF for faxes and image/audio/video for MMS.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Message Attachment Content",
+          "operationId": "readMessageContent",
+          "rateLimitGroup": "Medium",
+          "appPermission": "ReadMessages",
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "readMessageContentParameters"
+        }
+      ],
+      "parameter": "attachmentId"
     },
     {
       "paths": [
