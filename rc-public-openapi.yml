@@ -150,6 +150,7 @@ x-tagGroups:
   - "SMB"
   - "Account Federation"
   - "Integrations"
+  - "Enterprise Portal API"
 - name: "Address Book"
   tags:
   - "External Contacts"
@@ -191,6 +192,7 @@ x-tagGroups:
   - "Application Settings"
   - "Async Tasks"
   - "User Notifications"
+  - "Client Versions"
 security:
 - OAuth2: []
 tags:
@@ -1527,6 +1529,207 @@ paths:
           $ref: "#/components/responses/InternalError"
       x-throttling-group: "Heavy"
       x-app-permission: "ReadWebinars"
+  /restapi/v1.0/account/{accountId}/recording/{recordingId}/content:
+    get:
+      tags:
+      - "Call Recordings"
+      summary: "Get Call Recording Content"
+      description: |
+        Returns media content of a call recording (`audio/mpeg` or `audio/wav`)
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readCallRecordingContent"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/CallRecordingId"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            audio/mpeg:
+              schema:
+                type: "string"
+                format: "binary"
+            audio/wav:
+              schema:
+                type: "string"
+                format: "binary"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Heavy"
+      x-app-permission: "ReadCallRecording"
+  /restapi/v1.0/account/{accountId}/greeting/{greetingId}/content:
+    get:
+      tags:
+      - "Greetings"
+      summary: "Get Account Greeting Media Content"
+      description: |
+        Returns account-level greeting media contents.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readAccountGreetingContent"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            audio/*:
+              schema:
+                type: "string"
+                format: "binary"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Heavy"
+      x-app-permission: "ReadAccounts"
+  /restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting/{greetingId}/content:
+    get:
+      tags:
+      - "Greetings"
+      summary: "Get Extension Greeting Media Content"
+      description: |
+        Returns extension-level greeting media contents.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readGreetingContent"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            audio/*:
+              schema:
+                type: "string"
+                format: "binary"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Heavy"
+      x-app-permission: "ReadAccounts"
+  /restapi/v1.0/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}:
+    get:
+      tags:
+      - "User Settings"
+      summary: "Get Scaled Profile Image"
+      description: |
+        Returns the scaled profile image of an extension.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readScaledProfileImage"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      - $ref: "#/components/parameters/ProfileImageScale"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            image/*:
+              schema:
+                type: "string"
+                format: "binary"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Medium"
+      x-app-permission: "ReadAccounts"
+  /restapi/v1.0/account/{accountId}/extension/{extensionId}/message-store/{messageId}/content/{attachmentId}:
+    get:
+      tags:
+      - "Message Store"
+      summary: "Get Message Attachment Content"
+      description: |
+        Returns media content of a message attachment.
+        The content is typically an audio file (`audio/mpeg` or `audio/wav`) for voicemails,
+        TIFF or PDF for faxes and image/audio/video for MMS.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readMessageContent"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      - name: "messageId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "attachmentId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            audio/*:
+              schema:
+                type: "string"
+                format: "binary"
+            image/*:
+              schema:
+                type: "string"
+                format: "binary"
+            video/*:
+              schema:
+                type: "string"
+                format: "binary"
+            application/pdf:
+              schema:
+                type: "string"
+                format: "binary"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Medium"
+      x-app-permission: "ReadMessages"
+  /restapi/v1.0/account/{accountId}/ivr-prompts/{promptId}/content:
+    get:
+      tags:
+      - "IVR"
+      summary: "Get IVR Prompt Content"
+      description: "Returns media content of an IVR prompt by ID."
+      operationId: "readIVRPromptContent"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/IvrPromptId"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "IVR Prompt Media Data"
+          content:
+            audio/*:
+              schema:
+                type: "string"
+                format: "binary"
+      x-media-api: true
+      x-availability: "High"
+      x-throttling-group: "Heavy"
+      x-app-permission: "ReadAccounts"
   /rcvideo/v2/account/{accountId}/extension/{extensionId}/bridges:
     post:
       tags:
@@ -2156,61 +2359,6 @@ paths:
       x-availability: "Limited"
       x-throttling-group: "Heavy"
       x-app-permission: "EditAccounts"
-  /restapi/v2/accounts/{accountId}/forwarded-numbers:
-    post:
-      summary: "Add Forwarded Numbers"
-      description: |
-        Adds forwarded numbers to an account.
-
-        **Flow #1. For Partners with their own number pool.**
-
-        Adds forwarded (ported) phone number(s) in provisioned (activated) state,
-        but the Partner is responsible for all further calls on behalf of this number from fraud perspective.
-        If extension is specified in request body then the number will be added
-        at extension level as `ForwardedNumber`. If extension is not specified in request,
-        a number is assigned directly to an account as `ForwardedCompanyNumber`.
-        A forwarded number can be used as an outbound caller ID.
-        Once a number is finally ported it turns into ordinary (not forwarded) account/extension phone number.
-
-        **Flow #2. For Partners with RingCentral-managed number pool.**
-
-        Adds forwarded (ported) phone number(s) in non-activated state. A forwarded number should be activated
-        via separated RC support flow.
-        If extension is specified in request body then the number will be added
-        at extension level as `ForwardedNumber`. If extension is not specified in request,
-        a number is assigned directly to an account as `ForwardedCompanyNumber`.
-      operationId: "addForwardedNumbersV2"
-      tags:
-      - "Phone Numbers"
-      parameters:
-      - $ref: "#/components/parameters/AccountId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AddForwardedNumbersRequest"
-        required: true
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AddForwardedNumbersResponse"
-        "400":
-          $ref: "#/components/responses/InvalidRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
-        "503":
-          $ref: "#/components/responses/ServiceNotAvailable"
-      x-availability: "Limited"
-      x-throttling-group: "Heavy"
-      x-app-permission: "EditAccounts"
-      x-user-permission: "EditCompanyPhoneNumbers"
   /restapi/v2/accounts/{accountId}/send-welcome-email:
     post:
       tags:
@@ -8715,32 +8863,6 @@ paths:
       x-throttling-group: "Medium"
       x-app-permission: "EditExtensions"
       x-user-permission: "EditUserInfo"
-  /restapi/v1.0/account/{accountId}/extension/{extensionId}/profile-image/{scaleSize}:
-    get:
-      tags:
-      - "User Settings"
-      summary: "Get Scaled Profile Image"
-      deprecated: true
-      description: |
-        Returns the scaled profile image of an extension.
-      operationId: "readScaledProfileImageLegacy"
-      parameters:
-      - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/ProfileImageScale"
-      responses:
-        "200":
-          description: "User Profile Image Media Data"
-          content:
-            image/*:
-              schema:
-                type: "string"
-                format: "binary"
-      x-feature: "ReadExtensions"
-      x-availability: "High"
-      x-throttling-group: "Light"
-      x-app-permission: "ReadAccounts"
-      x-user-permission: "ReadExtensions"
   /restapi/v1.0/account/{accountId}/extension/{extensionId}/call-log:
     get:
       tags:
@@ -20019,76 +20141,6 @@ components:
               deviceId:
                 type: "string"
                 description: "Internal identifier of a device that should be deleted"
-    BulkItemResultModel:
-      type: "object"
-      required:
-      - "bulkItemSuccessful"
-      properties:
-        bulkItemSuccessful:
-          type: "boolean"
-          description: |
-            Indicates if this item was processed successfully during bulk operation.
-            If false, `bulkItemErrors` attribute contains the list of errors
-          example: true
-        bulkItemErrors:
-          type: "array"
-          description: |
-            The list of errors occurred during processing of particular item of bulk operation.
-            Returned only if `bulkItemSuccessful` is false
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/ApiError"
-    AddForwardedNumbersRequest:
-      type: "object"
-      required:
-      - "records"
-      properties:
-        records:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/AddForwardedNumberRequestItem"
-    AddForwardedNumberResponseItem:
-      allOf:
-      - $ref: "#/components/schemas/BulkItemResultModel"
-      - type: "object"
-        required:
-        - "phoneNumber"
-        properties:
-          id:
-            type: "string"
-            description: "Forwarded phone number ID. Returned only for successfully added numbers"
-          phoneNumber:
-            $ref: "#/components/schemas/PhoneNumberE164"
-          extension:
-            $ref: "#/components/schemas/BulkOperationExtensionReference"
-    AddForwardedNumbersResponse:
-      type: "object"
-      required:
-      - "records"
-      properties:
-        records:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/AddForwardedNumberResponseItem"
-    AddForwardedNumberRequestItem:
-      type: "object"
-      required:
-      - "phoneNumber"
-      properties:
-        phoneNumber:
-          $ref: "#/components/schemas/PhoneNumberE164"
-        extension:
-          $ref: "#/components/schemas/BulkOperationExtensionReference"
-    BulkOperationExtensionReference:
-      type: "object"
-      description: "Information about an extension this device is assigned to"
-      required:
-      - "id"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a RingCentral  extension"
-          example: "12345"
     DeletePhoneNumbersResponse:
       type: "object"
       required:
@@ -20283,6 +20335,25 @@ components:
       - "Frozen"
       - "NotActivated"
       - "Unassigned"
+    BulkItemResultModel:
+      type: "object"
+      required:
+      - "bulkItemSuccessful"
+      properties:
+        bulkItemSuccessful:
+          type: "boolean"
+          description: |
+            Indicates if this item was processed successfully during bulk operation.
+            If false, `bulkItemErrors` attribute contains the list of errors
+          example: true
+        bulkItemErrors:
+          type: "array"
+          description: |
+            The list of errors occurred during processing of particular item of bulk operation.
+            Returned only if `bulkItemSuccessful` is false
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ApiError"
     PhoneNumberId:
       type: "string"
       pattern: "^[1-9]\\d{1,14}$"
@@ -20537,6 +20608,16 @@ components:
         phoneNumberId:
           type: "string"
           description: "Phone number ID"
+    BulkOperationExtensionReference:
+      type: "object"
+      description: "Information about an extension this device is assigned to"
+      required:
+      - "id"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a RingCentral  extension"
+          example: "12345"
     BatchProvisionErrorItem:
       type: "object"
       required:
@@ -28698,7 +28779,8 @@ components:
             (access token must be passed via `Authorization` header or query parameter)
         contentType:
           type: "string"
-          description: "Call recording file format. Supported format is audio/x-wav"
+          description: "Call recording file MIME format. Supported format is `audio/wav` and `audio/mpeg`"
+          example: "audio/wav"
         duration:
           type: "integer"
           format: "int32"
@@ -42201,10 +42283,29 @@ components:
       schema:
         type: "string"
         format: "date-time"
-    RcvPageToken:
-      name: "pageToken"
+    CallRecordingId:
+      name: "recordingId"
+      in: "path"
+      description: "Internal identifier of a call recording (returned in Call Log)"
+      required: true
+      schema:
+        type: "string"
+        example: "625387632786"
+    ContentDisposition:
+      name: "contentDisposition"
       in: "query"
-      description: "Token to get the next page"
+      description: "Whether the content is expected to be displayed in the browser, or downloaded and saved locally"
+      required: false
+      schema:
+        type: "string"
+        enum:
+        - "Inline"
+        - "Attachment"
+    ContentDispositionFilename:
+      name: "contentDispositionFilename"
+      in: "query"
+      description: "The default filename of the file to be downloaded"
+      required: false
       schema:
         type: "string"
     AccountId:
@@ -42220,13 +42321,13 @@ components:
         type: "string"
         default: "~"
       example: "~"
-    RcvPerPage:
-      name: "perPage"
-      in: "query"
-      description: "Number of records returned"
+    GreetingId:
+      name: "greetingId"
+      in: "path"
+      description: "Internal identifier of a greeting"
+      required: true
       schema:
-        type: "integer"
-        format: "int32"
+        type: "string"
     ExtensionId:
       name: "extensionId"
       in: "path"
@@ -42240,6 +42341,34 @@ components:
         type: "string"
         default: "~"
       example: "~"
+    ProfileImageScale:
+      name: "scaleSize"
+      in: "path"
+      description: |
+        Dimensions of a profile image which will be returned in response.
+      required: true
+      schema:
+        type: "string"
+    IvrPromptId:
+      name: "promptId"
+      in: "path"
+      description: "Internal identifier of an IVR prompt"
+      required: true
+      schema:
+        type: "string"
+    RcvPageToken:
+      name: "pageToken"
+      in: "query"
+      description: "Token to get the next page"
+      schema:
+        type: "string"
+    RcvPerPage:
+      name: "perPage"
+      in: "query"
+      description: "Number of records returned"
+      schema:
+        type: "integer"
+        format: "int32"
     RcvMeetingId:
       name: "meetingId"
       in: "path"
@@ -42279,13 +42408,6 @@ components:
       name: "fieldId"
       in: "path"
       description: "Custom field identifier"
-      required: true
-      schema:
-        type: "string"
-    GreetingId:
-      name: "greetingId"
-      in: "path"
-      description: "Internal identifier of a greeting"
       required: true
       schema:
         type: "string"
@@ -42518,13 +42640,6 @@ components:
       required: true
       schema:
         type: "string"
-    IvrPromptId:
-      name: "promptId"
-      in: "path"
-      description: "Internal identifier of an IVR prompt"
-      required: true
-      schema:
-        type: "string"
     SiteIdQuery:
       name: "siteId"
       in: "query"
@@ -42567,22 +42682,6 @@ components:
       schema:
         type: "string"
       example: "400142200026-400142200026-bd162f24028442489385eb3f44c18354"
-    CallRecordingId:
-      name: "recordingId"
-      in: "path"
-      description: "Internal identifier of a call recording (returned in Call Log)"
-      required: true
-      schema:
-        type: "string"
-        example: "625387632786"
-    ProfileImageScale:
-      name: "scaleSize"
-      in: "path"
-      description: |
-        Dimensions of a profile image which will be returned in response.
-      required: true
-      schema:
-        type: "string"
     CallLogShowBlocked:
       name: "showBlocked"
       in: "query"
