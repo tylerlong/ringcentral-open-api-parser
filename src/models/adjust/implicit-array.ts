@@ -1,4 +1,4 @@
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 export const implicitArray = (schemas: NamedSchema[]): NamedSchema[] => {
   for (const schema of schemas) {

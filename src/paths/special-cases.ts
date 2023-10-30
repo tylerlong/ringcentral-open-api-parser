@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 
-import { Path } from '../types';
+import type { Path } from '../types';
 
 export const handleSpecialCases = (paths: Path[]) => {
   // body parameter is string[]

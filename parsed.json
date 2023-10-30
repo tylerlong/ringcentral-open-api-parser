@@ -984,21 +984,6 @@
       ]
     },
     {
-      "name": "ListLicensesV2Parameters",
-      "description": "Query parameters for operation listLicensesV2",
-      "fields": [
-        {
-          "name": "costCenterIds",
-          "explode": true,
-          "description": "Identifiers of cost centers to return licenses for",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    {
       "name": "ReadDeviceParameters",
       "description": "Query parameters for operation readDevice",
       "fields": [
@@ -2162,7 +2147,7 @@
       "fields": [
         {
           "name": "extensionNumber",
-          "description": "Number of extension to be retrieved",
+          "description": "Extension short number to filter records",
           "type": "string"
         },
         {
@@ -11452,6 +11437,11 @@
           "required": true
         },
         {
+          "$ref": "StatusInfo",
+          "name": "statusInfo",
+          "required": false
+        },
+        {
           "description": "Company name",
           "type": "string",
           "maxLength": 64,
@@ -11580,6 +11570,39 @@
           ],
           "name": "version",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "StatusInfo",
+      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Type of suspension, voluntarily or not",
+          "enum": [
+            "SuspendedVoluntarily",
+            "SuspendedInvoluntarily",
+            "CancelledVoluntarily",
+            "CancelledInvoluntarily"
+          ],
+          "example": "CancelledVoluntarily",
+          "name": "reason"
+        },
+        {
+          "type": "string",
+          "description": "A meaningful description of the reason to change the status",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "By customer request. Case ABC123",
+          "name": "comment"
+        },
+        {
+          "type": "string",
+          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
+          "format": "date-time",
+          "example": "2023-03-26T11:30:45.940Z",
+          "name": "till"
         }
       ]
     },
@@ -12383,6 +12406,95 @@
       ]
     },
     {
+      "name": "BulkManageLicensesRequest",
+      "description": "Request to assign/unassign licenses",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "LicenseAssignmentEntry"
+          },
+          "name": "assignedLicenses"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "LicenseAssignmentEntry"
+          },
+          "name": "unassignedLicenses"
+        }
+      ]
+    },
+    {
+      "name": "LicenseAssignmentEntry",
+      "fields": [
+        {
+          "type": "string",
+          "description": "SKU of a license",
+          "name": "skuId",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "extensionId",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "BulkManageLicensesResponse",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "LicenseAssignmentResponseEntry"
+          },
+          "name": "assignedLicenses"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "LicenseAssignmentResponseEntry"
+          },
+          "name": "unassignedLicenses"
+        }
+      ]
+    },
+    {
+      "name": "LicenseAssignmentResponseEntry",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Indicates if an assignment operation was successful for this item",
+          "name": "bulkItemSuccess",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "SKU of a license",
+          "name": "skuId",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "name": "extensionId",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccess` is false\n",
+          "minItems": 1,
+          "items": {
+            "$ref": "ApiError"
+          },
+          "name": "bulkItemErrors",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "BatchProvisionErrorItem",
       "fields": [
         {
@@ -12520,196 +12632,6 @@
           "required": true,
           "$ref": "BatchProvisionUsersSuccessItemExtension",
           "name": "extension"
-        }
-      ]
-    },
-    {
-      "name": "LicensesStatisticsResponse",
-      "description": "Returns the list of recurring licenses on the account",
-      "fields": [
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "LicensesStatisticsResponseItem"
-          },
-          "name": "licenses",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "OrderLine",
-      "description": "Particular license or device sku to be ordered (base)",
-      "fields": [
-        {
-          "type": "integer",
-          "description": "The number of items of this kind",
-          "format": "int32",
-          "example": 15,
-          "minimum": 1,
-          "name": "quantity",
-          "required": true
-        },
-        {
-          "type": "string",
-          "maxLength": 50,
-          "example": "LC_HD_529",
-          "name": "skuId",
-          "required": true
-        },
-        {
-          "description": "The cost center ID if necessary",
-          "type": "string",
-          "example": "224149",
-          "name": "costCenterId",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "OrderLineBase",
-      "description": "Particular license or device sku to be ordered (base)",
-      "fields": [
-        {
-          "type": "integer",
-          "description": "The number of items of this kind",
-          "format": "int32",
-          "example": 15,
-          "minimum": 1,
-          "name": "quantity",
-          "required": true
-        },
-        {
-          "type": "string",
-          "maxLength": 50,
-          "example": "LC_HD_529",
-          "name": "skuId",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "LicensesStatisticsResponseItem",
-      "description": "Particular license or device sku to be ordered (base)",
-      "fields": [
-        {
-          "type": "integer",
-          "description": "The number of items of this kind",
-          "format": "int32",
-          "example": 15,
-          "minimum": 1,
-          "name": "quantity",
-          "required": true
-        },
-        {
-          "type": "string",
-          "maxLength": 50,
-          "example": "LC_HD_529",
-          "name": "skuId",
-          "required": true
-        },
-        {
-          "description": "The cost center ID if necessary",
-          "type": "string",
-          "example": "224149",
-          "name": "costCenterId",
-          "required": false
-        },
-        {
-          "type": "boolean",
-          "description": "Indicates if this license is assigned",
-          "name": "assigned",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "BulkManageLicensesRequest",
-      "description": "Request to assign/unassign licenses",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "LicenseAssignmentEntry"
-          },
-          "name": "assignedLicenses"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "LicenseAssignmentEntry"
-          },
-          "name": "unassignedLicenses"
-        }
-      ]
-    },
-    {
-      "name": "LicenseAssignmentEntry",
-      "fields": [
-        {
-          "type": "string",
-          "description": "SKU of a license",
-          "name": "skuId",
-          "required": true
-        },
-        {
-          "type": "integer",
-          "format": "int64",
-          "name": "extensionId",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "BulkManageLicensesResponse",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "LicenseAssignmentResponseEntry"
-          },
-          "name": "assignedLicenses"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "LicenseAssignmentResponseEntry"
-          },
-          "name": "unassignedLicenses"
-        }
-      ]
-    },
-    {
-      "name": "LicenseAssignmentResponseEntry",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Indicates if an assignment operation was successful for this item",
-          "name": "bulkItemSuccess",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "SKU of a license",
-          "name": "skuId",
-          "required": true
-        },
-        {
-          "type": "integer",
-          "format": "int64",
-          "name": "extensionId",
-          "required": false
-        },
-        {
-          "type": "array",
-          "description": "The list of errors occurred during processing of particular item of bulk operation.\nReturned only if `bulkItemSuccess` is false\n",
-          "minItems": 1,
-          "items": {
-            "$ref": "ApiError"
-          },
-          "name": "bulkItemErrors",
-          "required": false
         }
       ]
     },
@@ -14761,7 +14683,6 @@
           "description": "Payment type. 'External' is returned for forwarded numbers\nwhich are not terminated in the RingCentral phone system\n",
           "enum": [
             "External",
-            "TollFree",
             "Local"
           ],
           "name": "paymentType"
@@ -15387,7 +15308,7 @@
     },
     {
       "name": "OwnerInfo",
-      "description": "Deprecated. Information on call owner",
+      "description": "Deprecated. Information on a call owner",
       "fields": [
         {
           "type": "string",
@@ -16253,6 +16174,91 @@
           "type": "string",
           "description": "Extension short number",
           "name": "extensionNumber"
+        }
+      ]
+    },
+    {
+      "name": "ForwardCallPartyResponse",
+      "description": "Information on a party of a call session",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a party",
+          "name": "id"
+        },
+        {
+          "$ref": "CallStatusInfo",
+          "name": "status"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if a call participant is muted or not. **Note:**\nIf a call is also controlled via Hard phone or RingCentral App (not only\nthrough the API by calling call control methods) then it cannot be fully\nmuted/unmuted via API only, in this case the action should be duplicated\nvia Hard phone/RC App interfaces\n",
+          "name": "muted"
+        },
+        {
+          "type": "boolean",
+          "description": "If 'True' then the party is not connected to a session voice\nconference, 'False' means the party is connected to other parties in a\nsession\n",
+          "name": "standAlone"
+        },
+        {
+          "$ref": "ParkInfo",
+          "name": "park"
+        },
+        {
+          "$ref": "PartyInfo",
+          "name": "from"
+        },
+        {
+          "$ref": "PartyInfo",
+          "name": "to"
+        },
+        {
+          "$ref": "OwnerInfo",
+          "name": "owner"
+        },
+        {
+          "type": "string",
+          "description": "Direction of a call",
+          "enum": [
+            "Inbound",
+            "Outbound"
+          ],
+          "name": "direction"
+        },
+        {
+          "type": "string",
+          "description": "A party's role in the conference scenarios. For calls of 'Conference' type only",
+          "enum": [
+            "Host",
+            "Participant"
+          ],
+          "name": "conferenceRole"
+        },
+        {
+          "type": "string",
+          "description": "A party's role in 'Ring Me'/'RingOut' scenarios. For calls of 'Ringout' type only",
+          "enum": [
+            "Initiator",
+            "Target"
+          ],
+          "name": "ringOutRole"
+        },
+        {
+          "type": "string",
+          "description": "A party's role in 'Ring Me'/'RingOut' scenarios. For calls of 'Ringme' type only",
+          "enum": [
+            "Initiator",
+            "Target"
+          ],
+          "name": "ringMeRole"
+        },
+        {
+          "type": "array",
+          "description": "Active recordings list",
+          "items": {
+            "$ref": "RecordingInfo"
+          },
+          "name": "recordings"
         }
       ]
     },
@@ -21583,7 +21589,8 @@
       "description": "Information on the extension, to which the phone number is assigned.\nReturned only for the request of Account phone number list\n",
       "fields": [
         {
-          "type": "string",
+          "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of an extension",
           "name": "id"
         },
@@ -21600,7 +21607,7 @@
         },
         {
           "type": "string",
-          "description": "Number of extension",
+          "description": "Extension short number",
           "name": "extensionNumber"
         },
         {
@@ -22170,6 +22177,22 @@
         {
           "$ref": "PresenceNavigationInfoURI",
           "name": "lastPage"
+        }
+      ]
+    },
+    {
+      "name": "CallRecordingIds",
+      "fields": [
+        {
+          "type": "array",
+          "description": "Call recordings ID(s) to delete",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "name": "records",
+          "required": true
         }
       ]
     },
@@ -22856,15 +22879,57 @@
       ]
     },
     {
+      "name": "AccountHistoryPaging",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty \n(because non-existent page was specified or perPage=0 was requested)\n",
+          "name": "page"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Current page size, describes how many items are in each page. Matches \"perPage\" parameter from the request",
+          "example": 50,
+          "name": "perPage"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Total number of pages in a dataset. May be omitted for some resources due to performance reasons",
+          "example": 25,
+          "name": "total"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Total number of elements in a dataset. May be omitted for some resources due to performance reasons",
+          "example": 25,
+          "name": "totalFound"
+        }
+      ]
+    },
+    {
       "name": "AccountHistorySearchPublicResponse",
       "fields": [
         {
           "type": "array",
-          "description": "List of Records",
+          "description": "List of records",
           "items": {
             "$ref": "AccountHistoryPublicRecord"
           },
           "name": "records"
+        },
+        {
+          "$ref": "AccountHistoryPaging",
+          "name": "paging"
         }
       ]
     },
@@ -25557,11 +25622,11 @@
         },
         {
           "type": "string",
-          "description": "Number of extension",
+          "description": "Extension short number",
           "name": "extensionNumber"
         },
         {
-          "description": "Cost center information",
+          "description": "Cost center information. Applicable if Cost Center feature is enabled. The default is root cost center value",
           "$ref": "ExtensionCreationRequestCostCenter",
           "name": "costCenter"
         },
@@ -25826,7 +25891,7 @@
         },
         {
           "type": "string",
-          "description": "Number of an extension",
+          "description": "Extension short number",
           "name": "extensionNumber"
         },
         {
@@ -26202,7 +26267,7 @@
         },
         {
           "type": "string",
-          "description": "Number of extension",
+          "description": "Extension short number",
           "name": "extensionNumber"
         },
         {
@@ -34044,7 +34109,7 @@
         },
         {
           "type": "string",
-          "description": "Number of extension",
+          "description": "Extension short number",
           "name": "extensionNumber"
         },
         {
@@ -42181,13 +42246,13 @@
         },
         {
           "type": "string",
-          "description": "Task start date in UTC time zone.",
+          "description": "Task start date in UTC time zone",
           "format": "date-time",
           "name": "startDate"
         },
         {
           "type": "string",
-          "description": "Task due date/time in UTC time zone.",
+          "description": "Task due date/time in UTC time zone",
           "format": "date-time",
           "name": "dueDate"
         },
@@ -42212,7 +42277,7 @@
         },
         {
           "type": "string",
-          "description": "Task details. Max allowed length is 102400 characters (100kB).",
+          "description": "Task details. Max allowed length is 102400 characters (100kB)",
           "name": "description"
         },
         {
@@ -42234,9 +42299,13 @@
         {
           "type": "array",
           "items": {
-            "$ref": "TMTaskListRecords"
+            "$ref": "TMTaskInfo"
           },
           "name": "records"
+        },
+        {
+          "$ref": "TMNavigationInfo",
+          "name": "navigation"
         }
       ]
     },
@@ -42266,18 +42335,18 @@
       "fields": [
         {
           "type": "string",
-          "description": "Task Id",
+          "description": "Internal identifier of a task",
           "name": "id"
         },
         {
           "type": "string",
-          "description": "Task creation date/time in UTC time zone.",
+          "description": "Task creation date/time in UTC time zone",
           "format": "date-time",
           "name": "creationTime"
         },
         {
           "type": "string",
-          "description": "Task the last modified time in UTC time zone.",
+          "description": "Task the last modified time in UTC time zone",
           "format": "date-time",
           "name": "lastModifiedTime"
         },
@@ -42295,7 +42364,7 @@
         },
         {
           "type": "array",
-          "description": "Chat IDs where the task is posted or shared.",
+          "description": "Internal identifiers of the chats where the task is posted or shared",
           "items": {
             "type": "string"
           },
@@ -42303,7 +42372,7 @@
         },
         {
           "type": "string",
-          "description": "Task execution status.",
+          "description": "Task execution status",
           "enum": [
             "Pending",
             "InProgress",
@@ -42313,12 +42382,12 @@
         },
         {
           "type": "string",
-          "description": "Task name/subject.",
+          "description": "Task name/subject",
           "name": "subject"
         },
         {
           "type": "array",
-          "description": "Task name/subject.",
+          "description": "Task name/subject",
           "items": {
             "$ref": "TMTaskInfoAssignees"
           },
@@ -42326,7 +42395,7 @@
         },
         {
           "type": "string",
-          "description": "How the task completeness should be determined.",
+          "description": "How the task completeness should be determined",
           "enum": [
             "Simple",
             "AllAssignees",
@@ -42344,19 +42413,19 @@
         },
         {
           "type": "string",
-          "description": "Task start date.",
+          "description": "Task start date",
           "format": "date-time",
           "name": "startDate"
         },
         {
           "type": "string",
-          "description": "Task due date/time.",
+          "description": "Task due date/time",
           "format": "date-time",
           "name": "dueDate"
         },
         {
           "type": "string",
-          "description": "Font color of a post with the current task.",
+          "description": "Font color of a post with the current task",
           "enum": [
             "Black",
             "Red",
@@ -42371,12 +42440,12 @@
         },
         {
           "type": "string",
-          "description": "Task section to group / search by.",
+          "description": "Task section to group / search by",
           "name": "section"
         },
         {
           "type": "string",
-          "description": "Task details.",
+          "description": "Task details",
           "name": "description"
         },
         {
@@ -42403,7 +42472,7 @@
         },
         {
           "type": "string",
-          "description": "Possible value: File. Attachment type (currently, only File is possible).",
+          "description": "Possible value - File. Attachment type (currently, only File is possible)",
           "enum": [
             "File"
           ],
@@ -42411,7 +42480,7 @@
         },
         {
           "type": "string",
-          "description": "Name of the attached file (incl. extension name).",
+          "description": "Name of the attached file (incl. extension name)",
           "name": "name"
         },
         {
@@ -42419,6 +42488,21 @@
           "format": "uri",
           "description": "URI",
           "name": "contentUri"
+        }
+      ]
+    },
+    {
+      "name": "TMNavigationInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Previous page token. To get previous page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens",
+          "name": "prevPageToken"
+        },
+        {
+          "type": "string",
+          "description": "Next page token. To get next page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens",
+          "name": "nextPageToken"
         }
       ]
     },
@@ -42563,21 +42647,6 @@
         {
           "$ref": "TMNavigationInfo",
           "name": "navigation"
-        }
-      ]
-    },
-    {
-      "name": "TMNavigationInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Previous page token. To get previous page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens",
-          "name": "prevPageToken"
-        },
-        {
-          "type": "string",
-          "description": "Next page token. To get next page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens",
-          "name": "nextPageToken"
         }
       ]
     },
@@ -42830,7 +42899,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Task name/subject. Max allowed length is 250 characters.",
+          "description": "Task name/subject. Max allowed length is 250 characters",
           "name": "subject",
           "required": true
         },
@@ -46819,7 +46888,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Assignee Id",
+          "description": "Internal identifier of an assignee",
           "name": "id"
         }
       ]
@@ -46856,27 +46925,23 @@
           "minimum": 1,
           "type": "integer",
           "format": "int32",
-          "description": "Count of iterations of periodic tasks.",
+          "description": "Count of iterations of periodic tasks",
           "name": "endingAfter"
         },
         {
           "type": "string",
-          "description": "The end date of periodic task in UTC time zone.",
+          "description": "The end date of periodic task in UTC time zone",
           "format": "date-time",
           "name": "endingOn"
         }
       ]
     },
     {
-      "name": "TMTaskListRecords",
-      "fields": []
-    },
-    {
       "name": "TMTaskInfoCreator",
       "fields": [
         {
           "type": "string",
-          "description": "Creator Id",
+          "description": "Internal identifier of a task creator",
           "name": "id"
         }
       ]
@@ -46886,7 +46951,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Assignee Id",
+          "description": "Internal identifier of an assignee",
           "name": "id"
         },
         {
@@ -46905,7 +46970,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Task recurrence settings. None for non-periodic tasks.",
+          "description": "Task recurrence settings. None for non-periodic tasks",
           "enum": [
             "None",
             "Daily",
@@ -46918,7 +46983,7 @@
         },
         {
           "type": "string",
-          "description": "Task ending condition.",
+          "description": "Task ending condition",
           "enum": [
             "None",
             "Count",
@@ -46931,12 +46996,12 @@
           "minimum": 1,
           "type": "integer",
           "format": "int32",
-          "description": "Count of iterations of periodic tasks.",
+          "description": "Count of iterations of periodic tasks",
           "name": "endingAfter"
         },
         {
           "type": "string",
-          "description": "End date of periodic task.",
+          "description": "End date of periodic task",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -46947,7 +47012,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Assignee Id",
+          "description": "Internal identifier of an assignee",
           "name": "id"
         }
       ]
@@ -46957,7 +47022,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Assignee Id",
+          "description": "Internal identifier of an assignee",
           "name": "id"
         }
       ]
@@ -50357,6 +50422,16 @@
     {
       "paths": [
         "restapi",
+        "v2",
+        "accounts",
+        "licenses"
+      ],
+      "operations": [],
+      "noParentParameter": false
+    },
+    {
+      "paths": [
+        "restapi",
         "account",
         "phone-number"
       ],
@@ -50498,35 +50573,6 @@
         }
       ],
       "parameter": "roleId"
-    },
-    {
-      "paths": [
-        "restapi",
-        "v2",
-        "accounts",
-        "licenses"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/v2/accounts/{accountId}/licenses",
-          "method": "get",
-          "tags": [
-            "Licenses"
-          ],
-          "method2": "get",
-          "description": "Returns the information about account licenses.\nLicense blocks are grouped by \"skuId\", \"assigned\" flag and \"costCenterId\".\nOnly recurring licenses are returned.\n",
-          "summary": "List Account Licenses",
-          "operationId": "listLicensesV2",
-          "rateLimitGroup": "Light",
-          "appPermission": "ReadAccounts",
-          "userPermission": "LicensesAndInventory",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "LicensesStatisticsResponse"
-          },
-          "queryParameters": "listLicensesV2Parameters"
-        }
-      ]
     },
     {
       "paths": [
@@ -51444,7 +51490,7 @@
             "User Settings"
           ],
           "method2": "delete",
-          "description": "Deletes user extension(s) and either keeps or destroys the assets - numbers and devices.\nMultiple extensions can be deleted with a single API call.\n",
+          "description": "Deletes user extension(s) and either keeps or destroys the assets - numbers and devices.\nMultiple extensions can be deleted with a single API call.\n**Please note:** This API cannot be tested on Sandbox.\n",
           "summary": "Delete User Extensions",
           "operationId": "bulkDeleteUsersV2",
           "rateLimitGroup": "Heavy",
@@ -51655,6 +51701,31 @@
         }
       ],
       "parameter": "batchId"
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "call-recordings"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/call-recordings",
+          "method": "delete",
+          "tags": [
+            "Call Recordings"
+          ],
+          "method2": "delete",
+          "description": "Deletes company call recordings by ID(s).",
+          "summary": "Delete Company Call Recording(s)",
+          "operationId": "deleteCompanyCallRecordings",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "EditCallLog",
+          "userPermission": "EditCompanyCallRecordings",
+          "withParameter": false,
+          "bodyParameters": "callRecordingIds"
+        }
+      ]
     },
     {
       "paths": [
@@ -57306,7 +57377,7 @@
           "appPermission": "CallControl",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "CallParty"
+            "$ref": "ForwardCallPartyResponse"
           },
           "bodyParameters": "forwardTarget"
         }

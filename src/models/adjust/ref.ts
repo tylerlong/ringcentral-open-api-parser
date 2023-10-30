@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 /**
  * we don't like properties of type `object`, because they should be a new model instead and we `$ref` them.

@@ -1,9 +1,9 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
 import { getEndpointPaths } from './endpoints';
 import { getBridgePaths } from './bridges';
 import { handleSpecialCases } from './special-cases';
-import { Model } from '../types';
+import type { Model } from '../types';
 
 export const preparePaths = (doc: OpenAPIV3.Document, models: Model[]) => {
   const endpointPaths = getEndpointPaths(doc, models);

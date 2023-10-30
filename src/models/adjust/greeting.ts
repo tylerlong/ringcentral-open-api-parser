@@ -1,4 +1,4 @@
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 /**
  * fix creation of greeting

@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 export const fixMiscellaneous = (schemas: NamedSchema[]): NamedSchema[] => {
   for (const name of ['AdaptiveCardRequest', 'AdaptiveCardInfo']) {

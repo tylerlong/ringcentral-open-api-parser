@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 import { capitalizeFirstLetter } from '../../utils';
 
 export const collectResponses = (doc: OpenAPIV3.Document) => {

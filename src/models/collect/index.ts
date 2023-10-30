@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema, RawOperation } from '../../types';
+import type { NamedSchema, RawOperation } from '../../types';
 import { collectRequestBodies } from './request-bodies';
 import { collectQueryParams } from './query-params';
 import { collectSchemas } from './schemas';

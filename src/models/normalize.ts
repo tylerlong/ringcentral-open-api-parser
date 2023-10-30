@@ -1,4 +1,4 @@
-import { Field, Model, NamedSchema } from '../types';
+import type { Field, Model, NamedSchema } from '../types';
 
 const normalizeField = (field: Field): Field => {
   if (field.$ref) {

@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs';
 import { load } from 'js-yaml';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { RawOperation } from './types';
+import type { RawOperation } from './types';
 
 export const getRawData = (filePath: string) => {
   const doc = load(readFileSync(filePath, 'utf8')) as OpenAPIV3.Document;

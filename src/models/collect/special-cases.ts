@@ -1,4 +1,4 @@
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 export const handleSpecialCases = () => {
   // attachment

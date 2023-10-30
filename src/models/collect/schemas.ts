@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 
 export const collectSchemas = (doc: OpenAPIV3.Document) => {
   const schemas: NamedSchema[] = [];

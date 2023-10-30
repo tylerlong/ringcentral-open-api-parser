@@ -1,7 +1,7 @@
 import { isEqual, last, remove, isEmpty } from 'lodash';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { Model, Path, ResponseSchema } from '../types';
+import type { Model, Path, ResponseSchema } from '../types';
 import { capitalizeFirstLetter, lowerCaseFirstLetter } from '../utils';
 
 // eslint-disable-next-line complexity

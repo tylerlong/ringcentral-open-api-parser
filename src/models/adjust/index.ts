@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-import { NamedSchema } from '../../types';
+import type { NamedSchema } from '../../types';
 import { deRef } from './de-ref';
 import { fixFax } from './fax';
 import { fixGreeting } from './greeting';

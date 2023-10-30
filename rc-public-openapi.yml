@@ -2781,6 +2781,43 @@ paths:
       x-throttling-group: "Medium"
       x-app-permission: "EditAccounts"
       x-user-permission: "AccountAdministration"
+  /restapi/v2/accounts/{accountId}/licenses/bulk-assign:
+    post:
+      tags:
+      - "Licenses"
+      summary: "Assign Account Licenses"
+      description: "Assigns/unassigns multiple account licenses in bulk"
+      operationId: "bulkAssignLicensesV2"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkManageLicensesRequest"
+        required: true
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BulkManageLicensesResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-availability: "Limited"
+      x-throttling-group: "Heavy"
+      x-app-permission: "EditAccounts"
   /restapi/v2/accounts/{accountId}/batch-provisioning/users:
     post:
       tags:
@@ -2819,87 +2856,6 @@ paths:
           $ref: "#/components/responses/ServiceNotAvailable"
       x-throttling-group: "Heavy"
       x-app-permission: "EditAccounts"
-  /restapi/v2/accounts/{accountId}/licenses:
-    get:
-      tags:
-      - "Licenses"
-      summary: "List Account Licenses"
-      description: |
-        Returns the information about account licenses.
-        License blocks are grouped by "skuId", "assigned" flag and "costCenterId".
-        Only recurring licenses are returned.
-      operationId: "listLicensesV2"
-      parameters:
-      - $ref: "#/components/parameters/AccountId"
-      - name: "costCenterIds"
-        in: "query"
-        explode: true
-        required: false
-        description: "Identifiers of cost centers to return licenses for"
-        schema:
-          type: "array"
-          items:
-            type: "string"
-      responses:
-        "200":
-          description: "The successful response with the list of licenses"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LicensesStatisticsResponse"
-        "400":
-          $ref: "#/components/responses/InvalidRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
-        "503":
-          $ref: "#/components/responses/ServiceNotAvailable"
-      x-availability: "Limited"
-      x-throttling-group: "Light"
-      x-app-permission: "ReadAccounts"
-      x-user-permission: "LicensesAndInventory"
-  /restapi/v2/accounts/{accountId}/licenses/bulk-assign:
-    post:
-      tags:
-      - "Licenses"
-      summary: "Assign Account Licenses"
-      description: "Assigns/unassigns multiple account licenses in bulk"
-      operationId: "bulkAssignLicensesV2"
-      parameters:
-      - $ref: "#/components/parameters/AccountId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BulkManageLicensesRequest"
-        required: true
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BulkManageLicensesResponse"
-        "400":
-          $ref: "#/components/responses/InvalidRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalError"
-        "503":
-          $ref: "#/components/responses/ServiceNotAvailable"
-      x-availability: "Limited"
-      x-throttling-group: "Heavy"
-      x-app-permission: "EditAccounts"
   /restapi/v2/accounts/{accountId}/extensions:
     delete:
       tags:
@@ -2908,6 +2864,7 @@ paths:
       description: |
         Deletes user extension(s) and either keeps or destroys the assets - numbers and devices.
         Multiple extensions can be deleted with a single API call.
+        **Please note:** This API cannot be tested on Sandbox.
       operationId: "bulkDeleteUsersV2"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4275,7 +4232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CallParty"
+                $ref: "#/components/schemas/ForwardCallPartyResponse"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "403":
@@ -6331,6 +6288,38 @@ paths:
       x-user-permission: "ReadPresenceStatus"
       x-notifications:
       - $ref: "#/components/schemas/AccountPresenceEvent"
+  /restapi/v1.0/account/{accountId}/call-recordings:
+    delete:
+      tags:
+      - "Call Recordings"
+      summary: "Delete Company Call Recording(s)"
+      description: "Deletes company call recordings by ID(s)."
+      operationId: "deleteCompanyCallRecordings"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CallRecordingIds"
+      responses:
+        "204":
+          description: "Successful response"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-availability: "High"
+      x-throttling-group: "Heavy"
+      x-app-permission: "EditCallLog"
+      x-user-permission: "EditCompanyCallRecordings"
   /restapi/v1.0/account/{accountId}/assigned-role:
     get:
       tags:
@@ -8013,7 +8002,7 @@ paths:
       - $ref: "#/components/parameters/AccountId"
       - name: "extensionNumber"
         in: "query"
-        description: "Number of extension to be retrieved"
+        description: "Extension short number to filter records"
         schema:
           type: "string"
       - name: "email"
@@ -14922,7 +14911,7 @@ paths:
       parameters:
       - name: "taskId"
         in: "path"
-        description: "Task Id or comma separated list of task ids"
+        description: "Task identifier or comma separated list of task IDs"
         required: true
         schema:
           type: "string"
@@ -14934,9 +14923,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMTaskInfo"
         "400":
-          description: "Invalid input parameter(-s)."
+          description: "Invalid input parameter(-s)"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Requested task ID does not exist"
       x-feature: "TeamMessaging"
@@ -14959,7 +14948,7 @@ paths:
         "204":
           description: "No Content"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Task with the specified ID does not exist"
       x-feature: "TeamMessaging"
@@ -14993,9 +14982,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMTaskList"
         "400":
-          description: "Invalid input parameter(-s)."
+          description: "Invalid input parameter(-s)"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Task with the specified ID does not exist"
       x-feature: "TeamMessaging"
@@ -15026,9 +15015,9 @@ paths:
         "204":
           description: "No Content"
         "400":
-          description: "Invalid input parameter(-s)."
+          description: "Invalid input parameter(-s)"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Requested task ID does not exist"
       x-feature: "TeamMessaging"
@@ -15483,9 +15472,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMTaskList"
         "400":
-          description: "Invalid input parameter(-s)."
+          description: "Invalid input parameter(-s)"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Specified chat ID does not exist"
       x-feature: "TeamMessaging"
@@ -15518,9 +15507,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMTaskInfo"
         "400":
-          description: "Invalid input parameter(-s)."
+          description: "Invalid input parameter(-s)"
         "403":
-          description: "Forbidden."
+          description: "Forbidden"
         "404":
           description: "Specified chat ID does not exist"
       x-feature: "TeamMessaging"
@@ -19947,6 +19936,8 @@ components:
           - "Confirmed"
           - "Disabled"
           example: "Confirmed"
+        statusInfo:
+          $ref: "#/components/schemas/StatusInfo"
         companyName:
           description: "Company name"
           type: "string"
@@ -20014,6 +20005,30 @@ components:
           description: "Billing package version"
           enum:
           - "1"
+    StatusInfo:
+      type: "object"
+      description: "Optional information to be used when account is moved to \"Disabled\" status"
+      properties:
+        reason:
+          type: "string"
+          description: "Type of suspension, voluntarily or not"
+          enum:
+          - "SuspendedVoluntarily"
+          - "SuspendedInvoluntarily"
+          - "CancelledVoluntarily"
+          - "CancelledInvoluntarily"
+          example: "CancelledVoluntarily"
+        comment:
+          type: "string"
+          description: "A meaningful description of the reason to change the status"
+          minLength: 1
+          maxLength: 256
+          example: "By customer request. Case ABC123"
+        till:
+          type: "string"
+          description: "Date after which the account will get deleted. Parameter can be used to overwrite default retention period"
+          format: "date-time"
+          example: "2023-03-26T11:30:45.940Z"
     PhoneNumberE164:
       type: "string"
       pattern: "^\\+[1-9]\\d{1,14}$"
@@ -20618,6 +20633,89 @@ components:
           type: "string"
           description: "Internal identifier of a RingCentral  extension"
           example: "12345"
+    BulkManageLicensesRequest:
+      description: "Request to assign/unassign licenses"
+      type: "object"
+      properties:
+        assignedLicenses:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LicenseAssignmentEntry"
+        unassignedLicenses:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LicenseAssignmentEntry"
+      example:
+        assignedLicenses:
+        - skuId: "LC_SM_476"
+          extensionId: 123456789
+        - skuId: "LC_SM_476"
+          extensionId: 987654321
+        unassignedLicenses:
+        - skuId: "LC_LM_275"
+          extensionId: 567789898
+    LicenseAssignmentEntry:
+      type: "object"
+      required:
+      - "skuId"
+      - "extensionId"
+      properties:
+        skuId:
+          type: "string"
+          description: "SKU of a license"
+        extensionId:
+          type: "integer"
+          format: "int64"
+    BulkManageLicensesResponse:
+      type: "object"
+      properties:
+        assignedLicenses:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LicenseAssignmentResponseEntry"
+        unassignedLicenses:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/LicenseAssignmentResponseEntry"
+      example:
+        assignedLicenses:
+        - bulkItemSuccess: true
+          skuId: "LC_SM_476"
+          extensionId: 123456789
+        - bulkItemSuccess: true
+          skuId: "LC_SM_476"
+          extensionId: 987654321
+        unassignedLicenses:
+        - bulkItemSuccess: false
+          skuId: "LC_LM_275"
+          extensionId: 567789898
+          bulkItemErrors:
+          - errorCode: "CMN-112"
+            message: "Feature [MeetingsLicenses] is not available for current extension type"
+            parameterName: "extensionId"
+    LicenseAssignmentResponseEntry:
+      type: "object"
+      required:
+      - "skuId"
+      - "bulkItemSuccess"
+      properties:
+        bulkItemSuccess:
+          type: "boolean"
+          description: "Indicates if an assignment operation was successful for this item"
+        skuId:
+          type: "string"
+          description: "SKU of a license"
+        extensionId:
+          type: "integer"
+          format: "int64"
+        bulkItemErrors:
+          type: "array"
+          description: |
+            The list of errors occurred during processing of particular item of bulk operation.
+            Returned only if `bulkItemSuccess` is false
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ApiError"
     BatchProvisionErrorItem:
       type: "object"
       required:
@@ -20760,153 +20858,6 @@ components:
                     example: "12345"
                   phoneNumber:
                     $ref: "#/components/schemas/PhoneNumberE164"
-    LicensesStatisticsResponse:
-      description: "Returns the list of recurring licenses on the account"
-      type: "object"
-      required:
-      - "licenses"
-      properties:
-        licenses:
-          type: "array"
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/LicensesStatisticsResponseItem"
-      example:
-        licenses:
-        - quantity: 2
-          skuId: "LC_ALN_38"
-          assigned: false
-          costCenterId: "224149"
-        - quantity: 3
-          skuId: "LC_ALN_38"
-          assigned: true
-        - quantity: 1
-          skuId: "LC_DL-UNL_50"
-          assigned: true
-        - quantity: 15
-          skuId: "LC_DL-UNL_50"
-          assigned: false
-          costCenterId: "224150"
-    OrderLine:
-      description: "Particular license or device sku to be ordered"
-      allOf:
-      - $ref: "#/components/schemas/OrderLineBase"
-      - type: "object"
-        properties:
-          costCenterId:
-            description: "The cost center ID if necessary"
-            type: "string"
-            example: "224149"
-    OrderLineBase:
-      description: "Particular license or device sku to be ordered (base)"
-      type: "object"
-      required:
-      - "skuId"
-      - "quantity"
-      properties:
-        quantity:
-          type: "integer"
-          description: "The number of items of this kind"
-          format: "int32"
-          example: 15
-          minimum: 1
-        skuId:
-          type: "string"
-          maxLength: 50
-          example: "LC_HD_529"
-    LicensesStatisticsResponseItem:
-      allOf:
-      - $ref: "#/components/schemas/OrderLine"
-      - type: "object"
-        required:
-        - "assigned"
-        properties:
-          assigned:
-            type: "boolean"
-            description: "Indicates if this license is assigned"
-    BulkManageLicensesRequest:
-      description: "Request to assign/unassign licenses"
-      type: "object"
-      properties:
-        assignedLicenses:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/LicenseAssignmentEntry"
-        unassignedLicenses:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/LicenseAssignmentEntry"
-      example:
-        assignedLicenses:
-        - skuId: "LC_SM_476"
-          extensionId: 123456789
-        - skuId: "LC_SM_476"
-          extensionId: 987654321
-        unassignedLicenses:
-        - skuId: "LC_LM_275"
-          extensionId: 567789898
-    LicenseAssignmentEntry:
-      type: "object"
-      required:
-      - "skuId"
-      - "extensionId"
-      properties:
-        skuId:
-          type: "string"
-          description: "SKU of a license"
-        extensionId:
-          type: "integer"
-          format: "int64"
-    BulkManageLicensesResponse:
-      type: "object"
-      properties:
-        assignedLicenses:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/LicenseAssignmentResponseEntry"
-        unassignedLicenses:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/LicenseAssignmentResponseEntry"
-      example:
-        assignedLicenses:
-        - bulkItemSuccess: true
-          skuId: "LC_SM_476"
-          extensionId: 123456789
-        - bulkItemSuccess: true
-          skuId: "LC_SM_476"
-          extensionId: 987654321
-        unassignedLicenses:
-        - bulkItemSuccess: false
-          skuId: "LC_LM_275"
-          extensionId: 567789898
-          bulkItemErrors:
-          - errorCode: "CMN-112"
-            message: "Feature [MeetingsLicenses] is not available for current extension type"
-            parameterName: "extensionId"
-    LicenseAssignmentResponseEntry:
-      type: "object"
-      required:
-      - "skuId"
-      - "bulkItemSuccess"
-      properties:
-        bulkItemSuccess:
-          type: "boolean"
-          description: "Indicates if an assignment operation was successful for this item"
-        skuId:
-          type: "string"
-          description: "SKU of a license"
-        extensionId:
-          type: "integer"
-          format: "int64"
-        bulkItemErrors:
-          type: "array"
-          description: |
-            The list of errors occurred during processing of particular item of bulk operation.
-            Returned only if `bulkItemSuccess` is false
-          minItems: 1
-          items:
-            $ref: "#/components/schemas/ApiError"
     BulkDeleteUsersRequest:
       type: "object"
       required:
@@ -22394,7 +22345,6 @@ components:
             which are not terminated in the RingCentral phone system
           enum:
           - "External"
-          - "TollFree"
           - "Local"
         phoneNumber:
           type: "string"
@@ -22800,7 +22750,7 @@ components:
         extensionId:
           type: "string"
           description: "Internal identifier of an extension that monitors a call"
-      description: "Deprecated. Information on call owner"
+      description: "Deprecated. Information on a call owner"
     RecordingInfo:
       type: "object"
       properties:
@@ -23353,6 +23303,66 @@ components:
         extensionNumber:
           type: "string"
           description: "Extension short number"
+    ForwardCallPartyResponse:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a party"
+        status:
+          $ref: "#/components/schemas/CallStatusInfo"
+        muted:
+          type: "boolean"
+          description: |
+            Specifies if a call participant is muted or not. **Note:**
+            If a call is also controlled via Hard phone or RingCentral App (not only
+            through the API by calling call control methods) then it cannot be fully
+            muted/unmuted via API only, in this case the action should be duplicated
+            via Hard phone/RC App interfaces
+        standAlone:
+          type: "boolean"
+          description: |
+            If 'True' then the party is not connected to a session voice
+            conference, 'False' means the party is connected to other parties in a
+            session
+        park:
+          $ref: "#/components/schemas/ParkInfo"
+        from:
+          $ref: "#/components/schemas/PartyInfo"
+        to:
+          $ref: "#/components/schemas/PartyInfo"
+        owner:
+          $ref: "#/components/schemas/OwnerInfo"
+        direction:
+          type: "string"
+          description: "Direction of a call"
+          enum:
+          - "Inbound"
+          - "Outbound"
+        conferenceRole:
+          type: "string"
+          description: "A party's role in the conference scenarios. For calls of 'Conference' type only"
+          enum:
+          - "Host"
+          - "Participant"
+        ringOutRole:
+          type: "string"
+          description: "A party's role in 'Ring Me'/'RingOut' scenarios. For calls of 'Ringout' type only"
+          enum:
+          - "Initiator"
+          - "Target"
+        ringMeRole:
+          type: "string"
+          description: "A party's role in 'Ring Me'/'RingOut' scenarios. For calls of 'Ringme' type only"
+          enum:
+          - "Initiator"
+          - "Target"
+        recordings:
+          type: "array"
+          description: "Active recordings list"
+          items:
+            $ref: "#/components/schemas/RecordingInfo"
+      description: "Information on a party of a call session"
     SuperviseCallSessionRequest:
       required:
       - "mode"
@@ -26604,7 +26614,8 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          type: "integer"
+          format: "int64"
           description: "Internal identifier of an extension"
         uri:
           type: "string"
@@ -26615,7 +26626,7 @@ components:
           description: "Extension name"
         extensionNumber:
           type: "string"
-          description: "Number of extension"
+          description: "Extension short number"
         partnerId:
           type: "string"
           description: |
@@ -26998,6 +27009,18 @@ components:
           $ref: "#/components/schemas/PresenceNavigationInfoURI"
         lastPage:
           $ref: "#/components/schemas/PresenceNavigationInfoURI"
+    CallRecordingIds:
+      type: "object"
+      required:
+      - "records"
+      properties:
+        records:
+          type: "array"
+          description: "Call recordings ID(s) to delete"
+          items:
+            type: "string"
+          minItems: 1
+          maxItems: 100
     ExtensionWithRolesCollectionResource:
       type: "object"
       properties:
@@ -27442,14 +27465,44 @@ components:
         value:
           type: "string"
           example: "Password"
+    AccountHistoryPaging:
+      type: "object"
+      properties:
+        page:
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 1000
+          description: "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty \n(because non-existent page was specified or perPage=0 was requested)\n"
+        perPage:
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 1000
+          description: "Current page size, describes how many items are in each page. Matches \"perPage\" parameter from the request"
+          example: 50
+        total:
+          type: "integer"
+          format: "int32"
+          minimum: 0
+          description: "Total number of pages in a dataset. May be omitted for some resources due to performance reasons"
+          example: 25
+        totalFound:
+          type: "integer"
+          format: "int32"
+          minimum: 0
+          description: "Total number of elements in a dataset. May be omitted for some resources due to performance reasons"
+          example: 25
     AccountHistorySearchPublicResponse:
       type: "object"
       properties:
         records:
           type: "array"
-          description: "List of Records"
+          description: "List of records"
           items:
             $ref: "#/components/schemas/AccountHistoryPublicRecord"
+        paging:
+          $ref: "#/components/schemas/AccountHistoryPaging"
     AccountHistoryPublicRecord:
       type: "object"
       properties:
@@ -29314,10 +29367,10 @@ components:
           $ref: "#/components/schemas/ContactInfoCreationRequest"
         extensionNumber:
           type: "string"
-          description: "Number of extension"
+          description: "Extension short number"
         costCenter:
           type: "object"
-          description: "Cost center information"
+          description: "Cost center information. Applicable if Cost Center feature is enabled. The default is root cost center value"
           properties:
             id:
               type: "string"
@@ -29518,7 +29571,7 @@ components:
           $ref: "#/components/schemas/ContactInfo"
         extensionNumber:
           type: "string"
-          description: "Number of an extension"
+          description: "Extension short number"
         name:
           type: "string"
           description: |
@@ -29797,7 +29850,7 @@ components:
             $ref: "#/components/schemas/DepartmentInfo"
         extensionNumber:
           type: "string"
-          description: "Number of extension"
+          description: "Extension short number"
         extensionNumbers:
           type: "array"
           items:
@@ -35086,7 +35139,7 @@ components:
           description: "Canonical URI of an extension"
         extensionNumber:
           type: "string"
-          description: "Number of extension"
+          description: "Extension short number"
         partnerId:
           type: "string"
           description: |
@@ -40307,7 +40360,7 @@ components:
             properties:
               id:
                 type: "string"
-                description: "Assignee Id"
+                description: "Internal identifier of an assignee"
         completenessCondition:
           type: "string"
           enum:
@@ -40316,11 +40369,11 @@ components:
           - "Percentage"
         startDate:
           type: "string"
-          description: "Task start date in UTC time zone."
+          description: "Task start date in UTC time zone"
           format: "date-time"
         dueDate:
           type: "string"
-          description: "Task due date/time in UTC time zone."
+          description: "Task due date/time in UTC time zone"
           format: "date-time"
         color:
           type: "string"
@@ -40338,7 +40391,7 @@ components:
           description: "Task section to group / search by. Max allowed length is 100 characters."
         description:
           type: "string"
-          description: "Task details. Max allowed length is 102400 characters (100kB)."
+          description: "Task details. Max allowed length is 102400 characters (100kB)"
         recurrence:
           type: "object"
           properties:
@@ -40365,10 +40418,10 @@ components:
               minimum: 1
               type: "integer"
               format: "int32"
-              description: "Count of iterations of periodic tasks."
+              description: "Count of iterations of periodic tasks"
             endingOn:
               type: "string"
-              description: "The end date of periodic task in UTC time zone."
+              description: "The end date of periodic task in UTC time zone"
               format: "date-time"
         attachments:
           type: "array"
@@ -40380,8 +40433,9 @@ components:
         records:
           type: "array"
           items:
-            type: "object"
-            properties: {}
+            $ref: "#/components/schemas/TMTaskInfo"
+        navigation:
+          $ref: "#/components/schemas/TMNavigationInfo"
     TMAttachmentInfo:
       type: "object"
       properties:
@@ -40401,14 +40455,14 @@ components:
       properties:
         id:
           type: "string"
-          description: "Task Id"
+          description: "Internal identifier of a task"
         creationTime:
           type: "string"
-          description: "Task creation date/time in UTC time zone."
+          description: "Task creation date/time in UTC time zone"
           format: "date-time"
         lastModifiedTime:
           type: "string"
-          description: "Task the last modified time in UTC time zone."
+          description: "Task the last modified time in UTC time zone"
           format: "date-time"
         type:
           type: "string"
@@ -40420,31 +40474,31 @@ components:
           properties:
             id:
               type: "string"
-              description: "Creator Id"
+              description: "Internal identifier of a task creator"
         chatIds:
           type: "array"
-          description: "Chat IDs where the task is posted or shared."
+          description: "Internal identifiers of the chats where the task is posted or shared"
           items:
             type: "string"
         status:
           type: "string"
-          description: "Task execution status."
+          description: "Task execution status"
           enum:
           - "Pending"
           - "InProgress"
           - "Completed"
         subject:
           type: "string"
-          description: "Task name/subject."
+          description: "Task name/subject"
         assignees:
           type: "array"
-          description: "Task name/subject."
+          description: "Task name/subject"
           items:
             type: "object"
             properties:
               id:
                 type: "string"
-                description: "Assignee Id"
+                description: "Internal identifier of an assignee"
               status:
                 type: "string"
                 description: "Task execution status by assignee"
@@ -40453,7 +40507,7 @@ components:
                 - "Completed"
         completenessCondition:
           type: "string"
-          description: "How the task completeness should be determined."
+          description: "How the task completeness should be determined"
           enum:
           - "Simple"
           - "AllAssignees"
@@ -40466,15 +40520,15 @@ components:
           description: "Current completeness percentage of the task with the specified percentage completeness condition"
         startDate:
           type: "string"
-          description: "Task start date."
+          description: "Task start date"
           format: "date-time"
         dueDate:
           type: "string"
-          description: "Task due date/time."
+          description: "Task due date/time"
           format: "date-time"
         color:
           type: "string"
-          description: "Font color of a post with the current task."
+          description: "Font color of a post with the current task"
           enum:
           - "Black"
           - "Red"
@@ -40486,16 +40540,16 @@ components:
           - "Magenta"
         section:
           type: "string"
-          description: "Task section to group / search by."
+          description: "Task section to group / search by"
         description:
           type: "string"
-          description: "Task details."
+          description: "Task details"
         recurrence:
           type: "object"
           properties:
             schedule:
               type: "string"
-              description: "Task recurrence settings. None for non-periodic tasks."
+              description: "Task recurrence settings. None for non-periodic tasks"
               enum:
               - "None"
               - "Daily"
@@ -40505,7 +40559,7 @@ components:
               - "Yearly"
             endingCondition:
               type: "string"
-              description: "Task ending condition."
+              description: "Task ending condition"
               enum:
               - "None"
               - "Count"
@@ -40515,10 +40569,10 @@ components:
               minimum: 1
               type: "integer"
               format: "int32"
-              description: "Count of iterations of periodic tasks."
+              description: "Count of iterations of periodic tasks"
             endingOn:
               type: "string"
-              description: "End date of periodic task."
+              description: "End date of periodic task"
               format: "date-time"
           description: "Task details."
         attachments:
@@ -40533,16 +40587,25 @@ components:
           description: "File ID."
         type:
           type: "string"
-          description: "Possible value: File. Attachment type (currently, only File is possible)."
+          description: "Possible value - File. Attachment type (currently, only File is possible)"
           enum:
           - "File"
         name:
           type: "string"
-          description: "Name of the attached file (incl. extension name)."
+          description: "Name of the attached file (incl. extension name)"
         contentUri:
           type: "string"
           format: "uri"
           description: "URI"
+    TMNavigationInfo:
+      type: "object"
+      properties:
+        prevPageToken:
+          type: "string"
+          description: "Previous page token. To get previous page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens"
+        nextPageToken:
+          type: "string"
+          description: "Next page token. To get next page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens"
     TMCompleteTaskRequest:
       type: "object"
       properties:
@@ -40559,7 +40622,7 @@ components:
             properties:
               id:
                 type: "string"
-                description: "Assignee Id"
+                description: "Internal identifier of an assignee"
         completenessPercentage:
           maximum: 100.0
           minimum: 0
@@ -40643,15 +40706,6 @@ components:
             $ref: "#/components/schemas/TMEventInfo"
         navigation:
           $ref: "#/components/schemas/TMNavigationInfo"
-    TMNavigationInfo:
-      type: "object"
-      properties:
-        prevPageToken:
-          type: "string"
-          description: "Previous page token. To get previous page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens"
-        nextPageToken:
-          type: "string"
-          description: "Next page token. To get next page, user should pass one of returned token in next request and, in turn, required page will be returned with new tokens"
     TMCreateEventRequest:
       required:
       - "endTime"
@@ -40818,7 +40872,7 @@ components:
       properties:
         subject:
           type: "string"
-          description: "Task name/subject. Max allowed length is 250 characters."
+          description: "Task name/subject. Max allowed length is 250 characters"
         assignees:
           type: "array"
           items:
@@ -40826,7 +40880,7 @@ components:
             properties:
               id:
                 type: "string"
-                description: "Assignee Id"
+                description: "Internal identifier of an assignee"
         completenessCondition:
           type: "string"
           default: "Simple"
@@ -42349,6 +42403,11 @@ components:
       required: true
       schema:
         type: "string"
+        enum:
+        - "original"
+        - "90x90"
+        - "195x195"
+        - "584x584"
     IvrPromptId:
       name: "promptId"
       in: "path"

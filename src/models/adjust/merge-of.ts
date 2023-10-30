@@ -1,7 +1,7 @@
 import { mergeWith, isArray, uniq } from 'lodash';
 
-import { NamedSchema } from '../../types';
-import { OpenAPIV3 } from 'openapi-types';
+import type { NamedSchema } from '../../types';
+import type { OpenAPIV3 } from 'openapi-types';
 
 /**
  * How to merge arrays
