@@ -969,14 +969,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegistrantBaseModel"
+              $ref: "#/components/schemas/RegistrantBaseModelWithQuestionnaire"
       responses:
         "201":
           description: "Successful response, new Registrant is created"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegistrantModelResponsePost"
+                $ref: "#/components/schemas/RegistrantModelResponsePostWithQuestionnaire"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "403":
@@ -1010,7 +1010,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegistrantModel"
+                $ref: "#/components/schemas/RegistrantModelWithQuestionnaire"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
@@ -6292,8 +6292,8 @@ paths:
     delete:
       tags:
       - "Call Recordings"
-      summary: "Delete Company Call Recording(s)"
-      description: "Deletes company call recordings by ID(s)."
+      summary: "Delete Company Call Recordings"
+      description: "Deletes company call recordings by their IDs."
       operationId: "deleteCompanyCallRecordings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -8457,18 +8457,19 @@ paths:
           - "Limited"
           - "Bot"
           - "Room"
+          - "DelegatedLinesGroup"
       - name: "page"
         in: "query"
         description: |
           Indicates a page number to retrieve. Only positive number values
-          are allowed. Default value is '1'
+          are allowed
         schema:
           type: "integer"
           format: "int32"
           default: 1
       - name: "perPage"
         in: "query"
-        description: "Indicates a page size (number of items). If not specified, the value is '100' by default"
+        description: "Indicates a page size (number of items)"
         schema:
           type: "integer"
           format: "int32"
@@ -10645,10 +10646,10 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CreateSMSMessage"
-          multipart/mixed:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/CreateSMSMessage"
-          multipart/form-data:
+          multipart/mixed:
             schema:
               $ref: "#/components/schemas/CreateSMSMessage"
         required: true
@@ -10862,10 +10863,10 @@ paths:
       requestBody:
         description: "MMS envelope and content"
         content:
-          multipart/mixed:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/CreateMMSMessage"
-          multipart/form-data:
+          multipart/mixed:
             schema:
               $ref: "#/components/schemas/CreateMMSMessage"
         required: true
@@ -14118,7 +14119,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "409":
-          description: "The {enrollmentId} already exists"
+          description: "The {speakerId} already exists"
           content:
             application/json:
               schema:
@@ -14131,7 +14132,7 @@ paths:
                 $ref: "#/components/schemas/EnrollmentStatus"
       x-throttling-group: "Heavy"
       x-app-permission: "AI"
-  /ai/audio/v1/enrollments/{enrollmentId}:
+  /ai/audio/v1/enrollments/{speakerId}:
     get:
       tags:
       - "Audio"
@@ -14139,7 +14140,7 @@ paths:
       description: "Get The Status of Enrollment for the provided Speaker."
       operationId: "caiEnrollmentsGet"
       parameters:
-      - $ref: "#/components/parameters/EnrollmentId"
+      - $ref: "#/components/parameters/SpeakerId"
       responses:
         "400":
           description: "Bad Request"
@@ -14148,13 +14149,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "404":
-          description: "The {enrollmentId} doesn't exist"
+          description: "The {speakerId} doesn't exist"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "200":
-          description: "Fetch enrollment status for speaker {enrollmentId}"
+          description: "Fetch enrollment status for speaker {speakerId}"
           content:
             application/json:
               schema:
@@ -14168,7 +14169,7 @@ paths:
       description: "Delete The Enrollment for the provided Speaker."
       operationId: "caiEnrollmentsDelete"
       parameters:
-      - $ref: "#/components/parameters/EnrollmentId"
+      - $ref: "#/components/parameters/SpeakerId"
       responses:
         "400":
           description: "Bad Request"
@@ -14177,13 +14178,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "404":
-          description: "The enrollmentId wasn't enrolled"
+          description: "The speakerId wasn't enrolled"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "410":
-          description: "The enrollmentId doesn't exist, already deleted"
+          description: "The speakerId doesn't exist, already deleted"
           content:
             application/json:
               schema:
@@ -14199,7 +14200,7 @@ paths:
       description: "Add newer audio data to improve an existing speaker enrollment"
       operationId: "caiEnrollmentsUpdate"
       parameters:
-      - $ref: "#/components/parameters/EnrollmentId"
+      - $ref: "#/components/parameters/SpeakerId"
       requestBody:
         $ref: "#/components/requestBodies/EnrollmentPatchRequest"
       responses:
@@ -14210,7 +14211,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CaiErrorResponse"
         "404":
-          description: "The {enrollmentId} doesn't exist"
+          description: "The {speakerId} doesn't exist"
           content:
             application/json:
               schema:
@@ -18381,6 +18382,17 @@ components:
               type: "boolean"
               description: "Indicates that work email address is required for registration."
               default: false
+    RegistrantModelResponsePostWithQuestionnaire:
+      allOf:
+      - $ref: "#/components/schemas/RegistrantModelWithQuestionnaire"
+      - type: "object"
+        properties:
+          icalendarSequence:
+            type: "integer"
+            format: "int32"
+            minimum: 0
+            readOnly: true
+            description: "Sequence number for iCalendar email attachments"
     RegQuestionBaseModel:
       type: "object"
       required:
@@ -18403,17 +18415,6 @@ components:
             minItems: 1
             items:
               type: "string"
-    RegistrantModelResponsePost:
-      allOf:
-      - $ref: "#/components/schemas/RegistrantModel"
-      - type: "object"
-        properties:
-          icalendarSequence:
-            type: "integer"
-            format: "int32"
-            minimum: 0
-            readOnly: true
-            description: "Sequence number for iCalendar email attachments"
     VariableAnswerModel:
       allOf:
       - $ref: "#/components/schemas/RegQuestionBaseModel"
@@ -18452,6 +18453,17 @@ components:
             minLength: 5
             description: "The personalized URI for this registrant to cancel the registration"
             example: "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel"
+    RegistrantBaseModelWithQuestionnaire:
+      allOf:
+      - $ref: "#/components/schemas/RegistrantBaseModel"
+      - type: "object"
+        properties:
+          questionnaire:
+            type: "array"
+            description: "Answers on custom registration questions"
+            minItems: 0
+            items:
+              $ref: "#/components/schemas/RegAnswerModel"
     RegistrantBaseModel:
       allOf:
       - $ref: "#/components/schemas/RegistrantMinimalModel"
@@ -18479,16 +18491,6 @@ components:
           participantId:
             type: "string"
             description: "ID of session participant (from Runtime Service - if this registrant attended the webinar)"
-          questionnaire:
-            type: "array"
-            description: "Answers on custom registration questions"
-            minItems: 0
-            items:
-              $ref: "#/components/schemas/RegAnswerModel"
-    RegistrantModel:
-      allOf:
-      - $ref: "#/components/schemas/RcwResourceBaseModel"
-      - $ref: "#/components/schemas/RegistrantBaseModel"
     RegistrantListResource:
       type: "object"
       required:
@@ -18499,9 +18501,13 @@ components:
           type: "array"
           minItems: 0
           items:
-            $ref: "#/components/schemas/RegistrantModel"
+            $ref: "#/components/schemas/RegistrantModelWithQuestionnaire"
         paging:
           $ref: "#/components/schemas/RcwPagingForwardModel"
+    RegistrantModelWithQuestionnaire:
+      allOf:
+      - $ref: "#/components/schemas/RcwResourceBaseModel"
+      - $ref: "#/components/schemas/RegistrantBaseModelWithQuestionnaire"
     RegAnswerModel:
       anyOf:
       - $ref: "#/components/schemas/FixedAnswerModel"
@@ -24220,9 +24226,16 @@ components:
           type: "string"
           description: "Type of suspension"
           enum:
-          - "Voluntarily"
-          - "Involuntarily"
           - "SuspendedVoluntarily"
+          - "SuspendedInvoluntarily"
+          - "CancelledVoluntarily"
+          - "CancelledInvoluntarily"
+        till:
+          type: "string"
+          format: "date-time"
+          description: |
+            Date until which an account will get deleted. The default
+            value is 30 days since the current date
       description: |
         Status information (reason, comment). Returned for 'Disabled'
         status only
@@ -24238,6 +24251,9 @@ components:
           enum:
           - "PartnerId"
           - "CustomerDirectoryId"
+        refAccId:
+          type: "string"
+          description: "Primary federation admin account identifier"
     ExtensionGreetingLanguageInfoRequest:
       type: "object"
       properties:
@@ -24443,6 +24459,8 @@ components:
           $ref: "#/components/schemas/ExtensionGreetingLanguageInfoRequest"
         formattingLocale:
           $ref: "#/components/schemas/ExtensionFormattingLocaleInfoRequest"
+        currency:
+          $ref: "#/components/schemas/ExtensionCurrencyInfoRequest"
         timeFormat:
           type: "string"
           description: "Time format setting"
@@ -24481,6 +24499,12 @@ components:
             'Unassigned' to 'NotActivated/Disabled')
       description: |
         For NotActivated extensions only. Welcome email settings
+    ExtensionCurrencyInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal Identifier of a currency"
     ExtensionBulkUpdateTaskResult:
       type: "object"
       description: "Result record on multiple extension update task"
@@ -28567,6 +28591,10 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/SiteInfo"
+        navigation:
+          $ref: "#/components/schemas/PageNavigationModel"
+        paging:
+          $ref: "#/components/schemas/EnumeratedPagingModel"
     CreateSiteRequest:
       type: "object"
       properties:
@@ -29434,6 +29462,7 @@ components:
           - "User"
           - "VirtualUser"
           - "DigitalUser"
+          - "FlexibleUser"
           - "Department"
           - "Announcement"
           - "Voicemail"
@@ -29741,12 +29770,6 @@ components:
           - "Frozen"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
-        reason:
-          type: "string"
-          description: "Type of suspension"
-        comment:
-          type: "string"
-          description: "Free Form user comment"
         extensionNumber:
           type: "string"
           description: "Extension number available"
@@ -29811,7 +29834,7 @@ components:
           enum:
           - "VideoPro"
           - "VideoProPlus"
-          - "DigitalSignage"
+          - "DigitalSignageOnlyRooms"
           - "Unknown"
         references:
           type: "array"
@@ -29939,6 +29962,7 @@ components:
           - "ParkLocation"
           - "Bot"
           - "Room"
+          - "RoomConnector"
           - "Limited"
           - "Site"
           - "ProxyAdmin"
@@ -30182,6 +30206,7 @@ components:
           - "IvrMenu"
           - "ApplicationExtension"
           - "ParkLocation"
+          - "DelegatedLinesGroup"
       description: "Extension information"
     ExtensionGrantListEvent:
       type: "object"
@@ -30254,6 +30279,9 @@ components:
           description: |
             Specifies whether the current extension is assigned as a Messages Manager
             in the queue referenced in extension object
+        sharedVoicemails:
+          type: "boolean"
+          description: "Specifies whether the user referenced in extension object is sharing voicemails \nwith the current extension\n"
     GetExtensionGrantListResponse:
       required:
       - "navigation"
@@ -33836,25 +33864,18 @@ components:
           type: "string"
         name:
           type: "string"
-    MessageCountryInfo:
+    SmsRequestCountryInfo:
       type: "object"
+      description: "Target number country information. Either `id` or `isoCode` can be specified."
       properties:
         id:
           type: "string"
           description: "Internal identifier of a country"
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Canonical URI of a country"
-        name:
-          type: "string"
-          description: "Official name of a country"
         isoCode:
           type: "string"
-          description: "ISO code of a country"
-        callingCode:
-          type: "string"
-          description: "Calling code of a country"
+          minLength: 2
+          maxLength: 2
+          description: "ISO 3166-1 alpha-2 code of a country"
     GetSMSMessageInfoResponse:
       type: "object"
       properties:
@@ -33960,9 +33981,11 @@ components:
             encoded). If a character is encoded in 4 bytes in UTF-16 it is treated
             as 2 characters, thus restricting the maximum message length to 500 symbols
         country:
-          $ref: "#/components/schemas/MessageCountryInfo"
+          $ref: "#/components/schemas/SmsRequestCountryInfo"
     MessageStoreCallerInfoRequest:
       type: "object"
+      required:
+      - "phoneNumber"
       properties:
         phoneNumber:
           type: "string"
@@ -34269,7 +34292,7 @@ components:
             encoded). If a character is encoded in 4 bytes in UTF-16 it is treated
             as 2 characters, thus restricting the maximum message length to 500 symbols
         country:
-          $ref: "#/components/schemas/MessageCountryInfo"
+          $ref: "#/components/schemas/SmsRequestCountryInfo"
         attachments:
           type: "array"
           description: "Media file(s) to upload"
@@ -34599,7 +34622,9 @@ components:
           description: "Internal identifier of an extension"
         lastUpdated:
           type: "string"
-          description: "Datetime when the message was last modified in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z"
+          description: |
+            Datetime when the message was last modified in ISO 8601 format
+            including timezone, for example 2016-03-10T18:07:52.534Z
           format: "date-time"
         changes:
           type: "array"
@@ -34621,7 +34646,9 @@ components:
           description: "Event filter URI"
         timestamp:
           type: "string"
-          description: "Datetime of sending a notification in [ISO 8601](shttps://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*"
+          description: |
+            Datetime of sending a notification in [ISO 8601](shttps://en.wikipedia.org/wiki/ISO_8601)
+            format including timezone, for example *2016-03-10T18:07:52.534Z*
         subscriptionId:
           type: "string"
           description: "Internal identifier of a subscription"
@@ -38331,7 +38358,7 @@ components:
     EnrollmentStatus:
       required:
       - "enrollmentComplete"
-      - "enrollmentId"
+      - "speakerId"
       - "totalSpeechDuration"
       type: "object"
       properties:
@@ -38348,7 +38375,7 @@ components:
           type: "boolean"
           description: "Status of the enrollment."
           example: true
-        enrollmentId:
+        speakerId:
           type: "string"
           example: "JohnDoe"
         totalEnrollDuration:
@@ -38365,12 +38392,12 @@ components:
       required:
       - "content"
       - "encoding"
-      - "enrollmentId"
+      - "speakerId"
       allOf:
       - $ref: "#/components/schemas/EnrollmentPatchInput"
       - type: "object"
         properties:
-          enrollmentId:
+          speakerId:
             type: "string"
             description: "The enrollment ID to be registered. Acceptable format [a-zA-Z0-9_]+"
             example: "JohnDoe"
@@ -38502,12 +38529,12 @@ components:
             description: "Number of speakers in the file, omit parameter if unknown"
             format: "int32"
             example: 2
-          enrollmentIds:
+          speakerIds:
             type: "array"
             description: "Optional set of speakers to be identified from the call."
             example:
-            - "enrollmentId1"
-            - "enrollmentId2"
+            - "speakerId1"
+            - "speakerId2"
             items:
               type: "string"
           enableVoiceActivityDetection:
@@ -38543,17 +38570,17 @@ components:
           format: "uri"
     IdentifyInput:
       required:
-      - "enrollmentIds"
+      - "speakerIds"
       allOf:
       - $ref: "#/components/schemas/AudioInput"
       - type: "object"
         properties:
-          enrollmentIds:
+          speakerIds:
             type: "array"
             description: "Set of enrolled speakers to be identified from the media."
             example:
-            - "enrollmentId1"
-            - "enrollmentId2"
+            - "speakerId1"
+            - "speakerId2"
             items:
               type: "string"
           enableVoiceActivityDetection:
@@ -42816,8 +42843,8 @@ components:
       explode: false
       schema:
         type: "string"
-    EnrollmentId:
-      name: "enrollmentId"
+    SpeakerId:
+      name: "speakerId"
       in: "path"
       description: "Speaker identifier of enrolled speaker"
       required: true

@@ -2337,19 +2337,20 @@
             "ParkLocation",
             "Limited",
             "Bot",
-            "Room"
+            "Room",
+            "DelegatedLinesGroup"
           ]
         },
         {
           "name": "page",
-          "description": "Indicates a page number to retrieve. Only positive number values\nare allowed. Default value is '1'\n",
+          "description": "Indicates a page number to retrieve. Only positive number values\nare allowed\n",
           "type": "integer",
           "format": "int32",
           "default": 1
         },
         {
           "name": "perPage",
-          "description": "Indicates a page size (number of items). If not specified, the value is '100' by default",
+          "description": "Indicates a page size (number of items)",
           "type": "integer",
           "format": "int32",
           "default": 100
@@ -8034,41 +8035,7 @@
       ]
     },
     {
-      "name": "RegQuestionBaseModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "ID of the custom question",
-          "example": "123456789",
-          "name": "questionId",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "FixedAnswerModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "ID of the custom question",
-          "example": "123456789",
-          "name": "questionId",
-          "required": true
-        },
-        {
-          "type": "array",
-          "description": "The list of answer IDs",
-          "minItems": 1,
-          "items": {
-            "type": "string"
-          },
-          "name": "answerIds",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "RegistrantModelResponsePost",
+      "name": "RegistrantModelResponsePostWithQuestionnaire",
       "fields": [
         {
           "type": "string",
@@ -8209,6 +8176,40 @@
       ]
     },
     {
+      "name": "RegQuestionBaseModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "ID of the custom question",
+          "example": "123456789",
+          "name": "questionId",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "FixedAnswerModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "ID of the custom question",
+          "example": "123456789",
+          "name": "questionId",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "The list of answer IDs",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "name": "answerIds",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "VariableAnswerModel",
       "fields": [
         {
@@ -8284,7 +8285,7 @@
       ]
     },
     {
-      "name": "RegistrantBaseModel",
+      "name": "RegistrantBaseModelWithQuestionnaire",
       "fields": [
         {
           "type": "string",
@@ -8390,7 +8391,122 @@
       ]
     },
     {
-      "name": "RegistrantModel",
+      "name": "RegistrantBaseModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "First (given) name",
+          "maxLength": 64,
+          "example": "John",
+          "x-sensitive-data": "masked",
+          "name": "firstName",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Last (family) name",
+          "maxLength": 64,
+          "example": "Doe",
+          "x-sensitive-data": "masked",
+          "name": "lastName",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "email",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "john.doe@example.com",
+          "description": "User's contact email",
+          "x-sensitive-data": "normalized-anonymized",
+          "name": "email",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true,
+          "maxLength": 256,
+          "minLength": 5,
+          "description": "The personalized URI for this registrant to join the Webinar",
+          "example": "https://v.ringcentral.com/w/a/join/iuyef77fsj473wn10ashjfk34",
+          "name": "joinUri",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true,
+          "maxLength": 256,
+          "minLength": 5,
+          "description": "The personalized URI for this registrant to cancel the registration",
+          "example": "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel",
+          "name": "cancellationUri",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Visitor ID passed from registration page",
+          "name": "visitorId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "ID of a registrant passed from external system",
+          "name": "externalId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Registration time (can be earlier than \"creationTime\" due to indirect persistence)",
+          "format": "date-time",
+          "readOnly": true,
+          "name": "registrationTime",
+          "required": false
+        },
+        {
+          "type": "string",
+          "x-sensitive-data": "normalized-anonymized",
+          "format": "ipv4",
+          "description": "IP address of the registrant's user agent",
+          "name": "ipAddress",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Registration channel source (coming from registration URI)",
+          "name": "source",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "ID of session participant (from Runtime Service - if this registrant attended the webinar)",
+          "name": "participantId",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "RegistrantListResource",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "RegistrantModelWithQuestionnaire"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "RcwPagingForwardModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "RegistrantModelWithQuestionnaire",
       "fields": [
         {
           "type": "string",
@@ -8518,25 +8634,6 @@
           },
           "name": "questionnaire",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "RegistrantListResource",
-      "fields": [
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "RegistrantModel"
-          },
-          "name": "records",
-          "required": true
-        },
-        {
-          "$ref": "RcwPagingForwardModel",
-          "name": "paging",
-          "required": true
         }
       ]
     },
@@ -18049,11 +18146,18 @@
           "type": "string",
           "description": "Type of suspension",
           "enum": [
-            "Voluntarily",
-            "Involuntarily",
-            "SuspendedVoluntarily"
+            "SuspendedVoluntarily",
+            "SuspendedInvoluntarily",
+            "CancelledVoluntarily",
+            "CancelledInvoluntarily"
           ],
           "name": "reason"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date until which an account will get deleted. The default\nvalue is 30 days since the current date\n",
+          "name": "till"
         }
       ]
     },
@@ -18073,6 +18177,11 @@
             "CustomerDirectoryId"
           ],
           "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Primary federation admin account identifier",
+          "name": "refAccId"
         }
       ]
     },
@@ -18379,6 +18488,10 @@
           "name": "formattingLocale"
         },
         {
+          "$ref": "ExtensionCurrencyInfoRequest",
+          "name": "currency"
+        },
+        {
           "type": "string",
           "description": "Time format setting",
           "default": "12h",
@@ -18427,6 +18540,16 @@
           "type": "boolean",
           "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\n",
           "name": "sendWelcomeEmail"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionCurrencyInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal Identifier of a currency",
+          "name": "id"
         }
       ]
     },
@@ -24516,6 +24639,14 @@
             "$ref": "SiteInfo"
           },
           "name": "records"
+        },
+        {
+          "$ref": "PageNavigationModel",
+          "name": "navigation"
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging"
         }
       ]
     },
@@ -25702,6 +25833,7 @@
             "User",
             "VirtualUser",
             "DigitalUser",
+            "FlexibleUser",
             "Department",
             "Announcement",
             "Voicemail",
@@ -26120,16 +26252,6 @@
         },
         {
           "type": "string",
-          "description": "Type of suspension",
-          "name": "reason"
-        },
-        {
-          "type": "string",
-          "description": "Free Form user comment",
-          "name": "comment"
-        },
-        {
-          "type": "string",
           "description": "Extension number available",
           "name": "extensionNumber"
         },
@@ -26212,7 +26334,7 @@
           "enum": [
             "VideoPro",
             "VideoProPlus",
-            "DigitalSignage",
+            "DigitalSignageOnlyRooms",
             "Unknown"
           ],
           "name": "subType"
@@ -26368,6 +26490,7 @@
             "ParkLocation",
             "Bot",
             "Room",
+            "RoomConnector",
             "Limited",
             "Site",
             "ProxyAdmin",
@@ -26707,7 +26830,8 @@
             "PagingOnly",
             "IvrMenu",
             "ApplicationExtension",
-            "ParkLocation"
+            "ParkLocation",
+            "DelegatedLinesGroup"
           ],
           "name": "type"
         }
@@ -26794,6 +26918,11 @@
           "type": "boolean",
           "description": "Specifies whether the current extension is assigned as a Messages Manager\nin the queue referenced in extension object\n",
           "name": "callQueueMessages"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies whether the user referenced in extension object is sharing voicemails \nwith the current extension\n",
+          "name": "sharedVoicemails"
         }
       ]
     },
@@ -32160,7 +32289,8 @@
       ]
     },
     {
-      "name": "MessageCountryInfo",
+      "name": "SmsRequestCountryInfo",
+      "description": "Target number country information. Either `id` or `isoCode` can be specified.",
       "fields": [
         {
           "type": "string",
@@ -32169,24 +32299,10 @@
         },
         {
           "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Official name of a country",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "ISO 3166-1 alpha-2 code of a country",
           "name": "isoCode"
-        },
-        {
-          "type": "string",
-          "description": "Calling code of a country",
-          "name": "callingCode"
         }
       ]
     },
@@ -32357,7 +32473,7 @@
           "required": true
         },
         {
-          "$ref": "MessageCountryInfo",
+          "$ref": "SmsRequestCountryInfo",
           "name": "country",
           "required": false
         }
@@ -32370,7 +32486,8 @@
         {
           "type": "string",
           "description": "Phone number in E.164 format",
-          "name": "phoneNumber"
+          "name": "phoneNumber",
+          "required": true
         }
       ]
     },
@@ -32761,7 +32878,7 @@
           "required": false
         },
         {
-          "$ref": "MessageCountryInfo",
+          "$ref": "SmsRequestCountryInfo",
           "name": "country",
           "required": false
         },
@@ -33256,7 +33373,7 @@
         },
         {
           "type": "string",
-          "description": "Datetime when the message was last modified in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z",
+          "description": "Datetime when the message was last modified in ISO 8601 format\nincluding timezone, for example 2016-03-10T18:07:52.534Z\n",
           "format": "date-time",
           "name": "lastUpdated"
         },
@@ -33290,7 +33407,7 @@
         },
         {
           "type": "string",
-          "description": "Datetime of sending a notification in [ISO 8601](shttps://en.wikipedia.org/wiki/ISO_8601) format including timezone, for example *2016-03-10T18:07:52.534Z*",
+          "description": "Datetime of sending a notification in [ISO 8601](shttps://en.wikipedia.org/wiki/ISO_8601)\nformat including timezone, for example *2016-03-10T18:07:52.534Z*\n",
           "name": "timestamp"
         },
         {
@@ -39036,7 +39153,7 @@
         {
           "type": "string",
           "example": "JohnDoe",
-          "name": "enrollmentId",
+          "name": "speakerId",
           "required": true
         },
         {
@@ -39095,7 +39212,7 @@
           "type": "string",
           "description": "The enrollment ID to be registered. Acceptable format [a-zA-Z0-9_]+",
           "example": "JohnDoe",
-          "name": "enrollmentId",
+          "name": "speakerId",
           "required": true
         }
       ]
@@ -39332,13 +39449,13 @@
           "type": "array",
           "description": "Optional set of speakers to be identified from the call.",
           "example": [
-            "enrollmentId1",
-            "enrollmentId2"
+            "speakerId1",
+            "speakerId2"
           ],
           "items": {
             "type": "string"
           },
-          "name": "enrollmentIds",
+          "name": "speakerIds",
           "required": false
         },
         {
@@ -39425,13 +39542,13 @@
           "type": "array",
           "description": "Optional set of speakers to be identified from the call.",
           "example": [
-            "enrollmentId1",
-            "enrollmentId2"
+            "speakerId1",
+            "speakerId2"
           ],
           "items": {
             "type": "string"
           },
-          "name": "enrollmentIds",
+          "name": "speakerIds",
           "required": false
         },
         {
@@ -39535,13 +39652,13 @@
           "type": "array",
           "description": "Set of enrolled speakers to be identified from the media.",
           "example": [
-            "enrollmentId1",
-            "enrollmentId2"
+            "speakerId1",
+            "speakerId2"
           ],
           "items": {
             "type": "string"
           },
-          "name": "enrollmentIds",
+          "name": "speakerIds",
           "required": true
         },
         {
@@ -39627,13 +39744,13 @@
           "type": "array",
           "description": "Optional set of speakers to be identified from the call.",
           "example": [
-            "enrollmentId1",
-            "enrollmentId2"
+            "speakerId1",
+            "speakerId2"
           ],
           "items": {
             "type": "string"
           },
-          "name": "enrollmentIds",
+          "name": "speakerIds",
           "required": false
         },
         {
@@ -48417,7 +48534,7 @@
           "bodyParameters": "enrollmentInput"
         },
         {
-          "endpoint": "/ai/audio/v1/enrollments/{enrollmentId}",
+          "endpoint": "/ai/audio/v1/enrollments/{speakerId}",
           "method": "get",
           "tags": [
             "Audio"
@@ -48434,7 +48551,7 @@
           }
         },
         {
-          "endpoint": "/ai/audio/v1/enrollments/{enrollmentId}",
+          "endpoint": "/ai/audio/v1/enrollments/{speakerId}",
           "method": "delete",
           "tags": [
             "Audio"
@@ -48448,7 +48565,7 @@
           "withParameter": true
         },
         {
-          "endpoint": "/ai/audio/v1/enrollments/{enrollmentId}",
+          "endpoint": "/ai/audio/v1/enrollments/{speakerId}",
           "method": "patch",
           "tags": [
             "Audio"
@@ -48466,7 +48583,7 @@
           "bodyParameters": "enrollmentPatchInput"
         }
       ],
-      "parameter": "enrollmentId"
+      "parameter": "speakerId"
     },
     {
       "paths": [
@@ -51716,8 +51833,8 @@
             "Call Recordings"
           ],
           "method2": "delete",
-          "description": "Deletes company call recordings by ID(s).",
-          "summary": "Delete Company Call Recording(s)",
+          "description": "Deletes company call recordings by their IDs.",
+          "summary": "Delete Company Call Recordings",
           "operationId": "deleteCompanyCallRecordings",
           "rateLimitGroup": "Heavy",
           "appPermission": "EditCallLog",
@@ -56161,9 +56278,9 @@
           "appPermission": "EditWebinars",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "RegistrantModelResponsePost"
+            "$ref": "RegistrantModelResponsePostWithQuestionnaire"
           },
-          "bodyParameters": "registrantBaseModel"
+          "bodyParameters": "registrantBaseModelWithQuestionnaire"
         },
         {
           "endpoint": "/webinar/registration/v1/sessions/{sessionId}/registrants/{registrantId}",
@@ -56179,7 +56296,7 @@
           "appPermission": "ReadWebinars",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "RegistrantModel"
+            "$ref": "RegistrantModelWithQuestionnaire"
           },
           "queryParameters": "rcwRegGetRegistrantParameters"
         },
