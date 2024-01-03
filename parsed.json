@@ -939,19 +939,15 @@
         },
         {
           "name": "status",
-          "description": "Status(es) of phone numbers to be returned",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise it is an external number not yet ported to RingCentral",
-            "enum": [
-              "Normal",
-              "Pending",
-              "PortedIn",
-              "Temporary",
-              "Unknown"
-            ]
-          }
+          "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise it is an external number not yet ported to RingCentral",
+          "type": "string",
+          "enum": [
+            "Normal",
+            "Pending",
+            "PortedIn",
+            "Temporary",
+            "Unknown"
+          ]
         },
         {
           "name": "tollType",
@@ -1965,7 +1961,7 @@
         },
         {
           "name": "perPage",
-          "description": "Records count to be returned per one page. It can be either integer or string with the specific keyword values: \n- `all` - all records are returned in one page\n- `max` - maximum count of records that can be returned in one page\n",
+          "description": "Records count to be returned per one page. It can be either integer or string with the specific keyword values:\n- `all` - all records are returned in one page\n- `max` - maximum count of records that can be returned in one page\n",
           "type": "string",
           "format": "int32",
           "default": 1000,
@@ -3426,7 +3422,7 @@
       "fields": [
         {
           "name": "status",
-          "description": "Status of a phone number. Multiple values are supported",
+          "description": "Status of a phone number",
           "type": "string",
           "enum": [
             "Normal",
@@ -9072,6 +9068,13 @@
           "required": true
         },
         {
+          "type": "string",
+          "description": "Localized time zone description.",
+          "example": "Eastern Time (America/New_York)",
+          "name": "localizedTimeZoneDescription",
+          "required": true
+        },
+        {
           "type": "integer",
           "format": "int32",
           "description": "The time offset (positive, in seconds) indicating how much in advance\n(comparing to \"scheduledStartTime\") panel members should join for the pre-webinar team sync\n",
@@ -9228,6 +9231,13 @@
           "required": true
         },
         {
+          "type": "string",
+          "description": "Localized time zone description.",
+          "example": "Eastern Time (America/New_York)",
+          "name": "localizedTimeZoneDescription",
+          "required": true
+        },
+        {
           "type": "integer",
           "format": "int32",
           "description": "The time offset (positive, in seconds) indicating how much in advance\n(comparing to \"scheduledStartTime\") panel members should join for the pre-webinar team sync\n",
@@ -9364,6 +9374,13 @@
           "minLength": 3,
           "example": "America/New_York",
           "name": "timeZone",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Localized time zone description.",
+          "example": "Eastern Time (America/New_York)",
+          "name": "localizedTimeZoneDescription",
           "required": true
         },
         {
@@ -10092,6 +10109,13 @@
           "minLength": 3,
           "example": "America/New_York",
           "name": "timeZone",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Localized time zone description.",
+          "example": "Eastern Time (America/New_York)",
+          "name": "localizedTimeZoneDescription",
           "required": true
         },
         {
@@ -10957,6 +10981,11 @@
           "type": "string",
           "description": "caller id",
           "name": "callerId"
+        },
+        {
+          "description": "pass-thru parameter in join url",
+          "type": "string",
+          "name": "correlationId"
         }
       ]
     },
@@ -12274,6 +12303,64 @@
       ]
     },
     {
+      "name": "RemoveLineResponse",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a source device",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Device type",
+          "default": "HardPhone",
+          "enum": [
+            "HardPhone",
+            "SoftPhone",
+            "OtherPhone",
+            "MobileDevice",
+            "BLA",
+            "Paging",
+            "WebPhone",
+            "WebRTC",
+            "ZoomMobile",
+            "ZoomPhone",
+            "Room",
+            "Unknown"
+          ],
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The display name of a source device",
+          "example": "My Device N1",
+          "name": "name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Serial number of a device (HardPhone)",
+          "example": "ff:ff:ff:ff:ff:ff",
+          "name": "serial",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "RemoveLineRequest",
+      "fields": [
+        {
+          "type": "boolean",
+          "default": true,
+          "description": "The flag that controls what to do with the number and device:\n  - if value ```keepAssetsInInventory == true```, the given device is moved to unassigned devices\nand the number is moved to the number inventory;\n  - if value ```keepAssetsInInventory == false```, the given device and number is removed from the account;\n  - if the parameter keepAssetsInInventory is not set (empty body) or the value of the parameter is empty,\ndefault value ```keepAssetsInInventory == true``` is used.\n",
+          "name": "keepAssetsInInventory",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "BulkAddDevicesItem",
       "fields": [
         {
@@ -13263,7 +13350,7 @@
         },
         {
           "$ref": "UBrandInfo",
-          "name": "uBrand"
+          "name": "ubrand"
         }
       ]
     },
@@ -22349,6 +22436,13 @@
       "fields": [
         {
           "type": "string",
+          "description": "Link to an assigned role resource",
+          "format": "uri",
+          "readOnly": true,
+          "name": "uri"
+        },
+        {
+          "type": "string",
           "description": "Internal identifier of a role",
           "name": "id"
         },
@@ -25287,6 +25381,31 @@
       ]
     },
     {
+      "name": "DefaultUserRole",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to a default role resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a default role",
+          "name": "id"
+        },
+        {
+          "maxLength": 128,
+          "minLength": 0,
+          "pattern": "^((?!(<|>|\\/|\\\")).)*$",
+          "type": "string",
+          "description": "Custom name of a default role",
+          "example": "My Custom User Role",
+          "name": "displayName"
+        }
+      ]
+    },
+    {
       "name": "DefaultUserRoleRequest",
       "fields": [
         {
@@ -27903,13 +28022,12 @@
         {
           "type": "string",
           "format": "uri",
-          "description": "Link to a recipient extension resource",
+          "description": "Link to a voicemail recipient extension resource",
           "name": "uri"
         },
         {
-          "type": "integer",
-          "format": "int64",
-          "description": "Internal identifier of a recipient extension",
+          "description": "Internal identifier of a voicemail recipient",
+          "type": "string",
           "name": "id"
         }
       ]
@@ -38867,6 +38985,7 @@
         {
           "type": "string",
           "example": "0",
+          "description": "Paragraph index of the long summary.",
           "name": "groupId",
           "required": false
         },
@@ -38919,8 +39038,6 @@
             "AbstractiveSummaryLong",
             "AbstractiveSummaryShort",
             "KeyPhrases",
-            "Tasks",
-            "Titles",
             "QuestionsAsked",
             "OverallSentiment",
             "Topics"
@@ -39025,14 +39142,7 @@
             "Energy",
             "Pace",
             "TalkToListenRatio",
-            "Patience",
-            "LongestMonologue",
-            "FillerWordRate",
-            "TalkingSpeed",
-            "TalkTime",
-            "QuestionsAsked",
-            "Tone",
-            "Interruptions"
+            "QuestionsAsked"
           ],
           "name": "name",
           "required": true
@@ -39770,6 +39880,7 @@
               "AbstractiveSummaryLong",
               "AbstractiveSummaryShort",
               "ExtractiveSummary",
+              "Topics",
               "TalkToListenRatio",
               "Energy",
               "Pace",
@@ -47830,7 +47941,7 @@
             "Company"
           ],
           "method2": "get",
-          "description": "Returns basic information about a particular RingCentral\ncustomer account.\n",
+          "description": "Returns basic information about a particular RingCentral customer account.\n",
           "summary": "Get Account Info",
           "operationId": "readAccountInfo",
           "rateLimitGroup": "Light",
@@ -49949,16 +50060,6 @@
     {
       "paths": [
         "restapi",
-        "v2",
-        "accounts",
-        "devices"
-      ],
-      "operations": [],
-      "noParentParameter": false
-    },
-    {
-      "paths": [
-        "restapi",
         "account",
         "ivr-prompts"
       ],
@@ -50121,6 +50222,36 @@
         }
       ],
       "parameter": "groupId"
+    },
+    {
+      "paths": [
+        "restapi",
+        "v2",
+        "accounts",
+        "devices"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/devices/{deviceId}",
+          "method": "delete",
+          "tags": [
+            "Devices"
+          ],
+          "method2": "delete",
+          "description": "Disassociates phone line (DL & Device) from an extension.\n - if value ```keepAssetsInInventory == true```,\nthe given device is moved to unassigned devices and the number is moved to the number inventory;\n - if value ```keepAssetsInInventory == false```, the given device and number is removed from the account;\n - if the parameter keepAssetsInInventory is not set (empty body),\ndefault value ```keepAssetsInInventory == true``` is used.\n",
+          "summary": "Remove phone line",
+          "operationId": "removeLineJWSPublic",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditAccounts",
+          "userPermission": "EditAccountDevices",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "RemoveLineResponse"
+          },
+          "bodyParameters": "removeLineRequest"
+        }
+      ],
+      "parameter": "deviceId"
     },
     {
       "paths": [
@@ -52668,7 +52799,10 @@
           "rateLimitGroup": "Light",
           "appPermission": "RoleManagement",
           "userPermission": "Roles",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "DefaultUserRole"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/user-role/default",
@@ -52684,6 +52818,9 @@
           "appPermission": "RoleManagement",
           "userPermission": "Roles",
           "withParameter": false,
+          "responseSchema": {
+            "$ref": "DefaultUserRole"
+          },
           "bodyParameters": "defaultUserRoleRequest"
         }
       ]
