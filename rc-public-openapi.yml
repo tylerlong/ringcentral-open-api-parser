@@ -2428,11 +2428,9 @@ paths:
       - name: "status"
         in: "query"
         required: false
-        description: "Status(es) of phone numbers to be returned"
+        description: "Status of the phone number(s) to be returned"
         schema:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PhoneNumberStatus"
+          $ref: "#/components/schemas/PhoneNumberStatus"
       - name: "tollType"
         in: "query"
         required: false
@@ -2719,6 +2717,57 @@ paths:
       x-throttling-group: "Heavy"
       x-app-permission: "EditAccounts"
       x-user-permission: "EditCompanyPhoneNumbers"
+  /restapi/v2/accounts/{accountId}/devices/{deviceId}:
+    delete:
+      tags:
+      - "Devices"
+      summary: "Remove phone line"
+      description: |
+        Disassociates phone line (DL & Device) from an extension.
+         - if value ```keepAssetsInInventory == true```,
+        the given device is moved to unassigned devices and the number is moved to the number inventory;
+         - if value ```keepAssetsInInventory == false```, the given device and number is removed from the account;
+         - if the parameter keepAssetsInInventory is not set (empty body),
+        default value ```keepAssetsInInventory == true``` is used.
+      operationId: "removeLineJWSPublic"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - name: "deviceId"
+        in: "path"
+        description: "Internal identifier of a source device"
+        required: true
+        schema:
+          type: "string"
+        example: "65462346462"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemoveLineRequest"
+      responses:
+        "200":
+          description: |
+            OK
+            - Is returned only when ```keepAssetsInInventory == true```
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RemoveLineResponse"
+        "204":
+          description: |
+            No content
+            - Is returned only when ```keepAssetsInInventory == false```
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: "Limited"
+      x-throttling-group: "Medium"
+      x-app-permission: "EditAccounts"
+      x-user-permission: "EditAccountDevices"
   /restapi/v2/accounts/{accountId}/devices/bulk-add:
     post:
       tags:
@@ -2942,8 +2991,7 @@ paths:
       - "Company"
       summary: "Get Account Info"
       description: |
-        Returns basic information about a particular RingCentral
-        customer account.
+        Returns basic information about a particular RingCentral customer account.
       operationId: "readAccountInfo"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -7031,7 +7079,10 @@ paths:
           default: 1
       - name: "perPage"
         in: "query"
-        description: "Records count to be returned per one page. It can be either integer or string with the specific keyword values: \n- `all` - all records are returned in one page\n- `max` - maximum count of records that can be returned in one page\n"
+        description: |
+          Records count to be returned per one page. It can be either integer or string with the specific keyword values:
+          - `all` - all records are returned in one page
+          - `max` - maximum count of records that can be returned in one page
         schema:
           oneOf:
           - type: "integer"
@@ -7047,11 +7098,7 @@ paths:
         description: "Internal identifier of the business site to which extensions belong"
         schema:
           type: "string"
-      - name: "If-None-Match"
-        in: "header"
-        description: "If-None-Match"
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/IfNoneMatch"
       responses:
         "200":
           description: "Paged collection of all contacts information for a given account. Records can be empty if no data found."
@@ -7848,6 +7895,10 @@ paths:
       responses:
         "200":
           description: "Default user role"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultUserRole"
       x-feature: "EditRoles"
       x-availability: "High"
       x-throttling-group: "Light"
@@ -7871,6 +7922,10 @@ paths:
       responses:
         "200":
           description: "Updated default user role"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DefaultUserRole"
       x-feature: "EditRoles"
       x-availability: "Limited"
       x-throttling-group: "Medium"
@@ -11806,7 +11861,7 @@ paths:
       - $ref: "#/components/parameters/ExtensionId"
       - name: "status"
         in: "query"
-        description: "Status of a phone number. Multiple values are supported"
+        description: "Status of a phone number"
         schema:
           type: "string"
           enum:
@@ -18722,6 +18777,7 @@ components:
       - "scheduledStartTime"
       - "scheduledDuration"
       - "timeZone"
+      - "localizedTimeZoneDescription"
       properties:
         scheduledStartTime:
           type: "string"
@@ -18740,6 +18796,10 @@ components:
           maxLength: 64
           minLength: 3
           example: "America/New_York"
+        localizedTimeZoneDescription:
+          type: "string"
+          description: "Localized time zone description."
+          example: "Eastern Time (America/New_York)"
         panelJoinTimeOffset:
           type: "integer"
           format: "int32"
@@ -19549,6 +19609,9 @@ components:
         callerId:
           type: "string"
           description: "caller id"
+        correlationId:
+          description: "pass-thru parameter in join url"
+          type: "string"
       description: "Participant information"
     ApiVersionInfo:
       type: "object"
@@ -20480,6 +20543,56 @@ components:
           type: "string"
           description: "Task status"
           example: "Accepted"
+    RemoveLineResponse:
+      type: "object"
+      required:
+      - "id"
+      - "type"
+      - "name"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a source device"
+        type:
+          type: "string"
+          description: "Device type"
+          default: "HardPhone"
+          enum:
+          - "HardPhone"
+          - "SoftPhone"
+          - "OtherPhone"
+          - "MobileDevice"
+          - "BLA"
+          - "Paging"
+          - "WebPhone"
+          - "WebRTC"
+          - "ZoomMobile"
+          - "ZoomPhone"
+          - "Room"
+          - "Unknown"
+        name:
+          type: "string"
+          description: "The display name of a source device"
+          example: "My Device N1"
+        serial:
+          type: "string"
+          description: "Serial number of a device (HardPhone)"
+          example: "ff:ff:ff:ff:ff:ff"
+    RemoveLineRequest:
+      type: "object"
+      required:
+      - "keepAssetsInInventory"
+      properties:
+        keepAssetsInInventory:
+          type: "boolean"
+          default: true
+          description: |
+            The flag that controls what to do with the number and device:
+              - if value ```keepAssetsInInventory == true```, the given device is moved to unassigned devices
+            and the number is moved to the number inventory;
+              - if value ```keepAssetsInInventory == false```, the given device and number is removed from the account;
+              - if the parameter keepAssetsInInventory is not set (empty body) or the value of the parameter is empty,
+            default value ```keepAssetsInInventory == true``` is used.
     BulkAddDevicesItem:
       allOf:
       - type: "object"
@@ -21240,7 +21353,7 @@ components:
           $ref: "#/components/schemas/TargetServicePlanInfo"
         contractedCountry:
           $ref: "#/components/schemas/CountryInfoShortModel"
-        uBrand:
+        ubrand:
           $ref: "#/components/schemas/UBrandInfo"
       description: |
         Account service information, including brand, sub-brand, service plan and
@@ -27062,6 +27175,11 @@ components:
     AssignedRoleResource:
       type: "object"
       properties:
+        uri:
+          type: "string"
+          description: "Link to an assigned role resource"
+          format: "uri"
+          readOnly: true
         id:
           type: "string"
           description: "Internal identifier of a role"
@@ -29018,6 +29136,23 @@ components:
         assignable:
           type: "boolean"
           description: "Specifies if the permission can be assigned by the account administrator"
+    DefaultUserRole:
+      type: "object"
+      properties:
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Link to a default role resource"
+        id:
+          type: "string"
+          description: "Internal identifier of a default role"
+        displayName:
+          maxLength: 128
+          minLength: 0
+          pattern: "^((?!(<|>|\\/|\\\")).)*$"
+          type: "string"
+          description: "Custom name of a default role"
+          example: "My Custom User Role"
     DefaultUserRoleRequest:
       type: "object"
       properties:
@@ -31076,11 +31211,10 @@ components:
         uri:
           type: "string"
           format: "uri"
-          description: "Link to a recipient extension resource"
+          description: "Link to a voicemail recipient extension resource"
         id:
-          type: "integer"
-          format: "int64"
-          description: "Internal identifier of a recipient extension"
+          description: "Internal identifier of a voicemail recipient"
+          type: "string"
     TransferInfo:
       type: "object"
       properties:
@@ -38182,6 +38316,7 @@ components:
         groupId:
           type: "string"
           example: "0"
+          description: "Paragraph index of the long summary."
         speakerId:
           type: "string"
           example: "JohnDoe"
@@ -38216,8 +38351,6 @@ components:
           - "AbstractiveSummaryLong"
           - "AbstractiveSummaryShort"
           - "KeyPhrases"
-          - "Tasks"
-          - "Titles"
           - "QuestionsAsked"
           - "OverallSentiment"
           - "Topics"
@@ -38290,14 +38423,7 @@ components:
           - "Energy"
           - "Pace"
           - "TalkToListenRatio"
-          - "Patience"
-          - "LongestMonologue"
-          - "FillerWordRate"
-          - "TalkingSpeed"
-          - "TalkTime"
           - "QuestionsAsked"
-          - "Tone"
-          - "Interruptions"
         values:
           type: "array"
           items:
@@ -38609,6 +38735,7 @@ components:
       - "AbstractiveSummaryLong"
       - "AbstractiveSummaryShort"
       - "ExtractiveSummary"
+      - "Topics"
       - "TalkToListenRatio"
       - "Energy"
       - "Pace"
@@ -42768,6 +42895,16 @@ components:
       schema:
         type: "string"
       example: "400142200026-400142200026-bd162f24028442489385eb3f44c18354"
+    IfNoneMatch:
+      name: "If-None-Match"
+      in: "header"
+      required: false
+      description: |
+        User in GET requests to skip retrieving the data if the provided value matches current `ETag` associated with this resource.
+        The server checks the current resource ETag and returns the data only if mismatches the `If-None-Match` value,
+        otherwise `HTTP 304 Not Modified` status is returned.
+      schema:
+        type: "string"
     CallLogShowBlocked:
       name: "showBlocked"
       in: "query"
