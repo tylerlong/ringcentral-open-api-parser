@@ -825,16 +825,6 @@
       ]
     },
     {
-      "name": "RcvListDelegatorsParameters",
-      "description": "Query parameters for operation rcvListDelegators",
-      "fields": [
-        {
-          "name": "requuid",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "ListVideoMeetingsParameters",
       "description": "Query parameters for operation listVideoMeetings",
       "fields": [
@@ -856,7 +846,7 @@
         },
         {
           "name": "type",
-          "description": "Type of returned data",
+          "description": "Specify what kind of meeting should be returned. Possible values: All, My, Deleted, Shared\nRequest type meaning in meeting search:\n`None` (not passed) - take meetings only where requested acc/ext is participant OR host OR deputy OR watcher.\n`ALL`- access rights of meeting is equal to Alive AND requested acc/ext  is in watchers list OR host OR deputy\n`My`- access rights of meeting is equal to Alive AND requested acc/ext is host OR deputy\n`Shared` - access rights of meeting is equal to Alive AND requested acc/ext is in watcher list AND not HOST\n`Deleted` - access rights of meeting is equal to Delete and requested acc/ext is host OR deputy\n",
           "type": "string",
           "enum": [
             "All",
@@ -864,6 +854,18 @@
             "Deleted",
             "Shared"
           ]
+        },
+        {
+          "name": "startTime",
+          "description": "Unix timestamp in milliseconds (inclusive) indicates the start time of meetings which should be included in response",
+          "type": "integer",
+          "format": "int64"
+        },
+        {
+          "name": "endTime",
+          "description": "Unix timestamp in milliseconds (inclusive) indicates the end time of meetings which should be included in response",
+          "type": "integer",
+          "format": "int64"
         }
       ]
     },
@@ -1646,7 +1648,7 @@
       "fields": [
         {
           "name": "page",
-          "description": "Indicates a page number to retrieve. Only positive number values\nare accepted\n",
+          "description": "Indicates a page number to retrieve. Only positive number values are accepted",
           "type": "integer",
           "format": "int32",
           "default": 1
@@ -1660,7 +1662,7 @@
         },
         {
           "name": "memberExtensionId",
-          "description": "Internal identifier of an extension that is a member of every\ngroup within the result\n",
+          "description": "Internal identifier of an extension that is a member of every group within the result",
           "type": "string"
         }
       ]
@@ -2138,6 +2140,17 @@
       ]
     },
     {
+      "name": "ReadUserRoleParameters",
+      "description": "Query parameters for operation readUserRole",
+      "fields": [
+        {
+          "name": "advancedPermissions",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false.\n",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
       "name": "DeleteCustomRoleParameters",
       "description": "Query parameters for operation deleteCustomRole",
       "fields": [
@@ -2220,7 +2233,8 @@
               "Limited",
               "Bot",
               "ProxyAdmin",
-              "DelegatedLinesGroup"
+              "DelegatedLinesGroup",
+              "Site"
             ]
           }
         }
@@ -2720,6 +2734,34 @@
             "OnDemand",
             "All"
           ]
+        }
+      ]
+    },
+    {
+      "name": "ListOfAvailableForAssigningRolesParameters",
+      "description": "Query parameters for operation listOfAvailableForAssigningRoles",
+      "fields": [
+        {
+          "name": "page",
+          "description": "The result set page number (1-indexed) to return",
+          "explode": false,
+          "example": 1,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
         }
       ]
     },
@@ -4089,6 +4131,11 @@
           "minimum": 1,
           "maximum": 1000,
           "default": 100
+        },
+        {
+          "name": "advancedPermissions",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false.\n",
+          "type": "boolean"
         }
       ]
     },
@@ -4242,6 +4289,179 @@
           "explode": true,
           "type": "string",
           "format": "uri"
+        }
+      ]
+    },
+    {
+      "name": "SocMsgListContentsParameters",
+      "description": "Query parameters for operation socMsgListContents",
+      "fields": [
+        {
+          "name": "intervention",
+          "description": "Filter based on the specified intervention identifiers.",
+          "example": [
+            "7f946431b6eebffafae642cc",
+            "re946431b6eebffafae642cc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "identity",
+          "description": "Filter based on the specified identity identifiers.",
+          "example": [
+            "7f946431b6eebffafae642cc",
+            "re946431b6eebffafae642cc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "identityGroup",
+          "description": "Filter based on the specified identity group identifiers.",
+          "example": [
+            "7f946431b6eebffafae642cc",
+            "re946431b6eebffafae642cc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "source",
+          "description": "Filter based on the specified channel identifiers.",
+          "example": [
+            "7f946431b6eebffafae642cc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "thread",
+          "description": "Filter based on the specified thread identifiers.",
+          "example": [
+            "7f946431b6eebffafae642cc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "text",
+          "description": "Filter based on the specified text(s). Provided multiple times, the values are ANDed.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "status",
+          "description": "Filter for specified status.",
+          "type": "array",
+          "items": {
+            "description": "Content status.",
+            "type": "string",
+            "enum": [
+              "New",
+              "Assigned",
+              "Replied",
+              "UserReply",
+              "UserInitiated",
+              "Ignored"
+            ]
+          }
+        },
+        {
+          "name": "orderBy",
+          "description": "Ordering by creationTime is descending by default.",
+          "type": "string",
+          "enum": [
+            "-creationTime",
+            "+creationTime",
+            "creationTime"
+          ],
+          "default": "-creationTime",
+          "example": "+creationTime"
+        },
+        {
+          "name": "pageToken",
+          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
+          "explode": false,
+          "type": "string"
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        }
+      ]
+    },
+    {
+      "name": "SocMsgListIdentitiesParameters",
+      "description": "Query parameters for operation socMsgListIdentities",
+      "fields": [
+        {
+          "name": "sourceId",
+          "description": "Filter based on the specified sourceId.",
+          "type": "string"
+        },
+        {
+          "name": "identityGroupId",
+          "description": "Filter based on the specified identityGroupId.",
+          "type": "string"
+        },
+        {
+          "name": "userId",
+          "description": "Filter based on the specified userId.",
+          "type": "string"
+        },
+        {
+          "name": "uuid",
+          "description": "Filter based on the specified uuid.",
+          "type": "string"
+        },
+        {
+          "name": "orderBy",
+          "description": "Ordering by creationTime is descending by default.",
+          "type": "string",
+          "enum": [
+            "-creationTime",
+            "+creationTime",
+            "creationTime"
+          ],
+          "default": "-creationTime",
+          "example": "+creationTime"
+        },
+        {
+          "name": "pageToken",
+          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
+          "explode": false,
+          "type": "string"
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
         }
       ]
     },
@@ -4665,6 +4885,21 @@
           "type": "integer",
           "format": "int32",
           "default": 30
+        }
+      ]
+    },
+    {
+      "name": "IntrospectTokenRequest",
+      "description": "Request body for operation introspectToken",
+      "fields": [
+        {
+          "type": "string",
+          "description": "OAuth token",
+          "name": "token"
+        },
+        {
+          "type": "string",
+          "name": "scope"
         }
       ]
     },
@@ -10247,6 +10482,10 @@
         {
           "$ref": "EveryoneCanControl",
           "name": "everyoneCanControl"
+        },
+        {
+          "$ref": "AutoShared",
+          "name": "autoShared"
         }
       ]
     },
@@ -10270,6 +10509,24 @@
           "description": "Meeting password hash.\nThis field will be returned only if the request was done by bridge owner, his delegate or any user who has\nthe Super Admin privilege.\n",
           "example": "99e4f8e6a241fc71279449a9c8f46eef",
           "name": "joinQuery"
+        }
+      ]
+    },
+    {
+      "name": "AutoShared",
+      "description": "Controls whether recording can be auto shared",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Controls whether preference is enabled",
+          "example": true,
+          "name": "enabled"
+        },
+        {
+          "type": "boolean",
+          "description": "Describes whether preference is locked on Service Web",
+          "example": false,
+          "name": "locked"
         }
       ]
     },
@@ -10644,17 +10901,17 @@
       "fields": [
         {
           "type": "string",
-          "description": "account id",
+          "description": "Account id",
           "name": "accountId"
         },
         {
           "type": "string",
-          "description": "extension id",
+          "description": "Extension id",
           "name": "extensionId"
         },
         {
           "type": "string",
-          "description": "displayName",
+          "description": "Display name",
           "name": "displayName"
         }
       ]
@@ -10666,12 +10923,14 @@
         {
           "type": "string",
           "description": "Current offset token",
-          "name": "currentPageToken"
+          "name": "currentPageToken",
+          "required": true
         },
         {
           "type": "string",
           "description": "Next page offset token",
-          "name": "nextPageToken"
+          "name": "nextPageToken",
+          "required": false
         }
       ]
     },
@@ -10739,9 +10998,21 @@
         },
         {
           "type": "string",
-          "description": "Link to the recording file",
-          "name": "downloadLink",
+          "description": "Link to the recording file. Not used anymore by Web team",
+          "name": "mediaLink",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Encrypted link to the recording file",
+          "name": "url",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Date after which recording will be deleted",
+          "name": "expiresIn",
+          "required": false
         }
       ]
     },
@@ -10794,32 +11065,32 @@
       "fields": [
         {
           "type": "string",
-          "description": "call id",
+          "description": "Call id",
           "name": "id",
           "required": true
         },
         {
           "type": "string",
-          "description": "bridge id",
+          "description": "Bridge id",
           "name": "bridgeId",
           "required": true
         },
         {
           "type": "string",
-          "description": "short bridge id",
+          "description": "Short bridge id",
           "name": "shortId",
           "required": true
         },
         {
           "type": "string",
-          "description": "start time ISO 8601",
+          "description": "Start time ISO 8601",
           "format": "date-time",
           "name": "startTime",
           "required": true
         },
         {
           "type": "integer",
-          "description": "duration second",
+          "description": "Duration second",
           "format": "int32",
           "example": 36,
           "name": "duration",
@@ -10827,13 +11098,13 @@
         },
         {
           "type": "string",
-          "description": "meetings name",
+          "description": "Meetings name",
           "name": "displayName",
           "required": true
         },
         {
           "type": "string",
-          "description": "meeting type",
+          "description": "Meeting type",
           "enum": [
             "Meeting",
             "Call"
@@ -10843,7 +11114,7 @@
         },
         {
           "type": "string",
-          "description": "meeting status",
+          "description": "Meeting status",
           "enum": [
             "InProgress",
             "Done"
@@ -10857,14 +11128,43 @@
           "required": true
         },
         {
+          "description": "Describe access rights which has participants to meeting",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "delete",
+              "download",
+              "share"
+            ]
+          },
+          "name": "rights",
+          "required": true
+        },
+        {
+          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
           "type": "string",
-          "description": "chat id",
-          "name": "chatId",
+          "name": "longSummary",
+          "required": false
+        },
+        {
+          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
+          "type": "string",
+          "name": "shortSummary",
+          "required": false
+        },
+        {
+          "description": "During meeting AI team analyze code and after meeting finished generates key words used in meeting",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "name": "keywords",
           "required": false
         },
         {
           "type": "array",
-          "description": "participants list",
+          "description": "List of the participants in the meeting",
           "items": {
             "$ref": "Participant"
           },
@@ -10873,16 +11173,16 @@
         },
         {
           "type": "array",
-          "description": "recording information",
+          "description": "Recording information",
           "items": {
             "$ref": "Recording"
           },
           "name": "recordings",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
-          "description": "chat location",
+          "description": "Chat location",
           "name": "chatUrl",
           "required": false
         }
@@ -10894,21 +11194,21 @@
       "fields": [
         {
           "type": "string",
-          "description": "recording id",
+          "description": "Recording id",
           "name": "id",
-          "required": false
+          "required": true
         },
         {
           "type": "integer",
           "format": "int64",
-          "description": "recording start time",
+          "description": "Recording start time",
           "name": "startTime",
           "required": false
         },
         {
           "type": "string",
-          "description": "recording url",
-          "name": "contentUri",
+          "description": "Secure Link to the recording file",
+          "name": "url",
           "required": false
         },
         {
@@ -10918,20 +11218,22 @@
         },
         {
           "type": "string",
-          "description": "recording status",
+          "description": "Recording processing status",
           "enum": [
             "Processing",
             "Processed",
             "Error",
             "Corrupted",
-            "InProgress"
+            "InProgress",
+            "Purged",
+            "Failed"
           ],
           "name": "status",
           "required": false
         },
         {
           "type": "string",
-          "description": "availability status",
+          "description": "Availability status",
           "enum": [
             "Alive",
             "Deleted",
@@ -10940,6 +11242,27 @@
           ],
           "name": "availabilityStatus",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
+          "name": "longSummary",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
+          "name": "shortSummary",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "During meeting AI team analyze code and after meeting finished generates key words used in meeting",
+          "items": {
+            "type": "string"
+          },
+          "name": "keywords",
+          "required": false
         }
       ]
     },
@@ -10953,15 +11276,17 @@
       "fields": [
         {
           "type": "array",
-          "description": "meetings array",
+          "description": "Meetings array",
           "items": {
             "$ref": "Meeting"
           },
-          "name": "meetings"
+          "name": "meetings",
+          "required": true
         },
         {
           "$ref": "Paging",
-          "name": "paging"
+          "name": "paging",
+          "required": true
         }
       ]
     },
@@ -10971,33 +11296,45 @@
       "fields": [
         {
           "type": "string",
+          "description": "Participant type",
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
           "description": "id",
-          "name": "id"
+          "name": "id",
+          "required": true
         },
         {
           "type": "string",
-          "description": "account id",
-          "name": "accountId"
+          "description": "Account id",
+          "name": "accountId",
+          "required": false
         },
         {
           "type": "string",
-          "description": "extension id",
-          "name": "extensionId"
+          "description": "Extension id",
+          "name": "extensionId",
+          "required": false
         },
         {
           "type": "string",
-          "description": "displayName",
-          "name": "displayName"
+          "description": "Display name",
+          "name": "displayName",
+          "required": false
         },
         {
           "type": "string",
-          "description": "caller id",
-          "name": "callerId"
+          "description": "Caller id",
+          "name": "callerId",
+          "required": false
         },
         {
-          "description": "pass-thru parameter in join url",
+          "description": "Pass-thru parameter in join url",
           "type": "string",
-          "name": "correlationId"
+          "name": "correlationId",
+          "required": false
         }
       ]
     },
@@ -11279,6 +11616,33 @@
           "description": "OIDC ID token (if OpenId Connect flow was activated during authorization)",
           "name": "id_token",
           "required": false
+        },
+        {
+          "type": "string",
+          "description": "OAuth session ID",
+          "name": "session_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Absolute value of session expiration time as ISO datetime",
+          "name": "session_expiration_time",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Remaining time (in seconds) until session expiration due to absolute timeout",
+          "name": "session_expires_in",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Nominal session idle timeout in seconds",
+          "name": "session_idle_timeout",
+          "required": false
         }
       ]
     },
@@ -11429,6 +11793,130 @@
       ]
     },
     {
+      "name": "SessionInfoResponse",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Identifier (key) of a client application",
+          "name": "client_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "List of permissions (space separated) granted to the application with this token\n",
+          "example": "AccountInfo CallLog ExtensionInfo Messages SMS",
+          "name": "scope",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Subject of the token (extension ID or the owner)",
+          "name": "sub",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RC account ID associated with the token",
+          "name": "account_id",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Remaining time in seconds until session expiration due to absolute timeout",
+          "name": "session_expires_in",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Absolute value of session expiration time in ISO date formatted string",
+          "example": "2023-04-01T12:00:01Z",
+          "name": "session_expiration_time",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "OAuth session ID",
+          "name": "session_id",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Nominal value of session idle timeout in seconds",
+          "name": "session_idle_timeout",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "TokenIntrospectionResponse",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Is presented token valid and active",
+          "example": true,
+          "name": "active",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "List of permissions (space separated) granted to the application with this token\n",
+          "example": "AccountInfo CallLog ExtensionInfo Messages SMS",
+          "name": "scope",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Identifier (key) of a client application",
+          "name": "client_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Type of token. The only supported value is `bearer`",
+          "example": "bearer",
+          "name": "token_type",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Timestamp indicating when this token will expire in seconds since January 1 1970 UTC\n",
+          "example": 1706715293,
+          "name": "exp",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Timestamp indicating when this token was originally issued in seconds since January 1 1970 UTC\n",
+          "example": 1706711693,
+          "name": "iat",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Subject of the token (extension ID or the owner)",
+          "name": "sub",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RC account ID associated with the token",
+          "name": "account_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "OAuth session ID associated with the token",
+          "name": "session_id",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "PostalAddress",
       "description": "Postal address/location",
       "fields": [
@@ -11535,6 +12023,39 @@
       ]
     },
     {
+      "name": "AccountStatusInfo",
+      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Type of suspension, voluntarily or not",
+          "enum": [
+            "SuspendedVoluntarily",
+            "SuspendedInvoluntarily",
+            "CancelledVoluntarily",
+            "CancelledInvoluntarily"
+          ],
+          "example": "CancelledVoluntarily",
+          "name": "reason"
+        },
+        {
+          "type": "string",
+          "description": "A meaningful description of the reason to change the status",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "By customer request. Case ABC123",
+          "name": "comment"
+        },
+        {
+          "type": "string",
+          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
+          "format": "date-time",
+          "example": "2023-03-26T11:30:45.940Z",
+          "name": "till"
+        }
+      ]
+    },
+    {
       "name": "AccountInfo",
       "fields": [
         {
@@ -11575,7 +12096,7 @@
           "required": true
         },
         {
-          "$ref": "StatusInfo",
+          "$ref": "AccountStatusInfo",
           "name": "statusInfo",
           "required": false
         },
@@ -11708,39 +12229,6 @@
           ],
           "name": "version",
           "required": true
-        }
-      ]
-    },
-    {
-      "name": "StatusInfo",
-      "description": "Optional information to be used when account is moved to \"Disabled\" status",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Type of suspension, voluntarily or not",
-          "enum": [
-            "SuspendedVoluntarily",
-            "SuspendedInvoluntarily",
-            "CancelledVoluntarily",
-            "CancelledInvoluntarily"
-          ],
-          "example": "CancelledVoluntarily",
-          "name": "reason"
-        },
-        {
-          "type": "string",
-          "description": "A meaningful description of the reason to change the status",
-          "minLength": 1,
-          "maxLength": 256,
-          "example": "By customer request. Case ABC123",
-          "name": "comment"
-        },
-        {
-          "type": "string",
-          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
-          "format": "date-time",
-          "example": "2023-03-26T11:30:45.940Z",
-          "name": "till"
         }
       ]
     },
@@ -13329,32 +13817,6 @@
           "type": "string",
           "description": "Official name of a formatting language",
           "name": "name"
-        }
-      ]
-    },
-    {
-      "name": "AccountStatusInfo",
-      "description": "Status information (reason, comment, lifetime). Returned for 'Disabled'\nstatus only\n",
-      "fields": [
-        {
-          "type": "string",
-          "description": "A free-form user comment, describing the status change reason\n",
-          "name": "comment"
-        },
-        {
-          "type": "string",
-          "description": "Type of suspension",
-          "enum": [
-            "SuspendedVoluntarily",
-            "SuspendedInvoluntarily",
-            "UserResumed"
-          ],
-          "name": "reason"
-        },
-        {
-          "type": "string",
-          "description": "Date until which an account will get deleted. The default\nvalue is 30 days since the current date\n",
-          "name": "till"
         }
       ]
     },
@@ -20559,6 +21021,24 @@
           "type": "string",
           "description": "Name of a call queue",
           "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Call queue status",
+          "enum": [
+            "Enabled",
+            "Disabled",
+            "NotActivated"
+          ],
+          "name": "status"
+        },
+        {
+          "type": "string",
+          "description": "Indicates whether it is an emergency call queue extension or not",
+          "enum": [
+            "Emergency"
+          ],
+          "name": "subType"
         }
       ]
     },
@@ -20627,18 +21107,24 @@
       "fields": [
         {
           "type": "string",
+          "format": "uri",
+          "description": "Link to a call queue",
+          "name": "uri"
+        },
+        {
+          "type": "string",
           "description": "Internal identifier of a call queue",
           "name": "id"
         },
         {
           "type": "string",
-          "description": "Call queue name",
-          "name": "name"
+          "description": "Extension number of a call queue",
+          "name": "extensionNumber"
         },
         {
           "type": "string",
-          "description": "Call queue extension number",
-          "name": "extensionNumber"
+          "description": "Name of a call queue",
+          "name": "name"
         },
         {
           "type": "string",
@@ -20651,50 +21137,20 @@
           "name": "status"
         },
         {
+          "type": "string",
+          "description": "Indicates whether it is an emergency call queue extension or not",
+          "enum": [
+            "Emergency"
+          ],
+          "name": "subType"
+        },
+        {
           "$ref": "CallQueueServiceLevelSettings",
           "name": "serviceLevelSettings"
         },
         {
           "type": "boolean",
           "description": "Allows members to change their queue status",
-          "name": "editableMemberStatus"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued\n",
-          "enum": [
-            5,
-            10,
-            15,
-            20,
-            30,
-            45,
-            60,
-            120,
-            180,
-            240,
-            300,
-            360,
-            420,
-            480,
-            540,
-            600
-          ],
-          "name": "alertTimer"
-        }
-      ]
-    },
-    {
-      "name": "CallQueueUpdateDetails",
-      "fields": [
-        {
-          "$ref": "CallQueueServiceLevelSettings",
-          "name": "serviceLevelSettings"
-        },
-        {
-          "type": "boolean",
-          "description": "Allows members to change their queue status\n",
           "name": "editableMemberStatus"
         },
         {
@@ -25181,11 +25637,14 @@
       "fields": [
         {
           "type": "string",
+          "description": "Link to a role resource",
           "format": "uri",
+          "readOnly": true,
           "name": "uri"
         },
         {
           "type": "string",
+          "description": "Internal identifier of a role",
           "name": "id"
         },
         {
@@ -25194,6 +25653,7 @@
           "pattern": "^((?!(<|>|\\/|\\\")).)*$",
           "type": "string",
           "example": "Super Admin",
+          "description": "Dispayed name of a role",
           "name": "displayName"
         },
         {
@@ -25201,6 +25661,7 @@
           "minLength": 0,
           "pattern": "^((?!(<|>|\\/|\\\")).)*$",
           "type": "string",
+          "description": "Role description",
           "example": "Primary company administrator role",
           "name": "description"
         },
@@ -25212,10 +25673,21 @@
         {
           "type": "boolean",
           "default": false,
+          "description": "Specifies if a user role is custom",
           "name": "custom"
         },
         {
           "type": "string",
+          "description": "Specifies resource for permission",
+          "enum": [
+            "Account",
+            "AllExtensions",
+            "Federation",
+            "NonUserExtensions",
+            "RoleBased",
+            "Self",
+            "UserExtensions"
+          ],
           "name": "scope"
         },
         {
@@ -25234,6 +25706,27 @@
             "$ref": "PermissionIdResource"
           },
           "name": "permissions"
+        }
+      ]
+    },
+    {
+      "name": "PermissionsCapabilities",
+      "description": "Advanced permissions capabilities. Returned if `advancedPermissions` query parameter is set to `true`.",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Specifies whether the user is enabled with the listed permission or not",
+          "name": "enabled"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if the user can manage the listed permission and is allowed to enable it on other users",
+          "name": "manageEnabled"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if the users who were enabled with the listed permission can grant it further to other users",
+          "name": "grantEnabled"
         }
       ]
     },
@@ -25293,6 +25786,10 @@
           "type": "boolean",
           "description": "Specifies if the permission can be assigned by the account administrator",
           "name": "assignable"
+        },
+        {
+          "$ref": "PermissionsCapabilities",
+          "name": "permissionsCapabilities"
         }
       ]
     },
@@ -26118,7 +26615,8 @@
             "VideoPro",
             "VideoProPlus",
             "DigitalSignage",
-            "Unknown"
+            "Unknown",
+            "Emergency"
           ],
           "name": "subType"
         },
@@ -26372,7 +26870,8 @@
             "VideoPro",
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
-            "Unknown"
+            "Unknown",
+            "Emergency"
           ],
           "name": "subType"
         },
@@ -26547,7 +27046,8 @@
             "VideoPro",
             "VideoProPlus",
             "DigitalSignage",
-            "Unknown"
+            "Unknown",
+            "Emergency"
           ],
           "name": "subType"
         },
@@ -29291,7 +29791,7 @@
               "UserExtensions"
             ]
           },
-          "name": "scopes"
+          "name": "scope"
         }
       ]
     },
@@ -34416,7 +34916,8 @@
             "VideoPro",
             "VideoProPlus",
             "DigitalSignage",
-            "Unknown"
+            "Unknown",
+            "Emergency"
           ],
           "name": "subType"
         },
@@ -34459,35 +34960,6 @@
       ]
     },
     {
-      "name": "CallQueueOverflowAgent",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a Call queue extension",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Extension number of call queue",
-          "name": "extensionNumber"
-        },
-        {
-          "type": "string",
-          "description": "Name of a call queue",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "description": "Queue current state (Enabled/Disabled)",
-          "enum": [
-            "Disabled",
-            "Enabled"
-          ],
-          "name": "status"
-        }
-      ]
-    },
-    {
       "name": "CallQueueOverflowSettingsRequestResource",
       "fields": [
         {
@@ -34515,7 +34987,7 @@
         {
           "type": "array",
           "items": {
-            "$ref": "CallQueueOverflowAgent"
+            "$ref": "CallQueueInfo"
           },
           "name": "items"
         }
@@ -37183,7 +37655,7 @@
         {
           "type": "string",
           "format": "password",
-          "description": "User password",
+          "description": "User password. Not returned if SipDigest is not enabled",
           "name": "password"
         },
         {
@@ -39370,6 +39842,1026 @@
             "$ref": "SpeechContextPhrasesInput"
           },
           "name": "speechContexts",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "ContentList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "ContentModel"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "NonEnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ContentModel",
+      "fields": [
+        {
+          "description": "An array containing the attachments that are attached to the content.\n",
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "ContentAttachment"
+          },
+          "name": "attachments",
+          "required": true
+        },
+        {
+          "description": "Identity identifier of the author of content.\n\nNot mandatory on creation, by default it uses the token's user first identity on channel.\n",
+          "type": "string",
+          "example": "541014e17aa58d8ccf000023",
+          "name": "authorIdentityId",
+          "required": true
+        },
+        {
+          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
+          "type": "boolean",
+          "name": "autoSubmitted",
+          "required": true
+        },
+        {
+          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * Engage Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
+          "type": "string",
+          "example": "Body of the content",
+          "name": "body",
+          "required": true
+        },
+        {
+          "$ref": "ContentBodyFormatted",
+          "name": "bodyFormatted",
+          "required": true
+        },
+        {
+          "description": "Values can be Text or Html.",
+          "enum": [
+            "Text",
+            "Html"
+          ],
+          "type": "string",
+          "name": "bodyInputFormat",
+          "required": true
+        },
+        {
+          "description": "List of the category identifiers of the content.\n",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "example": [
+            "541014e17aa58d8ccf000023",
+            "541014e17aa58d8ccf002023"
+          ],
+          "name": "categoryIds",
+          "required": true
+        },
+        {
+          "$ref": "ContentContextData",
+          "name": "contextData",
+          "required": false
+        },
+        {
+          "description": "Creation time of the resource.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "description": "Created from of the content.",
+          "type": "string",
+          "enum": [
+            "Synchronizer",
+            "Interface",
+            "Api",
+            "AutoSurvey",
+            "AutoResponseTrigger",
+            "AutoRequestEmail"
+          ],
+          "name": "createdFrom",
+          "required": true
+        },
+        {
+          "description": "RC user id of the creator",
+          "type": "string",
+          "example": "2683222036",
+          "name": "creatorId",
+          "required": true
+        },
+        {
+          "description": "External categories of the content.\n\nPresent only if the content has foreignCategories.\n",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "minItems": 0,
+          "example": [
+            "foreign_category_id"
+          ],
+          "name": "foreignCategories",
+          "required": false
+        },
+        {
+          "description": "Identifier of the content.",
+          "type": "string",
+          "example": "541014e17aa58d8ccf000023",
+          "name": "id",
+          "required": true
+        },
+        {
+          "description": "The identity identifier of the content to which this content is a reply to.",
+          "type": "string",
+          "example": "541014e17asdd8ccf000023",
+          "name": "inReplyToAuthorIdentityId",
+          "required": true
+        },
+        {
+          "description": "The content identifier to which this content is a reply to.\n\nOn creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.\n",
+          "type": "string",
+          "example": "123414e17asdd8ccf000023",
+          "name": "inReplyToContentId",
+          "required": true
+        },
+        {
+          "description": "The intervention identifier of the content.",
+          "type": "string",
+          "example": "123415437asdd8ccf000023",
+          "name": "interventionId",
+          "required": true
+        },
+        {
+          "description": "Language of the content.",
+          "type": "string",
+          "example": "En",
+          "name": "language",
+          "required": true
+        },
+        {
+          "description": "True if the content is publicly visible on the remote channel (default).\n\nPrivate content is NOT supported on every channel.\n",
+          "type": "boolean",
+          "default": true,
+          "name": "public",
+          "required": true
+        },
+        {
+          "description": "True if the content is published on the remote channel.",
+          "type": "boolean",
+          "example": true,
+          "name": "published",
+          "required": true
+        },
+        {
+          "description": "Rating of the content.\n\nPresent only if the content supports rating and rating is filled.\n",
+          "type": "integer",
+          "format": "int32",
+          "example": 4,
+          "name": "rating",
+          "required": true
+        },
+        {
+          "description": "True if the content has been deleted on the remote channel.",
+          "type": "boolean",
+          "example": false,
+          "name": "remotelyDeleted",
+          "required": true
+        },
+        {
+          "description": "Identifier of the channel.\n\nOn creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.\n",
+          "type": "string",
+          "example": "fff415437asdd8ccf000023",
+          "name": "sourceId",
+          "required": true
+        },
+        {
+          "description": "Type of the channel.",
+          "type": "string",
+          "enum": [
+            "AppleMessagesForBusiness",
+            "Email",
+            "EngageMessaging",
+            "Facebook",
+            "GoogleBusinessMessages",
+            "GoogleMyBusiness",
+            "Instagram",
+            "InstagramMessaging",
+            "Linkedin",
+            "Messenger",
+            "Twitter",
+            "Viber",
+            "WhatsApp",
+            "Youtube"
+          ],
+          "name": "sourceType",
+          "required": true
+        },
+        {
+          "description": "External Uri of the content channel.",
+          "type": "string",
+          "format": "uri",
+          "name": "sourceUri",
+          "required": true
+        },
+        {
+          "description": "Content status.",
+          "type": "string",
+          "enum": [
+            "New",
+            "Assigned",
+            "Replied",
+            "UserReply",
+            "UserInitiated",
+            "Ignored"
+          ],
+          "name": "status",
+          "required": true
+        },
+        {
+          "description": "Synchronization status.",
+          "type": "string",
+          "example": "success",
+          "name": "synchronizationStatus",
+          "required": true
+        },
+        {
+          "description": "Synchronization error details.",
+          "type": "string",
+          "name": "synchronizationError",
+          "required": true
+        },
+        {
+          "description": "Content thread identifier of the content.",
+          "type": "string",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "description": "Applicable to Email channels only.\n\nThe subject of the email.\n\nThis field is mandatory when initiating a discussion.\n",
+          "type": "string",
+          "example": "An email title",
+          "name": "title",
+          "required": true
+        },
+        {
+          "description": "Type of the content.",
+          "type": "string",
+          "enum": [
+            "Album",
+            "AuthenticateMessage",
+            "AuthenticateResponse",
+            "Carousel",
+            "CarouselMessage",
+            "Comment",
+            "ContactMessage",
+            "Content",
+            "Email",
+            "FormMessage",
+            "FormResponse",
+            "HsmMessage",
+            "Link",
+            "ListMessage",
+            "Media",
+            "Message",
+            "OutboundMessage",
+            "PaymentMessage",
+            "Photo",
+            "PostbackMessage",
+            "PrivateTweet",
+            "PromptMessage",
+            "Question",
+            "Review",
+            "ReviewResponse",
+            "RichLinkMessage",
+            "SelectMessage",
+            "Status",
+            "TemplateMessage",
+            "TimePickerMessage",
+            "Tweet",
+            "Video",
+            "VideoCallRequestMessage"
+          ],
+          "example": "Email",
+          "name": "type",
+          "required": true
+        },
+        {
+          "description": "The time when the last modification was completed.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "description": "Types of structured messages that can be used to reply to this type of message.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "name": "capabilitiesSupported",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ContentAttachment",
+      "fields": [
+        {
+          "description": "Type of the attachment, which is generally a MIME attachment type like \"image/jpeg\", etc.\n\nSecurity level in ED determines what type of attachment is allowed.\n\nBased on the security level the following attachment types are supported.\n\n\"Strict\" level allows safe extensions below:\nContent name and supported types\n* audio (supports aac mp3 ogg m4a)\n* image (supports bmp gif jpg jpeg png svg webp)\n* pdf (supports pdf)\n* text (supports csv txt log)\n* video (supports avi flv m4v mkv mov mp4 mpg qt wmv)\n* other (supports amr dms vcard tif tiff mpeg)\n\n\"Relaxed\" level allows documents:\nContent name and supported types\n* excel (supports xls xlsm xlsx xlc xlt xltm xltx)\n* presentation (supports key odp otp)\n* powerpoint (supports pps ppt pptx pot)\n* spreadsheet (supports numbers ods ots)\n* word (supports doc docm docx dotm dotx)\n* word_processing (supports pages odt ott rtf)\n\n\"Permissive\" level allows all documents.\n\nHowever, there are no security level restrictions for content posted through the channel.\n",
+          "type": "string",
+          "example": "image/jpeg",
+          "name": "contentType"
+        },
+        {
+          "description": "Creation time of the attachment.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "creationTime"
+        },
+        {
+          "description": "Embedded in a content.",
+          "type": "boolean",
+          "example": false,
+          "name": "embedded"
+        },
+        {
+          "description": "Filename of the attachment.",
+          "type": "string",
+          "example": "0.jpeg",
+          "name": "filename"
+        },
+        {
+          "description": "Identifier of the attachment.",
+          "type": "string",
+          "example": "54085e5b7aa58d8b5d00006c",
+          "name": "id"
+        },
+        {
+          "description": "Privacy setting of the attachment.",
+          "type": "boolean",
+          "example": false,
+          "name": "public"
+        },
+        {
+          "description": "Size of the attachment.",
+          "type": "integer",
+          "format": "int32",
+          "example": 217571,
+          "name": "size"
+        },
+        {
+          "description": "The time when the last modification was completed.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "lastModifiedTime"
+        },
+        {
+          "description": "Uri of the attachment.",
+          "type": "string",
+          "format": "uri",
+          "example": "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c",
+          "name": "uri"
+        }
+      ]
+    },
+    {
+      "name": "ContentContextData",
+      "description": "Additional data of the content.\n\nThe contextData hash keys are the custom fields keys.\n",
+      "fields": []
+    },
+    {
+      "name": "CreateContentRequest",
+      "fields": [
+        {
+          "description": "Identity identifier of the author of content.\n\nNot mandatory on creation, by default it uses the token's user first identity on channel.\n",
+          "type": "string",
+          "example": "541014e17aa58d8ccf000023",
+          "name": "authorIdentityId"
+        },
+        {
+          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * Engage Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
+          "type": "string",
+          "example": "Body of the content",
+          "name": "body"
+        },
+        {
+          "description": "The content identifier to which this content is a reply to.\n\nOn creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.\n",
+          "type": "string",
+          "example": "123414e17asdd8ccf000023",
+          "name": "inReplyToContentId"
+        },
+        {
+          "description": "True if the content is publicly visible on the remote channel (default).\n\nPrivate content is NOT supported on every channel.\n",
+          "type": "boolean",
+          "default": true,
+          "name": "public"
+        },
+        {
+          "description": "Identifier of the channel.\n\nOn creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.\n",
+          "type": "string",
+          "example": "fff415437asdd8ccf000023",
+          "name": "sourceId"
+        },
+        {
+          "description": "An array containing the attachment identifiers that need to be attached to the content.\n",
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "string",
+            "description": "Attachment identifier.",
+            "example": "506d9e817aa58d1259000f12"
+          },
+          "example": [
+            "541014e17aa58d8ccf000023",
+            "541014e17aa58d8ccf000023"
+          ],
+          "name": "attachmentIds"
+        },
+        {
+          "description": "Applicable to Email channels only.\n\nThe subject of the email.\n\nThis field is mandatory when initiating a discussion.\n",
+          "type": "string",
+          "example": "An email title",
+          "name": "title"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
+          "name": "to"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
+          "name": "cc"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
+          "name": "bcc"
+        },
+        {
+          "type": "string",
+          "description": "Applicable to WhatsApp channels only.\n\nName of the Whatsapp template to use for the content.\n\nAll available template names are visible on the Whatsapp Business Manager interface.\n",
+          "example": "customer_order_shipment_template",
+          "name": "templateName"
+        },
+        {
+          "type": "string",
+          "description": "Applicable to WhatsApp channels only.\n\nLanguage of the Whatsapp template to use for the content. All available template languages are visible on the Whatsapp Business Manager interface.\n\nLanguage specified must conform to the ISO 639-1 alpha-2 codes for representing the names of languages.\n",
+          "example": "fr",
+          "name": "templateLanguage"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "description": "Applicable to WhatsApp channels only.\n\nComponent configuration of the Whatsapp template to use for the content.\n\nAll available components are visible on the Whatsapp Business Manager interface.\n",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": [
+            {
+              "Message1": [
+                {
+                  "param11": {
+                    "type": "Name",
+                    "text": "John"
+                  }
+                },
+                {
+                  "param12": {
+                    "type": "Message",
+                    "text": "Product rocks!"
+                  }
+                }
+              ]
+            },
+            {
+              "Message2": [
+                {
+                  "param21": {
+                    "type": "Agent Name",
+                    "text": "Alice"
+                  }
+                },
+                {
+                  "param22": {
+                    "type": "Message",
+                    "text": "Thank you"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "components"
+        },
+        {
+          "$ref": "ContentContextData",
+          "name": "contextData"
+        },
+        {
+          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
+          "type": "boolean",
+          "name": "autoSubmitted"
+        }
+      ]
+    },
+    {
+      "name": "NonEnumeratedPagingModel",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Current page size, describes how many items are in each page.\nMatches \"perPage\" parameter from the request.\n",
+          "example": 50,
+          "name": "perPage",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Current page token. May be omitted if result is empty (because non-existent page\nwas specified or perPage=0 was requested)\n",
+          "name": "pageToken",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one.",
+          "name": "nextPageToken",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "A page token to be used to fetch the previous page of the result set.\nMay be omitted if the current page is the first one or if the result set does not support backward navigation.\n",
+          "name": "previousPageToken",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "A page token to be used to fetch the first page of the result set.",
+          "name": "firstPageToken",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "ContentBodyFormatted",
+      "description": "Text and HTML formatted versions of the content body.",
+      "fields": [
+        {
+          "type": "string",
+          "name": "html"
+        },
+        {
+          "type": "string",
+          "name": "text"
+        }
+      ]
+    },
+    {
+      "name": "IdentitiesList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "IdentityModel"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "NonEnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "IdentityModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Identity identifier.",
+          "example": "506d9e817aa58d1259000f12",
+          "name": "id",
+          "required": true
+        },
+        {
+          "description": "Identity's avatar Uri.",
+          "type": "string",
+          "format": "uri",
+          "example": "https://example.com/assets/avatar/default-79fd530c58c2a6b83a11fcc0e842ed7023ceb69292cfeb857bc2af2c624b90fd.png",
+          "name": "avatarUri",
+          "required": false
+        },
+        {
+          "description": "Company.",
+          "type": "string",
+          "example": "Test Company",
+          "name": "company",
+          "required": false
+        },
+        {
+          "description": "Creation time of the resource.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "description": "Display name of the identity.",
+          "type": "string",
+          "example": "John Doe",
+          "name": "displayName",
+          "required": false
+        },
+        {
+          "description": "Email address.",
+          "type": "string",
+          "format": "email",
+          "example": "user@example.com",
+          "name": "emailAddress",
+          "required": false
+        },
+        {
+          "$ref": "IdentityExtraValues",
+          "name": "extraValues",
+          "required": false
+        },
+        {
+          "description": "FirstName.",
+          "type": "string",
+          "example": "John",
+          "name": "firstName",
+          "required": false
+        },
+        {
+          "description": "Gender.",
+          "type": "string",
+          "example": "Woman",
+          "enum": [
+            "Man",
+            "Woman"
+          ],
+          "nullable": true,
+          "name": "gender",
+          "required": false
+        },
+        {
+          "description": "Phone number.",
+          "type": "string",
+          "example": "+33634231224",
+          "name": "homePhone",
+          "required": false
+        },
+        {
+          "description": "The identity group id references the identity group that contains\nall information (phone, notes, etc.). Many identities may belong to\nthis group. If the identity group id is null, it means that identity\ndoes not have a group and any extra information.\n",
+          "type": "string",
+          "example": "54085e5b7aa58d8b5d00006c",
+          "name": "identityGroupId",
+          "required": false
+        },
+        {
+          "description": "LastName.",
+          "type": "string",
+          "example": "Doe",
+          "name": "lastName",
+          "required": false
+        },
+        {
+          "description": "Phone number.",
+          "type": "string",
+          "example": "+33634231224",
+          "name": "mobilePhone",
+          "required": false
+        },
+        {
+          "description": "Screen name of the identity.",
+          "type": "string",
+          "example": "John D.",
+          "name": "screenName",
+          "required": false
+        },
+        {
+          "description": "Type of the identity.",
+          "type": "string",
+          "enum": [
+            "AppleMessagesForBusiness",
+            "Email",
+            "EngageMessaging",
+            "Facebook",
+            "GoogleBusinessMessages",
+            "GoogleMyBusiness",
+            "Instagram",
+            "Linkedin",
+            "Twitter",
+            "Viber",
+            "WhatsApp",
+            "Youtube"
+          ],
+          "name": "type",
+          "required": true
+        },
+        {
+          "description": "The time when the last modification was completed.",
+          "format": "date-time",
+          "type": "string",
+          "example": "2023-02-04T12:43:07Z",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "description": "List of the associated user identifiers who can use the identity.",
+          "items": {
+            "type": "string",
+            "example": "54085e5b7aa58d8b5d00006c"
+          },
+          "type": "array",
+          "minItems": 0,
+          "name": "userIds",
+          "required": false
+        },
+        {
+          "description": "UUID of the identity.",
+          "type": "string",
+          "example": "9680ab94-3b78-495c-bb2c-a969954d8260",
+          "name": "uuid",
+          "required": false
+        },
+        {
+          "description": "Device info of the identity.\n\nApplicable to Engage Messaging channels only.\n",
+          "type": "string",
+          "example": "iPhone (iPhone); iOS 15.0.2",
+          "name": "mobileDeviceInfo",
+          "required": false
+        },
+        {
+          "description": "Facebook biography of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "type": "string",
+          "example": "Painter living in Paris",
+          "name": "fbBio",
+          "required": false
+        },
+        {
+          "description": "Facebook category of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "type": "string",
+          "example": "Computers/Internet",
+          "name": "fbCategory",
+          "required": false
+        },
+        {
+          "description": "Facebook locale of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "type": "string",
+          "example": "fr_FR",
+          "name": "fbLocale",
+          "required": false
+        },
+        {
+          "description": "Instagram followers count of the identity.\n\nApplicable to Instagram and InstagramMessaging channels only.\n",
+          "type": "integer",
+          "format": "int32",
+          "example": 10,
+          "name": "igFollowersCount",
+          "required": false
+        },
+        {
+          "description": "Twitter description of the identity.\n\nApplicable to Twitter channels only.\n",
+          "type": "string",
+          "example": "Software Engineer",
+          "name": "twDescription",
+          "required": false
+        },
+        {
+          "description": "Twitter followers count of the identity.\n\nApplicable to Twitter channels only.\n",
+          "type": "integer",
+          "format": "int32",
+          "example": 10,
+          "name": "twFollowersCount",
+          "required": false
+        },
+        {
+          "description": "Count of Twitter accounts followed by the identity.\n\nApplicable to Twitter channels only.\n",
+          "type": "integer",
+          "format": "int32",
+          "example": 500,
+          "name": "twFollowingCount",
+          "required": false
+        },
+        {
+          "description": "Count of tweets of the identity.\n\nApplicable to Twitter channels only.\n",
+          "type": "integer",
+          "format": "int32",
+          "example": 42,
+          "name": "twStatusesCount",
+          "required": false
+        },
+        {
+          "description": "Twitter location of the identity.\n\nApplicable to Twitter channels only.\n",
+          "type": "string",
+          "example": "Paris",
+          "name": "twLocation",
+          "required": false
+        },
+        {
+          "description": "Viber API version of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "10",
+          "name": "apiVersion",
+          "required": false
+        },
+        {
+          "description": "Viber country of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "FR",
+          "name": "country",
+          "required": false
+        },
+        {
+          "description": "Viber device type of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "SM-G970U1",
+          "name": "deviceType",
+          "required": false
+        },
+        {
+          "description": "Viber language of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "fr-FR",
+          "name": "language",
+          "required": false
+        },
+        {
+          "description": "Viber mobile country code of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "1",
+          "name": "mcc",
+          "required": false
+        },
+        {
+          "description": "Viber mobile network code of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "220",
+          "name": "mnc",
+          "required": false
+        },
+        {
+          "description": "Viber primary device OS of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "Android 11",
+          "name": "primaryDeviceOs",
+          "required": false
+        },
+        {
+          "description": "Viber application version of the identity.\n\nApplicable to Viber channels only.\n",
+          "type": "string",
+          "example": "19.5.0",
+          "name": "viberVersion",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "IdentityExtraValues",
+      "description": "Additional data to store along the identity.",
+      "fields": []
+    },
+    {
+      "name": "ImportIdentityRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Identifier of the identity on the remote channel.",
+          "example": "9680ab94-3b78-495c-bb2c-a969954d8260",
+          "name": "foreignId",
+          "required": true
+        },
+        {
+          "description": "The channel identifier to create the identity for.\n",
+          "type": "string",
+          "example": "541014e17aa58d8ccf000023",
+          "name": "sourceId",
+          "required": true
+        },
+        {
+          "description": "Company.",
+          "type": "string",
+          "example": "Test Company",
+          "name": "company",
+          "required": false
+        },
+        {
+          "description": "FirstName.",
+          "type": "string",
+          "example": "John",
+          "name": "firstName",
+          "required": false
+        },
+        {
+          "description": "Gender.",
+          "type": "string",
+          "example": "Woman",
+          "enum": [
+            "Man",
+            "Woman"
+          ],
+          "nullable": true,
+          "name": "gender",
+          "required": false
+        },
+        {
+          "description": "Phone number.",
+          "type": "string",
+          "example": "+33634231224",
+          "name": "homePhone",
+          "required": false
+        },
+        {
+          "description": "LastName.",
+          "type": "string",
+          "example": "Doe",
+          "name": "lastName",
+          "required": false
+        },
+        {
+          "description": "Phone number.",
+          "type": "string",
+          "example": "+33634231224",
+          "name": "mobilePhone",
+          "required": false
+        },
+        {
+          "description": "Screen name of the identity.",
+          "type": "string",
+          "example": "John D.",
+          "name": "screenName",
+          "required": false
+        },
+        {
+          "$ref": "IdentityExtraValues",
+          "name": "extraValues",
+          "required": false
+        },
+        {
+          "description": "Permit to update an existing identity if set to true.\n\nfalse by default.\n",
+          "type": "boolean",
+          "example": true,
+          "default": false,
+          "name": "upsert",
           "required": false
         }
       ]
@@ -46381,6 +47873,13 @@
   "paths": [
     {
       "paths": [
+        "cx"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
         "ai"
       ],
       "operations": [],
@@ -46989,6 +48488,14 @@
     },
     {
       "paths": [
+        "cx",
+        "social-messaging"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
         "restapi",
         "client-info"
       ],
@@ -47330,6 +48837,15 @@
         }
       ],
       "parameter": "siteId"
+    },
+    {
+      "paths": [
+        "cx",
+        "social-messaging",
+        "v1"
+      ],
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -48122,6 +49638,34 @@
     {
       "paths": [
         "restapi",
+        "oauth",
+        "introspect"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/oauth/introspect",
+          "method": "post",
+          "tags": [
+            "OAuth/OIDC"
+          ],
+          "method2": "post",
+          "description": "Determines state and metadata for a given token (access token, refresh token \nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
+          "summary": "Token Introspection",
+          "operationId": "introspectToken",
+          "rateLimitGroup": "Auth",
+          "appPermission": "Interoperability",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TokenIntrospectionResponse"
+          },
+          "bodyParameters": "introspectTokenRequest",
+          "formUrlEncoded": true
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
         "account",
         "directory"
       ],
@@ -48486,7 +50030,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "RoleResource"
-          }
+          },
+          "queryParameters": "readUserRoleParameters"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/user-role/{roleId}",
@@ -48502,6 +50047,9 @@
           "appPermission": "RoleManagement",
           "userPermission": "EditUserRoles",
           "withParameter": true,
+          "responseSchema": {
+            "$ref": "RoleResource"
+          },
           "bodyParameters": "roleResource"
         },
         {
@@ -48737,6 +50285,31 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "ScimProviderConfig"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "oauth",
+        "session-info"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/oauth/session-info",
+          "method": "get",
+          "tags": [
+            "OAuth/OIDC"
+          ],
+          "method2": "get",
+          "description": "Returns information about current OAuth session\n",
+          "summary": "Session info",
+          "operationId": "getOAuthSessionInfo",
+          "rateLimitGroup": "Auth",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "SessionInfoResponse"
           }
         }
       ]
@@ -48979,7 +50552,7 @@
             "Call Queues"
           ],
           "method2": "list",
-          "description": "Returns a call queue list.\n",
+          "description": "Returns a call queue list.",
           "summary": "List Call Queues",
           "operationId": "listCallQueues",
           "rateLimitGroup": "Medium",
@@ -48998,7 +50571,7 @@
             "Call Queues"
           ],
           "method2": "get",
-          "description": "Returns basic information on a call queue group extension.\n",
+          "description": "Returns basic information on a call queue group extension.",
           "summary": "Get Call Queue",
           "operationId": "readCallQueueInfo",
           "rateLimitGroup": "Light",
@@ -49026,7 +50599,7 @@
           "responseSchema": {
             "$ref": "CallQueueDetails"
           },
-          "bodyParameters": "callQueueUpdateDetails"
+          "bodyParameters": "callQueueDetails"
         }
       ],
       "parameter": "groupId"
@@ -50120,10 +51693,11 @@
           "endpoint": "/rcvideo/v1/account/{accountId}/recordings",
           "method": "get",
           "tags": [
-            "Meeting Recordings"
+            "Meeting Recordings",
+            "Account Administration"
           ],
           "method2": "get",
-          "description": "Returns the list of meeting recordings belonging to all account users.",
+          "description": "Returns all account recordings.\nThis endpoint is used in Admin recording service, not regular web\n",
           "summary": "List Account Recordings",
           "operationId": "getAccountRecordings",
           "rateLimitGroup": "Light",
@@ -50772,6 +52346,61 @@
           "bodyParameters": "callRecordingIds"
         }
       ]
+    },
+    {
+      "paths": [
+        "cx",
+        "social-messaging",
+        "v1",
+        "contents"
+      ],
+      "operations": [
+        {
+          "endpoint": "/cx/social-messaging/v1/contents",
+          "method": "get",
+          "tags": [
+            "Contents"
+          ],
+          "method2": "list",
+          "description": "List contents by creation date. The default creation order is descending.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nThe query parameters provided shall be considered an AND operation to filter the list.\n\nA query parameter not specified or a query parameter provided with no value is treated as not required for\nfiltering the list.\n",
+          "summary": "List All Contents",
+          "operationId": "socMsgListContents",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false,
+          "queryParameters": "socMsgListContentsParameters"
+        },
+        {
+          "endpoint": "/cx/social-messaging/v1/contents",
+          "method": "post",
+          "tags": [
+            "Contents"
+          ],
+          "method2": "post",
+          "description": "Creates new content for use in discussions.\n\nThis request is used to reply to already-posted content or to initiate a discussion. If authorized, the\nauthenticated user will be used as the content author.\n\nContent will be created and pushed asynchronously to the channel. When the content is successfully pushed to\nthe channel, the Content.Exported event will be reported.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nReplying to customer content is usually possible unless the channel or conversation is read only. Composing\ncontent, on the contrary, depends on the channel itself.\n\n* The channel may not support it (and be purely reactive like Instagram, Messenger, etc.).\n\n* Some channels (usually public accounts like Twitter or Facebook pages) allow for the publishing of content\nwithout targeting specific individuals.\n\n* Some channels (usually non-public media) require specific targeting (phone number for SMS, email address\nfor email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the\ngeneric parameters.\n",
+          "summary": "Create Content",
+          "operationId": "socMsgCreateContent",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false,
+          "bodyParameters": "createContentRequest"
+        },
+        {
+          "endpoint": "/cx/social-messaging/v1/contents/{contentId}",
+          "method": "get",
+          "tags": [
+            "Contents"
+          ],
+          "method2": "get",
+          "description": "Retrieves the content from the given id.\n",
+          "summary": "Get Content",
+          "operationId": "socMsgGetContent",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": true
+        }
+      ],
+      "parameter": "contentId"
     },
     {
       "paths": [
@@ -51622,6 +53251,46 @@
           "bodyParameters": "defaultUserRoleRequest"
         }
       ]
+    },
+    {
+      "paths": [
+        "cx",
+        "social-messaging",
+        "v1",
+        "identities"
+      ],
+      "operations": [
+        {
+          "endpoint": "/cx/social-messaging/v1/identities",
+          "method": "get",
+          "tags": [
+            "Identities"
+          ],
+          "method2": "list",
+          "description": "List identities by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nThe query parameters provided shall be considered an AND operation to filter the list.\n\nA query parameter not specified or a query parameter provided with no value is treated as not required for\nfiltering the list.\n",
+          "summary": "List All Identities",
+          "operationId": "socMsgListIdentities",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false,
+          "queryParameters": "socMsgListIdentitiesParameters"
+        },
+        {
+          "endpoint": "/cx/social-messaging/v1/identities/{identityId}",
+          "method": "get",
+          "tags": [
+            "Identities"
+          ],
+          "method2": "get",
+          "description": "Renders an identity from given id.\n",
+          "summary": "Get Identity",
+          "operationId": "socMsgGetIdentity",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": true
+        }
+      ],
+      "parameter": "identityId"
     },
     {
       "paths": [
@@ -53935,7 +55604,7 @@
             "Meeting Recordings"
           ],
           "method2": "get",
-          "description": "Returns the list of meeting recordings belonging to particular user.",
+          "description": "Returns all recordings available for specific extension.\nThis endpoint is used in admin recording service, not regular web\n",
           "summary": "List User Recordings",
           "operationId": "getExtensionRecordings",
           "rateLimitGroup": "Light",
@@ -54217,6 +55886,32 @@
     },
     {
       "paths": [
+        "cx",
+        "social-messaging",
+        "v1",
+        "identities",
+        "import"
+      ],
+      "operations": [
+        {
+          "endpoint": "/cx/social-messaging/v1/identities/import",
+          "method": "post",
+          "tags": [
+            "Identities"
+          ],
+          "method2": "post",
+          "description": "Import an identity from given identifier.\n\nAvailable only for Email channels.\n",
+          "summary": "Import Identity",
+          "operationId": "socMsgImportIdentity",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false,
+          "bodyParameters": "importIdentityRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -54316,8 +56011,7 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "DelegatorsListResult"
-          },
-          "queryParameters": "rcvListDelegatorsParameters"
+          }
         }
       ]
     },
@@ -54520,6 +56214,34 @@
             "$ref": "PagingOnlyGroupDevices"
           },
           "queryParameters": "listPagingGroupDevicesParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "extension",
+        "assignable-roles"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/assignable-roles",
+          "method": "get",
+          "tags": [
+            "Role Management"
+          ],
+          "method2": "get",
+          "description": "Returns a list of roles which can be assigned to a given extension.",
+          "summary": "List Assignable Roles",
+          "operationId": "listOfAvailableForAssigningRoles",
+          "rateLimitGroup": "Medium",
+          "appPermission": "RoleManagement",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "RolesCollectionResource"
+          },
+          "queryParameters": "listOfAvailableForAssigningRolesParameters"
         }
       ]
     },
@@ -54960,7 +56682,7 @@
             "Call Queues"
           ],
           "method2": "get",
-          "description": "Returns overflow settings for a call queue specified in path.\n",
+          "description": "Returns overflow settings for a call queue specified in path.",
           "summary": "Get Call Queue Overflow Settings",
           "operationId": "getCallQueueOverflowSettings",
           "rateLimitGroup": "Heavy",
@@ -55064,6 +56786,31 @@
             "$ref": "MessageStoreConfiguration"
           },
           "bodyParameters": "messageStoreConfiguration"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "cx",
+        "social-messaging",
+        "v1",
+        "identities",
+        "anonymize"
+      ],
+      "operations": [
+        {
+          "endpoint": "/cx/social-messaging/v1/identities/{identityId}/anonymize",
+          "method": "post",
+          "tags": [
+            "Identities"
+          ],
+          "method2": "post",
+          "description": "Anonymizes an Identity.\n",
+          "summary": "Anonymize Identity",
+          "operationId": "socMsgAnonymizeIdentity",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false
         }
       ]
     },
@@ -55621,6 +57368,31 @@
             "$ref": "AuthProfileCheckResource"
           },
           "queryParameters": "checkUserPermissionParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "cx",
+        "social-messaging",
+        "v1",
+        "identities",
+        "deanonymize"
+      ],
+      "operations": [
+        {
+          "endpoint": "/cx/social-messaging/v1/identities/{identityId}/deanonymize",
+          "method": "post",
+          "tags": [
+            "Identities"
+          ],
+          "method2": "post",
+          "description": "Flag Identity for deanonymization.\n\nThe next time a content from this Identity will be imported, the identity will be imported again.\n",
+          "summary": "Deanonymize Identity",
+          "operationId": "socMsgDeanonymizeIdentity",
+          "rateLimitGroup": "Light",
+          "appPermission": "SocialMessaging",
+          "withParameter": false
         }
       ]
     },
