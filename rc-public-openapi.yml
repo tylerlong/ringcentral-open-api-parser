@@ -55,6 +55,11 @@ x-tagGroups:
   - "High Volume SMS"
   - "Voicemail Broadcasting"
   - "SMS Log Export"
+- name: "Social Messaging"
+  popular: true
+  tags:
+  - "Identities"
+  - "Contents"
 - name: "Team Messaging"
   popular: true
   tags:
@@ -102,18 +107,6 @@ x-tagGroups:
   - "Audio"
   - "Text"
   - "Status"
-- name: "Social Messaging"
-  popular: true
-  tags:
-  - "Identities"
-  - "Contents"
-- name: "Using the API"
-  tags:
-  - "Welcome"
-  - "Changelog"
-  - "Data Formats"
-  - "Localization"
-  - "Method Features"
 - name: "Authentication"
   tags:
   - "OAuth/OIDC"
@@ -218,6 +211,7 @@ tags:
 - name: "User Permissions"
 - name: "Line Of Business Analytics"
 - name: "Internal Contacts"
+- name: "Identities"
 - name: "Devices"
 - name: "Call Control"
 - name: "Company"
@@ -251,12 +245,14 @@ tags:
 - name: "Business Hours"
 - name: "Registrants"
   description: "External APIs for registrants management"
+- name: "Contents"
 - name: "Posts"
 - name: "Call Handling Rules"
 - name: "High Volume SMS"
 - name: "Webinars and Sessions"
   description: "External APIs for webinar and session management"
 - name: "Chats"
+- name: "Account Administration"
 - name: "Delegation Management"
 - name: "OAuth/OIDC"
   description: "Public OAuth 2.0 and OpenID Connect Resources"
@@ -1999,8 +1995,11 @@ paths:
     get:
       tags:
       - "Meeting Recordings"
+      - "Account Administration"
       summary: "List Account Recordings"
-      description: "Returns the list of meeting recordings belonging to all account users."
+      description: |
+        Returns all account recordings.
+        This endpoint is used in Admin recording service, not regular web
       operationId: "getAccountRecordings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -2026,7 +2025,9 @@ paths:
       tags:
       - "Meeting Recordings"
       summary: "List User Recordings"
-      description: "Returns the list of meeting recordings belonging to particular user."
+      description: |
+        Returns all recordings available for specific extension.
+        This endpoint is used in admin recording service, not regular web
       operationId: "getExtensionRecordings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -2064,10 +2065,6 @@ paths:
       - name: "extensionId"
         in: "path"
         required: true
-        schema:
-          type: "string"
-      - name: "requuid"
-        in: "query"
         schema:
           type: "string"
       responses:
@@ -2109,7 +2106,14 @@ paths:
           format: "int32"
       - name: "type"
         in: "query"
-        description: "Type of returned data"
+        description: |
+          Specify what kind of meeting should be returned. Possible values: All, My, Deleted, Shared
+          Request type meaning in meeting search:
+          `None` (not passed) - take meetings only where requested acc/ext is participant OR host OR deputy OR watcher.
+          `ALL`- access rights of meeting is equal to Alive AND requested acc/ext  is in watchers list OR host OR deputy
+          `My`- access rights of meeting is equal to Alive AND requested acc/ext is host OR deputy
+          `Shared` - access rights of meeting is equal to Alive AND requested acc/ext is in watcher list AND not HOST
+          `Deleted` - access rights of meeting is equal to Delete and requested acc/ext is host OR deputy
         schema:
           type: "string"
           enum:
@@ -2117,9 +2121,21 @@ paths:
           - "My"
           - "Deleted"
           - "Shared"
+      - name: "startTime"
+        in: "query"
+        description: "Unix timestamp in milliseconds (inclusive) indicates the start time of meetings which should be included in response"
+        schema:
+          type: "integer"
+          format: "int64"
+      - name: "endTime"
+        in: "query"
+        description: "Unix timestamp in milliseconds (inclusive) indicates the end time of meetings which should be included in response"
+        schema:
+          type: "integer"
+          format: "int64"
       responses:
         "200":
-          description: "Successful response"
+          description: "Returns meetings list with pagination"
           content:
             application/json:
               schema:
@@ -2266,6 +2282,57 @@ paths:
         "200":
           description: "OK"
       x-throttling-group: "Auth"
+  /restapi/oauth/session-info:
+    get:
+      tags:
+      - "OAuth/OIDC"
+      summary: "Session info"
+      description: |
+        Returns information about current OAuth session
+      operationId: "getOAuthSessionInfo"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionInfoResponse"
+      x-throttling-group: "Auth"
+  /restapi/oauth/introspect:
+    post:
+      tags:
+      - "OAuth/OIDC"
+      summary: "Token Introspection"
+      description: "Determines state and metadata for a given token (access token, refresh token \nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n"
+      operationId: "introspectToken"
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                  description: "OAuth token"
+                scope:
+                  type: "string"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenIntrospectionResponse"
+        "400":
+          description: |
+            Possible responses:
+            - `invalid_client`: The client application is disabled
+            - `invalid_scope`: The client application has insufficient scope
+        "429":
+          description: "Request rate exceeded"
+      x-throttling-group: "Auth"
+      x-app-permission: "Interoperability"
   /restapi/v2/accounts/{accountId}:
     get:
       tags:
@@ -5706,16 +5773,13 @@ paths:
       tags:
       - "Call Queues"
       summary: "List Call Queues"
-      description: |
-        Returns a call queue list.
+      description: "Returns a call queue list."
       operationId: "listCallQueues"
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - name: "page"
         in: "query"
-        description: |
-          Indicates a page number to retrieve. Only positive number values
-          are accepted
+        description: "Indicates a page number to retrieve. Only positive number values are accepted"
         schema:
           type: "integer"
           format: "int32"
@@ -5729,9 +5793,7 @@ paths:
           default: 100
       - name: "memberExtensionId"
         in: "query"
-        description: |
-          Internal identifier of an extension that is a member of every
-          group within the result
+        description: "Internal identifier of an extension that is a member of every group within the result"
         schema:
           type: "string"
       responses:
@@ -5751,8 +5813,7 @@ paths:
       tags:
       - "Call Queues"
       summary: "Get Call Queue"
-      description: |
-        Returns basic information on a call queue group extension.
+      description: "Returns basic information on a call queue group extension."
       operationId: "readCallQueueInfo"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -5792,7 +5853,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CallQueueUpdateDetails"
+              $ref: "#/components/schemas/CallQueueDetails"
         required: true
       responses:
         "200":
@@ -6973,7 +7034,7 @@ paths:
       operationId: "readMessageStoreReportTask"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/TaskId"
+      - $ref: "#/components/parameters/PicTaskId"
       responses:
         "200":
           description: "Success"
@@ -6998,7 +7059,7 @@ paths:
       operationId: "readMessageStoreReportArchive"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/TaskId"
+      - $ref: "#/components/parameters/PicTaskId"
       responses:
         "200":
           description: "Success"
@@ -7929,6 +7990,13 @@ paths:
         schema:
           type: "string"
       - $ref: "#/components/parameters/AccountId"
+      - name: "advancedPermissions"
+        in: "query"
+        description: |
+          Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.
+          The default value is false.
+        schema:
+          type: "boolean"
       responses:
         "200":
           description: "User role information"
@@ -7964,6 +8032,10 @@ paths:
       responses:
         "200":
           description: "Updated user role information"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleResource"
       x-feature: "EditRoles"
       x-availability: "Limited"
       x-throttling-group: "Medium"
@@ -8115,6 +8187,7 @@ paths:
             - "Bot"
             - "ProxyAdmin"
             - "DelegatedLinesGroup"
+            - "Site"
       responses:
         "200":
           description: "Extension list information"
@@ -9091,6 +9164,29 @@ paths:
       x-throttling-group: "Heavy"
       x-app-permission: "ReadCallLog"
       x-user-permission: "ReadCallLog"
+  /restapi/v1.0/account/{accountId}/extension/{extensionId}/assignable-roles:
+    get:
+      tags:
+      - "Role Management"
+      summary: "List Assignable Roles"
+      description: "Returns a list of roles which can be assigned to a given extension."
+      operationId: "listOfAvailableForAssigningRoles"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      - $ref: "#/components/parameters/Page"
+      - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          description: "List of roles which can be assigned to a given extension"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RolesCollectionResource"
+      x-feature: "EditUsers AND AdvancedPermissionsCapabilities"
+      x-availability: "Limited"
+      x-throttling-group: "Medium"
+      x-app-permission: "RoleManagement"
   /restapi/v1.0/account/{accountId}/extension/{extensionId}/active-calls:
     get:
       tags:
@@ -11891,8 +11987,7 @@ paths:
       tags:
       - "Call Queues"
       summary: "Get Call Queue Overflow Settings"
-      description: |
-        Returns overflow settings for a call queue specified in path.
+      description: "Returns overflow settings for a call queue specified in path."
       operationId: "getCallQueueOverflowSettings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -13801,6 +13896,13 @@ paths:
           type: "string"
       - $ref: "#/components/parameters/Page"
       - $ref: "#/components/parameters/PerPage"
+      - name: "advancedPermissions"
+        in: "query"
+        description: |
+          Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.
+          The default value is false.
+        schema:
+          type: "boolean"
       responses:
         "200":
           description: "List of standard user roles"
@@ -14400,6 +14502,256 @@ paths:
                   description: "Callback successfully accepted"
       x-throttling-group: "Heavy"
       x-app-permission: "AI"
+  /cx/social-messaging/v1/contents:
+    get:
+      tags:
+      - "Contents"
+      summary: "List All Contents"
+      description: |
+        List contents by creation date. The default creation order is descending.
+
+        The account context of this request is determined by the RC Account Id associated with the access token provided
+        in the Authorization header.
+
+        The query parameters provided shall be considered an AND operation to filter the list.
+
+        A query parameter not specified or a query parameter provided with no value is treated as not required for
+        filtering the list.
+      operationId: "socMsgListContents"
+      parameters:
+      - $ref: "#/components/parameters/InterventionFilter"
+      - $ref: "#/components/parameters/IdentityFilter"
+      - $ref: "#/components/parameters/IdentityGroupFilter"
+      - $ref: "#/components/parameters/SourceFilter"
+      - $ref: "#/components/parameters/ThreadFilter"
+      - $ref: "#/components/parameters/TextFilter"
+      - $ref: "#/components/parameters/StatusFilter"
+      - $ref: "#/components/parameters/SocMsgOrderBy"
+      - $ref: "#/components/parameters/PageToken"
+      - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          $ref: "#/components/responses/SocMsgListContentsResponse200"
+        "400":
+          $ref: "#/components/responses/SocMsgListContentsResponse400"
+        "422":
+          $ref: "#/components/responses/SocMsgListContentsResponse422"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+    post:
+      tags:
+      - "Contents"
+      summary: "Create Content"
+      description: |
+        Creates new content for use in discussions.
+
+        This request is used to reply to already-posted content or to initiate a discussion. If authorized, the
+        authenticated user will be used as the content author.
+
+        Content will be created and pushed asynchronously to the channel. When the content is successfully pushed to
+        the channel, the Content.Exported event will be reported.
+
+        The account context of this request is determined by the RC Account Id associated with the access token provided
+        in the Authorization header.
+
+        Replying to customer content is usually possible unless the channel or conversation is read only. Composing
+        content, on the contrary, depends on the channel itself.
+
+        * The channel may not support it (and be purely reactive like Instagram, Messenger, etc.).
+
+        * Some channels (usually public accounts like Twitter or Facebook pages) allow for the publishing of content
+        without targeting specific individuals.
+
+        * Some channels (usually non-public media) require specific targeting (phone number for SMS, email address
+        for email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the
+        generic parameters.
+      operationId: "socMsgCreateContent"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContentRequest"
+            examples:
+              Create content with inReplyToContentId:
+                $ref: "#/components/examples/CreateContentWithInReplyToContentId"
+              Create content with sourceId:
+                $ref: "#/components/examples/CreateContentWithSourceId"
+              Create content with attachments:
+                $ref: "#/components/examples/CreateContentWithAttachments"
+              Create content with specified authorIdentityId:
+                $ref: "#/components/examples/CreateContentWithAuthorIdentityId"
+              Create content with context data:
+                $ref: "#/components/examples/CreateContentWithContextData"
+              Create content for Email channel:
+                $ref: "#/components/examples/CreateContentOnEmailChannel"
+              Reply to a content for Email channel:
+                $ref: "#/components/examples/ReplyContentOnEmailChannel"
+              Create content for WhatsApp channel:
+                $ref: "#/components/examples/CreateOutboundContentOnWhatsappChannel"
+              Reply to a whatsapp content:
+                $ref: "#/components/examples/ReplyContentOnWhatsappChannel"
+      responses:
+        "201":
+          $ref: "#/components/responses/SocCreateContentResponse201"
+        "400":
+          $ref: "#/components/responses/SocMsgCreateContentResponse400"
+        "403":
+          $ref: "#/components/responses/SocMsgCreateContentResponse403"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+        "422":
+          $ref: "#/components/responses/SocMsgCreateContentResponse422"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/contents/{contentId}:
+    get:
+      tags:
+      - "Contents"
+      summary: "Get Content"
+      description: |
+        Retrieves the content from the given id.
+      operationId: "socMsgGetContent"
+      parameters:
+      - $ref: "#/components/parameters/ContentId"
+      responses:
+        "200":
+          $ref: "#/components/responses/SocMsgGetContentResponse200"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/identities:
+    get:
+      tags:
+      - "Identities"
+      summary: "List All Identities"
+      description: |
+        List identities by creation date. The default order is descending.
+
+        The account context of this request is determined by the RC Account Id associated with the access token provided
+        in the Authorization header.
+
+        The query parameters provided shall be considered an AND operation to filter the list.
+
+        A query parameter not specified or a query parameter provided with no value is treated as not required for
+        filtering the list.
+      operationId: "socMsgListIdentities"
+      parameters:
+      - $ref: "#/components/parameters/SourceId"
+      - $ref: "#/components/parameters/IdentityGroupId"
+      - $ref: "#/components/parameters/UserId"
+      - $ref: "#/components/parameters/UUID"
+      - $ref: "#/components/parameters/SocMsgOrderBy"
+      - $ref: "#/components/parameters/PageToken"
+      - $ref: "#/components/parameters/PerPage"
+      responses:
+        "200":
+          $ref: "#/components/responses/SocMsgListIdentitiesResponse200"
+        "400":
+          $ref: "#/components/responses/SocMsgListIdentitiesResponse400"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/identities/{identityId}:
+    get:
+      tags:
+      - "Identities"
+      summary: "Get Identity"
+      description: |
+        Renders an identity from given id.
+      operationId: "socMsgGetIdentity"
+      parameters:
+      - $ref: "#/components/parameters/IdentityId"
+      responses:
+        "200":
+          $ref: "#/components/responses/SocMsgGetIdentityResponse200"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/identities/{identityId}/deanonymize:
+    post:
+      tags:
+      - "Identities"
+      summary: "Deanonymize Identity"
+      description: |
+        Flag Identity for deanonymization.
+
+        The next time a content from this Identity will be imported, the identity will be imported again.
+      operationId: "socMsgDeanonymizeIdentity"
+      parameters:
+      - $ref: "#/components/parameters/IdentityId"
+      responses:
+        "201":
+          $ref: "#/components/responses/SocMsgIdentity201"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/identities/{identityId}/anonymize:
+    post:
+      tags:
+      - "Identities"
+      summary: "Anonymize Identity"
+      description: |
+        Anonymizes an Identity.
+      operationId: "socMsgAnonymizeIdentity"
+      parameters:
+      - $ref: "#/components/parameters/IdentityId"
+      responses:
+        "201":
+          $ref: "#/components/responses/SocMsgIdentity201"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
+  /cx/social-messaging/v1/identities/import:
+    post:
+      tags:
+      - "Identities"
+      summary: "Import Identity"
+      description: |
+        Import an identity from given identifier.
+
+        Available only for Email channels.
+      operationId: "socMsgImportIdentity"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportIdentityRequest"
+            examples:
+              Import an email identity:
+                summary: "An example for Import email identity"
+                value:
+                  foreignId: "test@test.com"
+                  sourceId: "541014e17aa58d8ccf000023"
+              Import an email identity with extra values:
+                summary: "An example for Import email identity with extra values"
+                value:
+                  foreignId: "test@test.com"
+                  sourceId: "541014e17aa58d8ccf000023"
+                  extraValues:
+                    customerId: "myCustomerId"
+              Update an email identity with a company name:
+                summary: "An example for update email identity with company name"
+                value:
+                  foreignId: "test@test.com"
+                  sourceId: "541014e17aa58d8ccf000023"
+                  company: "MyCompany"
+                  upsert: true
+      responses:
+        "201":
+          $ref: "#/components/responses/SocMsgCreateIdentityResponse201"
+        "404":
+          $ref: "#/components/responses/SocMsgResponse404"
+        "422":
+          $ref: "#/components/responses/SocMsgImportIdentityResponse422"
+        "500":
+          $ref: "#/components/responses/SocMsgImportIdentityResponse500"
+      x-throttling-group: "Light"
+      x-app-permission: "SocialMessaging"
   /scim/v2/Schemas:
     get:
       tags:
@@ -17088,6 +17440,199 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ApiErrorResponseModel"
+    SocCreateContentResponse201:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ContentModel"
+    SocMsgResponse404:
+      description: "Error 404"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-029:
+              $ref: "#/components/examples/EDI-029"
+            EDI-032:
+              $ref: "#/components/examples/EDI-032"
+    SocMsgListContentsResponse422:
+      description: "Error 422 on content list"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-034:
+              $ref: "#/components/examples/EDI-034"
+            EDI-035:
+              $ref: "#/components/examples/EDI-035"
+            EDI-036:
+              $ref: "#/components/examples/EDI-036"
+    SocMsgCreateContentResponse400:
+      description: "Error 400 on content creation"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-009:
+              $ref: "#/components/examples/EDI-009"
+            EDI-025:
+              $ref: "#/components/examples/EDI-025"
+            EDI-030:
+              $ref: "#/components/examples/EDI-030"
+            EDI-031:
+              $ref: "#/components/examples/EDI-031"
+            EDI-037:
+              $ref: "#/components/examples/EDI-037"
+            EDI-038:
+              $ref: "#/components/examples/EDI-038"
+            EDI-040:
+              $ref: "#/components/examples/EDI-040"
+    SocMsgCreateContentResponse403:
+      description: "Error 403 on content creation"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-013:
+              $ref: "#/components/examples/EDI-013"
+            EDI-014:
+              $ref: "#/components/examples/EDI-014"
+            EDI-015:
+              $ref: "#/components/examples/EDI-015"
+            EDI-016:
+              $ref: "#/components/examples/EDI-016"
+            EDI-017:
+              $ref: "#/components/examples/EDI-017"
+            EDI-018:
+              $ref: "#/components/examples/EDI-018"
+            EDI-019:
+              $ref: "#/components/examples/EDI-019"
+            EDI-020:
+              $ref: "#/components/examples/EDI-020"
+            EDI-021:
+              $ref: "#/components/examples/EDI-021"
+            EDI-022:
+              $ref: "#/components/examples/EDI-022"
+            EDI-023:
+              $ref: "#/components/examples/EDI-023"
+            EDI-024:
+              $ref: "#/components/examples/EDI-024"
+    SocMsgListContentsResponse200:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ContentList"
+    SocMsgCreateContentResponse422:
+      description: "Error 422 on content creation"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-010:
+              $ref: "#/components/examples/EDI-010"
+            EDI-011:
+              $ref: "#/components/examples/EDI-011"
+            EDI-012:
+              $ref: "#/components/examples/EDI-012"
+            EDI-027:
+              $ref: "#/components/examples/EDI-027"
+            EDI-001:
+              $ref: "#/components/examples/EDI-001"
+            EDI-002:
+              $ref: "#/components/examples/EDI-002"
+            EDI-003:
+              $ref: "#/components/examples/EDI-003"
+            EDI-004:
+              $ref: "#/components/examples/EDI-004"
+            EDI-005:
+              $ref: "#/components/examples/EDI-005"
+            EDI-006:
+              $ref: "#/components/examples/EDI-006"
+            EDI-007:
+              $ref: "#/components/examples/EDI-007"
+            EDI-008:
+              $ref: "#/components/examples/EDI-008"
+            EDI-033:
+              $ref: "#/components/examples/EDI-033"
+    SocMsgListContentsResponse400:
+      description: "Error 400 on content creation"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-028:
+              $ref: "#/components/examples/EDI-028"
+    SocMsgGetContentResponse200:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ContentModel"
+    SocMsgListIdentitiesResponse200:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/IdentitiesList"
+    SocMsgListIdentitiesResponse400:
+      description: "Error 400 on Identity search"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-028:
+              $ref: "#/components/examples/EDI-028"
+    SocMsgGetIdentityResponse200:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/IdentityModel"
+    SocMsgIdentity201:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/IdentityModel"
+    SocMsgImportIdentityResponse422:
+      description: "Error 422 on identity import"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-025:
+              $ref: "#/components/examples/EDI-025"
+            EDI-008:
+              $ref: "#/components/examples/EDI-008"
+            EDI-043:
+              $ref: "#/components/examples/EDI-043"
+            EDI-044:
+              $ref: "#/components/examples/EDI-044"
+    SocMsgImportIdentityResponse500:
+      description: "Error 500 on identity import"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+          examples:
+            EDI-045:
+              $ref: "#/components/examples/EDI-045"
+    SocMsgCreateIdentityResponse201:
+      description: "Successful response."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/IdentityModel"
     ScimNotFound:
       description: "Not found"
       content:
@@ -19038,6 +19583,8 @@ components:
       properties:
         everyoneCanControl:
           $ref: "#/components/schemas/EveryoneCanControl"
+        autoShared:
+          $ref: "#/components/schemas/AutoShared"
     BridgeResponseSecurityPassword:
       type: "object"
       properties:
@@ -19062,6 +19609,18 @@ components:
             This field will be returned only if the request was done by bridge owner, his delegate or any user who has
             the Super Admin privilege.
           example: "99e4f8e6a241fc71279449a9c8f46eef"
+    AutoShared:
+      type: "object"
+      description: "Controls whether recording can be auto shared"
+      properties:
+        enabled:
+          type: "boolean"
+          description: "Controls whether preference is enabled"
+          example: true
+        locked:
+          type: "boolean"
+          description: "Describes whether preference is locked on Service Web"
+          example: false
     BridgePstnPins:
       type: "object"
       properties:
@@ -19354,15 +19913,17 @@ components:
       properties:
         accountId:
           type: "string"
-          description: "account id"
+          description: "Account id"
         extensionId:
           type: "string"
-          description: "extension id"
+          description: "Extension id"
         displayName:
           type: "string"
-          description: "displayName"
+          description: "Display name"
       description: "Meeting host"
     Paging:
+      required:
+      - "currentPageToken"
       type: "object"
       properties:
         currentPageToken:
@@ -19389,11 +19950,12 @@ components:
     CloudRecording:
       required:
       - "displayName"
-      - "downloadLink"
       - "hostInfo"
       - "id"
       - "shortId"
       - "startTime"
+      - "mediaLink"
+      - "url"
       type: "object"
       properties:
         id:
@@ -19416,9 +19978,15 @@ components:
           description: "Meeting name"
         hostInfo:
           $ref: "#/components/schemas/Host"
-        downloadLink:
+        mediaLink:
           type: "string"
-          description: "Link to the recording file"
+          description: "Link to the recording file. Not used anymore by Web team"
+        url:
+          type: "string"
+          description: "Encrypted link to the recording file"
+        expiresIn:
+          type: "string"
+          description: "Date after which recording will be deleted"
       description: "Recording information"
     Delegate:
       required:
@@ -19451,135 +20019,177 @@ components:
       - "bridgeId"
       - "displayName"
       - "hostInfo"
+      - "rights"
       - "id"
       - "participants"
       - "shortId"
       - "startTime"
       - "status"
       - "type"
+      - "recordings"
       type: "object"
       properties:
         id:
           type: "string"
-          description: "call id"
+          description: "Call id"
         bridgeId:
           type: "string"
-          description: "bridge id"
+          description: "Bridge id"
         shortId:
           type: "string"
-          description: "short bridge id"
+          description: "Short bridge id"
         startTime:
           type: "string"
-          description: "start time ISO 8601"
+          description: "Start time ISO 8601"
           format: "date-time"
         duration:
           type: "integer"
-          description: "duration second"
+          description: "Duration second"
           format: "int32"
           example: 36
         displayName:
           type: "string"
-          description: "meetings name"
+          description: "Meetings name"
         type:
           type: "string"
-          description: "meeting type"
+          description: "Meeting type"
           enum:
           - "Meeting"
           - "Call"
         status:
           type: "string"
-          description: "meeting status"
+          description: "Meeting status"
           enum:
           - "InProgress"
           - "Done"
         hostInfo:
           $ref: "#/components/schemas/Host"
-        chatId:
+        rights:
+          description: "Describe access rights which has participants to meeting"
+          type: "array"
+          items:
+            type: "string"
+            enum:
+            - "delete"
+            - "download"
+            - "share"
+        longSummary:
+          description: "During meeting AI team analyze code and after meeting finished generates text summary about this meeting"
           type: "string"
-          description: "chat id"
+        shortSummary:
+          description: "During meeting AI team analyze code and after meeting finished generates text summary about this meeting"
+          type: "string"
+        keywords:
+          description: "During meeting AI team analyze code and after meeting finished generates key words used in meeting"
+          type: "array"
+          items:
+            type: "string"
         participants:
           type: "array"
-          description: "participants list"
+          description: "List of the participants in the meeting"
           items:
             $ref: "#/components/schemas/Participant"
         recordings:
           type: "array"
-          description: "recording information"
+          description: "Recording information"
           items:
             $ref: "#/components/schemas/Recording"
         chatUrl:
           type: "string"
-          description: "chat location"
+          description: "Chat location"
       description: "Meeting information"
     Recording:
       required:
+      - "id"
       - "availabilityStatus"
       type: "object"
       properties:
         id:
           type: "string"
-          description: "recording id"
+          description: "Recording id"
         startTime:
           type: "integer"
           format: "int64"
-          description: "recording start time"
-        contentUri:
+          description: "Recording start time"
+        url:
           type: "string"
-          description: "recording url"
+          description: "Secure Link to the recording file"
         metadata:
           $ref: "#/components/schemas/JsValue"
         status:
           type: "string"
-          description: "recording status"
+          description: "Recording processing status"
           enum:
           - "Processing"
           - "Processed"
           - "Error"
           - "Corrupted"
           - "InProgress"
+          - "Purged"
+          - "Failed"
         availabilityStatus:
           type: "string"
-          description: "availability status"
+          description: "Availability status"
           enum:
           - "Alive"
           - "Deleted"
           - "Purged"
           - "NotAvailable"
+        longSummary:
+          type: "string"
+          description: "During meeting AI team analyze code and after meeting finished generates text summary about this meeting"
+        shortSummary:
+          type: "string"
+          description: "During meeting AI team analyze code and after meeting finished generates text summary about this meeting"
+        keywords:
+          type: "array"
+          description: "During meeting AI team analyze code and after meeting finished generates key words used in meeting"
+          items:
+            type: "string"
       description: "Recording information"
     JsValue:
       type: "object"
       properties: {}
     MeetingPage:
+      required:
+      - "meetings"
+      - "paging"
       type: "object"
       properties:
         meetings:
           type: "array"
-          description: "meetings array"
+          description: "Meetings array"
           items:
             $ref: "#/components/schemas/Meeting"
         paging:
           $ref: "#/components/schemas/Paging"
       description: "Meetings page"
     Participant:
+      required:
+      - "type"
+      - "id"
       type: "object"
       properties:
+        type:
+          type: "string"
+          description: "Participant type"
         id:
           type: "string"
           description: "id"
         accountId:
           type: "string"
-          description: "account id"
+          description: "Account id"
         extensionId:
           type: "string"
-          description: "extension id"
+          description: "Extension id"
         displayName:
           type: "string"
-          description: "displayName"
+          description: "Display name"
         callerId:
           type: "string"
-          description: "caller id"
+          description: "Caller id"
         correlationId:
-          description: "pass-thru parameter in join url"
+          description: "Pass-thru parameter in join url"
           type: "string"
       description: "Participant information"
     ApiVersionInfo:
@@ -19782,6 +20392,21 @@ components:
         id_token:
           type: "string"
           description: "OIDC ID token (if OpenId Connect flow was activated during authorization)"
+        session_id:
+          type: "string"
+          description: "OAuth session ID"
+        session_expiration_time:
+          type: "string"
+          format: "date-time"
+          description: "Absolute value of session expiration time as ISO datetime"
+        session_expires_in:
+          type: "integer"
+          format: "int32"
+          description: "Remaining time (in seconds) until session expiration due to absolute timeout"
+        session_idle_timeout:
+          type: "integer"
+          format: "int32"
+          description: "Nominal session idle timeout in seconds"
     AuthorizeRequest:
       type: "object"
       required:
@@ -19890,6 +20515,84 @@ components:
         client_assertion:
           type: "string"
           description: "Client assertion"
+    SessionInfoResponse:
+      type: "object"
+      required:
+      - "session_id"
+      - "client_id"
+      properties:
+        client_id:
+          type: "string"
+          description: "Identifier (key) of a client application"
+        scope:
+          type: "string"
+          description: |
+            List of permissions (space separated) granted to the application with this token
+          example: "AccountInfo CallLog ExtensionInfo Messages SMS"
+        sub:
+          type: "string"
+          description: "Subject of the token (extension ID or the owner)"
+        account_id:
+          type: "string"
+          description: "RC account ID associated with the token"
+        session_expires_in:
+          type: "integer"
+          format: "int32"
+          description: "Remaining time in seconds until session expiration due to absolute timeout"
+        session_expiration_time:
+          type: "string"
+          format: "date-time"
+          description: "Absolute value of session expiration time in ISO date formatted string"
+          example: "2023-04-01T12:00:01Z"
+        session_id:
+          type: "string"
+          description: "OAuth session ID"
+        session_idle_timeout:
+          type: "integer"
+          format: "int32"
+          description: "Nominal value of session idle timeout in seconds"
+    TokenIntrospectionResponse:
+      type: "object"
+      required:
+      - "active"
+      properties:
+        active:
+          type: "boolean"
+          description: "Is presented token valid and active"
+          example: true
+        scope:
+          type: "string"
+          description: |
+            List of permissions (space separated) granted to the application with this token
+          example: "AccountInfo CallLog ExtensionInfo Messages SMS"
+        client_id:
+          type: "string"
+          description: "Identifier (key) of a client application"
+        token_type:
+          type: "string"
+          description: "Type of token. The only supported value is `bearer`"
+          example: "bearer"
+        exp:
+          type: "integer"
+          format: "int64"
+          description: |
+            Timestamp indicating when this token will expire in seconds since January 1 1970 UTC
+          example: 1706715293
+        iat:
+          type: "integer"
+          format: "int64"
+          description: |
+            Timestamp indicating when this token was originally issued in seconds since January 1 1970 UTC
+          example: 1706711693
+        sub:
+          type: "string"
+          description: "Subject of the token (extension ID or the owner)"
+        account_id:
+          type: "string"
+          description: "RC account ID associated with the token"
+        session_id:
+          type: "string"
+          description: "OAuth session ID associated with the token"
     PostalAddress:
       type: "object"
       description: "Postal address/location"
@@ -19946,6 +20649,30 @@ components:
           $ref: "#/components/schemas/ServiceInfoPackage"
         brand:
           $ref: "#/components/schemas/ServiceInfoBrand"
+    AccountStatusInfo:
+      type: "object"
+      description: "Optional information to be used when account is moved to \"Disabled\" status"
+      properties:
+        reason:
+          type: "string"
+          description: "Type of suspension, voluntarily or not"
+          enum:
+          - "SuspendedVoluntarily"
+          - "SuspendedInvoluntarily"
+          - "CancelledVoluntarily"
+          - "CancelledInvoluntarily"
+          example: "CancelledVoluntarily"
+        comment:
+          type: "string"
+          description: "A meaningful description of the reason to change the status"
+          minLength: 1
+          maxLength: 256
+          example: "By customer request. Case ABC123"
+        till:
+          type: "string"
+          description: "Date after which the account will get deleted. Parameter can be used to overwrite default retention period"
+          format: "date-time"
+          example: "2023-03-26T11:30:45.940Z"
     AccountInfo:
       type: "object"
       required:
@@ -19976,7 +20703,7 @@ components:
           - "Disabled"
           example: "Confirmed"
         statusInfo:
-          $ref: "#/components/schemas/StatusInfo"
+          $ref: "#/components/schemas/AccountStatusInfo"
         companyName:
           description: "Company name"
           type: "string"
@@ -20044,30 +20771,6 @@ components:
           description: "Billing package version"
           enum:
           - "1"
-    StatusInfo:
-      type: "object"
-      description: "Optional information to be used when account is moved to \"Disabled\" status"
-      properties:
-        reason:
-          type: "string"
-          description: "Type of suspension, voluntarily or not"
-          enum:
-          - "SuspendedVoluntarily"
-          - "SuspendedInvoluntarily"
-          - "CancelledVoluntarily"
-          - "CancelledInvoluntarily"
-          example: "CancelledVoluntarily"
-        comment:
-          type: "string"
-          description: "A meaningful description of the reason to change the status"
-          minLength: 1
-          maxLength: 256
-          example: "By customer request. Case ABC123"
-        till:
-          type: "string"
-          description: "Date after which the account will get deleted. Parameter can be used to overwrite default retention period"
-          format: "date-time"
-          example: "2023-03-26T11:30:45.940Z"
     PhoneNumberE164:
       type: "string"
       pattern: "^\\+[1-9]\\d{1,14}$"
@@ -21281,28 +21984,6 @@ components:
           description: "Official name of a formatting language"
       description: |
         Formatting language preferences for numbers, dates and currencies
-    AccountStatusInfo:
-      type: "object"
-      properties:
-        comment:
-          type: "string"
-          description: |
-            A free-form user comment, describing the status change reason
-        reason:
-          type: "string"
-          description: "Type of suspension"
-          enum:
-          - "SuspendedVoluntarily"
-          - "SuspendedInvoluntarily"
-          - "UserResumed"
-        till:
-          type: "string"
-          description: |
-            Date until which an account will get deleted. The default
-            value is 30 days since the current date
-      description: |
-        Status information (reason, comment, lifetime). Returned for 'Disabled'
-        status only
     UBrandInfo:
       type: "object"
       properties:
@@ -25738,6 +26419,18 @@ components:
         name:
           type: "string"
           description: "Name of a call queue"
+        status:
+          type: "string"
+          description: "Call queue status"
+          enum:
+          - "Enabled"
+          - "Disabled"
+          - "NotActivated"
+        subType:
+          type: "string"
+          description: "Indicates whether it is an emergency call queue extension or not"
+          enum:
+          - "Emergency"
     CallQueues:
       required:
       - "navigation"
@@ -25787,82 +26480,37 @@ components:
             time in seconds will not be included into the calculation of Service Level
       description: "Call queue service level settings"
     CallQueueDetails:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a call queue"
-        name:
-          type: "string"
-          description: "Call queue name"
-        extensionNumber:
-          type: "string"
-          description: "Call queue extension number"
-        status:
-          type: "string"
-          description: "Call queue status"
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "NotActivated"
-        serviceLevelSettings:
-          $ref: "#/components/schemas/CallQueueServiceLevelSettings"
-        editableMemberStatus:
-          type: "boolean"
-          description: "Allows members to change their queue status"
-        alertTimer:
-          type: "integer"
-          format: "int32"
-          description: |
-            Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued
-          enum:
-          - 5
-          - 10
-          - 15
-          - 20
-          - 30
-          - 45
-          - 60
-          - 120
-          - 180
-          - 240
-          - 300
-          - 360
-          - 420
-          - 480
-          - 540
-          - 600
-    CallQueueUpdateDetails:
-      type: "object"
-      properties:
-        serviceLevelSettings:
-          $ref: "#/components/schemas/CallQueueServiceLevelSettings"
-        editableMemberStatus:
-          type: "boolean"
-          description: |
-            Allows members to change their queue status
-        alertTimer:
-          type: "integer"
-          format: "int32"
-          description: |
-            Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued
-          enum:
-          - 5
-          - 10
-          - 15
-          - 20
-          - 30
-          - 45
-          - 60
-          - 120
-          - 180
-          - 240
-          - 300
-          - 360
-          - 420
-          - 480
-          - 540
-          - 600
+      allOf:
+      - $ref: "#/components/schemas/CallQueueInfo"
+      - type: "object"
+        properties:
+          serviceLevelSettings:
+            $ref: "#/components/schemas/CallQueueServiceLevelSettings"
+          editableMemberStatus:
+            type: "boolean"
+            description: "Allows members to change their queue status"
+          alertTimer:
+            type: "integer"
+            format: "int32"
+            description: |
+              Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued
+            enum:
+            - 5
+            - 10
+            - 15
+            - 20
+            - 30
+            - 45
+            - 60
+            - 120
+            - 180
+            - 240
+            - 300
+            - 360
+            - 420
+            - 480
+            - 540
+            - 600
     CallQueuePresenceEvent:
       type: "object"
       properties:
@@ -28836,20 +29484,25 @@ components:
       properties:
         uri:
           type: "string"
+          description: "Link to a role resource"
           format: "uri"
+          readOnly: true
         id:
           type: "string"
+          description: "Internal identifier of a role"
         displayName:
           maxLength: 128
           minLength: 0
           pattern: "^((?!(<|>|\\/|\\\")).)*$"
           type: "string"
           example: "Super Admin"
+          description: "Dispayed name of a role"
         description:
           maxLength: 2000
           minLength: 0
           pattern: "^((?!(<|>|\\/|\\\")).)*$"
           type: "string"
+          description: "Role description"
           example: "Primary company administrator role"
         siteCompatible:
           type: "boolean"
@@ -28857,8 +29510,18 @@ components:
         custom:
           type: "boolean"
           default: false
+          description: "Specifies if a user role is custom"
         scope:
           type: "string"
+          description: "Specifies resource for permission"
+          enum:
+          - "Account"
+          - "AllExtensions"
+          - "Federation"
+          - "NonUserExtensions"
+          - "RoleBased"
+          - "Self"
+          - "UserExtensions"
         hidden:
           type: "boolean"
           default: false
@@ -28869,6 +29532,19 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/PermissionIdResource"
+    PermissionsCapabilities:
+      type: "object"
+      description: "Advanced permissions capabilities. Returned if `advancedPermissions` query parameter is set to `true`."
+      properties:
+        enabled:
+          type: "boolean"
+          description: "Specifies whether the user is enabled with the listed permission or not"
+        manageEnabled:
+          type: "boolean"
+          description: "Specifies if the user can manage the listed permission and is allowed to enable it on other users"
+        grantEnabled:
+          type: "boolean"
+          description: "Specifies if the users who were enabled with the listed permission can grant it further to other users"
     RolesCollectionResource:
       type: "object"
       properties:
@@ -28904,6 +29580,8 @@ components:
         assignable:
           type: "boolean"
           description: "Specifies if the permission can be assigned by the account administrator"
+        permissionsCapabilities:
+          $ref: "#/components/schemas/PermissionsCapabilities"
     DefaultUserRole:
       type: "object"
       properties:
@@ -29545,6 +30223,7 @@ components:
           - "VideoProPlus"
           - "DigitalSignage"
           - "Unknown"
+          - "Emergency"
         callQueueInfo:
           $ref: "#/components/schemas/CallQueueExtensionInfo"
         hidden:
@@ -29724,6 +30403,7 @@ components:
           - "VideoProPlus"
           - "DigitalSignageOnlyRooms"
           - "Unknown"
+          - "Emergency"
         references:
           type: "array"
           description: |
@@ -29868,6 +30548,7 @@ components:
           - "VideoProPlus"
           - "DigitalSignage"
           - "Unknown"
+          - "Emergency"
         callQueueInfo:
           $ref: "#/components/schemas/CallQueueExtensionInfo"
         hidden:
@@ -31839,7 +32520,7 @@ components:
           $ref: "#/components/schemas/PermissionIdResource"
         effectiveRole:
           $ref: "#/components/schemas/RoleIdResource"
-        scopes:
+        scope:
           type: "array"
           items:
             type: "string"
@@ -35188,6 +35869,7 @@ components:
           - "VideoProPlus"
           - "DigitalSignage"
           - "Unknown"
+          - "Emergency"
         usageType:
           type: "string"
           description: |
@@ -35218,20 +35900,6 @@ components:
             - "MmsSender"
             - "InternationalSmsSender"
             - "Delegated"
-    CallQueueOverflowAgent:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a Call queue extension"
-        extensionNumber:
-          type: "string"
-          description: "Extension number of call queue"
-        name:
-          type: "string"
-          description: "Name of a call queue"
-        status:
-          $ref: "#/components/schemas/CallQueueStatus"
     CallQueueOverflowSettingsRequestResource:
       type: "object"
       properties:
@@ -35251,13 +35919,7 @@ components:
         items:
           type: "array"
           items:
-            $ref: "#/components/schemas/CallQueueOverflowAgent"
-    CallQueueStatus:
-      type: "string"
-      description: "Queue current state (Enabled/Disabled)"
-      enum:
-      - "Disabled"
-      - "Enabled"
+            $ref: "#/components/schemas/CallQueueInfo"
     CallQueueIdResource:
       type: "object"
       properties:
@@ -36930,7 +37592,7 @@ components:
         password:
           type: "string"
           format: "password"
-          description: "User password"
+          description: "User password. Not returned if SipDigest is not enabled"
         authorizationTypes:
           type: "array"
           description: "Supported authorization types and their priority for clients"
@@ -38196,6 +38858,976 @@ components:
       - "Energy"
       - "Pace"
       - "QuestionsAsked"
+    SocMsgPhoneNumber:
+      description: "Phone number."
+      type: "string"
+      example: "+33634231224"
+    ContentPublished:
+      description: "True if the content is published on the remote channel."
+      type: "boolean"
+      example: true
+    ContentCreatedFrom:
+      description: "Created from of the content."
+      type: "string"
+      enum:
+      - "Synchronizer"
+      - "Interface"
+      - "Api"
+      - "AutoSurvey"
+      - "AutoResponseTrigger"
+      - "AutoRequestEmail"
+    ContentSynchronizationError:
+      description: "Synchronization error details."
+      type: "string"
+    SocMsgCreationTime:
+      description: "Creation time of the resource."
+      format: "date-time"
+      type: "string"
+      example: "2023-02-04T12:43:07Z"
+    ContentInReplyToAuthorIdentityId:
+      description: "The identity identifier of the content to which this content is a reply to."
+      type: "string"
+      example: "541014e17asdd8ccf000023"
+    ContentAttachments:
+      description: |
+        An array containing the attachments that are attached to the content.
+      type: "array"
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/ContentAttachment"
+    ContentTemplateName:
+      type: "string"
+      description: |
+        Applicable to WhatsApp channels only.
+
+        Name of the Whatsapp template to use for the content.
+
+        All available template names are visible on the Whatsapp Business Manager interface.
+      example: "customer_order_shipment_template"
+    ContentComponents:
+      type: "array"
+      minItems: 0
+      description: |
+        Applicable to WhatsApp channels only.
+
+        Component configuration of the Whatsapp template to use for the content.
+
+        All available components are visible on the Whatsapp Business Manager interface.
+      items:
+        type: "object"
+        properties:
+          type:
+            type: "string"
+          parameters:
+            type: "array"
+            minItems: 0
+            items:
+              type: "object"
+              properties:
+                type:
+                  type: "string"
+                text:
+                  type: "string"
+      example:
+      - Message1:
+        - param11:
+            type: "Name"
+            text: "John"
+        - param12:
+            type: "Message"
+            text: "Product rocks!"
+      - Message2:
+        - param21:
+            type: "Agent Name"
+            text: "Alice"
+        - param22:
+            type: "Message"
+            text: "Thank you"
+    SocMsgLastModifiedTime:
+      description: "The time when the last modification was completed."
+      format: "date-time"
+      type: "string"
+      example: "2023-02-04T12:43:07Z"
+    SocMsgCreationTimeOrder:
+      description: "Ordering by creationTime is descending by default."
+      type: "string"
+      enum:
+      - "-creationTime"
+      - "+creationTime"
+      - "creationTime"
+      default: "-creationTime"
+      example: "+creationTime"
+    ContentType:
+      description: "Type of the content."
+      type: "string"
+      enum:
+      - "Album"
+      - "AuthenticateMessage"
+      - "AuthenticateResponse"
+      - "Carousel"
+      - "CarouselMessage"
+      - "Comment"
+      - "ContactMessage"
+      - "Content"
+      - "Email"
+      - "FormMessage"
+      - "FormResponse"
+      - "HsmMessage"
+      - "Link"
+      - "ListMessage"
+      - "Media"
+      - "Message"
+      - "OutboundMessage"
+      - "PaymentMessage"
+      - "Photo"
+      - "PostbackMessage"
+      - "PrivateTweet"
+      - "PromptMessage"
+      - "Question"
+      - "Review"
+      - "ReviewResponse"
+      - "RichLinkMessage"
+      - "SelectMessage"
+      - "Status"
+      - "TemplateMessage"
+      - "TimePickerMessage"
+      - "Tweet"
+      - "Video"
+      - "VideoCallRequestMessage"
+      example: "Email"
+    ContentAutoSubmittedField:
+      description: |
+        Auto submitted content:
+          - won't reopen tasks or interventions
+          - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,
+          - doesn't get included in statistics
+      type: "boolean"
+    ContentCategoryIds:
+      description: |
+        List of the category identifiers of the content.
+      items:
+        type: "string"
+      type: "array"
+      example:
+      - "541014e17aa58d8ccf000023"
+      - "541014e17aa58d8ccf002023"
+    ContentStatus:
+      description: "Content status."
+      type: "string"
+      enum:
+      - "New"
+      - "Assigned"
+      - "Replied"
+      - "UserReply"
+      - "UserInitiated"
+      - "Ignored"
+    ContentList:
+      type: "object"
+      required:
+      - "records"
+      - "paging"
+      properties:
+        records:
+          type: "array"
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentModel"
+        paging:
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
+    ContentBody:
+      description: |
+        The content's body.
+
+        On creation this field is mandatory except for WhatsApp content using templates.
+
+        The following are the max length restrictions for the different channels supported.
+        Channel and max length
+          * Apple Messages For Business (max length 10000)
+          * Email (max length 262144)
+          * Engage Messaging (max length 1024)
+          * Facebook (max length 8000)
+          * GoogleBusinessMessages (max length 3000)
+          * Google My Business (max length 4000)
+          * Instagram (max length 950)
+          * Instagram Messaging (max length 1000)
+          * LinkedIn (max length 3000)
+          * Messenger (max length 2000)
+          * Twitter (max length 280)
+          * Viber (max length 7000)
+          * WhatsApp (max length 3800)
+          * Youtube (max length 8000)
+      type: "string"
+      example: "Body of the content"
+    ContentModel:
+      type: "object"
+      required:
+      - "id"
+      - "attachments"
+      - "authorIdentityId"
+      - "autoSubmitted"
+      - "body"
+      - "bodyFormatted"
+      - "bodyInputFormat"
+      - "categoryIds"
+      - "creationTime"
+      - "createdFrom"
+      - "creatorId"
+      - "inReplyToAuthorIdentityId"
+      - "inReplyToContentId"
+      - "interventionId"
+      - "language"
+      - "public"
+      - "published"
+      - "rating"
+      - "remotelyDeleted"
+      - "sourceId"
+      - "sourceType"
+      - "sourceUri"
+      - "status"
+      - "synchronizationStatus"
+      - "synchronizationError"
+      - "threadId"
+      - "title"
+      - "type"
+      - "lastModifiedTime"
+      - "capabilitiesSupported"
+      properties:
+        attachments:
+          $ref: "#/components/schemas/ContentAttachments"
+        authorIdentityId:
+          $ref: "#/components/schemas/ContentAuthorIdentityId"
+        autoSubmitted:
+          $ref: "#/components/schemas/ContentAutoSubmittedField"
+        body:
+          $ref: "#/components/schemas/ContentBody"
+        bodyFormatted:
+          $ref: "#/components/schemas/ContentBodyFormatted"
+        bodyInputFormat:
+          $ref: "#/components/schemas/ContentBodyInputFormat"
+        categoryIds:
+          $ref: "#/components/schemas/ContentCategoryIds"
+        contextData:
+          $ref: "#/components/schemas/ContentContextData"
+        creationTime:
+          $ref: "#/components/schemas/SocMsgCreationTime"
+        createdFrom:
+          $ref: "#/components/schemas/ContentCreatedFrom"
+        creatorId:
+          $ref: "#/components/schemas/ContentCreatorId"
+        foreignCategories:
+          $ref: "#/components/schemas/ContentForeignCategories"
+        id:
+          $ref: "#/components/schemas/ContentId"
+        inReplyToAuthorIdentityId:
+          $ref: "#/components/schemas/ContentInReplyToAuthorIdentityId"
+        inReplyToContentId:
+          $ref: "#/components/schemas/ContentInReplyToContentId"
+        interventionId:
+          $ref: "#/components/schemas/ContentInterventionId"
+        language:
+          $ref: "#/components/schemas/ContentLanguage"
+        public:
+          $ref: "#/components/schemas/ContentPublic"
+        published:
+          $ref: "#/components/schemas/ContentPublished"
+        rating:
+          $ref: "#/components/schemas/ContentRating"
+        remotelyDeleted:
+          $ref: "#/components/schemas/ContentRemotelyDeleted"
+        sourceId:
+          $ref: "#/components/schemas/ContentSourceId"
+        sourceType:
+          $ref: "#/components/schemas/ContentSourceType"
+        sourceUri:
+          $ref: "#/components/schemas/ContentSourceUri"
+        status:
+          $ref: "#/components/schemas/ContentStatus"
+        synchronizationStatus:
+          $ref: "#/components/schemas/ContentSynchronizationStatus"
+        synchronizationError:
+          $ref: "#/components/schemas/ContentSynchronizationError"
+        threadId:
+          $ref: "#/components/schemas/ContentThreadId"
+        title:
+          $ref: "#/components/schemas/ContentTitle"
+        type:
+          $ref: "#/components/schemas/ContentType"
+        lastModifiedTime:
+          $ref: "#/components/schemas/SocMsgLastModifiedTime"
+        capabilitiesSupported:
+          $ref: "#/components/schemas/ContentCapabilitiesSupported"
+    ContentLanguage:
+      description: "Language of the content."
+      type: "string"
+      example: "En"
+    ContentEmailAddresses:
+      type: "array"
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/SocMsgEmailAddress"
+      description: |
+        Applicable on Email channels only.
+
+        An array containing the email addresses used in sections of the email.
+
+        This parameter is mandatory when initiating a discussion.
+    ContentAttachmentIds:
+      description: |
+        An array containing the attachment identifiers that need to be attached to the content.
+      type: "array"
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/AttachmentId"
+      example:
+      - "541014e17aa58d8ccf000023"
+      - "541014e17aa58d8ccf000023"
+    ContentAuthorIdentityId:
+      description: |
+        Identity identifier of the author of content.
+
+        Not mandatory on creation, by default it uses the token's user first identity on channel.
+      type: "string"
+      example: "541014e17aa58d8ccf000023"
+    ContentTemplateLanguage:
+      type: "string"
+      description: |
+        Applicable to WhatsApp channels only.
+
+        Language of the Whatsapp template to use for the content. All available template languages are visible on the Whatsapp Business Manager interface.
+
+        Language specified must conform to the ISO 639-1 alpha-2 codes for representing the names of languages.
+      example: "fr"
+    ContentInterventionId:
+      description: "The intervention identifier of the content."
+      type: "string"
+      example: "123415437asdd8ccf000023"
+    ContentAttachment:
+      type: "object"
+      properties:
+        contentType:
+          description: |
+            Type of the attachment, which is generally a MIME attachment type like "image/jpeg", etc.
+
+            Security level in ED determines what type of attachment is allowed.
+
+            Based on the security level the following attachment types are supported.
+
+            "Strict" level allows safe extensions below:
+            Content name and supported types
+            * audio (supports aac mp3 ogg m4a)
+            * image (supports bmp gif jpg jpeg png svg webp)
+            * pdf (supports pdf)
+            * text (supports csv txt log)
+            * video (supports avi flv m4v mkv mov mp4 mpg qt wmv)
+            * other (supports amr dms vcard tif tiff mpeg)
+
+            "Relaxed" level allows documents:
+            Content name and supported types
+            * excel (supports xls xlsm xlsx xlc xlt xltm xltx)
+            * presentation (supports key odp otp)
+            * powerpoint (supports pps ppt pptx pot)
+            * spreadsheet (supports numbers ods ots)
+            * word (supports doc docm docx dotm dotx)
+            * word_processing (supports pages odt ott rtf)
+
+            "Permissive" level allows all documents.
+
+            However, there are no security level restrictions for content posted through the channel.
+          type: "string"
+          example: "image/jpeg"
+        creationTime:
+          description: "Creation time of the attachment."
+          format: "date-time"
+          type: "string"
+          example: "2023-02-04T12:43:07Z"
+        embedded:
+          description: "Embedded in a content."
+          type: "boolean"
+          example: false
+        filename:
+          description: "Filename of the attachment."
+          type: "string"
+          example: "0.jpeg"
+        id:
+          description: "Identifier of the attachment."
+          type: "string"
+          example: "54085e5b7aa58d8b5d00006c"
+        public:
+          description: "Privacy setting of the attachment."
+          type: "boolean"
+          example: false
+        size:
+          description: "Size of the attachment."
+          type: "integer"
+          format: "int32"
+          example: 217571
+        lastModifiedTime:
+          description: "The time when the last modification was completed."
+          format: "date-time"
+          type: "string"
+          example: "2023-02-04T12:43:07Z"
+        uri:
+          description: "Uri of the attachment."
+          type: "string"
+          format: "uri"
+          example: "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c"
+    ContentCapabilitiesSupported:
+      description: "Types of structured messages that can be used to reply to this type of message."
+      items:
+        type: "string"
+      type: "array"
+    SocMsgEmailAddress:
+      description: "Email address."
+      type: "string"
+      format: "email"
+      example: "user@example.com"
+    AttachmentId:
+      type: "string"
+      description: "Attachment identifier."
+      example: "506d9e817aa58d1259000f12"
+    ContentRating:
+      description: |
+        Rating of the content.
+
+        Present only if the content supports rating and rating is filled.
+      type: "integer"
+      format: "int32"
+      example: 4
+    ContentId:
+      description: "Identifier of the content."
+      type: "string"
+      example: "541014e17aa58d8ccf000023"
+    ContentSynchronizationStatus:
+      description: "Synchronization status."
+      type: "string"
+      example: "success"
+    ContentRemotelyDeleted:
+      description: "True if the content has been deleted on the remote channel."
+      type: "boolean"
+      example: false
+    ContentPublic:
+      description: |
+        True if the content is publicly visible on the remote channel (default).
+
+        Private content is NOT supported on every channel.
+      type: "boolean"
+      default: true
+    ContentContextData:
+      description: |
+        Additional data of the content.
+
+        The contextData hash keys are the custom fields keys.
+      type: "object"
+      additionalProperties:
+        type: "string"
+      example:
+        test1: "value1"
+        test2: "value2"
+    ContentInReplyToContentId:
+      description: |
+        The content identifier to which this content is a reply to.
+
+        On creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.
+      type: "string"
+      example: "123414e17asdd8ccf000023"
+    CreateContentRequest:
+      type: "object"
+      properties:
+        authorIdentityId:
+          $ref: "#/components/schemas/ContentAuthorIdentityId"
+        body:
+          $ref: "#/components/schemas/ContentBody"
+        inReplyToContentId:
+          $ref: "#/components/schemas/ContentInReplyToContentId"
+        public:
+          $ref: "#/components/schemas/ContentPublic"
+        sourceId:
+          $ref: "#/components/schemas/ContentSourceId"
+        attachmentIds:
+          $ref: "#/components/schemas/ContentAttachmentIds"
+        title:
+          $ref: "#/components/schemas/ContentTitle"
+        to:
+          anyOf:
+          - $ref: "#/components/schemas/ContentPhoneNumbers"
+          - $ref: "#/components/schemas/ContentEmailAddresses"
+        cc:
+          $ref: "#/components/schemas/ContentEmailAddresses"
+        bcc:
+          $ref: "#/components/schemas/ContentEmailAddresses"
+        templateName:
+          $ref: "#/components/schemas/ContentTemplateName"
+        templateLanguage:
+          $ref: "#/components/schemas/ContentTemplateLanguage"
+        components:
+          $ref: "#/components/schemas/ContentComponents"
+        contextData:
+          $ref: "#/components/schemas/ContentContextData"
+        autoSubmitted:
+          $ref: "#/components/schemas/ContentAutoSubmittedField"
+    ContentPhoneNumbers:
+      type: "array"
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/SocMsgPhoneNumber"
+      description: |
+        Applicable on SMS/WhatsApp channels only.
+
+        Must be a phone number to which the message will be sent. It must be in the E.164 format. For example: +33634231224.
+
+        This parameter is mandatory when initiating a discussion.
+    ContentBodyInputFormat:
+      description: "Values can be Text or Html."
+      enum:
+      - "Text"
+      - "Html"
+      type: "string"
+    ContentForeignCategories:
+      description: |
+        External categories of the content.
+
+        Present only if the content has foreignCategories.
+      items:
+        type: "string"
+      type: "array"
+      minItems: 0
+      example:
+      - "foreign_category_id"
+    ContentSourceType:
+      description: "Type of the channel."
+      type: "string"
+      enum:
+      - "AppleMessagesForBusiness"
+      - "Email"
+      - "EngageMessaging"
+      - "Facebook"
+      - "GoogleBusinessMessages"
+      - "GoogleMyBusiness"
+      - "Instagram"
+      - "InstagramMessaging"
+      - "Linkedin"
+      - "Messenger"
+      - "Twitter"
+      - "Viber"
+      - "WhatsApp"
+      - "Youtube"
+    ContentThreadId:
+      description: "Content thread identifier of the content."
+      type: "string"
+    NonEnumeratedPagingModel:
+      type: "object"
+      required:
+      - "perPage"
+      additionalProperties: false
+      properties:
+        perPage:
+          type: "integer"
+          format: "int32"
+          minimum: 1
+          maximum: 1000
+          description: |
+            Current page size, describes how many items are in each page.
+            Matches "perPage" parameter from the request.
+          example: 50
+        pageToken:
+          type: "string"
+          description: |
+            Current page token. May be omitted if result is empty (because non-existent page
+            was specified or perPage=0 was requested)
+        nextPageToken:
+          type: "string"
+          description: "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one."
+        previousPageToken:
+          type: "string"
+          description: |
+            A page token to be used to fetch the previous page of the result set.
+            May be omitted if the current page is the first one or if the result set does not support backward navigation.
+        firstPageToken:
+          type: "string"
+          description: "A page token to be used to fetch the first page of the result set."
+    ContentSourceUri:
+      description: "External Uri of the content channel."
+      type: "string"
+      format: "uri"
+    ContentBodyFormatted:
+      description: "Text and HTML formatted versions of the content body."
+      type: "object"
+      properties:
+        html:
+          type: "string"
+        text:
+          type: "string"
+    ContentTitle:
+      description: |
+        Applicable to Email channels only.
+
+        The subject of the email.
+
+        This field is mandatory when initiating a discussion.
+      type: "string"
+      example: "An email title"
+    ContentSourceId:
+      description: |
+        Identifier of the channel.
+
+        On creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.
+      type: "string"
+      example: "fff415437asdd8ccf000023"
+    ContentCreatorId:
+      description: "RC user id of the creator"
+      type: "string"
+      example: "2683222036"
+    ContentStatuses:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/ContentStatus"
+    IdentityTwDescription:
+      description: |
+        Twitter description of the identity.
+
+        Applicable to Twitter channels only.
+      type: "string"
+      example: "Software Engineer"
+    IdentityTwLocation:
+      description: |
+        Twitter location of the identity.
+
+        Applicable to Twitter channels only.
+      type: "string"
+      example: "Paris"
+    IdentityAvatarURI:
+      description: "Identity's avatar Uri."
+      type: "string"
+      format: "uri"
+      example: "https://example.com/assets/avatar/default-79fd530c58c2a6b83a11fcc0e842ed7023ceb69292cfeb857bc2af2c624b90fd.png"
+    IdentityMcc:
+      description: |
+        Viber mobile country code of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "1"
+    IdentityApiVersion:
+      description: |
+        Viber API version of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "10"
+    IdentityDeviceType:
+      description: |
+        Viber device type of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "SM-G970U1"
+    IdentityTwStatusesCount:
+      description: |
+        Count of tweets of the identity.
+
+        Applicable to Twitter channels only.
+      type: "integer"
+      format: "int32"
+      example: 42
+    IdentityTwFollowingCount:
+      description: |
+        Count of Twitter accounts followed by the identity.
+
+        Applicable to Twitter channels only.
+      type: "integer"
+      format: "int32"
+      example: 500
+    SocMsgCompany:
+      description: "Company."
+      type: "string"
+      example: "Test Company"
+    IdentitiesList:
+      type: "object"
+      required:
+      - "records"
+      - "paging"
+      properties:
+        records:
+          type: "array"
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/IdentityModel"
+        paging:
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
+    IdentityModel:
+      type: "object"
+      required:
+      - "id"
+      - "type"
+      - "creationTime"
+      - "lastModifiedTime"
+      properties:
+        id:
+          $ref: "#/components/schemas/IdentityId"
+        avatarUri:
+          $ref: "#/components/schemas/IdentityAvatarURI"
+        company:
+          $ref: "#/components/schemas/SocMsgCompany"
+        creationTime:
+          $ref: "#/components/schemas/SocMsgCreationTime"
+        displayName:
+          $ref: "#/components/schemas/IdentityDisplayName"
+        emailAddress:
+          $ref: "#/components/schemas/SocMsgEmailAddress"
+        extraValues:
+          $ref: "#/components/schemas/IdentityExtraValues"
+        firstName:
+          $ref: "#/components/schemas/SocMsgFirstName"
+        gender:
+          $ref: "#/components/schemas/SocMsgGender"
+        homePhone:
+          $ref: "#/components/schemas/SocMsgPhoneNumber"
+        identityGroupId:
+          $ref: "#/components/schemas/IdentityGroupId"
+        lastName:
+          $ref: "#/components/schemas/SocMsgLastName"
+        mobilePhone:
+          $ref: "#/components/schemas/SocMsgPhoneNumber"
+        screenName:
+          $ref: "#/components/schemas/IdentityScreenName"
+        type:
+          $ref: "#/components/schemas/IdentityType"
+        lastModifiedTime:
+          $ref: "#/components/schemas/SocMsgLastModifiedTime"
+        userIds:
+          $ref: "#/components/schemas/IdentityUserIds"
+        uuid:
+          $ref: "#/components/schemas/IdentityUUID"
+        mobileDeviceInfo:
+          $ref: "#/components/schemas/IdentityMobileDeviceInfo"
+        fbBio:
+          $ref: "#/components/schemas/IdentityFbBio"
+        fbCategory:
+          $ref: "#/components/schemas/IdentityFbCategory"
+        fbLocale:
+          $ref: "#/components/schemas/IdentityFbLocale"
+        igFollowersCount:
+          $ref: "#/components/schemas/IdentityIgFollowersCount"
+        twDescription:
+          $ref: "#/components/schemas/IdentityTwDescription"
+        twFollowersCount:
+          $ref: "#/components/schemas/IdentityTwFollowersCount"
+        twFollowingCount:
+          $ref: "#/components/schemas/IdentityTwFollowingCount"
+        twStatusesCount:
+          $ref: "#/components/schemas/IdentityTwStatusesCount"
+        twLocation:
+          $ref: "#/components/schemas/IdentityTwLocation"
+        apiVersion:
+          $ref: "#/components/schemas/IdentityApiVersion"
+        country:
+          $ref: "#/components/schemas/IdentityCountry"
+        deviceType:
+          $ref: "#/components/schemas/IdentityDeviceType"
+        language:
+          $ref: "#/components/schemas/IdentityLanguage"
+        mcc:
+          $ref: "#/components/schemas/IdentityMcc"
+        mnc:
+          $ref: "#/components/schemas/IdentityMnc"
+        primaryDeviceOs:
+          $ref: "#/components/schemas/IdentityPrimaryDeviceOs"
+        viberVersion:
+          $ref: "#/components/schemas/IdentityViberVersion"
+    IdentityGroupId:
+      description: |
+        The identity group id references the identity group that contains
+        all information (phone, notes, etc.). Many identities may belong to
+        this group. If the identity group id is null, it means that identity
+        does not have a group and any extra information.
+      type: "string"
+      example: "54085e5b7aa58d8b5d00006c"
+    IdentityPrimaryDeviceOs:
+      description: |
+        Viber primary device OS of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "Android 11"
+    IdentityId:
+      type: "string"
+      description: "Identity identifier."
+      example: "506d9e817aa58d1259000f12"
+    IdentityCountry:
+      description: |
+        Viber country of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "FR"
+    IdentityFbBio:
+      description: |
+        Facebook biography of the identity.
+
+        Applicable to Facebook and Messenger channels only.
+      type: "string"
+      example: "Painter living in Paris"
+    IdentityLanguage:
+      description: |
+        Viber language of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "fr-FR"
+    SocMsgLastName:
+      description: "LastName."
+      type: "string"
+      example: "Doe"
+    IdentityExtraValues:
+      description: "Additional data to store along the identity."
+      type: "object"
+      additionalProperties:
+        type: "string"
+      example:
+        key: "value"
+    IdentityMnc:
+      description: |
+        Viber mobile network code of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "220"
+    IdentityViberVersion:
+      description: |
+        Viber application version of the identity.
+
+        Applicable to Viber channels only.
+      type: "string"
+      example: "19.5.0"
+    IdentityFbCategory:
+      description: |
+        Facebook category of the identity.
+
+        Applicable to Facebook and Messenger channels only.
+      type: "string"
+      example: "Computers/Internet"
+    SocMsgFirstName:
+      description: "FirstName."
+      type: "string"
+      example: "John"
+    SocMsgGender:
+      description: "Gender."
+      type: "string"
+      example: "Woman"
+      enum:
+      - "Man"
+      - "Woman"
+      nullable: true
+    IdentityTwFollowersCount:
+      description: |
+        Twitter followers count of the identity.
+
+        Applicable to Twitter channels only.
+      type: "integer"
+      format: "int32"
+      example: 10
+    IdentityScreenName:
+      description: "Screen name of the identity."
+      type: "string"
+      example: "John D."
+    IdentityFbLocale:
+      description: |
+        Facebook locale of the identity.
+
+        Applicable to Facebook and Messenger channels only.
+      type: "string"
+      example: "fr_FR"
+    IdentityMobileDeviceInfo:
+      description: |
+        Device info of the identity.
+
+        Applicable to Engage Messaging channels only.
+      type: "string"
+      example: "iPhone (iPhone); iOS 15.0.2"
+    IdentityUserIds:
+      description: "List of the associated user identifiers who can use the identity."
+      items:
+        type: "string"
+        example: "54085e5b7aa58d8b5d00006c"
+      type: "array"
+      minItems: 0
+    IdentityType:
+      description: "Type of the identity."
+      type: "string"
+      enum:
+      - "AppleMessagesForBusiness"
+      - "Email"
+      - "EngageMessaging"
+      - "Facebook"
+      - "GoogleBusinessMessages"
+      - "GoogleMyBusiness"
+      - "Instagram"
+      - "Linkedin"
+      - "Twitter"
+      - "Viber"
+      - "WhatsApp"
+      - "Youtube"
+    IdentityIgFollowersCount:
+      description: |
+        Instagram followers count of the identity.
+
+        Applicable to Instagram and InstagramMessaging channels only.
+      type: "integer"
+      format: "int32"
+      example: 10
+    IdentityDisplayName:
+      description: "Display name of the identity."
+      type: "string"
+      example: "John Doe"
+    IdentityUUID:
+      description: "UUID of the identity."
+      type: "string"
+      example: "9680ab94-3b78-495c-bb2c-a969954d8260"
+    IdentityUpsert:
+      description: |
+        Permit to update an existing identity if set to true.
+
+        false by default.
+      type: "boolean"
+      example: true
+      default: false
+    IdentitySourceId:
+      description: |
+        The channel identifier to create the identity for.
+      type: "string"
+      example: "541014e17aa58d8ccf000023"
+    ImportIdentityRequest:
+      type: "object"
+      required:
+      - "foreignId"
+      - "sourceId"
+      properties:
+        foreignId:
+          $ref: "#/components/schemas/IdentityForeignId"
+        sourceId:
+          $ref: "#/components/schemas/IdentitySourceId"
+        company:
+          $ref: "#/components/schemas/SocMsgCompany"
+        firstName:
+          $ref: "#/components/schemas/SocMsgFirstName"
+        gender:
+          $ref: "#/components/schemas/SocMsgGender"
+        homePhone:
+          $ref: "#/components/schemas/SocMsgPhoneNumber"
+        lastName:
+          $ref: "#/components/schemas/SocMsgLastName"
+        mobilePhone:
+          $ref: "#/components/schemas/SocMsgPhoneNumber"
+        screenName:
+          $ref: "#/components/schemas/IdentityScreenName"
+        extraValues:
+          $ref: "#/components/schemas/IdentityExtraValues"
+        upsert:
+          $ref: "#/components/schemas/IdentityUpsert"
+    IdentityForeignId:
+      type: "string"
+      description: "Identifier of the identity on the remote channel."
+      example: "9680ab94-3b78-495c-bb2c-a969954d8260"
     ScimErrorResponse:
       type: "object"
       properties:
@@ -42351,7 +43983,7 @@ components:
       required: true
       schema:
         type: "string"
-    TaskId:
+    PicTaskId:
       name: "taskId"
       in: "path"
       description: "Internal identifier of a task"
@@ -42454,6 +44086,127 @@ components:
       schema:
         type: "string"
       example: "JohnDoe"
+    IdentityGroupFilter:
+      in: "query"
+      name: "identityGroup"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified identity group identifiers."
+      example:
+      - "7f946431b6eebffafae642cc"
+      - "re946431b6eebffafae642cc"
+    ThreadFilter:
+      in: "query"
+      name: "thread"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified thread identifiers."
+      example:
+      - "7f946431b6eebffafae642cc"
+    SourceFilter:
+      in: "query"
+      name: "source"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified channel identifiers."
+      example:
+      - "7f946431b6eebffafae642cc"
+    StatusFilter:
+      in: "query"
+      name: "status"
+      required: false
+      description: "Filter for specified status."
+      schema:
+        $ref: "#/components/schemas/ContentStatuses"
+    InterventionFilter:
+      in: "query"
+      name: "intervention"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified intervention identifiers."
+      example:
+      - "7f946431b6eebffafae642cc"
+      - "re946431b6eebffafae642cc"
+    IdentityFilter:
+      in: "query"
+      name: "identity"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified identity identifiers."
+      example:
+      - "7f946431b6eebffafae642cc"
+      - "re946431b6eebffafae642cc"
+    TextFilter:
+      in: "query"
+      name: "text"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified text(s). Provided multiple times, the values are ANDed."
+    SocMsgOrderBy:
+      in: "query"
+      name: "orderBy"
+      required: false
+      description: "Order results by specified field."
+      schema:
+        $ref: "#/components/schemas/SocMsgCreationTimeOrder"
+    ContentId:
+      in: "path"
+      name: "contentId"
+      required: true
+      schema:
+        type: "string"
+    UUID:
+      name: "uuid"
+      description: "Filter based on the specified uuid."
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+    SourceId:
+      name: "sourceId"
+      description: "Filter based on the specified sourceId."
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+    UserId:
+      name: "userId"
+      description: "Filter based on the specified userId."
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+    IdentityGroupId:
+      name: "identityGroupId"
+      description: "Filter based on the specified identityGroupId."
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+    IdentityId:
+      in: "path"
+      name: "identityId"
+      required: true
+      schema:
+        $ref: "#/components/schemas/IdentityId"
     ScimUserId:
       name: "scimUserId"
       in: "path"
@@ -42596,6 +44349,337 @@ components:
           secretKey: "y943yr9834ry394yriy4489yr93y4r983y4r3894ry94"
           encryptionAlgorithm: "AES"
           encryptionKey: "0mWk/6SMiSz191u2dV5drg=="
+    EDI-006:
+      summary: "Invalid content type"
+      value:
+        errors:
+        - errorCode: "EDI-006"
+          message: "Cannot find a content class corresponding to the requested action: [${requestActionType}]"
+    EDI-005:
+      summary: "Structured content type is not supported on the channel"
+      value:
+        errors:
+        - errorCode: "EDI-005"
+          message: "Source does not support this type of structured content"
+    EDI-008:
+      summary: "Parameter type is invalid"
+      value:
+        errors:
+        - errorCode: "EDI-008"
+          message: "[${parameterName}] must be a hash, got [${extraValuesClass}]"
+    EDI-007:
+      summary: "Attachment already used on another content"
+      value:
+        errors:
+        - errorCode: "EDI-007"
+          message: "Attachment is already used by an other content"
+    EDI-002:
+      summary: "Structured contents require a type attribute"
+      value:
+        errors:
+        - errorCode: "EDI-002"
+          message: "type is required for structured contents"
+    EDI-001:
+      summary: "Privacy attribute error"
+      value:
+        errors:
+        - errorCode: "EDI-001"
+          message: "Public and private parameters must not be used at the same time, use public parameter only"
+    CreateContentWithAttachments:
+      summary: "An example for Create content with attachments"
+      value:
+        authorIdentityId: "541014e17aa58d8ccf000023"
+        inReplyToContentId: "541014e17aa58d8ccf000023"
+        body: "This is a sample body for a private content with attachments"
+        public: false
+        attachmentIds:
+        - "541014e17aa58d8ccf000023"
+        - "541014e17aa58d8ccf000043"
+    EDI-004:
+      summary: "Compose not supported on the channel"
+      value:
+        errors:
+        - errorCode: "EDI-004"
+          message: "Compose is not supported on this source"
+    EDI-003:
+      summary: "Private compose is not supported on the channel"
+      value:
+        errors:
+        - errorCode: "EDI-003"
+          message: "Private compose is not supported on this source, try adding public=true parameter"
+    ReplyContentOnEmailChannel:
+      summary: "Reply to a content on an Email channel"
+      value:
+        inReplyToContentId: "541014e17aa58d8ccf001023"
+        title: "Reply to the message"
+        to:
+        - "test@example.com"
+        cc:
+        - "test.cc@test.com"
+        bcc:
+        - "test.bcc@test.com"
+        body: "Sample email content"
+    EDI-009:
+      summary: "An attribute is missing"
+      value:
+        errors:
+        - errorCode: "EDI-009"
+          message: "[${parameterName}] is required"
+    CreateContentWithAuthorIdentityId:
+      summary: "An example for Create content with authorIdentityId"
+      value:
+        authorIdentityId: "541014e17aa58d8ccf000023"
+        inReplyToContentId: "541014e17aa58d8ccf000063"
+        body: "This is a sample content body for a private content with authorIdentityId specified"
+        public: false
+    EDI-028:
+      summary: "Search query is invalid"
+      value:
+        errors:
+        - errorCode: "EDI-028"
+          message: "Search query is invalid"
+        - errorCode: "EDI-028"
+          message: "Searching identity groups by \"firstname\" only is disabled, please provide \"lastname\""
+    EDI-027:
+      summary: "Attribute array format error"
+      value:
+        errors:
+        - errorCode: "EDI-027"
+          message: "parameters [${brokenParameters}] should be arrays and need to be formatted like this: [${formattedParameters}]"
+    EDI-029:
+      summary: "Resource not found"
+      value:
+        errors:
+        - errorCode: "EDI-029"
+          message: "Resource not found"
+    EDI-024:
+      summary: "Content creation is not permitted (channel-specific validations)"
+      value:
+        errors:
+        - errorCode: "EDI-024"
+          message: "You cannot create the content (channel-specific validations)."
+    EDI-023:
+      summary: "Private messages cannot be sent without a recipient"
+      value:
+        errors:
+        - errorCode: "EDI-023"
+          message: "Cannot send private messages without a recipient."
+    EDI-025:
+      summary: "An attribute is missing"
+      value:
+        errors:
+        - errorCode: "EDI-025"
+          message: "Missing required parameter: \"[${parameterName}]\""
+    EDI-020:
+      summary: "A channel is required to create this message"
+      value:
+        errors:
+        - errorCode: "EDI-020"
+          message: "You need a channel to create this message."
+    EDI-022:
+      summary: "Recipient does not allow private messages"
+      value:
+        errors:
+        - errorCode: "EDI-022"
+          message: "Recipient does not allow private messages."
+    EDI-021:
+      summary: "Replying to this content is not possible for the moment"
+      value:
+        errors:
+        - errorCode: "EDI-021"
+          message: "It is not possible to reply to this content right now."
+    CreateContentOnEmailChannel:
+      summary: "An example for Create content on an Email channel"
+      value:
+        title: "Title of the message"
+        to:
+        - "test@example.com"
+        cc:
+        - "test.cc@test.com"
+        bcc:
+        - "test.bcc@test.com"
+        body: "Sample email content"
+        sourceId: "541014e17aa58d8ccf000093"
+    EDI-017:
+      summary: "The agent is not authorized to create a new discussion on this channel"
+      value:
+        errors:
+        - errorCode: "EDI-017"
+          message: "Agent is not authorized to create a new discussion on this channel."
+    EDI-016:
+      summary: "The channel does not support creation of new discussions"
+      value:
+        errors:
+        - errorCode: "EDI-016"
+          message: "Channel does not support creation of new discussions."
+    EDI-019:
+      summary: "The agent is not authorized to reply on this channel"
+      value:
+        errors:
+        - errorCode: "EDI-019"
+          message: "Agent is not authorized to reply on this channel."
+    EDI-018:
+      summary: "An identity is required to reply to this message"
+      value:
+        errors:
+        - errorCode: "EDI-018"
+          message: "You need an identity to reply to this message."
+    EDI-013:
+      summary: "A conversation cannot be open on an agent message"
+      value:
+        errors:
+        - errorCode: "EDI-013"
+          message: "Cannot open a conversation on agent message."
+    EDI-012:
+      summary: "Allowed parameters are limited when sending an outbound message"
+      value:
+        errors:
+        - errorCode: "EDI-012"
+          message: "Only allowed parameters when sending an outbound message are [${parameterNames}]"
+    EDI-015:
+      summary: "The content already has an open conversation"
+      value:
+        errors:
+        - errorCode: "EDI-015"
+          message: "Content already has an open conversation."
+    EDI-014:
+      summary: "Reply to the content is not possible"
+      value:
+        errors:
+        - errorCode: "EDI-014"
+          message: "You cannot reply to ${messageType}."
+    EDI-011:
+      summary: "A parameter must be an array"
+      value:
+        errors:
+        - errorCode: "EDI-011"
+          message: "[${parameterName}] needs to be an array"
+    EDI-010:
+      summary: "Attachments are not supported for this type of content"
+      value:
+        errors:
+        - errorCode: "EDI-010"
+          message: "Attachments are not supported for this type of content"
+    CreateOutboundContentOnWhatsappChannel:
+      summary: "An example for Create outbound content for WhatsApp channel"
+      value:
+        sourceId: "5c1bd9c7d6cb0053da1e9d78"
+        to:
+        - "+33620202020"
+        templateName: "test_template_name"
+        templateLanguage: "en"
+    CreateContentWithInReplyToContentId:
+      summary: "An example for Create content with inReplyToContentId"
+      value:
+        inReplyToContentId: "541014e17aa58d8ccf000023"
+        body: "content body"
+    EDI-040:
+      summary: "Some attributes are invalid"
+      value:
+        errors:
+        - errorCode: "EDI-040"
+          message: "Invalid parameters provided"
+    ReplyContentOnWhatsappChannel:
+      summary: "A reply example to a WhatsApp channel content"
+      value:
+        body: "test whatsapp content"
+        inReplyToContentId: "63e664a9713368687b6ef4e4"
+    EDI-038:
+      summary: "A pagination attribute is invalid"
+      value:
+        errors:
+        - errorCode: "EDI-038"
+          message: "\"[${parameterName}]\" param is invalid"
+    CreateContentWithContextData:
+      summary: "An example for Create content with contextData"
+      value:
+        inReplyToContentId: "541014e17aa58d8ccf000093"
+        body: "This is a sample content body for a content with contextData"
+        contextData:
+          additionalContextData1: "context data 1"
+          additionalContextData2: "context data 2"
+    EDI-035:
+      summary: "Inefficient query"
+      value:
+        errors:
+        - errorCode: "EDI-035"
+          message: "Inefficient query"
+    EDI-034:
+      summary: "Invalid offset"
+      value:
+        errors:
+        - errorCode: "EDI-034"
+          message: "Invalid offset"
+    EDI-037:
+      summary: "Impersonation error"
+      value:
+        errors:
+        - errorCode: "EDI-037"
+          message: "Impersonation error"
+    EDI-036:
+      summary: "Inefficient sort"
+      value:
+        errors:
+        - errorCode: "EDI-036"
+          message: "Inefficient sort"
+    EDI-031:
+      summary: "A value in the payload is invalid"
+      value:
+        errors:
+        - errorCode: "EDI-031"
+          message: "Invalid value"
+          details: "Value of type Array cannot be written to a field of type Hash"
+    EDI-030:
+      summary: "The format of the payload is invalid"
+      value:
+        errors:
+        - errorCode: "EDI-030"
+          message: "Invalid format"
+    EDI-033:
+      summary: "Validation error"
+      value:
+        errors:
+        - errorCode: "EDI-033"
+          message: "[${resourceType}] cannot be saved"
+          details: "Author cannot be blank"
+        - errorCode: "EDI-033"
+          message: "[${resourceType}] cannot be saved"
+          details: "Message cannot be blank"
+        - errorCode: "EDI-033"
+          message: "[${resourceType}] cannot be saved"
+          details: "Email format is invalid"
+        - errorCode: "EDI-033"
+          message: "[${resourceType}] cannot be saved"
+          details: "File is invalid"
+    EDI-032:
+      summary: "Invalid id"
+      value:
+        errors:
+        - errorCode: "EDI-032"
+          message: "Invalid id: [${invalidId}]"
+    CreateContentWithSourceId:
+      summary: "An example for Create content with sourceId"
+      value:
+        sourceId: "541014e17aa58d8ccf000023"
+        body: "This is a sample content body"
+    EDI-045:
+      summary: "The identity cannot be imported"
+      value:
+        errors:
+        - errorCode: "EDI-045"
+          message: "\"[${exception}]\""
+    EDI-044:
+      summary: "Identity creation failed"
+      value:
+        errors:
+        - errorCode: "EDI-044"
+          message: "Could not import or find an identity from these parameters"
+    EDI-043:
+      summary: "Incompatible source"
+      value:
+        errors:
+        - errorCode: "EDI-043"
+          message: "Impossible to add identities on this kind of community"
   requestBodies:
     SummaryCallbackRequest:
       description: "Summary Callback Output"
