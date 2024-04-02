@@ -99,7 +99,7 @@ x-tagGroups:
 - name: "Analytics"
   popular: true
   tags:
-  - "Line Of Business Analytics"
+  - "Business Analytics"
 - name: "Artificial Intelligence"
   popular: true
   tags:
@@ -209,7 +209,6 @@ tags:
 - name: "API Info"
 - name: "Tasks"
 - name: "User Permissions"
-- name: "Line Of Business Analytics"
 - name: "Internal Contacts"
 - name: "Identities"
 - name: "Devices"
@@ -248,6 +247,7 @@ tags:
 - name: "Contents"
 - name: "Posts"
 - name: "Call Handling Rules"
+- name: "Business Analytics"
 - name: "High Volume SMS"
 - name: "Webinars and Sessions"
   description: "External APIs for webinar and session management"
@@ -2522,6 +2522,12 @@ paths:
         required: false
         schema:
           $ref: "#/components/schemas/ExtensionStatus"
+      - name: "byocNumber"
+        in: "query"
+        description: "The parameter reflects whether this number is BYOC or not"
+        required: false
+        schema:
+          type: "boolean"
       - name: "phoneNumber"
         in: "query"
         description: |
@@ -6116,7 +6122,7 @@ paths:
       tags:
       - "Automatic Location Updates"
       summary: "Get Emergency Location"
-      description: "Returns emergency response location by ID."
+      description: "Returns emergency response location by ID. Available for Admin users only."
       operationId: "readEmergencyLocation"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -6385,7 +6391,9 @@ paths:
       tags:
       - "Call Recordings"
       summary: "Delete Company Call Recordings"
-      description: "Deletes company call recordings by their IDs."
+      description: |
+        Deletes company call recordings by their IDs. *Please note:* This method deletes the recording file itself,
+        not the record of it in the call log.
       operationId: "deleteCompanyCallRecordings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -13048,6 +13056,11 @@ paths:
             - "BusinessMobileNumber"
             - "PartnerBusinessMobileNumber"
             - "IntegrationNumber"
+      - name: "paymentType"
+        in: "query"
+        description: "Payment Type of the number"
+        schema:
+          $ref: "#/components/schemas/PlatformPaymentType"
       - name: "status"
         in: "query"
         description: "Status of a phone number"
@@ -14639,7 +14652,7 @@ paths:
       operationId: "socMsgListIdentities"
       parameters:
       - $ref: "#/components/parameters/SourceId"
-      - $ref: "#/components/parameters/IdentityGroupId"
+      - $ref: "#/components/parameters/IdentityGroupIds"
       - $ref: "#/components/parameters/UserId"
       - $ref: "#/components/parameters/UUID"
       - $ref: "#/components/parameters/SocMsgOrderBy"
@@ -15178,7 +15191,7 @@ paths:
   /analytics/calls/v1/accounts/{accountId}/aggregation/fetch:
     post:
       tags:
-      - "Line Of Business Analytics"
+      - "Business Analytics"
       summary: "Calls Aggregation Data"
       description: "Returns call aggregations filtered by parameters specified"
       operationId: "analyticsCallsAggregationFetch"
@@ -15227,7 +15240,7 @@ paths:
   /analytics/calls/v1/accounts/{accountId}/timeline/fetch:
     post:
       tags:
-      - "Line Of Business Analytics"
+      - "Business Analytics"
       summary: "Calls Timeline Data"
       description: "Returns time-value data aggregations filtered by parameters specified"
       operationId: "analyticsCallsTimelineFetch"
@@ -17984,7 +17997,6 @@ components:
           description: "Subscription status"
           enum:
           - "Active"
-          - "Suspended"
           - "Blacklisted"
           readOnly: true
         creationTime:
@@ -18952,6 +18964,10 @@ components:
               type: "boolean"
               description: "Indicates that work email address is required for registration."
               default: false
+            viewRecording:
+              type: "boolean"
+              description: "Indicates that recording will be shown after the webinar and in emails."
+              default: true
     RegistrantModelResponsePostWithQuestionnaire:
       allOf:
       - $ref: "#/components/schemas/RegistrantModelWithQuestionnaire"
@@ -21069,6 +21085,8 @@ components:
           $ref: "#/components/schemas/PhoneNumberTollType"
         usageType:
           $ref: "#/components/schemas/PhoneNumberUsageType"
+        byocNumber:
+          type: "boolean"
         status:
           $ref: "#/components/schemas/PhoneNumberStatus"
         extension:
@@ -35248,6 +35266,12 @@ components:
           type: "integer"
           format: "int32"
           description: "Number of updated messages. Can be omitted if the value is zero"
+        newMessageIds:
+          description: "Identifiers of the new messages, applicable for all message types"
+          type: "array"
+          items:
+            type: "integer"
+            format: "int64"
     DeleteMessageBulkRequest:
       type: "array"
       minItems: 1
@@ -35345,7 +35369,8 @@ components:
       type: "object"
       properties:
         id:
-          type: "string"
+          type: "integer"
+          format: "int64"
           description: "Internal identifier of a message"
         to:
           type: "array"
@@ -35389,12 +35414,17 @@ components:
           description: "Message subject. It replicates message text which is also returned as an attachment"
         messageStatus:
           $ref: "#/components/schemas/MessageStatusEnum"
-        conversationId:
-          type: "string"
-          description: "Internal identifier of a conversation this message belongs to"
         vmTranscriptionStatus:
           type: "string"
-          description: "Specifies if a voicemail message transcription is already completed or not"
+          description: "Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not \nIf 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned\n"
+          enum:
+          - "NotAvailable"
+          - "InProgress"
+          - "TimedOut"
+          - "Completed"
+          - "CompletedPartially"
+          - "Failed"
+          - "Unknown"
       description: "Notification payload body"
     MultipartRequestEntryBase:
       type: "object"
@@ -35788,6 +35818,18 @@ components:
       description: |
         Information on the extension, to which the phone number is assigned.
         Returned only for the request of Account phone number list
+    PlatformPaymentType:
+      type: "string"
+      description: |
+        Payment type. 'External' is returned for forwarded numbers
+        which are not terminated in the RingCentral phone system
+      enum:
+      - "External"
+      - "TollFree"
+      - "Local"
+      - "BusinessMobileNumberProvider"
+      - "ExternalNumberProvider"
+      - "ExternalNumberProviderTollFree"
     ContactCenterProvider:
       type: "object"
       properties:
@@ -35824,16 +35866,7 @@ components:
           type: "string"
           description: "Location (City, State). Filled for local US numbers"
         paymentType:
-          type: "string"
-          description: |
-            Payment type. 'External' is returned for forwarded numbers
-            which are not terminated in the RingCentral phone system
-          enum:
-          - "External"
-          - "TollFree"
-          - "Local"
-          - "BusinessMobileNumberProvider"
-          - "ExternalNumberProvider"
+          $ref: "#/components/schemas/PlatformPaymentType"
         phoneNumber:
           type: "string"
           description: "Phone number"
@@ -36752,16 +36785,7 @@ components:
           type: "string"
           description: "Location (City, State). Filled for local US numbers"
         paymentType:
-          type: "string"
-          description: |
-            Payment type. 'External' is returned for forwarded numbers
-            which are not terminated in the RingCentral phone system
-          enum:
-          - "External"
-          - "TollFree"
-          - "Local"
-          - "BusinessMobileNumberProvider"
-          - "ExternalNumberProvider"
+          $ref: "#/components/schemas/PlatformPaymentType"
         phoneNumber:
           type: "string"
           description: "Phone number"
@@ -38419,7 +38443,7 @@ components:
           example: 0.97
         value:
           type: "string"
-          example: "RingCentral MVP"
+          example: "RingCentral"
         start:
           type: "number"
           format: "float"
@@ -39044,7 +39068,7 @@ components:
         Channel and max length
           * Apple Messages For Business (max length 10000)
           * Email (max length 262144)
-          * Engage Messaging (max length 1024)
+          * RingCX Digital Messaging (max length 1024)
           * Facebook (max length 8000)
           * GoogleBusinessMessages (max length 3000)
           * Google My Business (max length 4000)
@@ -39741,7 +39765,7 @@ components:
       description: |
         Device info of the identity.
 
-        Applicable to Engage Messaging channels only.
+        Applicable to RingCX Digital Messaging channels only.
       type: "string"
       example: "iPhone (iPhone); iOS 15.0.2"
     IdentityUserIds:
@@ -41650,7 +41674,7 @@ components:
               - "Yearly"
             endingCondition:
               type: "string"
-              description: "Task ending condition."
+              description: "Task ending condition"
               enum:
               - "None"
               - "Count"
@@ -41663,7 +41687,7 @@ components:
               description: "Count of iterations of periodic tasks"
             endingOn:
               type: "string"
-              description: "The end date of periodic task in UTC time zone"
+              description: "End date of a periodic task in UTC time zone"
               format: "date-time"
         attachments:
           type: "array"
@@ -41814,9 +41838,9 @@ components:
               description: "Count of iterations of periodic tasks"
             endingOn:
               type: "string"
-              description: "End date of periodic task"
+              description: "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format"
               format: "date-time"
-          description: "Task details."
+          description: "Task details"
         attachments:
           type: "array"
           items:
@@ -41906,19 +41930,19 @@ components:
           - "Year"
         endingCondition:
           type: "string"
-          description: "Condition of ending"
-        endingAfter:
-          type: "integer"
-          format: "int32"
-          description: "Count of iterations. For periodic events only"
-        endingOn:
-          type: "string"
-          description: "Iterations end datetime for periodic events"
-          default: "None"
+          description: "Condition of ending an event"
           enum:
           - "None"
           - "Count"
           - "Date"
+        endingAfter:
+          type: "integer"
+          format: "int32"
+          description: "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n"
+        endingOn:
+          type: "string"
+          description: "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format"
+          format: "date-time"
         color:
           type: "string"
           description: "Color of Event title (including its presentation in Calendar)"
@@ -41991,21 +42015,19 @@ components:
           - "Year"
         endingCondition:
           type: "string"
-          description: "Condition of ending"
-        endingAfter:
-          type: "integer"
-          format: "int32"
-          description: |
-            Count of iterations. For periodic events only. Value range
-            is 1 - 10. Must be specified if `endingCondition` is `Count`
-        endingOn:
-          type: "string"
-          description: "Iterations end datetime for periodic events."
-          default: "None"
+          description: "Condition of ending an event"
           enum:
           - "None"
           - "Count"
           - "Date"
+        endingAfter:
+          type: "integer"
+          format: "int32"
+          description: "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n"
+        endingOn:
+          type: "string"
+          description: "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format"
+          format: "date-time"
         color:
           type: "string"
           description: "Color of Event title (including its presentation in Calendar)"
@@ -42188,10 +42210,10 @@ components:
               minimum: 1
               type: "integer"
               format: "int32"
-              description: "Count of iterations of periodic tasks."
+              description: "Count of iterations of periodic tasks"
             endingOn:
               type: "string"
-              description: "The end date of periodic task in UTC time zone."
+              description: "End date of a periodic task in UTC time zone"
               format: "date-time"
         attachments:
           type: "array"
@@ -42269,19 +42291,19 @@ components:
           - "Year"
         endingCondition:
           type: "string"
-          description: "Condition of ending"
-        endingAfter:
-          type: "integer"
-          format: "int32"
-          description: "Count of iterations. For periodic events only"
-        endingOn:
-          type: "string"
-          description: "Iterations end datetime for periodic events"
-          default: "None"
+          description: "Condition of ending an event"
           enum:
           - "None"
           - "Count"
           - "Date"
+        endingAfter:
+          type: "integer"
+          format: "int32"
+          description: "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n"
+        endingOn:
+          type: "string"
+          description: "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format"
+          format: "date-time"
         color:
           type: "string"
           description: "Color of Event title, including its presentation in Calendar; or the color of the side border of an interactive message of a Card"
@@ -44180,6 +44202,17 @@ components:
       required: false
       schema:
         type: "string"
+    IdentityGroupIds:
+      name: "identityGroupIds"
+      description: "Filter based on the specified identityGroupIds (separated by commas)."
+      in: "query"
+      required: false
+      style: "form"
+      explode: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
     SourceId:
       name: "sourceId"
       description: "Filter based on the specified sourceId."
@@ -44190,13 +44223,6 @@ components:
     UserId:
       name: "userId"
       description: "Filter based on the specified userId."
-      in: "query"
-      required: false
-      schema:
-        type: "string"
-    IdentityGroupId:
-      name: "identityGroupId"
-      description: "Filter based on the specified identityGroupId."
       in: "query"
       required: false
       schema:
@@ -44239,12 +44265,14 @@ components:
           phoneNumber: "+18002024080"
           tollType: "TollFree"
           usageType: "Inventory"
+          byocNumber: false
           status: "Normal"
         - id: "1162822004"
           phoneNumber: "+18332023665"
           tollType: "Toll"
           usageType: "DirectNumber"
           type: "VoiceFax"
+          byocNumber: false
           status: "Normal"
           extension:
             id: "697477005"
@@ -44253,6 +44281,7 @@ components:
           phoneNumber: "+18332023678"
           tollType: "Toll"
           usageType: "MainCompanyNumber"
+          byocNumber: false
           type: "VoiceOnly"
           status: "Normal"
         paging:
