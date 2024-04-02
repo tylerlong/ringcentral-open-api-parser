@@ -985,6 +985,11 @@
           ]
         },
         {
+          "name": "byocNumber",
+          "description": "The parameter reflects whether this number is BYOC or not",
+          "type": "boolean"
+        },
+        {
           "name": "phoneNumber",
           "description": "Phone number in e.164 format to be searched for.\nParameter value can include wildcards (e.g. \"+165012345**\")\nor be an exact number \"+16501234500\" - single number is searched in that case.\nMake sure you escape the \"+\" in the URL as \"%2B\"\n",
           "type": "string",
@@ -3805,6 +3810,19 @@
           }
         },
         {
+          "name": "paymentType",
+          "description": "Payment type. 'External' is returned for forwarded numbers\nwhich are not terminated in the RingCentral phone system\n",
+          "type": "string",
+          "enum": [
+            "External",
+            "TollFree",
+            "Local",
+            "BusinessMobileNumberProvider",
+            "ExternalNumberProvider",
+            "ExternalNumberProviderTollFree"
+          ]
+        },
+        {
           "name": "status",
           "description": "Status of a phone number",
           "type": "string",
@@ -4420,9 +4438,14 @@
           "type": "string"
         },
         {
-          "name": "identityGroupId",
-          "description": "Filter based on the specified identityGroupId.",
-          "type": "string"
+          "name": "identityGroupIds",
+          "description": "Filter based on the specified identityGroupIds (separated by commas).",
+          "style": "form",
+          "explode": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         {
           "name": "userId",
@@ -5511,7 +5534,6 @@
           "description": "Subscription status",
           "enum": [
             "Active",
-            "Suspended",
             "Blacklisted"
           ],
           "readOnly": true,
@@ -12591,6 +12613,11 @@
           ],
           "name": "usageType",
           "required": true
+        },
+        {
+          "type": "boolean",
+          "name": "byocNumber",
+          "required": false
         },
         {
           "type": "string",
@@ -33993,6 +34020,15 @@
           "format": "int32",
           "description": "Number of updated messages. Can be omitted if the value is zero",
           "name": "updatedCount"
+        },
+        {
+          "description": "Identifiers of the new messages, applicable for all message types",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": "newMessageIds"
         }
       ]
     },
@@ -34120,7 +34156,8 @@
       "description": "Notification payload body",
       "fields": [
         {
-          "type": "string",
+          "type": "integer",
+          "format": "int64",
           "description": "Internal identifier of a message",
           "name": "id"
         },
@@ -34221,12 +34258,16 @@
         },
         {
           "type": "string",
-          "description": "Internal identifier of a conversation this message belongs to",
-          "name": "conversationId"
-        },
-        {
-          "type": "string",
-          "description": "Specifies if a voicemail message transcription is already completed or not",
+          "description": "Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not \nIf 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned\n",
+          "enum": [
+            "NotAvailable",
+            "InProgress",
+            "TimedOut",
+            "Completed",
+            "CompletedPartially",
+            "Failed",
+            "Unknown"
+          ],
           "name": "vmTranscriptionStatus"
         }
       ]
@@ -34873,7 +34914,8 @@
             "TollFree",
             "Local",
             "BusinessMobileNumberProvider",
-            "ExternalNumberProvider"
+            "ExternalNumberProvider",
+            "ExternalNumberProviderTollFree"
           ],
           "name": "paymentType"
         },
@@ -36346,7 +36388,8 @@
             "TollFree",
             "Local",
             "BusinessMobileNumberProvider",
-            "ExternalNumberProvider"
+            "ExternalNumberProvider",
+            "ExternalNumberProviderTollFree"
           ],
           "name": "paymentType"
         },
@@ -38909,7 +38952,7 @@
         },
         {
           "type": "string",
-          "example": "RingCentral MVP",
+          "example": "RingCentral",
           "name": "value",
           "required": true
         },
@@ -39892,7 +39935,7 @@
           "required": true
         },
         {
-          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * Engage Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
+          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * RingCX Digital Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
           "type": "string",
           "example": "Body of the content",
           "name": "body",
@@ -40252,7 +40295,7 @@
           "name": "authorIdentityId"
         },
         {
-          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * Engage Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
+          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * RingCX Digital Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
           "type": "string",
           "example": "Body of the content",
           "name": "body"
@@ -40644,7 +40687,7 @@
           "required": false
         },
         {
-          "description": "Device info of the identity.\n\nApplicable to Engage Messaging channels only.\n",
+          "description": "Device info of the identity.\n\nApplicable to RingCX Digital Messaging channels only.\n",
           "type": "string",
           "example": "iPhone (iPhone); iOS 15.0.2",
           "name": "mobileDeviceInfo",
@@ -43642,7 +43685,7 @@
           "name": "description"
         },
         {
-          "description": "Task details.",
+          "description": "Task details",
           "$ref": "TMTaskInfoRecurrence",
           "name": "recurrence"
         },
@@ -43778,24 +43821,24 @@
         },
         {
           "type": "string",
-          "description": "Condition of ending",
-          "name": "endingCondition"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of iterations. For periodic events only",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "Iterations end datetime for periodic events",
-          "default": "None",
+          "description": "Condition of ending an event",
           "enum": [
             "None",
             "Count",
             "Date"
           ],
+          "name": "endingCondition"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
+          "name": "endingAfter"
+        },
+        {
+          "type": "string",
+          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
+          "format": "date-time",
           "name": "endingOn"
         },
         {
@@ -43901,26 +43944,26 @@
         },
         {
           "type": "string",
-          "description": "Condition of ending",
+          "description": "Condition of ending an event",
+          "enum": [
+            "None",
+            "Count",
+            "Date"
+          ],
           "name": "endingCondition",
           "required": false
         },
         {
           "type": "integer",
           "format": "int32",
-          "description": "Count of iterations. For periodic events only. Value range\nis 1 - 10. Must be specified if `endingCondition` is `Count`\n",
+          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
           "name": "endingAfter",
           "required": false
         },
         {
           "type": "string",
-          "description": "Iterations end datetime for periodic events.",
-          "default": "None",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
+          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
+          "format": "date-time",
           "name": "endingOn",
           "required": false
         },
@@ -44279,24 +44322,24 @@
         },
         {
           "type": "string",
-          "description": "Condition of ending",
-          "name": "endingCondition"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of iterations. For periodic events only",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "Iterations end datetime for periodic events",
-          "default": "None",
+          "description": "Condition of ending an event",
           "enum": [
             "None",
             "Count",
             "Date"
           ],
+          "name": "endingCondition"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
+          "name": "endingAfter"
+        },
+        {
+          "type": "string",
+          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
+          "format": "date-time",
           "name": "endingOn"
         },
         {
@@ -46092,6 +46135,12 @@
           "description": "Indicates that work email address is required for registration.",
           "default": false,
           "name": "workEmailRequired"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates that recording will be shown after the webinar and in emails.",
+          "default": true,
+          "name": "viewRecording"
         }
       ]
     },
@@ -47439,7 +47488,7 @@
         },
         {
           "type": "string",
-          "description": "Task ending condition.",
+          "description": "Task ending condition",
           "enum": [
             "None",
             "Count",
@@ -47457,7 +47506,7 @@
         },
         {
           "type": "string",
-          "description": "The end date of periodic task in UTC time zone",
+          "description": "End date of a periodic task in UTC time zone",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -47528,7 +47577,7 @@
         },
         {
           "type": "string",
-          "description": "End date of periodic task",
+          "description": "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -47587,12 +47636,12 @@
           "minimum": 1,
           "type": "integer",
           "format": "int32",
-          "description": "Count of iterations of periodic tasks.",
+          "description": "Count of iterations of periodic tasks",
           "name": "endingAfter"
         },
         {
           "type": "string",
-          "description": "The end date of periodic task in UTC time zone.",
+          "description": "End date of a periodic task in UTC time zone",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -52336,7 +52385,7 @@
             "Call Recordings"
           ],
           "method2": "delete",
-          "description": "Deletes company call recordings by their IDs.",
+          "description": "Deletes company call recordings by their IDs. *Please note:* This method deletes the recording file itself,\nnot the record of it in the call log.\n",
           "summary": "Delete Company Call Recordings",
           "operationId": "deleteCompanyCallRecordings",
           "rateLimitGroup": "Heavy",
@@ -54151,7 +54200,7 @@
             "Automatic Location Updates"
           ],
           "method2": "get",
-          "description": "Returns emergency response location by ID.",
+          "description": "Returns emergency response location by ID. Available for Admin users only.",
           "summary": "Get Emergency Location",
           "operationId": "readEmergencyLocation",
           "rateLimitGroup": "Light",
@@ -56460,7 +56509,7 @@
           "endpoint": "/analytics/calls/v1/accounts/{accountId}/timeline/fetch",
           "method": "post",
           "tags": [
-            "Line Of Business Analytics"
+            "Business Analytics"
           ],
           "method2": "post",
           "description": "Returns time-value data aggregations filtered by parameters specified",
@@ -57410,7 +57459,7 @@
           "endpoint": "/analytics/calls/v1/accounts/{accountId}/aggregation/fetch",
           "method": "post",
           "tags": [
-            "Line Of Business Analytics"
+            "Business Analytics"
           ],
           "method2": "post",
           "description": "Returns call aggregations filtered by parameters specified",
