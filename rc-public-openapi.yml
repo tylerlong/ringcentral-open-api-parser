@@ -32,6 +32,7 @@ x-tagGroups:
   - "Call Control"
   - "Call Forwarding"
   - "Call Handling Rules"
+  - "Call Flip"
   - "Call Log"
   - "Call History"
   - "Call Log Export"
@@ -53,8 +54,9 @@ x-tagGroups:
   - "Pager Messages"
   - "SMS"
   - "High Volume SMS"
-  - "Voicemail Broadcasting"
   - "SMS Log Export"
+  - "SMS Templates"
+  - "Voicemail Broadcasting"
 - name: "Social Messaging"
   popular: true
   tags:
@@ -149,12 +151,15 @@ x-tagGroups:
   - "Account Federation"
   - "Integrations"
   - "Enterprise Portal API"
+  - "Push to Talk Provisioning"
+  - "BYOC"
 - name: "Address Book"
   tags:
   - "External Contacts"
   - "Internal Contacts"
   - "Hybrid Directory Contacts"
   - "Overlay Contacts"
+  - "External Shared Directory"
 - name: "Roles and Permissions"
   tags:
   - "Permissions"
@@ -184,6 +189,12 @@ x-tagGroups:
   - "App Gallery"
   - "App Rating Review"
   - "Bot Provisioning"
+- name: "Workflow Builder"
+  tags:
+  - "Flows"
+  - "Flow Editor"
+  - "Flow Log"
+  - "Flow Templates"
 - name: "Utilities"
   tags:
   - "API Info"
@@ -191,6 +202,7 @@ x-tagGroups:
   - "Async Tasks"
   - "User Notifications"
   - "Client Versions"
+  - "End-to-End Encryption"
 security:
 - OAuth2: []
 tags:
@@ -252,7 +264,6 @@ tags:
 - name: "Webinars and Sessions"
   description: "External APIs for webinar and session management"
 - name: "Chats"
-- name: "Account Administration"
 - name: "Delegation Management"
 - name: "OAuth/OIDC"
   description: "Public OAuth 2.0 and OpenID Connect Resources"
@@ -368,7 +379,7 @@ paths:
         Updates the existing subscription. The client application can extend/narrow
         the list of events for which it receives notifications within this subscription.
         If event filters are specified, calling this method modifies them for the
-        existing subscription. The method also allows to set the subscription expiration time.
+        existing subscription. The method also allows setting the subscription expiration time.
         If other than `events` and `expiresIn` parameters are passed in the request they will be ignored.
         If the request body is empty then the specified subscription will be just renewed without any
         event filter modifications and with default expiration time.
@@ -1139,7 +1150,7 @@ paths:
       summary: "Update Webinar"
       description: |
         Updates a Webinar. The payload may contain just changed fields of a Webinar resource (it is a partial update):
-        - host cannot be changed and host user information cannot be updated;
+        - host cannot be changed, and host user information cannot be updated;
         - only the settings which are not mandated at account level or are unlocked can be
         changed;
         - in order to reset a webinar password it should be passed as an empty string;
@@ -1995,7 +2006,6 @@ paths:
     get:
       tags:
       - "Meeting Recordings"
-      - "Account Administration"
       summary: "List Account Recordings"
       description: |
         Returns all account recordings.
@@ -2069,15 +2079,15 @@ paths:
           type: "string"
       responses:
         "200":
-          description: "Success of receiving delegators"
+          description: "Successful response"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DelegatorsListResult"
         "403":
-          description: "You should be owner of extension for get delegators"
+          description: "The calling user must be the owner of the extension to get delegators"
         "500":
-          description: "internal server error"
+          description: "Internal server error"
       x-throttling-group: "Medium"
       x-app-permission: "Video"
   /rcvideo/v1/history/meetings:
@@ -2303,7 +2313,13 @@ paths:
       tags:
       - "OAuth/OIDC"
       summary: "Token Introspection"
-      description: "Determines state and metadata for a given token (access token, refresh token \nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n"
+      description: |
+        Determines state and metadata for a given token (access token, refresh token
+        or authorization code)
+
+        Depending on client application type
+        requests to this endpoint may require authentication with HTTP Basic scheme
+        using registered client ID and client secret as login and password, correspondingly.
       operationId: "introspectToken"
       requestBody:
         content:
@@ -3533,9 +3549,6 @@ paths:
       - "Call Control"
       summary: "Make CallOut"
       description: "Creates a new outbound call out session. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Sessions/op_session_add_CallOut"
       operationId: "createCallOutCallSession"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3563,9 +3576,6 @@ paths:
       - "Call Control"
       summary: "Start Conference Call Session"
       description: "Initiates a conference call session."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Sessions/op_session_add_Conference"
       operationId: "createConferenceCallSession"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3605,7 +3615,9 @@ paths:
           type: "string"
       - name: "timeout"
         in: "query"
-        description: "The time frame of awaiting for a status change before sending the resulting one in response"
+        description: |
+          The time frame of awaiting for a status change before sending
+          the resulting one in response
         schema:
           type: "string"
       responses:
@@ -3655,10 +3667,11 @@ paths:
       tags:
       - "Call Control"
       summary: "Bring-In Call Party"
-      description: "Adds a new party to the call session by bringing-in an established SIP call connection. The maximum number of parties to bring-in is 10; only 1 call party can be added per request. Currently the method is supported for sessions of 'Conference' origin only."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Add_Party/op_parties_add_bringIn"
+      description: |
+        Adds a new party to the call session by bringing in an established
+        SIP call connection. The maximum number of parties to bring in is 10; only
+        1 call party can be added per request. Currently, the method is supported for
+        sessions of the `Conference` origin only.
       operationId: "createCallPartyWithBringIn"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3697,9 +3710,6 @@ paths:
       - "Call Control"
       summary: "Get Call Party Status"
       description: "Returns a call party status by ID."
-      externalDocs:
-        description: "Find more info about response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_get"
       operationId: "readCallPartyStatus"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3788,10 +3798,7 @@ paths:
       tags:
       - "Call Control"
       summary: "Un-hold Call Party"
-      description: "Brings a party back into a call and stops to play Hold Music. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back."
-      externalDocs:
-        description: "Find more info about response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_unhold"
+      description: "Brings a party back into a call and stops to play Hold Music. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to un-hold both endpoints to remove Hold Music and bring media back."
       operationId: "unholdCallParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3821,10 +3828,7 @@ paths:
       tags:
       - "Call Control"
       summary: "Call Park"
-      description: "Parks a call to a virtual location from where it can further be retrieved by any user from any phone of the system. The call session and call party identifiers should be specified in path. Currently the users can park only their own incoming calls. Up to 50 calls can be parked simultaneously. Park location starts with asterisk (*) and ranges 801-899."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+11.0#/Parties/op_party_park"
+      description: "Parks a call to a virtual location from where it can further be retrieved by any user from any phone of the system. The call session and call party identifiers should be specified in path. Currently, the users can park only their own incoming calls. Up to 50 calls can be parked simultaneously. Park location starts with asterisk (*) and ranges 801-899."
       operationId: "callParkParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3857,9 +3861,6 @@ paths:
       - "Call Control"
       summary: "Call Flip on Party"
       description: "Performs call flip procedure by holding opposite party and calling to the specified target"
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_flip"
       operationId: "callFlipParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3933,7 +3934,12 @@ paths:
       tags:
       - "Call Control"
       summary: "Bridge Call Party"
-      description: "Allows the user to connect multiple call session participants over a conference call bridge. The current active call session ID and party ID of the user within this session should be specified in path; the bridged call session ID and party ID of the user within that session should be specified in request body. Thus the user connects participants of two sessions into one conference call using his/her own party IDs from both sessions."
+      description: |
+        Allows the user to connect multiple call session participants over a conference call bridge.
+        The current active call session ID and party ID of the user within this session should be specified
+        in path; the bridged call session ID and party ID of the user within that session should be specified
+        in request body. Thus, the user connects participants of two sessions into the one conference call
+        using his/her own party IDs from both sessions."
       operationId: "bridgeCallParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -3973,9 +3979,6 @@ paths:
       - "Call Control"
       summary: "Ignore Call in Queue"
       description: "Ignores a call to a call queue agent in `Setup` or `Proceeding` state."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+19.2#/Parties/op_party_ignore"
       operationId: "ignoreCallInQueue"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4010,7 +4013,17 @@ paths:
       tags:
       - "Call Control"
       summary: "Supervise Call Party"
-      description: "Allows to monitor a call party in 'Listen' mode. Input parameters are extension number of a monitored user and internal identifier of a supervisor's device. Call session and party identifiers should be specified in path. Please note that for this method dual channel audio flow is supported, which means that you need to make one more request for monitoring the second participant of a call. And as a result of each monitoring request the client receives SIP invite with the following header `p-rc-api-monitoring-ids` containing IDs of the monitored party and session. The flow is supported for calls with no more than 2 participants. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained."
+      description: |
+        Allows to monitor a call party in 'Listen' mode. Input parameters
+        are extension number of a monitored user and internal identifier of a supervisor's
+        device. Call session and party identifiers should be specified in path. Please
+        note that for this method dual channel audio flow is supported, which means
+        that you need to make one more request for monitoring the second participant
+        of a call. And as a result of each monitoring request the client receives
+        SIP invite with the following header `p-rc-api-monitoring-ids` containing
+        IDs of the monitored party and session. The flow is supported for calls with
+        no more than 2 participants. Currently, this method is supported for Softphone/Hardphone devices
+        only, since device IDs for WebRTC/Mobile apps cannot be obtained.
       operationId: "superviseCallParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4075,9 +4088,6 @@ paths:
       - "Call Control"
       summary: "Create Recording"
       description: "Starts a new call recording for the party"
-      externalDocs:
-        description: "Find more info about response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_addRecording"
       operationId: "startCallRecording"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4106,14 +4116,11 @@ paths:
       - "Call Control"
       summary: "Pause/Resume Recording"
       description: "Pause/resume recording"
-      externalDocs:
-        description: "Find more info about response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_modifyRecording"
       operationId: "pauseResumeCallRecording"
       parameters:
       - name: "brandId"
         in: "query"
-        description: "Identifies a brand of a logged in user or a brand of a sign-up session"
+        description: "Identifies a brand of a logged-in user or a brand of a sign-up session"
         required: true
         schema:
           type: "string"
@@ -4238,7 +4245,7 @@ paths:
       tags:
       - "Call Control"
       summary: "Hold Call Party"
-      description: "Puts the party to stand-alone mode and starts to play Hold Music according to configuration & state to peers. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back."
+      description: "Puts the party to stand-alone mode and starts to play Hold Music according to configuration & state to peers. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to un-hold both endpoints to remove Hold Music and bring media back."
       operationId: "holdCallParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4315,9 +4322,6 @@ paths:
       - "Call Control"
       summary: "Forward Call Party"
       description: "Forwards a non-answered incoming call to the specified call party. Applicable for a call session in \"Setup\" or \"Proceeding\" state."
-      externalDocs:
-        description: "Find more info about body and response format"
-        url: "https://wiki.ringcentral.com/display/TA/Telephony+Platform+API+-+TAS+10.2#/Parties/op_party_forward"
       operationId: "forwardCallParty"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4356,7 +4360,7 @@ paths:
       tags:
       - "Call Control"
       summary: "Supervise Call Session"
-      description: "Allows to monitor a call session in 'Listen' mode. Input parameters should contain internal identifiers of a monitored user and a supervisor's device. Call session should be specified in path. Please note that this method supports single channel audio flow, which means that audio of both call participants is mixed and delivered to the supervisor in single audio channel. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained."
+      description: "Allows monitoring a call session in 'Listen' mode. Input parameters should contain internal identifiers of a monitored user and a supervisor's device. Call session should be specified in path. Please note that this method supports single channel audio flow, which means that audio of both call participants is mixed and delivered to the supervisor in single audio channel. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained."
       operationId: "superviseCallSession"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4526,7 +4530,11 @@ paths:
           format: "date-time"
       - name: "recordCount"
         in: "query"
-        description: "For 'FSync' the parameter is mandatory, it limits the number of records to be returned in response. For 'ISync' it specifies with how many records to extend sync frame to the past, the maximum number of records is 250"
+        description: |
+          For `FSync` mode this parameter is mandatory, it limits the number of records to be returned in response.
+
+          For `ISync` mode this parameter specifies the number of records to extend the sync frame with to the past
+          (the maximum number of records is 250)
         schema:
           type: "integer"
           format: "int32"
@@ -5004,22 +5012,28 @@ paths:
     get:
       tags:
       - "High Volume SMS"
-      summary: "Get Opted Out Numbers"
-      description: "Returns the list of numbers opted out from the account. The list can be filtered by `to`/`from` phone number query parameters. Specifying `text/csv` in the Accept header downloads the data in CSV format."
+      summary: "List Opted Out Numbers"
+      description: |
+        Returns the list of numbers opted out from the account. The list
+        can be filtered by `to`/`from` phone number query parameters. Specifying `text/csv`
+        in the `Accept` header lets download the data in the CSV format.
       operationId: "readA2PSMSOptOuts"
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - name: "from"
         in: "query"
         required: false
-        description: "The sender's phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages. The asterisk value \"*\" means any number in `from` field"
+        description: |
+          The sender's phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages.
+          The asterisk value "*" means any number in `from` field
         schema:
           type: "string"
         example: "15551234455"
       - name: "to"
         in: "query"
         required: false
-        description: "The receiver's phone number (`to` field) in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages"
+        description: |
+          The receiver's phone number (`to` field) in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages
         example: "15551237755"
         schema:
           type: "string"
@@ -5053,7 +5067,7 @@ paths:
         example: 5
       responses:
         "200":
-          description: "The list of opt records for the account filtered by the search criteria provided as query param"
+          description: "Successful response"
           content:
             application/json:
               schema:
@@ -6103,7 +6117,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmergencyLocationInfoRequest"
+              $ref: "#/components/schemas/EmergencyLocationRequestResource"
         required: true
       responses:
         "200":
@@ -6111,7 +6125,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CommonEmergencyLocationResource"
+                $ref: "#/components/schemas/EmergencyLocationResponseResource"
       x-feature: "EditSoftPhoneAutoLocationUpdate OR EditHardPhoneAutoLocationUpdate"
       x-availability: "Limited"
       x-throttling-group: "Medium"
@@ -6157,7 +6171,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmergencyLocationInfoRequest"
+              $ref: "#/components/schemas/EmergencyLocationRequestResource"
         required: true
       responses:
         "200":
@@ -6165,7 +6179,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CommonEmergencyLocationResource"
+                $ref: "#/components/schemas/EmergencyLocationResponseResource"
       x-feature: "EditSoftPhoneAutoLocationUpdate OR EditHardPhoneAutoLocationUpdate OR EditEmergencyLocations"
       x-availability: "Limited"
       x-throttling-group: "Heavy"
@@ -6240,7 +6254,7 @@ paths:
       tags:
       - "RCM Meetings (Legacy)"
       summary: "Get Account-level Meeting Info"
-      description: "Returns a particular account-level meeting details by ID."
+      description: "Returns a particular account-level meeting details by ID"
       operationId: "readAccountMeeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -8832,7 +8846,7 @@ paths:
           format: "int32"
       - name: "syncToken"
         in: "query"
-        description: "Value of syncToken property of last sync request response"
+        description: "A `syncToken` value from the previous sync response (for `ISync` mode only, mandatory)"
         schema:
           type: "string"
       - name: "syncType"
@@ -9125,18 +9139,25 @@ paths:
       - $ref: "#/components/parameters/CallLogSyncType"
       - name: "syncToken"
         in: "query"
-        description: "Value of syncToken property of last sync request response. Mandatory parameter for 'ISync' sync type"
+        description: "A `syncToken` value from the previous sync response (for `ISync` mode only, mandatory)"
         schema:
           type: "string"
       - name: "dateFrom"
         in: "query"
-        description: "The start datetime for resulting records in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is the current moment"
+        description: |
+          The start datetime for resulting records in ISO 8601 format including
+          timezone, for example 2016-03-10T18:07:52.534Z. The default value is the
+          current moment
         schema:
           type: "string"
           format: "date-time"
       - name: "recordCount"
         in: "query"
-        description: "For 'FSync' the parameter is mandatory, it limits the number of records to be returned in response. For 'ISync' it specifies with how many records to extend sync Frame to the past, the maximum number of records is 250"
+        description: |
+          For `FSync` mode this parameter is mandatory, it limits the number of records to be returned in response.
+
+          For `ISync` mode this parameter specifies the number of records to extend the sync frame with to the past
+          (the maximum number of records is 250)
         schema:
           type: "integer"
           format: "int32"
@@ -9697,7 +9718,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CommonEmergencyLocationResource"
+                $ref: "#/components/schemas/EmergencyLocationResponseResource"
       x-feature: "EmergencyFramework or NewEmergencyCallingFramework"
       x-availability: "Limited"
       x-throttling-group: "Heavy"
@@ -9719,7 +9740,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EmergencyLocationInfoRequest"
+              $ref: "#/components/schemas/EmergencyLocationRequestResource"
         required: true
       responses:
         "200":
@@ -9727,7 +9748,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CommonEmergencyLocationResource"
+                $ref: "#/components/schemas/EmergencyLocationResponseResource"
       x-feature: "EmergencyFramework or NewEmergencyCallingFramework"
       x-availability: "Limited"
       x-throttling-group: "Light"
@@ -10052,7 +10073,7 @@ paths:
       tags:
       - "RCM Meetings (Legacy)"
       summary: "Get Meeting Info"
-      description: "Returns a particular meeting details by ID."
+      description: "Returns a particular meeting details by ID"
       operationId: "readMeeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -10075,7 +10096,7 @@ paths:
       tags:
       - "RCM Meetings (Legacy)"
       summary: "Update Meeting"
-      description: "Modifies a particular meeting."
+      description: "Modifies a particular meeting"
       operationId: "updateMeeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -10127,7 +10148,7 @@ paths:
       tags:
       - "RCM Meetings (Legacy)"
       summary: "Update Meeting"
-      description: "Modifies a particular meeting."
+      description: "Modifies a particular meeting"
       operationId: "patchMeeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -10156,7 +10177,7 @@ paths:
       tags:
       - "RCM Meetings (Legacy)"
       summary: "End Meeting"
-      description: "Ends a meetings which is in progress."
+      description: "Ends a meeting which is in progress"
       operationId: "endMeeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -10352,7 +10373,8 @@ paths:
                   format: "date-time"
                 isoCode:
                   type: "string"
-                  description: "ISO Code. e.g UK"
+                  description: "Alpha-2 ISO Code of a country"
+                  example: "US"
                 coverIndex:
                   type: "integer"
                   description: |
@@ -10366,6 +10388,7 @@ paths:
                   description: |
                     Cover page text, entered by a fax sender and printed
                     on a cover page. Maximum length is limited to 1024 symbols
+                  maxLength: 1024
         required: true
       responses:
         "200":
@@ -10816,11 +10839,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AssignedRolesResource"
-      x-feature: "ReadExtensions"
+      x-feature: "ReadAssignedRoles"
       x-availability: "High"
       x-throttling-group: "Light"
       x-app-permission: "ReadAccounts"
-      x-user-permission: "ReadExtensions"
+      x-user-permission: "ReadAssignedRoles"
     put:
       tags:
       - "Role Management"
@@ -11017,23 +11040,23 @@ paths:
       - "Features"
       summary: "Get User Features"
       description: |
-        Returns a list of supported features and information on their
-        availability for the current extension. Specific feature(s) might
+        Returns a list of supported features and the information on their
+        availability for the current extension. Particular feature(s) can
         be checked by providing `featureId` query parameter. Multiple values
         are supported in the format: `?featureId=Feature1&featureId=Feature2`.
         To get only available features in order to decrease response size,
-        `availableOnly=true` query param might be specified. In case a feature
+        `availableOnly=true` query param can be specified. If a feature
         is available for the current user, `"available": true` is returned in
         response for the record with the corresponding feature ID. Otherwise,
-        additional attribute `reason` is returned with the appropriate code:
+        the additional attribute `reason` is returned with the appropriate code:
         - `ServicePlanLimitation` -  a feature is not included in account service plan;
         - `AccountLimitation` - a feature is turned off for account;
         - `ExtensionTypeLimitation` - a feature is not applicable for extension type;
         - `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;
-        - `InsufficientPermissions` - required permission not granted to the current user (not the one, who is specified in the URL, but the one who's access token is used);
+        - `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);
         - `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.
 
-        Also, some features may have additional parameters, e.g., limits, which are returned in `params` attribute as a name-value collection:
+        Also, some features may have additional parameters, e.g. limits, which are returned in `params` attribute as a name-value collection:
 
             {
               "id": "HUD",
@@ -11302,8 +11325,8 @@ paths:
       - "Message Store"
       summary: "Update Message(s)"
       description: |
-        Updates message(s) by their ID(s). Currently only message read status
-        can be updated through this method.
+        Updates message(s) by their ID(s). Currently, only the `readStatus`
+        can be updated using this method.
 
         Bulk syntax is supported, max number of IDs passed as query/path
         parameters is 50. Alternative bulk syntax is also supported - user messages can be updated
@@ -11350,7 +11373,7 @@ paths:
       - "Message Store"
       summary: "Patch Message(s)"
       description: |
-        Patches message(s) by ID(s). Currently only message read status update and
+        Patches message(s) by ID(s). Currently, only updating the `readStatus` and
         restoring deleted messages are supported through this method.
 
         For changing status of a message send `readStatus` set to either 'Read' or 'Unread' in request.
@@ -11589,7 +11612,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/UnifiedPresenceList"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Resource not found"
       x-throttling-group: "Medium"
@@ -12001,13 +12024,10 @@ paths:
       - $ref: "#/components/parameters/AccountId"
       - name: "callQueueId"
         in: "path"
-        description: |
-          Internal identifier of an call queue or tilde (~) to indicate
-          the call queue assigned to the account logged-in within the current session
+        description: "Internal identifier of a call queue"
         required: true
         schema:
           type: "string"
-          default: "~"
       responses:
         "200":
           description: "Call queue overflow settings"
@@ -12023,20 +12043,16 @@ paths:
       tags:
       - "Call Queues"
       summary: "Update Call Queue Overflow Settings"
-      description: |
-        Updates overflow settings for a call queue specified in path.
+      description: "Updates overflow settings for a call queue specified in path."
       operationId: "updateCallQueueOverflowSettings"
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - name: "callQueueId"
         in: "path"
-        description: |
-          Internal identifier of an call queue or tilde (~) to indicate
-          the call queue assigned to the account logged-in within the current session
+        description: "Internal identifier of a call queue"
         required: true
         schema:
           type: "string"
-          default: "~"
       requestBody:
         description: "JSON body"
         content:
@@ -13088,7 +13104,9 @@ paths:
       tags:
       - "Phone Numbers"
       summary: "Get Phone Number"
-      description: "Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s).
+        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
       operationId: "readAccountPhoneNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -13622,7 +13640,7 @@ paths:
       parameters:
       - name: "permissionId"
         in: "path"
-        description: "Internal identifier of a user permissions"
+        description: "Internal identifier of a user permission"
         required: true
         schema:
           type: "string"
@@ -14125,7 +14143,9 @@ paths:
       tags:
       - "Text"
       summary: "Conversational Summarization"
-      description: "Returns Conversational Summarization to webhook uri for segmented transcript of audios with start,end,speakerId, text(alphanumeric and punctuations)."
+      description: |
+        Returns Conversational Summarization to the webhook URI for segmented transcript of audios
+        with start, end, speakerId, text(alphanumeric and punctuations).
       operationId: "caiSummarize"
       parameters:
       - $ref: "#/components/parameters/Webhook"
@@ -14162,7 +14182,7 @@ paths:
       tags:
       - "Text"
       summary: "Smart Punctuation"
-      description: "Returns Smart Punctuation to the provided webhook uri."
+      description: "Returns Smart Punctuation to the provided webhook URI."
       operationId: "caiPunctuate"
       parameters:
       - $ref: "#/components/parameters/Webhook"
@@ -14369,7 +14389,7 @@ paths:
       tags:
       - "Audio"
       summary: "Speech to Text Conversion"
-      description: "Returns Speech to Text Conversion to the provided webhook uri."
+      description: "Returns Speech to Text Conversion to the provided webhook URI."
       operationId: "caiSpeechToText"
       parameters:
       - $ref: "#/components/parameters/Webhook"
@@ -14445,7 +14465,7 @@ paths:
       tags:
       - "Audio"
       summary: "Speaker Identification"
-      description: "Returns Speaker Identification to the provided webhook uri."
+      description: "Returns Speaker Identification to the provided webhook URI."
       operationId: "caiSpeakerIdentify"
       parameters:
       - $ref: "#/components/parameters/Webhook"
@@ -14680,89 +14700,6 @@ paths:
           $ref: "#/components/responses/SocMsgGetIdentityResponse200"
         "404":
           $ref: "#/components/responses/SocMsgResponse404"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/identities/{identityId}/deanonymize:
-    post:
-      tags:
-      - "Identities"
-      summary: "Deanonymize Identity"
-      description: |
-        Flag Identity for deanonymization.
-
-        The next time a content from this Identity will be imported, the identity will be imported again.
-      operationId: "socMsgDeanonymizeIdentity"
-      parameters:
-      - $ref: "#/components/parameters/IdentityId"
-      responses:
-        "201":
-          $ref: "#/components/responses/SocMsgIdentity201"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/identities/{identityId}/anonymize:
-    post:
-      tags:
-      - "Identities"
-      summary: "Anonymize Identity"
-      description: |
-        Anonymizes an Identity.
-      operationId: "socMsgAnonymizeIdentity"
-      parameters:
-      - $ref: "#/components/parameters/IdentityId"
-      responses:
-        "201":
-          $ref: "#/components/responses/SocMsgIdentity201"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/identities/import:
-    post:
-      tags:
-      - "Identities"
-      summary: "Import Identity"
-      description: |
-        Import an identity from given identifier.
-
-        Available only for Email channels.
-      operationId: "socMsgImportIdentity"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ImportIdentityRequest"
-            examples:
-              Import an email identity:
-                summary: "An example for Import email identity"
-                value:
-                  foreignId: "test@test.com"
-                  sourceId: "541014e17aa58d8ccf000023"
-              Import an email identity with extra values:
-                summary: "An example for Import email identity with extra values"
-                value:
-                  foreignId: "test@test.com"
-                  sourceId: "541014e17aa58d8ccf000023"
-                  extraValues:
-                    customerId: "myCustomerId"
-              Update an email identity with a company name:
-                summary: "An example for update email identity with company name"
-                value:
-                  foreignId: "test@test.com"
-                  sourceId: "541014e17aa58d8ccf000023"
-                  company: "MyCompany"
-                  upsert: true
-      responses:
-        "201":
-          $ref: "#/components/responses/SocMsgCreateIdentityResponse201"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-        "422":
-          $ref: "#/components/responses/SocMsgImportIdentityResponse422"
-        "500":
-          $ref: "#/components/responses/SocMsgImportIdentityResponse500"
       x-throttling-group: "Light"
       x-app-permission: "SocialMessaging"
   /scim/v2/Schemas:
@@ -15468,7 +15405,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMEventInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Medium"
       x-app-permission: "TeamMessaging"
@@ -15501,7 +15438,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMEventInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Event not found."
       x-feature: "TeamMessaging"
@@ -15534,7 +15471,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMEventInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Event to update not exists."
       x-feature: "TeamMessaging"
@@ -15557,7 +15494,7 @@ paths:
         "200":
           description: "OK"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Event not found."
       x-feature: "TeamMessaging"
@@ -15602,7 +15539,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMChatListWithoutNavigation"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Light"
       x-app-permission: "TeamMessaging"
@@ -15646,7 +15583,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMAddFileRequest"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "415":
           description: "Media type is not supported"
       x-feature: "TeamMessaging"
@@ -16134,7 +16071,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AdaptiveCardShortInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "You do not have permissions to create adaptive card in the specified chat."
         "404":
@@ -16209,7 +16146,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMNoteList"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "You do not have permissions to get such kind of information."
         "404":
@@ -16244,7 +16181,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMNoteInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "You do not have permissions to create note in the specified group."
         "404":
@@ -16278,7 +16215,7 @@ paths:
         "207":
           description: "Multi-Status"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Adaptive Card not found."
       x-feature: "TeamMessaging"
@@ -16311,7 +16248,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AdaptiveCardShortInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "You do not have permissions to update specified adaptive card."
         "404":
@@ -16336,7 +16273,7 @@ paths:
         "204":
           description: "No Content"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "You do not have permissions to delete specified adaptive card."
         "404":
@@ -16393,7 +16330,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMWebhookList"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Webhooks not found."
       x-feature: "TeamMessaging"
@@ -16416,7 +16353,7 @@ paths:
         "200":
           description: "The resource was deleted successfully."
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Webhook not found."
       x-feature: "TeamMessaging"
@@ -16440,7 +16377,7 @@ paths:
         "200":
           description: "OK"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Webhook not found."
       x-feature: "TeamMessaging"
@@ -16464,7 +16401,7 @@ paths:
         "200":
           description: "OK"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "404":
           description: "Webhook not found."
       x-feature: "TeamMessaging"
@@ -16591,7 +16528,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMConversationInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Medium"
       x-app-permission: "TeamMessaging"
@@ -16674,7 +16611,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMEventInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Medium"
       x-app-permission: "TeamMessaging"
@@ -16725,7 +16662,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMWebhookInfo"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Medium"
       x-app-permission: "TeamMessaging"
@@ -17029,7 +16966,7 @@ paths:
         "204":
           description: "No Content."
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "User is not Team Admin."
         "404":
@@ -17166,7 +17103,7 @@ paths:
         "204":
           description: "No Content."
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
         "403":
           description: "User is not Team Admin."
         "404":
@@ -17370,7 +17307,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/TMChatListWithoutNavigation"
         "400":
-          description: "Some of parameters are missing or have invalid format."
+          description: "Some of the parameters are missing or have invalid format"
       x-feature: "TeamMessaging"
       x-throttling-group: "Light"
       x-app-permission: "TeamMessaging"
@@ -17605,42 +17542,6 @@ components:
             EDI-028:
               $ref: "#/components/examples/EDI-028"
     SocMsgGetIdentityResponse200:
-      description: "Successful response."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/IdentityModel"
-    SocMsgIdentity201:
-      description: "Successful response."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/IdentityModel"
-    SocMsgImportIdentityResponse422:
-      description: "Error 422 on identity import"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-025:
-              $ref: "#/components/examples/EDI-025"
-            EDI-008:
-              $ref: "#/components/examples/EDI-008"
-            EDI-043:
-              $ref: "#/components/examples/EDI-043"
-            EDI-044:
-              $ref: "#/components/examples/EDI-044"
-    SocMsgImportIdentityResponse500:
-      description: "Error 500 on identity import"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-045:
-              $ref: "#/components/examples/EDI-045"
-    SocMsgCreateIdentityResponse201:
       description: "Successful response."
       content:
         application/json:
@@ -20407,18 +20308,18 @@ components:
           example: "8zXq6oaLT7WvwWITlGiA1A"
         id_token:
           type: "string"
-          description: "OIDC ID token (if OpenId Connect flow was activated during authorization)"
+          description: "OIDC ID token (if OpenID Connect flow was activated during authorization)"
         session_id:
           type: "string"
           description: "OAuth session ID"
         session_expiration_time:
           type: "string"
           format: "date-time"
-          description: "Absolute value of session expiration time as ISO datetime"
+          description: "Absolute value of session expiration time as an ISO timestamp"
         session_expires_in:
           type: "integer"
           format: "int32"
-          description: "Remaining time (in seconds) until session expiration due to absolute timeout"
+          description: "Remaining time (in seconds) until session expiration due to the absolute timeout"
         session_idle_timeout:
           type: "integer"
           format: "int32"
@@ -21659,14 +21560,7 @@ components:
         serviceInfo:
           $ref: "#/components/schemas/ServiceInfo"
         setupWizardState:
-          type: "string"
-          description: |
-            Specifies account configuration wizard state (web service setup)
-          default: "NotStarted"
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateEnum"
         signupInfo:
           $ref: "#/components/schemas/SignupInfoResource"
         status:
@@ -21740,7 +21634,14 @@ components:
           description: "Number of an operator extension"
         partnerId:
           type: "string"
-          description: "Internal identifier of an extension created by partner. Supported for Partner Applications.\nThe RingCentral supports the mapping of accounts and stores the corresponding account ID/extension \nID for each partner ID of a client application. In request URIs partner IDs are accepted instead\nof regular RingCentral native IDs as path parameters using `pid=XXX` clause.\nThough in response URIs contain the corresponding account IDs and extension\nIDs. In all request and response bodies these values are reflected via\npartnerId attributes of account and extension\n"
+          description: |
+            Internal identifier of an extension created by partner. Supported for Partner Applications.
+            The RingCentral supports the mapping of accounts and stores the corresponding account ID/extension
+            ID for each partner ID of a client application. In request URIs partner IDs are accepted instead
+            of regular RingCentral native IDs as path parameters using `pid=XXX` clause.
+            Though in response URIs contain the corresponding account IDs and extension
+            IDs. In all request and response bodies these values are reflected via
+            partnerId attributes of account and extension
     TimezoneInfo:
       type: "object"
       properties:
@@ -22062,6 +21963,14 @@ components:
               recommendations [E.123](http://en.wikipedia.org/wiki/E.123) and
               [E.164](http://en.wikipedia.org/wiki/E.164),
               see [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)
+    SetupWizardStateEnum:
+      type: "string"
+      description: "Initial configuration wizard state"
+      enum:
+      - "NotStarted"
+      - "Incomplete"
+      - "Completed"
+      - "Unknown"
     CompanyBusinessHoursUpdateRequest:
       type: "object"
       properties:
@@ -22683,9 +22592,9 @@ components:
           type: "integer"
           format: "int64"
           description: |
-            Box billing identifier of a device. Applicable only for HardPhones.
+            Box billing identifier of a device. Applicable only for devices of `HardPhone` type.
             It is an alternative way to identify the device to be ordered. Either
-            model structure, or boxBillingId  must be specified for HardPhone
+            `model` structure, or `boxBillingId` must be specified
         useAsCommonPhone:
           type: "boolean"
           description: |
@@ -22711,16 +22620,7 @@ components:
             [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
             format including timezone, for example *2016-03-10T18:07:52.534Z
         linePooling:
-          type: "string"
-          description: |
-            Pooling type of device:
-            - Host - a device with standalone paid phone line which can be linked to a soft client instance
-            - Guest - a device with a linked phone line
-            - None - a device without a phone line or with specific line (free, BLA, etc.)
-          enum:
-          - "Host"
-          - "Guest"
-          - "None"
+          $ref: "#/components/schemas/LinePoolingEnum"
         billingStatement:
           $ref: "#/components/schemas/BillingStatementInfo"
     BillingStatementCharges:
@@ -22736,6 +22636,17 @@ components:
         freeServiceCredit:
           type: "number"
           format: "double"
+    LinePoolingEnum:
+      type: "string"
+      description: |
+        Pooling type of device:
+        - `Host` - device with a standalone paid phone line which can be linked to soft phone client instance;
+        - `Guest` - device with a linked phone line;
+        - `None` - device without a phone line or with a specific line (free, BLA, etc.)
+      enum:
+      - "Host"
+      - "Guest"
+      - "None"
     DeviceUpdatePhoneLinesInfo:
       type: "object"
       properties:
@@ -24889,20 +24800,27 @@ components:
         type:
           type: "string"
           description: |
-            Voice name type. 'Default' - default extension name; first
-            name and last name specified in user profile; 'TextToSpeech' - custom
-            text; user name spelled the way it sounds and specified by user; 'Recorded'
-            - custom audio, user name recorded in user's own voice (supported only
-            for extension retrieval)
+            The method used to pronounce the user's name:
+            - `Default` - default extension name; first and last name specified in user's profile are pronounced using text-to-speech;
+            - `TextToSpeech` - custom text specified by a user  pronounced using text-to-speech;
+            - `Recorded` - custom audio uploaded by a user, the name recorded in user's own voice (supported only for extension retrieval).
           enum:
           - "Default"
           - "TextToSpeech"
           - "Recorded"
         text:
           type: "string"
-          description: "Custom text"
+          description: "Custom text (for `TextToSpeech` type only)"
         prompt:
           $ref: "#/components/schemas/PronouncedNamePromptInfo"
+    SetupWizardStateForUpdateEnum:
+      type: "string"
+      description: "Initial configuration wizard state"
+      enum:
+      - "NotStarted"
+      - "Incomplete"
+      - "Completed"
+      default: "NotStarted"
     ExtensionCountryInfoRequest:
       type: "object"
       properties:
@@ -25144,11 +25062,7 @@ components:
         regionalSettings:
           $ref: "#/components/schemas/ExtensionRegionalSettingRequest"
         setupWizardState:
-          type: "string"
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         partnerId:
           type: "string"
           description: |
@@ -25221,23 +25135,23 @@ components:
       properties:
         country:
           type: "string"
-          description: "Country name of an extension user company"
+          description: "Country name of a user's company"
         state:
           type: "string"
           description: |
-            State/province name of an extension user company. Mandatory
+            State/province name of a user's company. Mandatory
             for the USA, UK and Canada
         city:
           type: "string"
-          description: "City name of an extension user company"
+          description: "City name of a user's company"
         street:
           type: "string"
-          description: "Street address of an extension user company"
+          description: "Street address of a user's company"
         zip:
           type: "string"
-          description: "Zip code of an extension user company"
+          description: "Zip code of a user's company"
       description: |
-        Extension user business address. The default is
+        User's business address. The default is
         Company (Auto-Receptionist) settings
     CostCenterInfo:
       type: "object"
@@ -26671,6 +26585,14 @@ components:
           $ref: "#/components/schemas/PageNavigationModel"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
+    EmergencyLocationRequestResource:
+      allOf:
+      - $ref: "#/components/schemas/EmergencyLocationInfoRequest"
+      - type: "object"
+        properties:
+          trusted:
+            type: "boolean"
+            description: "If 'true' address validation for non-us addresses is skipped"
     EmergencyAddressStatus:
       type: "string"
       enum:
@@ -26852,6 +26774,14 @@ components:
       enum:
       - "Private"
       - "Public"
+    EmergencyLocationResponseResource:
+      allOf:
+      - $ref: "#/components/schemas/CommonEmergencyLocationResource"
+      - type: "object"
+        properties:
+          trusted:
+            type: "boolean"
+            description: "If 'true' address validation for non-us addresses is skipped"
     LocationDeletionInfo:
       type: "object"
       properties:
@@ -29428,7 +29358,7 @@ components:
           format: "int32"
           description: |
             Retention policy setting, specifying how long to keep messages;
-            the supported value range is 7-90 days. Currently the retention period is supported for Fax and Voicemail messages only.
+            the supported value range is 7-90 days. Currently, the retention period is supported for `Fax` and `Voicemail` messages only.
             SMS messages are stored with no time limits
     AnsweringRuleQueryRequest:
       type: "object"
@@ -29839,14 +29769,7 @@ components:
           items:
             $ref: "#/components/schemas/ExtensionServiceFeatureInfo"
         setupWizardState:
-          type: "string"
-          description: |
-            Specifies extension configuration wizard state (web service
-            setup). The default value is 'NotStarted'
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         site:
           $ref: "#/components/schemas/ProvisioningSiteInfo"
         status:
@@ -30012,15 +29935,7 @@ components:
           type: "string"
           description: "IVR PIN"
         setupWizardState:
-          type: "string"
-          description: |
-            Specifies extension configuration wizard state (web service
-            setup).
-          default: "NotStarted"
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         site:
           $ref: "#/components/schemas/SiteInfo"
         status:
@@ -30122,51 +30037,50 @@ components:
         firstName:
           type: "string"
           description: |
-            For User extension type only. Extension user first name
+            User's first name (for extensions of `User` type only)
         lastName:
           type: "string"
           description: |
-            For User extension type only. Extension user last name
+            For User extension type only. User's last name (for extensions of `User` type only)
         name:
           type: "string"
           description: |
-            Extension user name (first name and last name)
+            Extension name (for extensions of `User` type - concatenation of first and last name)
         company:
           type: "string"
-          description: "Extension user company name"
+          description: "User's company name"
         jobTitle:
           type: "string"
+          description: "User's job title"
         email:
           type: "string"
           format: "email"
-          description: "Contact email of extension user"
+          description: "User's contact email"
         businessPhone:
           type: "string"
           description: |
-            Extension user contact phone number in
-            [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)
+            User's contact phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)
             (with '+' sign) format
         mobilePhone:
           type: "string"
           description: |
-            Extension user mobile (**non** Toll Free) phone number in
-            [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)
+            User's mobile (**non** Toll Free) phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)
             (with '+' sign) format
         businessAddress:
           $ref: "#/components/schemas/ContactBusinessAddressInfo"
         emailAsLoginName:
           type: "boolean"
           description: |
-            If `true` then contact email is enabled as login name for this
-            user. Please note that email should be unique in this case.
+            Indicates that the contact email is enabled as a login name for this
+            user. Please note that the email must be unique in this case.
           default: false
         pronouncedName:
           $ref: "#/components/schemas/PronouncedNameInfo"
         department:
           type: "string"
           description: |
-            Extension user department, if any
-      description: "Contact detailed information"
+            User's department name
+      description: "Detailed contact information"
     GetExtensionListInfoResponse:
       type: "object"
       properties:
@@ -30289,7 +30203,7 @@ components:
     DepartmentInfo:
       type: "object"
       description: |
-        Please note that legacy 'Department' extension type corresponds to
+        Please note that the `Department` extension type corresponds to
         'Call Queue' extensions in modern RingCentral product terminology
       properties:
         id:
@@ -30302,7 +30216,7 @@ components:
           description: "Canonical URI of an extension resource"
         extensionNumber:
           type: "string"
-          description: "Number of a department extension"
+          description: "Short number of a department extension"
     ExtensionInfoEventBody:
       type: "object"
       properties:
@@ -30363,11 +30277,7 @@ components:
         regionalSettings:
           $ref: "#/components/schemas/ExtensionRegionalSettingRequest"
         setupWizardState:
-          type: "string"
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         partnerId:
           type: "string"
           description: |
@@ -30507,13 +30417,7 @@ components:
           items:
             $ref: "#/components/schemas/ExtensionServiceFeatureInfo"
         setupWizardState:
-          type: "string"
-          description: "Specifies extension configuration wizard state (web service setup)"
-          default: "NotStarted"
-          enum:
-          - "NotStarted"
-          - "Incomplete"
-          - "Completed"
+          $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         status:
           type: "string"
           description: |
@@ -30868,6 +30772,10 @@ components:
           description: |
             Specifies whether the current extension is assigned as a Messages Manager
             in the queue referenced in extension object
+        callQueueFacSetup:
+          type: "boolean"
+          description: |
+            Specifies whether the current extension is granted *Forward All Calls (FAC)* permission
         sharedVoicemails:
           type: "boolean"
           description: |
@@ -32587,6 +32495,9 @@ components:
         addressFormatId:
           type: "string"
           description: "Address format ID"
+        trusted:
+          type: "boolean"
+          description: "If 'true' address validation for non-us addresses is skipped"
         address:
           $ref: "#/components/schemas/CommonEmergencyLocationAddressInfo"
     GetExtensionForwardingNumberListResponse:
@@ -35416,7 +35327,9 @@ components:
           $ref: "#/components/schemas/MessageStatusEnum"
         vmTranscriptionStatus:
           type: "string"
-          description: "Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not \nIf 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned\n"
+          description: |
+            Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not
+            If 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned
           enum:
           - "NotAvailable"
           - "InProgress"
@@ -37484,24 +37397,12 @@ components:
           type: "integer"
           format: "int64"
           description: |
-            Box billing identifier of a device. Applicable only for HardPhones.
-            It is an alternative way to identify the device to be ordered. Either
-            model  structure, or  boxBillingId  must be specified forT?HardPhone
+            Box billing identifier of a device. Applicable only for devices of `HardPhone` type.
         useAsCommonPhone:
           type: "boolean"
           description: "Supported only for devices assigned to Limited extensions. If true, enables users to log in to this phone as a common phone."
         linePooling:
-          type: "string"
-          description: |
-            Pooling type of device:
-            - `Host` - device with standalone paid
-              phone line which can be linked to soft phone client instance
-            - `Guest` - device with a linked phone line
-            - `None` - device without a phone line or with specific line (free, BLA, etc.)
-          enum:
-          - "Host"
-          - "Guest"
-          - "None"
+          $ref: "#/components/schemas/LinePoolingEnum"
         inCompanyNet:
           type: "boolean"
           description: |
@@ -39806,51 +39707,6 @@ components:
     IdentityUUID:
       description: "UUID of the identity."
       type: "string"
-      example: "9680ab94-3b78-495c-bb2c-a969954d8260"
-    IdentityUpsert:
-      description: |
-        Permit to update an existing identity if set to true.
-
-        false by default.
-      type: "boolean"
-      example: true
-      default: false
-    IdentitySourceId:
-      description: |
-        The channel identifier to create the identity for.
-      type: "string"
-      example: "541014e17aa58d8ccf000023"
-    ImportIdentityRequest:
-      type: "object"
-      required:
-      - "foreignId"
-      - "sourceId"
-      properties:
-        foreignId:
-          $ref: "#/components/schemas/IdentityForeignId"
-        sourceId:
-          $ref: "#/components/schemas/IdentitySourceId"
-        company:
-          $ref: "#/components/schemas/SocMsgCompany"
-        firstName:
-          $ref: "#/components/schemas/SocMsgFirstName"
-        gender:
-          $ref: "#/components/schemas/SocMsgGender"
-        homePhone:
-          $ref: "#/components/schemas/SocMsgPhoneNumber"
-        lastName:
-          $ref: "#/components/schemas/SocMsgLastName"
-        mobilePhone:
-          $ref: "#/components/schemas/SocMsgPhoneNumber"
-        screenName:
-          $ref: "#/components/schemas/IdentityScreenName"
-        extraValues:
-          $ref: "#/components/schemas/IdentityExtraValues"
-        upsert:
-          $ref: "#/components/schemas/IdentityUpsert"
-    IdentityForeignId:
-      type: "string"
-      description: "Identifier of the identity on the remote channel."
       example: "9680ab94-3b78-495c-bb2c-a969954d8260"
     ScimErrorResponse:
       type: "object"
@@ -44691,24 +44547,6 @@ components:
       value:
         sourceId: "541014e17aa58d8ccf000023"
         body: "This is a sample content body"
-    EDI-045:
-      summary: "The identity cannot be imported"
-      value:
-        errors:
-        - errorCode: "EDI-045"
-          message: "\"[${exception}]\""
-    EDI-044:
-      summary: "Identity creation failed"
-      value:
-        errors:
-        - errorCode: "EDI-044"
-          message: "Could not import or find an identity from these parameters"
-    EDI-043:
-      summary: "Incompatible source"
-      value:
-        errors:
-        - errorCode: "EDI-043"
-          message: "Impossible to add identities on this kind of community"
   requestBodies:
     SummaryCallbackRequest:
       description: "Summary Callback Output"
