@@ -1045,7 +1045,7 @@
         },
         {
           "name": "timeout",
-          "description": "The time frame of awaiting for a status change before sending the resulting one in response",
+          "description": "The time frame of awaiting for a status change before sending\nthe resulting one in response\n",
           "type": "string"
         }
       ]
@@ -1056,7 +1056,7 @@
       "fields": [
         {
           "name": "brandId",
-          "description": "Identifies a brand of a logged in user or a brand of a sign-up session",
+          "description": "Identifies a brand of a logged-in user or a brand of a sign-up session",
           "type": "string",
           "default": "~"
         }
@@ -1218,7 +1218,7 @@
         },
         {
           "name": "recordCount",
-          "description": "For 'FSync' the parameter is mandatory, it limits the number of records to be returned in response. For 'ISync' it specifies with how many records to extend sync frame to the past, the maximum number of records is 250",
+          "description": "For `FSync` mode this parameter is mandatory, it limits the number of records to be returned in response.\n\nFor `ISync` mode this parameter specifies the number of records to extend the sync frame with to the past\n(the maximum number of records is 250)\n",
           "type": "integer",
           "format": "int32",
           "minimum": 1
@@ -1522,13 +1522,13 @@
       "fields": [
         {
           "name": "from",
-          "description": "The sender's phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages. The asterisk value \"*\" means any number in `from` field",
+          "description": "The sender's phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages.\nThe asterisk value \"*\" means any number in `from` field\n",
           "example": "15551234455",
           "type": "string"
         },
         {
           "name": "to",
-          "description": "The receiver's phone number (`to` field) in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages",
+          "description": "The receiver's phone number (`to` field) in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format for filtering messages\n",
           "example": "15551237755",
           "type": "string"
         },
@@ -2472,7 +2472,7 @@
         },
         {
           "name": "syncToken",
-          "description": "Value of syncToken property of last sync request response",
+          "description": "A `syncToken` value from the previous sync response (for `ISync` mode only, mandatory)",
           "type": "string"
         },
         {
@@ -2678,18 +2678,18 @@
         },
         {
           "name": "syncToken",
-          "description": "Value of syncToken property of last sync request response. Mandatory parameter for 'ISync' sync type",
+          "description": "A `syncToken` value from the previous sync response (for `ISync` mode only, mandatory)",
           "type": "string"
         },
         {
           "name": "dateFrom",
-          "description": "The start datetime for resulting records in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is the current moment",
+          "description": "The start datetime for resulting records in ISO 8601 format including\ntimezone, for example 2016-03-10T18:07:52.534Z. The default value is the\ncurrent moment\n",
           "type": "string",
           "format": "date-time"
         },
         {
           "name": "recordCount",
-          "description": "For 'FSync' the parameter is mandatory, it limits the number of records to be returned in response. For 'ISync' it specifies with how many records to extend sync Frame to the past, the maximum number of records is 250",
+          "description": "For `FSync` mode this parameter is mandatory, it limits the number of records to be returned in response.\n\nFor `ISync` mode this parameter specifies the number of records to extend the sync frame with to the past\n(the maximum number of records is 250)\n",
           "type": "integer",
           "format": "int32"
         },
@@ -5057,7 +5057,8 @@
         },
         {
           "type": "string",
-          "description": "ISO Code. e.g UK",
+          "description": "Alpha-2 ISO Code of a country",
+          "example": "US",
           "name": "isoCode",
           "required": false
         },
@@ -5071,6 +5072,7 @@
         {
           "type": "string",
           "description": "Cover page text, entered by a fax sender and printed\non a cover page. Maximum length is limited to 1024 symbols\n",
+          "maxLength": 1024,
           "name": "coverPageText",
           "required": false
         },
@@ -11635,7 +11637,7 @@
         },
         {
           "type": "string",
-          "description": "OIDC ID token (if OpenId Connect flow was activated during authorization)",
+          "description": "OIDC ID token (if OpenID Connect flow was activated during authorization)",
           "name": "id_token",
           "required": false
         },
@@ -11648,14 +11650,14 @@
         {
           "type": "string",
           "format": "date-time",
-          "description": "Absolute value of session expiration time as ISO datetime",
+          "description": "Absolute value of session expiration time as an ISO timestamp",
           "name": "session_expiration_time",
           "required": false
         },
         {
           "type": "integer",
           "format": "int32",
-          "description": "Remaining time (in seconds) until session expiration due to absolute timeout",
+          "description": "Remaining time (in seconds) until session expiration due to the absolute timeout",
           "name": "session_expires_in",
           "required": false
         },
@@ -13348,12 +13350,12 @@
         },
         {
           "type": "string",
-          "description": "Specifies account configuration wizard state (web service setup)\n",
-          "default": "NotStarted",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
-            "Completed"
+            "Completed",
+            "Unknown"
           ],
           "name": "setupWizardState"
         },
@@ -13457,7 +13459,7 @@
         },
         {
           "type": "string",
-          "description": "Internal identifier of an extension created by partner. Supported for Partner Applications.\nThe RingCentral supports the mapping of accounts and stores the corresponding account ID/extension \nID for each partner ID of a client application. In request URIs partner IDs are accepted instead\nof regular RingCentral native IDs as path parameters using `pid=XXX` clause.\nThough in response URIs contain the corresponding account IDs and extension\nIDs. In all request and response bodies these values are reflected via\npartnerId attributes of account and extension\n",
+          "description": "Internal identifier of an extension created by partner. Supported for Partner Applications.\nThe RingCentral supports the mapping of accounts and stores the corresponding account ID/extension\nID for each partner ID of a client application. In request URIs partner IDs are accepted instead\nof regular RingCentral native IDs as path parameters using `pid=XXX` clause.\nThough in response URIs contain the corresponding account IDs and extension\nIDs. In all request and response bodies these values are reflected via\npartnerId attributes of account and extension\n",
           "name": "partnerId"
         }
       ]
@@ -14920,7 +14922,7 @@
         {
           "type": "integer",
           "format": "int64",
-          "description": "Box billing identifier of a device. Applicable only for HardPhones.\nIt is an alternative way to identify the device to be ordered. Either\nmodel structure, or boxBillingId  must be specified for HardPhone\n",
+          "description": "Box billing identifier of a device. Applicable only for devices of `HardPhone` type.\nIt is an alternative way to identify the device to be ordered. Either\n`model` structure, or `boxBillingId` must be specified\n",
           "name": "boxBillingId"
         },
         {
@@ -14950,7 +14952,7 @@
         },
         {
           "type": "string",
-          "description": "Pooling type of device:\n- Host - a device with standalone paid phone line which can be linked to a soft client instance\n- Guest - a device with a linked phone line\n- None - a device without a phone line or with specific line (free, BLA, etc.)\n",
+          "description": "Pooling type of device:\n- `Host` - device with a standalone paid phone line which can be linked to soft phone client instance;\n- `Guest` - device with a linked phone line;\n- `None` - device without a phone line or with a specific line (free, BLA, etc.)\n",
           "enum": [
             "Host",
             "Guest",
@@ -18786,7 +18788,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Voice name type. 'Default' - default extension name; first\nname and last name specified in user profile; 'TextToSpeech' - custom\ntext; user name spelled the way it sounds and specified by user; 'Recorded'\n- custom audio, user name recorded in user's own voice (supported only\nfor extension retrieval)\n",
+          "description": "The method used to pronounce the user's name:\n- `Default` - default extension name; first and last name specified in user's profile are pronounced using text-to-speech;\n- `TextToSpeech` - custom text specified by a user  pronounced using text-to-speech;\n- `Recorded` - custom audio uploaded by a user, the name recorded in user's own voice (supported only for extension retrieval).\n",
           "enum": [
             "Default",
             "TextToSpeech",
@@ -18796,7 +18798,7 @@
         },
         {
           "type": "string",
-          "description": "Custom text",
+          "description": "Custom text (for `TextToSpeech` type only)",
           "name": "text"
         },
         {
@@ -19155,11 +19157,13 @@
         },
         {
           "type": "string",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
             "Completed"
           ],
+          "default": "NotStarted",
           "name": "setupWizardState"
         },
         {
@@ -19261,31 +19265,31 @@
     },
     {
       "name": "ContactBusinessAddressInfo",
-      "description": "Extension user business address. The default is\nCompany (Auto-Receptionist) settings\n",
+      "description": "User's business address. The default is\nCompany (Auto-Receptionist) settings\n",
       "fields": [
         {
           "type": "string",
-          "description": "Country name of an extension user company",
+          "description": "Country name of a user's company",
           "name": "country"
         },
         {
           "type": "string",
-          "description": "State/province name of an extension user company. Mandatory\nfor the USA, UK and Canada\n",
+          "description": "State/province name of a user's company. Mandatory\nfor the USA, UK and Canada\n",
           "name": "state"
         },
         {
           "type": "string",
-          "description": "City name of an extension user company",
+          "description": "City name of a user's company",
           "name": "city"
         },
         {
           "type": "string",
-          "description": "Street address of an extension user company",
+          "description": "Street address of a user's company",
           "name": "street"
         },
         {
           "type": "string",
-          "description": "Zip code of an extension user company",
+          "description": "Zip code of a user's company",
           "name": "zip"
         }
       ]
@@ -21439,6 +21443,66 @@
       ]
     },
     {
+      "name": "EmergencyLocationRequestResource",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an emergency response location\n",
+          "name": "id"
+        },
+        {
+          "$ref": "CommonEmergencyLocationAddressInfo",
+          "name": "address"
+        },
+        {
+          "type": "string",
+          "description": "Emergency response location name",
+          "name": "name"
+        },
+        {
+          "$ref": "ShortSiteInfo",
+          "name": "site"
+        },
+        {
+          "type": "string",
+          "description": "Emergency address status",
+          "enum": [
+            "Valid",
+            "Invalid"
+          ],
+          "name": "addressStatus"
+        },
+        {
+          "type": "string",
+          "description": "Status of an emergency response location usage.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "usageStatus"
+        },
+        {
+          "type": "string",
+          "description": "Address format ID",
+          "name": "addressFormatId"
+        },
+        {
+          "type": "string",
+          "description": "Visibility of an emergency response location. If `Private`\nis set, then a location is visible only for restricted number of users,\nspecified in `owners` array\n",
+          "default": "Public",
+          "enum": [
+            "Public"
+          ],
+          "name": "visibility"
+        },
+        {
+          "type": "boolean",
+          "description": "If 'true' address validation for non-us addresses is skipped",
+          "name": "trusted"
+        }
+      ]
+    },
+    {
       "name": "EmergencyLocationsPaging",
       "fields": [
         {
@@ -21670,6 +21734,99 @@
           "type": "string",
           "description": "Extension user first name",
           "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "EmergencyLocationResponseResource",
+      "description": "Company emergency response location details",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an emergency response location\n",
+          "name": "id"
+        },
+        {
+          "$ref": "CommonEmergencyLocationAddressInfo",
+          "name": "address"
+        },
+        {
+          "type": "string",
+          "description": "Emergency response location name",
+          "name": "name"
+        },
+        {
+          "$ref": "ShortSiteInfo",
+          "name": "site"
+        },
+        {
+          "type": "string",
+          "description": "Emergency address status",
+          "enum": [
+            "Valid",
+            "Invalid",
+            "Provisioning"
+          ],
+          "name": "addressStatus"
+        },
+        {
+          "type": "string",
+          "description": "Status of emergency response location usage.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "usageStatus"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nif `syncEmergencyAddress` parameter is set to `true`\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "ActivationProcess",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "LocationWithElins",
+            "LocationWithEndpoint"
+          ],
+          "name": "addressType"
+        },
+        {
+          "type": "string",
+          "description": "Visibility of an emergency response location. If `Private`\nis set, then location is visible only for the restricted number of users,\nspecified in `owners` array\n",
+          "default": "Public",
+          "enum": [
+            "Private",
+            "Public"
+          ],
+          "name": "visibility"
+        },
+        {
+          "type": "array",
+          "description": "List of private location owners",
+          "items": {
+            "$ref": "LocationOwnerInfo"
+          },
+          "name": "owners"
+        },
+        {
+          "type": "string",
+          "description": "Address format ID",
+          "name": "addressFormatId"
+        },
+        {
+          "type": "boolean",
+          "description": "If 'true' address validation for non-us addresses is skipped",
+          "name": "trusted"
         }
       ]
     },
@@ -25549,7 +25706,7 @@
           "minimum": 7,
           "type": "integer",
           "format": "int32",
-          "description": "Retention policy setting, specifying how long to keep messages;\nthe supported value range is 7-90 days. Currently the retention period is supported for Fax and Voicemail messages only.\nSMS messages are stored with no time limits\n",
+          "description": "Retention policy setting, specifying how long to keep messages;\nthe supported value range is 7-90 days. Currently, the retention period is supported for `Fax` and `Voicemail` messages only.\nSMS messages are stored with no time limits\n",
           "name": "retentionPeriod"
         }
       ]
@@ -26138,12 +26295,13 @@
         },
         {
           "type": "string",
-          "description": "Specifies extension configuration wizard state (web service\nsetup). The default value is 'NotStarted'\n",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
             "Completed"
           ],
+          "default": "NotStarted",
           "name": "setupWizardState"
         },
         {
@@ -26354,13 +26512,13 @@
         },
         {
           "type": "string",
-          "description": "Specifies extension configuration wizard state (web service\nsetup).\n",
-          "default": "NotStarted",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
             "Completed"
           ],
+          "default": "NotStarted",
           "name": "setupWizardState"
         },
         {
@@ -26496,46 +26654,47 @@
     },
     {
       "name": "ContactInfo",
-      "description": "Contact detailed information",
+      "description": "Detailed contact information",
       "fields": [
         {
           "type": "string",
-          "description": "For User extension type only. Extension user first name\n",
+          "description": "User's first name (for extensions of `User` type only)\n",
           "name": "firstName"
         },
         {
           "type": "string",
-          "description": "For User extension type only. Extension user last name\n",
+          "description": "For User extension type only. User's last name (for extensions of `User` type only)\n",
           "name": "lastName"
         },
         {
           "type": "string",
-          "description": "Extension user name (first name and last name)\n",
+          "description": "Extension name (for extensions of `User` type - concatenation of first and last name)\n",
           "name": "name"
         },
         {
           "type": "string",
-          "description": "Extension user company name",
+          "description": "User's company name",
           "name": "company"
         },
         {
           "type": "string",
+          "description": "User's job title",
           "name": "jobTitle"
         },
         {
           "type": "string",
           "format": "email",
-          "description": "Contact email of extension user",
+          "description": "User's contact email",
           "name": "email"
         },
         {
           "type": "string",
-          "description": "Extension user contact phone number in\n[E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)\n(with '+' sign) format\n",
+          "description": "User's contact phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)\n(with '+' sign) format\n",
           "name": "businessPhone"
         },
         {
           "type": "string",
-          "description": "Extension user mobile (**non** Toll Free) phone number in\n[E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)\n(with '+' sign) format\n",
+          "description": "User's mobile (**non** Toll Free) phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I)\n(with '+' sign) format\n",
           "name": "mobilePhone"
         },
         {
@@ -26544,7 +26703,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` then contact email is enabled as login name for this\nuser. Please note that email should be unique in this case.\n",
+          "description": "Indicates that the contact email is enabled as a login name for this\nuser. Please note that the email must be unique in this case.\n",
           "default": false,
           "name": "emailAsLoginName"
         },
@@ -26554,7 +26713,7 @@
         },
         {
           "type": "string",
-          "description": "Extension user department, if any\n",
+          "description": "User's department name\n",
           "name": "department"
         }
       ]
@@ -26718,7 +26877,7 @@
     },
     {
       "name": "DepartmentInfo",
-      "description": "Please note that legacy 'Department' extension type corresponds to\n'Call Queue' extensions in modern RingCentral product terminology\n",
+      "description": "Please note that the `Department` extension type corresponds to\n'Call Queue' extensions in modern RingCentral product terminology\n",
       "fields": [
         {
           "type": "string",
@@ -26734,7 +26893,7 @@
         },
         {
           "type": "string",
-          "description": "Number of a department extension",
+          "description": "Short number of a department extension",
           "name": "extensionNumber"
         }
       ]
@@ -26827,11 +26986,13 @@
         },
         {
           "type": "string",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
             "Completed"
           ],
+          "default": "NotStarted",
           "name": "setupWizardState"
         },
         {
@@ -27013,13 +27174,13 @@
         },
         {
           "type": "string",
-          "description": "Specifies extension configuration wizard state (web service setup)",
-          "default": "NotStarted",
+          "description": "Initial configuration wizard state",
           "enum": [
             "NotStarted",
             "Incomplete",
             "Completed"
           ],
+          "default": "NotStarted",
           "name": "setupWizardState"
         },
         {
@@ -27486,6 +27647,11 @@
           "type": "boolean",
           "description": "Specifies whether the current extension is assigned as a Messages Manager\nin the queue referenced in extension object\n",
           "name": "callQueueMessages"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies whether the current extension is granted *Forward All Calls (FAC)* permission\n",
+          "name": "callQueueFacSetup"
         },
         {
           "type": "boolean",
@@ -29881,6 +30047,11 @@
           "type": "string",
           "description": "Address format ID",
           "name": "addressFormatId"
+        },
+        {
+          "type": "boolean",
+          "description": "If 'true' address validation for non-us addresses is skipped",
+          "name": "trusted"
         },
         {
           "$ref": "CommonEmergencyLocationAddressInfo",
@@ -34258,7 +34429,7 @@
         },
         {
           "type": "string",
-          "description": "Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not \nIf 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned\n",
+          "description": "Status of a voicemail to text transcription. Specifies if a voicemail message transcription is already completed or not\nIf 'VoicemailToText' feature is not activated for account, the 'NotAvailable' value is returned\n",
           "enum": [
             "NotAvailable",
             "InProgress",
@@ -37509,7 +37680,7 @@
         {
           "type": "integer",
           "format": "int64",
-          "description": "Box billing identifier of a device. Applicable only for HardPhones.\nIt is an alternative way to identify the device to be ordered. Either\nmodel  structure, or  boxBillingId  must be specified forT?HardPhone\n",
+          "description": "Box billing identifier of a device. Applicable only for devices of `HardPhone` type.\n",
           "name": "boxBillingId"
         },
         {
@@ -37519,7 +37690,7 @@
         },
         {
           "type": "string",
-          "description": "Pooling type of device:\n- `Host` - device with standalone paid\n  phone line which can be linked to soft phone client instance\n- `Guest` - device with a linked phone line\n- `None` - device without a phone line or with specific line (free, BLA, etc.)\n",
+          "description": "Pooling type of device:\n- `Host` - device with a standalone paid phone line which can be linked to soft phone client instance;\n- `Guest` - device with a linked phone line;\n- `None` - device without a phone line or with a specific line (free, BLA, etc.)\n",
           "enum": [
             "Host",
             "Guest",
@@ -40822,92 +40993,6 @@
       "name": "IdentityExtraValues",
       "description": "Additional data to store along the identity.",
       "fields": []
-    },
-    {
-      "name": "ImportIdentityRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Identifier of the identity on the remote channel.",
-          "example": "9680ab94-3b78-495c-bb2c-a969954d8260",
-          "name": "foreignId",
-          "required": true
-        },
-        {
-          "description": "The channel identifier to create the identity for.\n",
-          "type": "string",
-          "example": "541014e17aa58d8ccf000023",
-          "name": "sourceId",
-          "required": true
-        },
-        {
-          "description": "Company.",
-          "type": "string",
-          "example": "Test Company",
-          "name": "company",
-          "required": false
-        },
-        {
-          "description": "FirstName.",
-          "type": "string",
-          "example": "John",
-          "name": "firstName",
-          "required": false
-        },
-        {
-          "description": "Gender.",
-          "type": "string",
-          "example": "Woman",
-          "enum": [
-            "Man",
-            "Woman"
-          ],
-          "nullable": true,
-          "name": "gender",
-          "required": false
-        },
-        {
-          "description": "Phone number.",
-          "type": "string",
-          "example": "+33634231224",
-          "name": "homePhone",
-          "required": false
-        },
-        {
-          "description": "LastName.",
-          "type": "string",
-          "example": "Doe",
-          "name": "lastName",
-          "required": false
-        },
-        {
-          "description": "Phone number.",
-          "type": "string",
-          "example": "+33634231224",
-          "name": "mobilePhone",
-          "required": false
-        },
-        {
-          "description": "Screen name of the identity.",
-          "type": "string",
-          "example": "John D.",
-          "name": "screenName",
-          "required": false
-        },
-        {
-          "$ref": "IdentityExtraValues",
-          "name": "extraValues",
-          "required": false
-        },
-        {
-          "description": "Permit to update an existing identity if set to true.\n\nfalse by default.\n",
-          "type": "boolean",
-          "example": true,
-          "default": false,
-          "name": "upsert",
-          "required": false
-        }
-      ]
     },
     {
       "name": "ScimErrorResponse",
@@ -49698,7 +49783,7 @@
             "OAuth/OIDC"
           ],
           "method2": "post",
-          "description": "Determines state and metadata for a given token (access token, refresh token \nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
+          "description": "Determines state and metadata for a given token (access token, refresh token\nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
           "summary": "Token Introspection",
           "operationId": "introspectToken",
           "rateLimitGroup": "Auth",
@@ -50379,7 +50464,7 @@
             "Text"
           ],
           "method2": "post",
-          "description": "Returns Conversational Summarization to webhook uri for segmented transcript of audios with start,end,speakerId, text(alphanumeric and punctuations).",
+          "description": "Returns Conversational Summarization to the webhook URI for segmented transcript of audios\nwith start, end, speakerId, text(alphanumeric and punctuations).\n",
           "summary": "Conversational Summarization",
           "operationId": "caiSummarize",
           "rateLimitGroup": "Heavy",
@@ -50409,7 +50494,7 @@
             "Text"
           ],
           "method2": "post",
-          "description": "Returns Smart Punctuation to the provided webhook uri.",
+          "description": "Returns Smart Punctuation to the provided webhook URI.",
           "summary": "Smart Punctuation",
           "operationId": "caiPunctuate",
           "rateLimitGroup": "Heavy",
@@ -51130,7 +51215,7 @@
             "Phone Numbers"
           ],
           "method2": "get",
-          "description": "Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
           "summary": "Get Phone Number",
           "operationId": "readAccountPhoneNumber",
           "rateLimitGroup": "Light",
@@ -51742,8 +51827,7 @@
           "endpoint": "/rcvideo/v1/account/{accountId}/recordings",
           "method": "get",
           "tags": [
-            "Meeting Recordings",
-            "Account Administration"
+            "Meeting Recordings"
           ],
           "method2": "get",
           "description": "Returns all account recordings.\nThis endpoint is used in Admin recording service, not regular web\n",
@@ -52796,8 +52880,8 @@
             "High Volume SMS"
           ],
           "method2": "get",
-          "description": "Returns the list of numbers opted out from the account. The list can be filtered by `to`/`from` phone number query parameters. Specifying `text/csv` in the Accept header downloads the data in CSV format.",
-          "summary": "Get Opted Out Numbers",
+          "description": "Returns the list of numbers opted out from the account. The list\ncan be filtered by `to`/`from` phone number query parameters. Specifying `text/csv`\nin the `Accept` header lets download the data in the CSV format.\n",
+          "summary": "List Opted Out Numbers",
           "operationId": "readA2PSMSOptOuts",
           "rateLimitGroup": "Light",
           "appPermission": "A2PSMS",
@@ -53025,7 +53109,7 @@
             "Audio"
           ],
           "method2": "post",
-          "description": "Returns Speech to Text Conversion to the provided webhook uri.",
+          "description": "Returns Speech to Text Conversion to the provided webhook URI.",
           "summary": "Speech to Text Conversion",
           "operationId": "caiSpeechToText",
           "rateLimitGroup": "Heavy",
@@ -53423,7 +53507,7 @@
             "Webinars and Sessions"
           ],
           "method2": "patch",
-          "description": "Updates a Webinar. The payload may contain just changed fields of a Webinar resource (it is a partial update):\n- host cannot be changed and host user information cannot be updated;\n- only the settings which are not mandated at account level or are unlocked can be\nchanged;\n- in order to reset a webinar password it should be passed as an empty string;\n- \"registrationStatus\" cannot be changed.\n",
+          "description": "Updates a Webinar. The payload may contain just changed fields of a Webinar resource (it is a partial update):\n- host cannot be changed, and host user information cannot be updated;\n- only the settings which are not mandated at account level or are unlocked can be\nchanged;\n- in order to reset a webinar password it should be passed as an empty string;\n- \"registrationStatus\" cannot be changed.\n",
           "summary": "Update Webinar",
           "operationId": "rcwConfigUpdateWebinar",
           "rateLimitGroup": "Heavy",
@@ -53953,7 +54037,7 @@
             "Features"
           ],
           "method2": "get",
-          "description": "Returns a list of supported features and information on their\navailability for the current extension. Specific feature(s) might\nbe checked by providing `featureId` query parameter. Multiple values\nare supported in the format: `?featureId=Feature1&featureId=Feature2`.\nTo get only available features in order to decrease response size,\n`availableOnly=true` query param might be specified. In case a feature\nis available for the current user, `\"available\": true` is returned in\nresponse for the record with the corresponding feature ID. Otherwise,\nadditional attribute `reason` is returned with the appropriate code:\n- `ServicePlanLimitation` -  a feature is not included in account service plan;\n- `AccountLimitation` - a feature is turned off for account;\n- `ExtensionTypeLimitation` - a feature is not applicable for extension type;\n- `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;\n- `InsufficientPermissions` - required permission not granted to the current user (not the one, who is specified in the URL, but the one who's access token is used);\n- `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.\n\nAlso, some features may have additional parameters, e.g., limits, which are returned in `params` attribute as a name-value collection:\n\n    {\n      \"id\": \"HUD\",\n      \"available\": true,\n      \"params\": [\n        {\n          \"name\": \"limitMax\",\n          \"value\": \"100\"\n        }\n      ]\n    }\n",
+          "description": "Returns a list of supported features and the information on their\navailability for the current extension. Particular feature(s) can\nbe checked by providing `featureId` query parameter. Multiple values\nare supported in the format: `?featureId=Feature1&featureId=Feature2`.\nTo get only available features in order to decrease response size,\n`availableOnly=true` query param can be specified. If a feature\nis available for the current user, `\"available\": true` is returned in\nresponse for the record with the corresponding feature ID. Otherwise,\nthe additional attribute `reason` is returned with the appropriate code:\n- `ServicePlanLimitation` -  a feature is not included in account service plan;\n- `AccountLimitation` - a feature is turned off for account;\n- `ExtensionTypeLimitation` - a feature is not applicable for extension type;\n- `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;\n- `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);\n- `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.\n\nAlso, some features may have additional parameters, e.g. limits, which are returned in `params` attribute as a name-value collection:\n\n    {\n      \"id\": \"HUD\",\n      \"available\": true,\n      \"params\": [\n        {\n          \"name\": \"limitMax\",\n          \"value\": \"100\"\n        }\n      ]\n    }\n",
           "summary": "Get User Features",
           "operationId": "readExtensionFeatures",
           "rateLimitGroup": "Medium",
@@ -54087,7 +54171,7 @@
             "Audio"
           ],
           "method2": "post",
-          "description": "Returns Speaker Identification to the provided webhook uri.",
+          "description": "Returns Speaker Identification to the provided webhook URI.",
           "summary": "Speaker Identification",
           "operationId": "caiSpeakerIdentify",
           "rateLimitGroup": "Heavy",
@@ -54189,9 +54273,9 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "CommonEmergencyLocationResource"
+            "$ref": "EmergencyLocationResponseResource"
           },
-          "bodyParameters": "emergencyLocationInfoRequest"
+          "bodyParameters": "emergencyLocationRequestResource"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -54227,9 +54311,9 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "CommonEmergencyLocationResource"
+            "$ref": "EmergencyLocationResponseResource"
           },
-          "bodyParameters": "emergencyLocationInfoRequest"
+          "bodyParameters": "emergencyLocationRequestResource"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/emergency-locations/{locationId}",
@@ -55140,7 +55224,7 @@
             "Webinar Subscriptions"
           ],
           "method2": "put",
-          "description": "Updates the existing subscription. The client application can extend/narrow\nthe list of events for which it receives notifications within this subscription.\nIf event filters are specified, calling this method modifies them for the\nexisting subscription. The method also allows to set the subscription expiration time.\nIf other than `events` and `expiresIn` parameters are passed in the request they will be ignored.\nIf the request body is empty then the specified subscription will be just renewed without any\nevent filter modifications and with default expiration time.\n",
+          "description": "Updates the existing subscription. The client application can extend/narrow\nthe list of events for which it receives notifications within this subscription.\nIf event filters are specified, calling this method modifies them for the\nexisting subscription. The method also allows setting the subscription expiration time.\nIf other than `events` and `expiresIn` parameters are passed in the request they will be ignored.\nIf the request body is empty then the specified subscription will be just renewed without any\nevent filter modifications and with default expiration time.\n",
           "summary": "Update Webinar Subscription",
           "operationId": "rcwN11sUpdateSubscription",
           "rateLimitGroup": "Medium",
@@ -55426,7 +55510,7 @@
             "Message Store"
           ],
           "method2": "put",
-          "description": "Updates message(s) by their ID(s). Currently only message read status\ncan be updated through this method.\n\nBulk syntax is supported, max number of IDs passed as query/path\nparameters is 50. Alternative bulk syntax is also supported - user messages can be updated\nby passing multiple IDs in request body as an array of string, max number\nof IDs passed in the body is 1000. In this case asterisk is used in the\npath instead of IDs.\n",
+          "description": "Updates message(s) by their ID(s). Currently, only the `readStatus`\ncan be updated using this method.\n\nBulk syntax is supported, max number of IDs passed as query/path\nparameters is 50. Alternative bulk syntax is also supported - user messages can be updated\nby passing multiple IDs in request body as an array of string, max number\nof IDs passed in the body is 1000. In this case asterisk is used in the\npath instead of IDs.\n",
           "summary": "Update Message(s)",
           "operationId": "updateMessage",
           "rateLimitGroup": "Medium",
@@ -55463,7 +55547,7 @@
             "Message Store"
           ],
           "method2": "patch",
-          "description": "Patches message(s) by ID(s). Currently only message read status update and\nrestoring deleted messages are supported through this method.\n\nFor changing status of a message send `readStatus` set to either 'Read' or 'Unread' in request.\nIt is possible to restore a message and its attachments (if message status is 'Deleted') by sending\n`availability` attribute set to 'Alive' in request body. If a message is already in 'Purged' state\nthen its attachments cannot be restored and the message itself is about to be physically deleted.\n\nBulk syntax (both traditional and alternative one) is supported.\n",
+          "description": "Patches message(s) by ID(s). Currently, only updating the `readStatus` and\nrestoring deleted messages are supported through this method.\n\nFor changing status of a message send `readStatus` set to either 'Read' or 'Unread' in request.\nIt is possible to restore a message and its attachments (if message status is 'Deleted') by sending\n`availability` attribute set to 'Alive' in request body. If a message is already in 'Purged' state\nthen its attachments cannot be restored and the message itself is about to be physically deleted.\n\nBulk syntax (both traditional and alternative one) is supported.\n",
           "summary": "Patch Message(s)",
           "operationId": "patchMessage",
           "rateLimitGroup": "Medium",
@@ -55583,7 +55667,7 @@
           "operationId": "listUserAssignedRoles",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "userPermission": "ReadExtensions",
+          "userPermission": "ReadAssignedRoles",
           "withParameter": false,
           "responseSchema": {
             "$ref": "AssignedRolesResource"
@@ -55930,32 +56014,6 @@
           },
           "queryParameters": "caiAnalyzeInteractionParameters",
           "bodyParameters": "interactionInput"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "cx",
-        "social-messaging",
-        "v1",
-        "identities",
-        "import"
-      ],
-      "operations": [
-        {
-          "endpoint": "/cx/social-messaging/v1/identities/import",
-          "method": "post",
-          "tags": [
-            "Identities"
-          ],
-          "method2": "post",
-          "description": "Import an identity from given identifier.\n\nAvailable only for Email channels.\n",
-          "summary": "Import Identity",
-          "operationId": "socMsgImportIdentity",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false,
-          "bodyParameters": "importIdentityRequest"
         }
       ]
     },
@@ -56749,7 +56807,7 @@
             "Call Queues"
           ],
           "method2": "put",
-          "description": "Updates overflow settings for a call queue specified in path.\n",
+          "description": "Updates overflow settings for a call queue specified in path.",
           "summary": "Update Call Queue Overflow Settings",
           "operationId": "updateCallQueueOverflowSettings",
           "rateLimitGroup": "Heavy",
@@ -56840,31 +56898,6 @@
     },
     {
       "paths": [
-        "cx",
-        "social-messaging",
-        "v1",
-        "identities",
-        "anonymize"
-      ],
-      "operations": [
-        {
-          "endpoint": "/cx/social-messaging/v1/identities/{identityId}/anonymize",
-          "method": "post",
-          "tags": [
-            "Identities"
-          ],
-          "method2": "post",
-          "description": "Anonymizes an Identity.\n",
-          "summary": "Anonymize Identity",
-          "operationId": "socMsgAnonymizeIdentity",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false
-        }
-      ]
-    },
-    {
-      "paths": [
         "restapi",
         "account",
         "telephony",
@@ -56879,7 +56912,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Allows to monitor a call session in 'Listen' mode. Input parameters should contain internal identifiers of a monitored user and a supervisor's device. Call session should be specified in path. Please note that this method supports single channel audio flow, which means that audio of both call participants is mixed and delivered to the supervisor in single audio channel. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
+          "description": "Allows monitoring a call session in 'Listen' mode. Input parameters should contain internal identifiers of a monitored user and a supervisor's device. Call session should be specified in path. Please note that this method supports single channel audio flow, which means that audio of both call participants is mixed and delivered to the supervisor in single audio channel. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
           "summary": "Supervise Call Session",
           "operationId": "superviseCallSession",
           "rateLimitGroup": "Light",
@@ -57211,7 +57244,7 @@
           "userPermission": "EmergencyFramework",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "CommonEmergencyLocationResource"
+            "$ref": "EmergencyLocationResponseResource"
           },
           "bodyParameters": "createUserEmergencyLocationRequest"
         },
@@ -57247,9 +57280,9 @@
           "userPermission": "EmergencyFramework",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "CommonEmergencyLocationResource"
+            "$ref": "EmergencyLocationResponseResource"
           },
-          "bodyParameters": "emergencyLocationInfoRequest"
+          "bodyParameters": "emergencyLocationRequestResource"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/emergency-locations/{locationId}",
@@ -57417,31 +57450,6 @@
             "$ref": "AuthProfileCheckResource"
           },
           "queryParameters": "checkUserPermissionParameters"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "cx",
-        "social-messaging",
-        "v1",
-        "identities",
-        "deanonymize"
-      ],
-      "operations": [
-        {
-          "endpoint": "/cx/social-messaging/v1/identities/{identityId}/deanonymize",
-          "method": "post",
-          "tags": [
-            "Identities"
-          ],
-          "method2": "post",
-          "description": "Flag Identity for deanonymization.\n\nThe next time a content from this Identity will be imported, the identity will be imported again.\n",
-          "summary": "Deanonymize Identity",
-          "operationId": "socMsgDeanonymizeIdentity",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false
         }
       ]
     },
@@ -57760,7 +57768,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Parks a call to a virtual location from where it can further be retrieved by any user from any phone of the system. The call session and call party identifiers should be specified in path. Currently the users can park only their own incoming calls. Up to 50 calls can be parked simultaneously. Park location starts with asterisk (*) and ranges 801-899.",
+          "description": "Parks a call to a virtual location from where it can further be retrieved by any user from any phone of the system. The call session and call party identifiers should be specified in path. Currently, the users can park only their own incoming calls. Up to 50 calls can be parked simultaneously. Park location starts with asterisk (*) and ranges 801-899.",
           "summary": "Call Park",
           "operationId": "callParkParty",
           "rateLimitGroup": "Light",
@@ -57816,7 +57824,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Puts the party to stand-alone mode and starts to play Hold Music according to configuration & state to peers. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back.",
+          "description": "Puts the party to stand-alone mode and starts to play Hold Music according to configuration & state to peers. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to un-hold both endpoints to remove Hold Music and bring media back.",
           "summary": "Hold Call Party",
           "operationId": "holdCallParty",
           "rateLimitGroup": "Light",
@@ -58012,7 +58020,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Brings a party back into a call and stops to play Hold Music. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to unhold both endpoints to remove Hold Music and bring media back.",
+          "description": "Brings a party back into a call and stops to play Hold Music. There is a known limitation for Hold API - hold via REST API doesn't work with hold placed via RingCentral apps or HardPhone. It means that if you muted participant via Call Control API and RingCentral Desktop app, then you need to un-hold both endpoints to remove Hold Music and bring media back.",
           "summary": "Un-hold Call Party",
           "operationId": "unholdCallParty",
           "rateLimitGroup": "Light",
@@ -58041,7 +58049,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Allows the user to connect multiple call session participants over a conference call bridge. The current active call session ID and party ID of the user within this session should be specified in path; the bridged call session ID and party ID of the user within that session should be specified in request body. Thus the user connects participants of two sessions into one conference call using his/her own party IDs from both sessions.",
+          "description": "Allows the user to connect multiple call session participants over a conference call bridge.\nThe current active call session ID and party ID of the user within this session should be specified\nin path; the bridged call session ID and party ID of the user within that session should be specified\nin request body. Thus, the user connects participants of two sessions into the one conference call\nusing his/her own party IDs from both sessions.\"\n",
           "summary": "Bridge Call Party",
           "operationId": "bridgeCallParty",
           "rateLimitGroup": "Light",
@@ -58300,7 +58308,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Adds a new party to the call session by bringing-in an established SIP call connection. The maximum number of parties to bring-in is 10; only 1 call party can be added per request. Currently the method is supported for sessions of 'Conference' origin only.",
+          "description": "Adds a new party to the call session by bringing in an established\nSIP call connection. The maximum number of parties to bring in is 10; only\n1 call party can be added per request. Currently, the method is supported for\nsessions of the `Conference` origin only.\n",
           "summary": "Bring-In Call Party",
           "operationId": "createCallPartyWithBringIn",
           "rateLimitGroup": "Light",
@@ -58486,7 +58494,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Allows to monitor a call party in 'Listen' mode. Input parameters are extension number of a monitored user and internal identifier of a supervisor's device. Call session and party identifiers should be specified in path. Please note that for this method dual channel audio flow is supported, which means that you need to make one more request for monitoring the second participant of a call. And as a result of each monitoring request the client receives SIP invite with the following header `p-rc-api-monitoring-ids` containing IDs of the monitored party and session. The flow is supported for calls with no more than 2 participants. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
+          "description": "Allows to monitor a call party in 'Listen' mode. Input parameters\nare extension number of a monitored user and internal identifier of a supervisor's\ndevice. Call session and party identifiers should be specified in path. Please\nnote that for this method dual channel audio flow is supported, which means\nthat you need to make one more request for monitoring the second participant\nof a call. And as a result of each monitoring request the client receives\nSIP invite with the following header `p-rc-api-monitoring-ids` containing\nIDs of the monitored party and session. The flow is supported for calls with\nno more than 2 participants. Currently, this method is supported for Softphone/Hardphone devices\nonly, since device IDs for WebRTC/Mobile apps cannot be obtained.\n",
           "summary": "Supervise Call Party",
           "operationId": "superviseCallParty",
           "rateLimitGroup": "Light",
