@@ -870,6 +870,109 @@
       ]
     },
     {
+      "name": "AuthorizeParameters",
+      "description": "Query parameters for operation authorize",
+      "fields": [
+        {
+          "name": "client_id",
+          "description": "The registered identifier of a client application",
+          "type": "string",
+          "example": "AZwEVwGEcfGet2PCouA7K6"
+        },
+        {
+          "name": "response_type",
+          "description": "Determines authorization flow type. The only supported value is `code` which corresponds to OAuth 2.0 \"Authorization Code Flow\"\n",
+          "type": "string",
+          "enum": [
+            "code"
+          ]
+        },
+        {
+          "name": "redirect_uri",
+          "description": "This is the URI where the Authorization Server redirects the User Agent to at the end of the authorization flow.\nThe value of this parameter must exactly match one of the URIs registered for this client application.\nThis parameter is required if there are more than one redirect URIs registered for the app.\n",
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "name": "state",
+          "description": "An opaque value used by the client to maintain state between the request and callback.\nThe authorization server includes this value when redirecting the User Agent back\nto the client. The parameter SHOULD be used for preventing cross-site request forgery attacks.\n",
+          "type": "string"
+        },
+        {
+          "name": "scope",
+          "description": "The list of space separated application permissions (OAuth scopes)",
+          "type": "string"
+        },
+        {
+          "name": "display",
+          "description": "Specifies how the Authorization Server displays the authentication and consent user interface pages to the End-User.\n",
+          "type": "string",
+          "enum": [
+            "page",
+            "popup",
+            "touch",
+            "mobile"
+          ],
+          "default": "page"
+        },
+        {
+          "name": "prompt",
+          "description": "Space-delimited, case-sensitive list of ASCII string values that specifies whether the Authorization Server prompts the End-User for\nre-authentication and consent. The defined values are:\n\n- `login` - RingCentral native login form,\n- `sso` - Single Sign-On login form,\n- `consent` - form to show the requested scope and prompt user for consent.\n\nEither `login` or `sso` (or both) must be specified. The default\nvalue is `login sso`\n",
+          "type": "string",
+          "default": "login sso"
+        },
+        {
+          "name": "ui_locales",
+          "description": "End-User's preferred languages and scripts for the user interface, represented as a space-separated list of\n[RFC-5646](https://datatracker.ietf.org/doc/html/rfc5646) language tag values, ordered by preference.\n\nIf this parameter is provided, its value overrides 'Accept-Language' header value and 'localeId' parameter value (if any)\n",
+          "type": "string",
+          "example": "en-US"
+        },
+        {
+          "name": "localeId",
+          "deprecated": true,
+          "description": "DEPRECATED: `ui_locales` parameter should be used instead",
+          "type": "string",
+          "example": "en-US"
+        },
+        {
+          "name": "code_challenge",
+          "description": "The code challenge value as defined by the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
+          "type": "string"
+        },
+        {
+          "name": "code_challenge_method",
+          "description": "The code challenge method as defined by the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
+          "type": "string",
+          "enum": [
+            "plain",
+            "S256"
+          ],
+          "default": "plain"
+        },
+        {
+          "name": "nonce",
+          "description": "String value used to associate a Client session with an ID Token, and to mitigate replay attacks. The value is passed through unmodified from the Authentication Request to the ID Token.\n",
+          "type": "string"
+        },
+        {
+          "name": "ui_options",
+          "description": "Login form user interface options (space-separated). By default, the UI options that are registered for this client application will be used\n",
+          "type": "string"
+        },
+        {
+          "name": "login_hint",
+          "description": "Hint to the Authorization Server about the login identifier the End-User might use to log in.",
+          "type": "string"
+        },
+        {
+          "name": "brand_id",
+          "description": "RingCentral Brand identifier. If it is not provided in the request,\nserver will try to determine brand from the client application profile.\n",
+          "type": "string",
+          "example": "1210"
+        }
+      ]
+    },
+    {
       "name": "RevokeTokenParameters",
       "description": "Query parameters for operation revokeToken",
       "fields": [
@@ -1059,6 +1162,20 @@
           "description": "Identifies a brand of a logged-in user or a brand of a sign-up session",
           "type": "string",
           "default": "~"
+        }
+      ]
+    },
+    {
+      "name": "ListCompanyMessageTemplatesParameters",
+      "description": "Query parameters for operation listCompanyMessageTemplates",
+      "fields": [
+        {
+          "name": "siteIds",
+          "description": "Site ID(s) to filter company message templates, associated with particular sites\nBy default the value is all - templates with all sites will be returned\n",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2402,6 +2519,29 @@
           "name": "editableMemberStatus",
           "description": "Filtering by the flag 'Allow members to change their Queue Status'. If 'true' only queues where user can change his availability status are returned",
           "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "ListUserMessageTemplatesParameters",
+      "description": "Query parameters for operation listUserMessageTemplates",
+      "fields": [
+        {
+          "name": "siteIds",
+          "description": "Site ID(s) to filter user message templates, associated with particular sites.\nBy default the value is all - templates with all sites will be returned\n",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "scope",
+          "description": "Specifies if a template is available on a user (Personal) or a company (Company) level",
+          "type": "string",
+          "enum": [
+            "Company",
+            "Personal"
+          ]
         }
       ]
     },
@@ -4429,17 +4569,17 @@
       ]
     },
     {
-      "name": "SocMsgListIdentitiesParameters",
-      "description": "Query parameters for operation socMsgListIdentities",
+      "name": "ListSocialMessagingIdentitiesParameters",
+      "description": "Query parameters for operation listSocialMessagingIdentities",
       "fields": [
         {
           "name": "sourceId",
-          "description": "Filter based on the specified sourceId.",
+          "description": "Filter based on the specified `sourceId`",
           "type": "string"
         },
         {
           "name": "identityGroupIds",
-          "description": "Filter based on the specified identityGroupIds (separated by commas).",
+          "description": "Filter based on the specified `identityGroupIds` (separated by commas)",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4449,12 +4589,12 @@
         },
         {
           "name": "userId",
-          "description": "Filter based on the specified userId.",
+          "description": "Filter based on the specified `userId`",
           "type": "string"
         },
         {
           "name": "uuid",
-          "description": "Filter based on the specified uuid.",
+          "description": "Filter based on the specified `uuid`",
           "type": "string"
         },
         {
@@ -4759,7 +4899,7 @@
       "fields": [
         {
           "name": "recordCount",
-          "description": "Max number of posts to be fetched by one request (not more than 250).",
+          "description": "Max number of posts to be fetched by one request (not more than 250)",
           "maximum": 250,
           "type": "integer",
           "format": "int32",
@@ -4908,21 +5048,6 @@
           "type": "integer",
           "format": "int32",
           "default": 30
-        }
-      ]
-    },
-    {
-      "name": "IntrospectTokenRequest",
-      "description": "Request body for operation introspectToken",
-      "fields": [
-        {
-          "type": "string",
-          "description": "OAuth token",
-          "name": "token"
-        },
-        {
-          "type": "string",
-          "name": "scope"
         }
       ]
     },
@@ -8382,6 +8507,14 @@
           "required": false
         },
         {
+          "type": "boolean",
+          "description": "Indicates if the registrant was registered to on-demand webinar",
+          "readOnly": true,
+          "nullable": false,
+          "name": "registeredPostWebinar",
+          "required": false
+        },
+        {
           "type": "string",
           "description": "Visitor ID passed from registration page",
           "name": "visitorId",
@@ -8548,6 +8681,14 @@
           "example": "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel",
           "name": "cancellationUri",
           "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if the registrant was registered to on-demand webinar",
+          "readOnly": true,
+          "nullable": false,
+          "name": "registeredPostWebinar",
+          "required": false
         }
       ]
     },
@@ -8603,6 +8744,14 @@
           "description": "The personalized URI for this registrant to cancel the registration",
           "example": "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel",
           "name": "cancellationUri",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if the registrant was registered to on-demand webinar",
+          "readOnly": true,
+          "nullable": false,
+          "name": "registeredPostWebinar",
           "required": false
         },
         {
@@ -8709,6 +8858,14 @@
           "description": "The personalized URI for this registrant to cancel the registration",
           "example": "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel",
           "name": "cancellationUri",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if the registrant was registered to on-demand webinar",
+          "readOnly": true,
+          "nullable": false,
+          "name": "registeredPostWebinar",
           "required": false
         },
         {
@@ -8850,6 +9007,14 @@
           "description": "The personalized URI for this registrant to cancel the registration",
           "example": "https://abcde12345.webinar.ringcentral.com/register?jlt=iuyef77fsj473wn10ashjfk34&action=cancel",
           "name": "cancellationUri",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if the registrant was registered to on-demand webinar",
+          "readOnly": true,
+          "nullable": false,
+          "name": "registeredPostWebinar",
           "required": false
         },
         {
@@ -11423,22 +11588,17 @@
       "fields": [
         {
           "type": "string",
-          "description": "For `password` grant type only. User login name: email or phone number in E.164 format\n",
-          "name": "username",
+          "enum": [
+            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+          ],
+          "description": "Client assertion type for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
+          "name": "client_assertion_type",
           "required": false
         },
         {
           "type": "string",
-          "description": "For `password` grant type only. User's password",
-          "format": "password",
-          "name": "password",
-          "required": false
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "For `password` grant type only. Optional. Extension short number. If company number\nis specified as a username, and extension is not specified, the\nserver will attempt to authenticate client as main company administrator\n\nDEPRECATED: use extension number embedded into username string like `+16501234567*101`\n",
-          "name": "extension",
+          "description": "Client assertion (JWT) for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
+          "name": "client_assertion",
           "required": false
         },
         {
@@ -11463,15 +11623,21 @@
         },
         {
           "type": "string",
-          "description": "For `authorization_code` grant type only. User's authorization code",
-          "name": "code",
+          "description": "The list of application permissions (OAuth scopes) requested.\nBy default, it includes all permissions configured on\nthe client application registration\n",
+          "name": "scope",
           "required": false
         },
         {
           "type": "string",
-          "format": "uri",
-          "description": "For `authorization_code` grant type only. This is a callback URI which determines where the response\nis sent. The value of this parameter must exactly match one of\nthe URIs you have provided for your app upon registration\n",
-          "name": "redirect_uri",
+          "description": "The registered identifier of a client application.\nUsed to identify a client ONLY if the client authentication is not required and\ncorresponding credentials are not provided with this request\n",
+          "example": "AZwEVwGEcfGet2PCouA7K6",
+          "name": "client_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "The unique identifier of a client application instance. If not\nspecified, the derived or auto-generated value will be used\n",
+          "name": "endpoint_id",
           "required": false
         },
         {
@@ -11492,85 +11658,6 @@
           "default": 604800,
           "name": "refresh_token_ttl",
           "required": false
-        },
-        {
-          "type": "string",
-          "description": "List of application permissions to be used with access token.\nBy default, the scope includes all permissions configured during\nthe application registration phase\n",
-          "name": "scope",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "For `refresh_token` grant type only. Previously issued refresh token.\n",
-          "name": "refresh_token",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "The unique identifier of a client application instance. If not\nspecified, the derived or auto generated value will be used\n",
-          "name": "endpoint_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "pin",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "OAuth client identifier (if not specified via `Authorization` header)",
-          "name": "client_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "account_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "partner_account_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Client assertion type",
-          "name": "client_assertion_type",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Client assertion",
-          "name": "client_assertion",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "For `jwt_bearer` grant type only. Assertion",
-          "name": "assertion",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "brand_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "PKCE code verifier",
-          "name": "code_verifier",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "device_code",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "For `ivr_pin` grant type only. IVR pin.",
-          "name": "ivr_pin",
-          "required": false
         }
       ]
     },
@@ -11587,14 +11674,14 @@
         {
           "type": "integer",
           "format": "int32",
-          "description": "Issued access token TTL (time-to-live) in seconds",
+          "description": "Access token TTL (time-to-live) in seconds",
           "example": 7199,
           "name": "expires_in",
           "required": true
         },
         {
           "type": "string",
-          "description": "OAuth refresh token (in case the one was issued)\n",
+          "description": "OAuth refresh token (if issued)\n",
           "example": "U1BCMDFUMDRKV1MwMXxzLFL4ec6A0XMsUv9wLriecyxS_w",
           "name": "refresh_token",
           "required": false
@@ -11602,70 +11689,482 @@
         {
           "type": "integer",
           "format": "int32",
-          "description": "Issued refresh token TTL (time-to-live) in seconds",
+          "description": "Refresh token TTL (time-to-live) in seconds",
           "example": 604799,
           "name": "refresh_token_expires_in",
           "required": false
         },
         {
           "type": "string",
-          "description": "List of permissions (space separated) granted to the application with this access token\n",
+          "description": "The list of space separated application permissions (OAuth scopes)\n",
           "example": "AccountInfo CallLog ExtensionInfo Messages SMS",
           "name": "scope",
           "required": true
         },
         {
           "type": "string",
-          "description": "Type of token. The only supported value is `bearer`. This value should be used when specifying access token in `Authorization` header of subsequent API requests",
+          "description": "Type of the token. The only supported value is `bearer`. This value should be used when specifying access token in `Authorization` header of subsequent API requests",
+          "enum": [
+            "bearer"
+          ],
           "example": "bearer",
           "name": "token_type",
           "required": true
         },
         {
           "type": "string",
-          "description": "Token owner (extension/user) identifier",
+          "description": "Token owner's identifier. Contains RingCentral user (extension) ID",
           "example": "256440016",
           "name": "owner_id",
           "required": false
         },
         {
           "type": "string",
-          "description": "Application instance identifier",
+          "description": "Client application instance identifier that matches the value provided by the client,\nor generated by the server if a client has not provided this value\n",
           "example": "8zXq6oaLT7WvwWITlGiA1A",
           "name": "endpoint_id",
           "required": false
         },
         {
           "type": "string",
-          "description": "OIDC ID token (if OpenID Connect flow was activated during authorization)",
+          "description": "OpenID Connect ID token (if OpenID Connect flow was activated during authorization)",
           "name": "id_token",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Remaining time in seconds until session expiration due to absolute timeout.\nReturned only if absolute session timeout is enforced\n",
+          "name": "session_expires_in",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Absolute value of session expiration time in ISO date formatted string.\nReturned only if absolute session timeout is enforced\n",
+          "example": "2023-04-01T12:00:01Z",
+          "name": "session_expiration_time",
           "required": false
         },
         {
           "type": "string",
           "description": "OAuth session ID",
           "name": "session_id",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Nominal value of session idle timeout in seconds.\nReturned only if idle session timeout is enforced\n",
+          "name": "session_idle_timeout",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "IvrPinTokenRequest",
+      "description": "Token endpoint request parameters used in the \"IVR Pin\" authorization flow with the `ivr_pin` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "ivr_pin"
+          ],
+          "name": "grant_type",
           "required": false
         },
         {
           "type": "string",
-          "format": "date-time",
-          "description": "Absolute value of session expiration time as an ISO timestamp",
-          "name": "session_expiration_time",
+          "description": "For `ivr_pin` grant type only. User's IVR pin.",
+          "name": "ivr_pin",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsBase",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type"
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type",
           "required": false
         },
         {
-          "type": "integer",
-          "format": "int32",
-          "description": "Remaining time (in seconds) until session expiration due to the absolute timeout",
-          "name": "session_expires_in",
+          "type": "string",
+          "description": "RingCentral Brand identifier",
+          "name": "brand_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "RingCentral internal account ID",
+          "name": "account_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The ID of the account on RingCentral partner's side",
+          "name": "partner_account_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "DeviceCodeTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Device Authorization\" flow\nwith the `urn:ietf:params:oauth:grant-type:device_code` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "urn:ietf:params:oauth:grant-type:device_code"
+          ],
+          "name": "grant_type",
           "required": false
         },
         {
+          "type": "string",
+          "description": "For `urn:ietf:params:oauth:grant-type:device_code` grant type only.\nThe device verification code as defined by [RFC-8628](https://datatracker.ietf.org/doc/html/rfc8628#section-3.4)\n",
+          "name": "device_code",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ClientAuthJwtModel",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+          ],
+          "description": "Client assertion type for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
+          "name": "client_assertion_type"
+        },
+        {
+          "type": "string",
+          "description": "Client assertion (JWT) for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
+          "name": "client_assertion"
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsByAccount",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RingCentral internal account ID",
+          "name": "account_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "GuestTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "guest"
+          ],
+          "name": "grant_type"
+        },
+        {
+          "type": "string",
+          "description": "RingCentral Brand identifier.",
+          "name": "brand_id"
+        },
+        {
+          "type": "string",
+          "description": "Resource type for the guest access.",
+          "name": "resource_type"
+        },
+        {
+          "type": "string",
+          "description": "Resource URL for the guest access.",
+          "name": "resource"
+        }
+      ]
+    },
+    {
+      "name": "AuthCodeTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Authorization Code\" and \"Authorization code with PKCE\" flows\nwith the `authorization_code` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "authorization_code"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `authorization_code` grant type only. User's authorization code",
+          "name": "code",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "For `authorization_code` grant type only. This is a callback URI which determines where the response\nis sent. The value of this parameter must exactly match one of\nthe URIs you have provided for your app upon registration\n",
+          "name": "redirect_uri",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `authorization_code` grant type only.\nThe code verifier as defined by  the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
+          "name": "code_verifier",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsByBrand",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RingCentral Brand identifier",
+          "name": "brand_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsByPartnerAccount",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RingCentral Brand identifier",
+          "name": "brand_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The ID of the account on RingCentral partner's side",
+          "name": "partner_account_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "JwtTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Personal JWT\", \"JWT Bearer\" and \"Partner JWT\" authorization flows\nwith the `urn:ietf:params:oauth:grant-type:jwt-bearer` and `partner_jwt` grant types\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "partner_jwt"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `urn:ietf:params:oauth:grant-type:jwt-bearer` or `partner_jwt` grant types only.\nAuthorization grant assertion (JWT)\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.1).\n",
+          "name": "assertion",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "BaseTokenRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "authorization_code",
+            "password",
+            "refresh_token",
+            "client_credentials",
+            "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "urn:ietf:params:oauth:grant-type:device_code",
+            "device_certificate",
+            "partner_jwt",
+            "guest",
+            "personal_jwt",
+            "otp",
+            "ivr_pin"
+          ],
+          "name": "grant_type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The list of application permissions (OAuth scopes) requested.\nBy default, it includes all permissions configured on\nthe client application registration\n",
+          "name": "scope",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "The registered identifier of a client application.\nUsed to identify a client ONLY if the client authentication is not required and\ncorresponding credentials are not provided with this request\n",
+          "example": "AZwEVwGEcfGet2PCouA7K6",
+          "name": "client_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "The unique identifier of a client application instance. If not\nspecified, the derived or auto-generated value will be used\n",
+          "name": "endpoint_id",
+          "required": false
+        },
+        {
+          "maximum": 3600,
+          "minimum": 600,
           "type": "integer",
+          "description": "Access token lifetime in seconds",
           "format": "int32",
-          "description": "Nominal session idle timeout in seconds",
-          "name": "session_idle_timeout",
+          "default": 3600,
+          "name": "access_token_ttl",
+          "required": false
+        },
+        {
+          "maximum": 604800,
+          "type": "integer",
+          "description": "Refresh token lifetime in seconds",
+          "format": "int32",
+          "default": 604800,
+          "name": "refresh_token_ttl",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "RefreshTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Refresh Token\" flow\nwith the `refresh_token` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "refresh_token"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `refresh_token` grant type only. Previously issued refresh token.\n",
+          "name": "refresh_token",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "OtpTokenRequest",
+      "description": "Token endpoint request parameters used in the \"One-time Password\" (OTP) authorization flow with the `otp` grant type",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "otp"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `otp` grant type only.\nOne-time password code\n",
+          "name": "code",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "RopcTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Password\" (also known as \"Resource Owner Password Credentials\" - ROPC)\nauthorization flow with the `password` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "password"
+          ],
+          "name": "grant_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `password` grant type only. User login name: email or phone number in E.164 format\n",
+          "name": "username",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "For `password` grant type only. User's password",
+          "format": "password",
+          "name": "password",
+          "required": true
+        },
+        {
+          "type": "string",
+          "deprecated": true,
+          "description": "For `password` grant type only. Optional. Extension short number. If a company number\nis specified as a username, and extension is not specified, the\nserver will attempt to authenticate client as main company administrator\n\nDEPRECATED: use extension number embedded into username string like `+16501234567*101`\n",
+          "name": "extension",
+          "required": false
+        },
+        {
+          "type": "string",
+          "deprecated": true,
+          "description": "IVR pin for pin-based authentication.\n\nDEPRECATED: use a dedicated `ivr_pin` grant type instead\n",
+          "name": "pin",
           "required": false
         }
       ]
@@ -11675,10 +12174,9 @@
       "fields": [
         {
           "type": "string",
-          "description": "Determines authorization flow:\n- **code** - Authorization Code,\n- **token** - Implicit\n",
+          "description": "Determines authorization flow type. The only supported value is `code` which corresponds to OAuth 2.0 \"Authorization Code Flow\"\n",
           "enum": [
-            "code",
-            "token"
+            "code"
           ],
           "name": "response_type",
           "required": true
@@ -11686,32 +12184,32 @@
         {
           "type": "string",
           "format": "uri",
-          "description": "This is a callback URI which determines where the response\nis sent. The value of this parameter must exactly match one of\nthe URIs you have provided for your app upon registration\n",
+          "description": "This is the URI where the Authorization Server redirects the User Agent to at the end of the authorization flow.\nThe value of this parameter must exactly match one of the URIs registered for this client application.\nThis parameter is required if there are more than one redirect URIs registered for the app.\n",
           "name": "redirect_uri",
-          "required": true
+          "required": false
         },
         {
           "type": "string",
-          "description": "Identifier (key) of a client application",
+          "description": "The registered identifier of a client application",
+          "example": "AZwEVwGEcfGet2PCouA7K6",
           "name": "client_id",
           "required": true
         },
         {
           "type": "string",
-          "description": "Client state. Returned to the client at the end of the flow",
+          "description": "An opaque value used by the client to maintain state between the request and callback.\nThe authorization server includes this value when redirecting the User Agent back\nto the client. The parameter SHOULD be used for preventing cross-site request forgery attacks.\n",
           "name": "state",
           "required": false
         },
         {
           "type": "string",
-          "description": "Brand identifier. If it is not provided in request,\nserver will try to determine brand from client app profile. The\ndefault value is `1210` - RingCentral US brand ID\n",
-          "default": "1210",
-          "name": "brand_id",
+          "description": "The list of requested OAuth scopes (space separated)",
+          "name": "scope",
           "required": false
         },
         {
           "type": "string",
-          "description": "Style of login form. The default value is 'page'. The\n'popup' and 'touch' values are featured for mobile applications\n",
+          "description": "Specifies how the Authorization Server displays the authentication and consent user interface pages to the End-User.\n",
           "enum": [
             "page",
             "popup",
@@ -11724,71 +12222,64 @@
         },
         {
           "type": "string",
-          "description": "Specifies which login form will be displayed. Space-separated\nset of the following values:\n\n- **login** - RingCentral native login form,\n- **sso** - Single Sign-On login form,\n- **consent** - form to show the requested scope and prompt user for consent.\n\nEither `login` or `sso` (or both) must be specified. The default\nvalue is `login sso`\n",
+          "description": "Space-delimited, case-sensitive list of ASCII string values that specifies whether the Authorization Server prompts the End-User for\nre-authentication and consent. The defined values are:\n\n- `login` - RingCentral native login form,\n- `sso` - Single Sign-On login form,\n- `consent` - form to show the requested scope and prompt user for consent.\n\nEither `login` or `sso` (or both) must be specified. The default\nvalue is `login sso`\n",
           "default": "login sso",
           "name": "prompt",
           "required": false
         },
         {
           "type": "string",
-          "description": "Locale code of a language. Overwrites 'Accept-Language' header value.\n\nDEPRECATED: `ui_locales` parameter should be used instead\n",
-          "deprecated": true,
-          "example": "en-US",
-          "name": "localeId",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Locale code of a language. Overwrites 'Accept-Language' header value and 'localeId' parameter value",
+          "description": "End-User's preferred languages and scripts for the user interface, represented as a space-separated list of\n[RFC-5646](https://datatracker.ietf.org/doc/html/rfc5646) language tag values, ordered by preference.\n\nIf this parameter is provided, its value overrides 'Accept-Language' header value and 'localeId' parameter value (if any)\n",
           "example": "en-US",
           "name": "ui_locales",
           "required": false
         },
         {
           "type": "string",
-          "description": "User interface options (space-separated)",
-          "name": "ui_options",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "OAuth scope",
-          "name": "scope",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "accept_language",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "request",
-          "required": false
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "name": "request_uri",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "nonce",
-          "required": false
-        },
-        {
-          "type": "string",
+          "description": "The code challenge value as defined by the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
           "name": "code_challenge",
           "required": false
         },
         {
           "type": "string",
+          "description": "The code challenge method as defined by the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
           "enum": [
             "plain",
             "S256"
           ],
+          "default": "plain",
           "name": "code_challenge_method",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "String value used to associate a Client session with an ID Token, and to mitigate replay attacks. The value is passed through unmodified from the Authentication Request to the ID Token.\n",
+          "name": "nonce",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Login form user interface options (space-separated). By default, the UI options that are registered for this client application will be used\n",
+          "name": "ui_options",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Hint to the Authorization Server about the login identifier the End-User might use to log in.",
+          "name": "login_hint",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "RingCentral Brand identifier. If it is not provided in the request,\nserver will try to determine brand from the client application profile.\n",
+          "example": "1210",
+          "name": "brand_id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "deprecated": true,
+          "name": "accept_language",
           "required": false
         }
       ]
@@ -11804,138 +12295,17 @@
         },
         {
           "type": "string",
-          "description": "Client assertion type",
+          "enum": [
+            "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+          ],
+          "description": "Client assertion type for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
           "name": "client_assertion_type",
           "required": false
         },
         {
           "type": "string",
-          "description": "Client assertion",
+          "description": "Client assertion (JWT) for the `client_secret_jwt` or `private_key_jwt` client authentication types,\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.2).\nThis parameter is mandatory if the client authentication is required and a client decided to use one of these authentication types\n",
           "name": "client_assertion",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "SessionInfoResponse",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Identifier (key) of a client application",
-          "name": "client_id",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "List of permissions (space separated) granted to the application with this token\n",
-          "example": "AccountInfo CallLog ExtensionInfo Messages SMS",
-          "name": "scope",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Subject of the token (extension ID or the owner)",
-          "name": "sub",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "RC account ID associated with the token",
-          "name": "account_id",
-          "required": false
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Remaining time in seconds until session expiration due to absolute timeout",
-          "name": "session_expires_in",
-          "required": false
-        },
-        {
-          "type": "string",
-          "format": "date-time",
-          "description": "Absolute value of session expiration time in ISO date formatted string",
-          "example": "2023-04-01T12:00:01Z",
-          "name": "session_expiration_time",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "OAuth session ID",
-          "name": "session_id",
-          "required": true
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Nominal value of session idle timeout in seconds",
-          "name": "session_idle_timeout",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "TokenIntrospectionResponse",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Is presented token valid and active",
-          "example": true,
-          "name": "active",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "List of permissions (space separated) granted to the application with this token\n",
-          "example": "AccountInfo CallLog ExtensionInfo Messages SMS",
-          "name": "scope",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Identifier (key) of a client application",
-          "name": "client_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Type of token. The only supported value is `bearer`",
-          "example": "bearer",
-          "name": "token_type",
-          "required": false
-        },
-        {
-          "type": "integer",
-          "format": "int64",
-          "description": "Timestamp indicating when this token will expire in seconds since January 1 1970 UTC\n",
-          "example": 1706715293,
-          "name": "exp",
-          "required": false
-        },
-        {
-          "type": "integer",
-          "format": "int64",
-          "description": "Timestamp indicating when this token was originally issued in seconds since January 1 1970 UTC\n",
-          "example": 1706711693,
-          "name": "iat",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Subject of the token (extension ID or the owner)",
-          "name": "sub",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "RC account ID associated with the token",
-          "name": "account_id",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "OAuth session ID associated with the token",
-          "name": "session_id",
           "required": false
         }
       ]
@@ -12031,51 +12401,20 @@
       ]
     },
     {
-      "name": "ServiceInfoV2",
-      "description": "Service Plan information (billing package, brand, etc.)",
-      "fields": [
-        {
-          "$ref": "ServiceInfoPackage",
-          "name": "package",
-          "required": true
-        },
-        {
-          "$ref": "ServiceInfoBrand",
-          "name": "brand",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "AccountStatusInfo",
-      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "name": "ServiceInfoUBrand",
+      "description": "Account sub-brand information",
       "fields": [
         {
           "type": "string",
-          "description": "Type of suspension, voluntarily or not",
-          "enum": [
-            "SuspendedVoluntarily",
-            "SuspendedInvoluntarily",
-            "CancelledVoluntarily",
-            "CancelledInvoluntarily"
-          ],
-          "example": "CancelledVoluntarily",
-          "name": "reason"
+          "description": "Sub-brand unique ID",
+          "example": "111.222",
+          "name": "id"
         },
         {
           "type": "string",
-          "description": "A meaningful description of the reason to change the status",
-          "minLength": 1,
-          "maxLength": 256,
-          "example": "By customer request. Case ABC123",
-          "name": "comment"
-        },
-        {
-          "type": "string",
-          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
-          "format": "date-time",
-          "example": "2023-03-26T11:30:45.940Z",
-          "name": "till"
+          "description": "Sub-brand name",
+          "example": "Sub-brand name",
+          "name": "name"
         }
       ]
     },
@@ -12153,6 +12492,127 @@
           "example": "0061800000DwZzJAAV",
           "name": "opportunityId",
           "required": false
+        }
+      ]
+    },
+    {
+      "name": "BasicContactInfo",
+      "description": "Personal contact information",
+      "fields": [
+        {
+          "description": "Given name",
+          "type": "string",
+          "maxLength": 64,
+          "example": "John",
+          "name": "firstName"
+        },
+        {
+          "description": "Family name",
+          "type": "string",
+          "maxLength": 64,
+          "example": "Smith",
+          "name": "lastName"
+        },
+        {
+          "description": "Contact email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 64,
+          "example": "john.smith@acme.com",
+          "name": "email"
+        }
+      ]
+    },
+    {
+      "name": "ServiceInfoV2",
+      "description": "Service Plan information (billing package, brand, etc.)",
+      "fields": [
+        {
+          "$ref": "ServiceInfoPackage",
+          "name": "package",
+          "required": true
+        },
+        {
+          "$ref": "ServiceInfoBrand",
+          "name": "brand",
+          "required": false
+        },
+        {
+          "$ref": "ServiceInfoCountryShortModel",
+          "name": "contractedCountry",
+          "required": false
+        },
+        {
+          "$ref": "ServiceInfoUBrand",
+          "name": "uBrand",
+          "required": false
+        },
+        {
+          "$ref": "ServiceInfoPlan",
+          "name": "servicePlan",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "ServiceInfoPlan",
+      "description": "Information on account service plan",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a service plan",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name of a service plan",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Edition of a service plan",
+          "name": "edition"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Freyja",
+            "Phoenix"
+          ],
+          "name": "freemiumProductType"
+        }
+      ]
+    },
+    {
+      "name": "AccountStatusInfo",
+      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Type of suspension, voluntarily or not",
+          "enum": [
+            "SuspendedVoluntarily",
+            "SuspendedInvoluntarily",
+            "CancelledVoluntarily",
+            "CancelledInvoluntarily"
+          ],
+          "example": "CancelledVoluntarily",
+          "name": "reason"
+        },
+        {
+          "type": "string",
+          "description": "A meaningful description of the reason to change the status",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "By customer request. Case ABC123",
+          "name": "comment"
+        },
+        {
+          "type": "string",
+          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
+          "format": "date-time",
+          "example": "2023-03-26T11:30:45.940Z",
+          "name": "till"
         }
       ]
     },
@@ -12257,30 +12717,70 @@
       ]
     },
     {
-      "name": "BasicContactInfo",
-      "description": "Personal contact information",
+      "name": "CountryInfoMinimalModel",
       "fields": [
         {
-          "description": "Given name",
           "type": "string",
-          "maxLength": 64,
-          "example": "John",
-          "name": "firstName"
+          "description": "Internal identifier of a country",
+          "name": "id"
         },
         {
-          "description": "Family name",
           "type": "string",
-          "maxLength": 64,
-          "example": "Smith",
-          "name": "lastName"
+          "format": "uri",
+          "description": "Canonical URI of a country resource",
+          "name": "uri"
+        }
+      ]
+    },
+    {
+      "name": "ServiceInfoCountryShortModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "id"
         },
         {
-          "description": "Contact email",
           "type": "string",
-          "format": "email",
-          "maxLength": 64,
-          "example": "john.smith@acme.com",
-          "name": "email"
+          "format": "uri",
+          "description": "Canonical URI of a country resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "The official name of a country",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "A ISO country code value complying with the\n[ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\nformat.\n",
+          "name": "isoCode"
+        },
+        {
+          "type": "string",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164),\nsee [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
+          "name": "callingCode"
+        }
+      ]
+    },
+    {
+      "name": "CountryInfoBasicModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a country resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "The official name of a country",
+          "name": "name"
         }
       ]
     },
@@ -12549,6 +13049,22 @@
       ]
     },
     {
+      "name": "ContactCenterProvider",
+      "description": "CCRN (Contact Center Routing Number) provider. If not specified\nthen the default value 'InContact/North America' is used, its ID is '1'\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of the provider",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Provider's name",
+          "name": "name"
+        }
+      ]
+    },
+    {
       "name": "AccountPhoneNumberInfo",
       "fields": [
         {
@@ -12622,6 +13138,11 @@
           "required": false
         },
         {
+          "$ref": "ContactCenterProvider",
+          "name": "contactCenterProvider",
+          "required": false
+        },
+        {
           "type": "string",
           "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise, it is an external number not yet ported to RingCentral",
           "enum": [
@@ -12686,7 +13207,8 @@
             "MainCompanyNumber",
             "CompanyNumber",
             "DirectNumber",
-            "PhoneLine"
+            "PhoneLine",
+            "ContactCenterNumber"
           ],
           "name": "usageType",
           "required": true
@@ -12699,6 +13221,11 @@
         {
           "type": "string",
           "name": "costCenterId",
+          "required": false
+        },
+        {
+          "$ref": "ContactCenterProvider",
+          "name": "contactCenterProvider",
           "required": false
         }
       ]
@@ -13795,7 +14322,7 @@
         },
         {
           "$ref": "UBrandInfo",
-          "name": "ubrand"
+          "name": "uBrand"
         }
       ]
     },
@@ -13868,22 +14395,6 @@
       ]
     },
     {
-      "name": "CountryInfoMinimalModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country resource",
-          "name": "uri"
-        }
-      ]
-    },
-    {
       "name": "BrandInfo",
       "description": "Information on account brand",
       "fields": [
@@ -13900,27 +14411,6 @@
         {
           "$ref": "CountryInfoShortModel",
           "name": "homeCountry"
-        }
-      ]
-    },
-    {
-      "name": "CountryInfoBasicModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "The official name of a country",
-          "name": "name"
         }
       ]
     },
@@ -14193,109 +14683,6 @@
       ]
     },
     {
-      "name": "EmergencyAddressInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "Postal (Zip) code",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "description": "Customer name",
-          "name": "customerName"
-        },
-        {
-          "type": "string",
-          "description": "Company name",
-          "name": "companyName"
-        },
-        {
-          "type": "string",
-          "description": "(Optional) Building name",
-          "name": "buildingName"
-        },
-        {
-          "type": "string",
-          "description": "Street type",
-          "name": "streetType"
-        },
-        {
-          "type": "string",
-          "description": "Building/street number",
-          "name": "buildingNumber"
-        },
-        {
-          "type": "string",
-          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto `true`\n",
-          "enum": [
-            "Verified",
-            "Updated",
-            "Deleted",
-            "NotRequired",
-            "Unsupported",
-            "Failed"
-          ],
-          "name": "syncStatus"
-        }
-      ]
-    },
-    {
       "name": "CommonEmergencyLocationAddressInfoDefault",
       "fields": [
         {
@@ -14469,96 +14856,6 @@
       ]
     },
     {
-      "name": "CommonEmergencyLocationAddressInfoAu",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "The name of the street (the field is utilized as 'streetName' field for AU addresses)",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Company name",
-          "name": "companyName"
-        },
-        {
-          "type": "string",
-          "description": "(Optional) Building name",
-          "name": "buildingName"
-        },
-        {
-          "type": "string",
-          "description": "Street type",
-          "name": "streetType"
-        },
-        {
-          "type": "string",
-          "description": "Building/street number",
-          "name": "buildingNumber"
-        },
-        {
-          "type": "string",
-          "description": "Second line address (apartment, suite, unit, building, floor, etc.)\n",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "Postal (Zip) code",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "description": "Customer name",
-          "name": "customerName"
-        }
-      ]
-    },
-    {
       "name": "EmergencyAddress",
       "fields": [
         {
@@ -14580,96 +14877,6 @@
             "Invalid"
           ],
           "name": "lineProvisioningStatus"
-        }
-      ]
-    },
-    {
-      "name": "CommonEmergencyLocationAddressInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "Postal (Zip) code",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "description": "Customer name",
-          "name": "customerName"
-        },
-        {
-          "type": "string",
-          "description": "Company name",
-          "name": "companyName"
-        },
-        {
-          "type": "string",
-          "description": "(Optional) Building name",
-          "name": "buildingName"
-        },
-        {
-          "type": "string",
-          "description": "Street type",
-          "name": "streetType"
-        },
-        {
-          "type": "string",
-          "description": "Building/street number",
-          "name": "buildingNumber"
         }
       ]
     },
@@ -15032,91 +15239,6 @@
       ]
     },
     {
-      "name": "CommonEmergencyLocationAddressInfoFr",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Country name",
-          "name": "country"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "countryId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a country",
-          "name": "countryIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a country",
-          "name": "countryName"
-        },
-        {
-          "type": "string",
-          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a state",
-          "name": "stateId"
-        },
-        {
-          "type": "string",
-          "description": "ISO code of a state",
-          "name": "stateIsoCode"
-        },
-        {
-          "type": "string",
-          "description": "Full name of a state",
-          "name": "stateName"
-        },
-        {
-          "type": "string",
-          "description": "City name",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "description": "Company name",
-          "name": "companyName"
-        },
-        {
-          "type": "string",
-          "description": "(Optional) Building name",
-          "name": "buildingName"
-        },
-        {
-          "type": "string",
-          "description": "Building/street number",
-          "name": "buildingNumber"
-        },
-        {
-          "type": "string",
-          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
-          "name": "street2"
-        },
-        {
-          "type": "string",
-          "description": "Postal (Zip) code",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "description": "Customer name",
-          "name": "customerName"
-        }
-      ]
-    },
-    {
       "name": "ExtensionInfoIntId",
       "description": "This attribute can be omitted for unassigned devices",
       "fields": [
@@ -15286,7 +15408,7 @@
       "description": "Device emergency settings",
       "fields": [
         {
-          "$ref": "EmergencyAddressInfo",
+          "$ref": "CommonEmergencyLocationAddressInfoDefault",
           "name": "address"
         },
         {
@@ -17334,6 +17456,121 @@
       ]
     },
     {
+      "name": "MessageTemplateRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a template",
+          "name": "displayName",
+          "required": true
+        },
+        {
+          "$ref": "TemplateInfo",
+          "name": "body",
+          "required": true
+        },
+        {
+          "$ref": "Site",
+          "name": "site",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "TemplateInfo",
+      "description": "Text message template information",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Text of a message template. Maximum length is 1000 symbols (2-byte UTF-16 encoded)\n",
+          "name": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "Site",
+      "description": "Specifies a site that message template is associated with. Supported only if the Sites feature is enabled. \nThe default is `main-site` value.\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a site",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Custom name of a site",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "MessageTemplatesListResponse",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of text message templates",
+          "items": {
+            "$ref": "MessageTemplateResponse"
+          },
+          "name": "records"
+        }
+      ]
+    },
+    {
+      "name": "MessageTemplateResponse",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a template",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name of a template",
+          "name": "displayName"
+        },
+        {
+          "$ref": "TemplateInfo",
+          "name": "body"
+        },
+        {
+          "type": "string",
+          "description": "Specifies if a template is available on a user (Personal) or a company (Company) level",
+          "enum": [
+            "Company",
+            "Personal"
+          ],
+          "name": "scope"
+        },
+        {
+          "$ref": "Site",
+          "name": "site"
+        }
+      ]
+    },
+    {
+      "name": "MessageTemplateUpdateRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a template",
+          "name": "displayName",
+          "required": false
+        },
+        {
+          "$ref": "TemplateInfo",
+          "name": "body",
+          "required": true
+        },
+        {
+          "$ref": "Site",
+          "name": "site",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "BaseCallLogFromParty",
       "description": "Sender/initiator caller information",
       "fields": [
@@ -17489,7 +17726,7 @@
             "VoIP"
           ],
           "name": "transport",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogFromParty",
@@ -17890,7 +18127,7 @@
             "VoIP"
           ],
           "name": "transport",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogFromParty",
@@ -18194,7 +18431,7 @@
             "VoIP"
           ],
           "name": "transport",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogFromParty",
@@ -19412,47 +19649,6 @@
       ]
     },
     {
-      "name": "TemplateInfo",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Link to a template",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a template",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "enum": [
-            "UserSettings",
-            "CallHandling"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of a template",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "format": "date-time",
-          "description": "Time of a template creation",
-          "name": "creationTime"
-        },
-        {
-          "type": "string",
-          "format": "date-time",
-          "description": "Time of the last template modification",
-          "name": "lastModifiedTime"
-        }
-      ]
-    },
-    {
       "name": "MessageStatusesResponse",
       "description": "The messages status object with details of each status",
       "fields": [
@@ -19511,16 +19707,17 @@
         {
           "type": "integer",
           "description": "Count of messages with this status code",
-          "format": "int64",
+          "format": "int32",
           "example": 7,
           "name": "count"
         },
         {
           "type": "object",
+          "description": "Message sending/delivery errors. Returned in `deliveryFailed` and `sendingFailed` resources",
           "additionalProperties": {
             "type": "integer",
             "description": "Count of messages with this error code",
-            "format": "int64",
+            "format": "int32",
             "example": 5
           },
           "name": "errorCodeCounts"
@@ -20389,7 +20586,7 @@
           "name": "callHandlingAction"
         },
         {
-          "$ref": "CompanyAnsweringRuleCallersInfoRequest",
+          "$ref": "CompanyAnsweringRuleExtensionInfoRequest",
           "name": "extension"
         },
         {
@@ -21503,6 +21700,91 @@
       ]
     },
     {
+      "name": "CommonEmergencyLocationAddressInfoFr",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        }
+      ]
+    },
+    {
       "name": "EmergencyLocationsPaging",
       "fields": [
         {
@@ -21556,6 +21838,186 @@
         {
           "$ref": "EmergencyLocationsPaging",
           "name": "paging"
+        }
+      ]
+    },
+    {
+      "name": "CommonEmergencyLocationAddressInfoAu",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (the field is utilized as 'streetName' field for AU addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor, etc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        }
+      ]
+    },
+    {
+      "name": "CommonEmergencyLocationAddressInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
         }
       ]
     },
@@ -25867,6 +26329,7 @@
             "Account",
             "AllExtensions",
             "Federation",
+            "Group",
             "NonUserExtensions",
             "RoleBased",
             "Self",
@@ -26331,6 +26794,7 @@
             "User",
             "VirtualUser",
             "DigitalUser",
+            "FlexibleUser",
             "Department",
             "Announcement",
             "Voicemail",
@@ -27775,6 +28239,12 @@
           "name": "phoneNumber"
         },
         {
+          "description": "Link to a branded support page",
+          "type": "string",
+          "example": "http://success.ringcentral.com",
+          "name": "supportUri"
+        },
+        {
           "type": "string",
           "format": "uri",
           "description": "Short URL leading to the service web page Tap to Join for audio\nconference bridge\n",
@@ -28150,6 +28620,11 @@
           "type": "string",
           "description": "Phone number of a party. Usually it is a plain number including\ncountry and area code like 18661234567. But sometimes it could be returned\nfrom database with some formatting applied, for example (866)123-4567.\nThis property is filled in all cases where parties communicate by means\nof global phone numbers, for example when calling to direct numbers or\nsending/receiving SMS\n",
           "name": "phoneNumber"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message recipient",
+          "name": "recipientId"
         }
       ]
     },
@@ -29984,7 +30459,7 @@
               "UserExtensions"
             ]
           },
-          "name": "scope"
+          "name": "scopes"
         }
       ]
     },
@@ -31806,6 +32281,11 @@
       "fields": [
         {
           "type": "string",
+          "description": "Internal identifier of a fax recipient",
+          "name": "recipientId"
+        },
+        {
+          "type": "string",
           "description": "Phone number in E.164 (with '+' sign) format",
           "example": "+18661234567",
           "name": "phoneNumber"
@@ -31827,6 +32307,11 @@
             "Received"
           ],
           "name": "messageStatus"
+        },
+        {
+          "type": "string",
+          "description": "Contains party location (city, state) if one can be determined\nfrom phoneNumber. This property is filled only when phoneNumber is not\nempty and server can calculate location information from it (for example,\nthis information is unavailable for US toll-free numbers)\n",
+          "name": "location"
         }
       ]
     },
@@ -35025,22 +35510,6 @@
       ]
     },
     {
-      "name": "ContactCenterProvider",
-      "description": "CCRN (Contact Center Routing Number) provider. If not specified\nthen the default value 'InContact/North America' is used, its ID is '1'\n",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of the provider",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Provider's name",
-          "name": "name"
-        }
-      ]
-    },
-    {
       "name": "UserPhoneNumberInfo",
       "fields": [
         {
@@ -35447,6 +35916,109 @@
             "type": "string"
           },
           "name": "disabledUserIds"
+        }
+      ]
+    },
+    {
+      "name": "EmergencyAddressInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Country name",
+          "name": "country"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "countryId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a country",
+          "name": "countryIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a country",
+          "name": "countryName"
+        },
+        {
+          "type": "string",
+          "description": "State/Province name. Mandatory for the USA, the UK and Canada\n",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a state",
+          "name": "stateId"
+        },
+        {
+          "type": "string",
+          "description": "ISO code of a state",
+          "name": "stateIsoCode"
+        },
+        {
+          "type": "string",
+          "description": "Full name of a state",
+          "name": "stateName"
+        },
+        {
+          "type": "string",
+          "description": "City name",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "description": "The name of the street (The field is utilized as 'streetName' field for FR addresses)",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "description": "Second line address (apartment, suite, unit, building, floor,\netc.)\n",
+          "name": "street2"
+        },
+        {
+          "type": "string",
+          "description": "Postal (Zip) code",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "description": "Customer name",
+          "name": "customerName"
+        },
+        {
+          "type": "string",
+          "description": "Company name",
+          "name": "companyName"
+        },
+        {
+          "type": "string",
+          "description": "(Optional) Building name",
+          "name": "buildingName"
+        },
+        {
+          "type": "string",
+          "description": "Street type",
+          "name": "streetType"
+        },
+        {
+          "type": "string",
+          "description": "Building/street number",
+          "name": "buildingNumber"
+        },
+        {
+          "type": "string",
+          "description": "Resulting status of emergency address synchronization. Returned\nfor 'Get Device Info' request if `syncEmergencyAddress` parameter is set\nto `true`\n",
+          "enum": [
+            "Verified",
+            "Updated",
+            "Deleted",
+            "NotRequired",
+            "Unsupported",
+            "Failed"
+          ],
+          "name": "syncStatus"
         }
       ]
     },
@@ -40715,7 +41287,7 @@
           "required": true
         },
         {
-          "description": "Identity's avatar Uri.",
+          "description": "Identity's avatar URI",
           "type": "string",
           "format": "uri",
           "example": "https://example.com/assets/avatar/default-79fd530c58c2a6b83a11fcc0e842ed7023ceb69292cfeb857bc2af2c624b90fd.png",
@@ -40738,7 +41310,7 @@
           "required": true
         },
         {
-          "description": "Display name of the identity.",
+          "description": "Display name of identity",
           "type": "string",
           "example": "John Doe",
           "name": "displayName",
@@ -40784,7 +41356,7 @@
           "required": false
         },
         {
-          "description": "The identity group id references the identity group that contains\nall information (phone, notes, etc.). Many identities may belong to\nthis group. If the identity group id is null, it means that identity\ndoes not have a group and any extra information.\n",
+          "description": "Identity group identifier which references the identity group that contains\nall information (phone, notes, etc). Multiple identities may belong to\na single group. If the parameter value is null, it means that identity\ndoes not belong to a group or have extra information\n",
           "type": "string",
           "example": "54085e5b7aa58d8b5d00006c",
           "name": "identityGroupId",
@@ -40805,14 +41377,14 @@
           "required": false
         },
         {
-          "description": "Screen name of the identity.",
+          "description": "Screen name of identity",
           "type": "string",
           "example": "John D.",
           "name": "screenName",
           "required": false
         },
         {
-          "description": "Type of the identity.",
+          "description": "Type of identity",
           "type": "string",
           "enum": [
             "AppleMessagesForBusiness",
@@ -40840,7 +41412,7 @@
           "required": true
         },
         {
-          "description": "List of the associated user identifiers who can use the identity.",
+          "description": "List of the associated user identifiers who can use the identity",
           "items": {
             "type": "string",
             "example": "54085e5b7aa58d8b5d00006c"
@@ -40851,42 +41423,42 @@
           "required": false
         },
         {
-          "description": "UUID of the identity.",
+          "description": "UUID of identity",
           "type": "string",
           "example": "9680ab94-3b78-495c-bb2c-a969954d8260",
           "name": "uuid",
           "required": false
         },
         {
-          "description": "Device info of the identity.\n\nApplicable to RingCX Digital Messaging channels only.\n",
+          "description": "Device info of the identity. Applicable to RingCX Digital Messaging channels only",
           "type": "string",
           "example": "iPhone (iPhone); iOS 15.0.2",
           "name": "mobileDeviceInfo",
           "required": false
         },
         {
-          "description": "Facebook biography of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "description": "Facebook biography of the identity. Applicable to Facebook and Messenger channels only",
           "type": "string",
           "example": "Painter living in Paris",
           "name": "fbBio",
           "required": false
         },
         {
-          "description": "Facebook category of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "description": "Facebook category of the identity. Applicable to Facebook and Messenger channels only",
           "type": "string",
           "example": "Computers/Internet",
           "name": "fbCategory",
           "required": false
         },
         {
-          "description": "Facebook locale of the identity.\n\nApplicable to Facebook and Messenger channels only.\n",
+          "description": "Facebook locale of the identity. Applicable to Facebook and Messenger channels only",
           "type": "string",
           "example": "fr_FR",
           "name": "fbLocale",
           "required": false
         },
         {
-          "description": "Instagram followers count of the identity.\n\nApplicable to Instagram and InstagramMessaging channels only.\n",
+          "description": "Instagram followers count of the identity. Applicable to Instagram and InstagramMessaging channels only",
           "type": "integer",
           "format": "int32",
           "example": 10,
@@ -40894,14 +41466,14 @@
           "required": false
         },
         {
-          "description": "Twitter description of the identity.\n\nApplicable to Twitter channels only.\n",
+          "description": "Twitter description of the identity. Applicable to Twitter channels only",
           "type": "string",
           "example": "Software Engineer",
           "name": "twDescription",
           "required": false
         },
         {
-          "description": "Twitter followers count of the identity.\n\nApplicable to Twitter channels only.\n",
+          "description": "Twitter followers count of the identity. Applicable to Twitter channels only",
           "type": "integer",
           "format": "int32",
           "example": 10,
@@ -40909,7 +41481,7 @@
           "required": false
         },
         {
-          "description": "Count of Twitter accounts followed by the identity.\n\nApplicable to Twitter channels only.\n",
+          "description": "Count of Twitter accounts followed by the identity. Applicable to Twitter channels only",
           "type": "integer",
           "format": "int32",
           "example": 500,
@@ -40917,7 +41489,7 @@
           "required": false
         },
         {
-          "description": "Count of tweets of the identity.\n\nApplicable to Twitter channels only.\n",
+          "description": "Count of tweets of the identity. Applicable to Twitter channels only",
           "type": "integer",
           "format": "int32",
           "example": 42,
@@ -40925,63 +41497,63 @@
           "required": false
         },
         {
-          "description": "Twitter location of the identity.\n\nApplicable to Twitter channels only.\n",
+          "description": "Twitter location of the identity. Applicable to Twitter channels only",
           "type": "string",
           "example": "Paris",
           "name": "twLocation",
           "required": false
         },
         {
-          "description": "Viber API version of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber API version of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "10",
           "name": "apiVersion",
           "required": false
         },
         {
-          "description": "Viber country of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber country of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "FR",
           "name": "country",
           "required": false
         },
         {
-          "description": "Viber device type of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber device type of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "SM-G970U1",
           "name": "deviceType",
           "required": false
         },
         {
-          "description": "Viber language of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber language of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "fr-FR",
           "name": "language",
           "required": false
         },
         {
-          "description": "Viber mobile country code of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber mobile country code of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "1",
           "name": "mcc",
           "required": false
         },
         {
-          "description": "Viber mobile network code of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber mobile network code of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "220",
           "name": "mnc",
           "required": false
         },
         {
-          "description": "Viber primary device OS of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber primary device OS of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "Android 11",
           "name": "primaryDeviceOs",
           "required": false
         },
         {
-          "description": "Viber application version of the identity.\n\nApplicable to Viber channels only.\n",
+          "description": "Viber application version of the identity. Applicable to Viber channels only",
           "type": "string",
           "example": "19.5.0",
           "name": "viberVersion",
@@ -40991,7 +41563,7 @@
     },
     {
       "name": "IdentityExtraValues",
-      "description": "Additional data to store along the identity.",
+      "description": "Additional data to store along with identity",
       "fields": []
     },
     {
@@ -43542,6 +44114,51 @@
       ]
     },
     {
+      "name": "TaskRecurrenceInfo",
+      "description": "Task information",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Recurrence settings of a task. None for non-periodic tasks",
+          "default": "None",
+          "enum": [
+            "None",
+            "Daily",
+            "Weekdays",
+            "Weekly",
+            "Monthly",
+            "Yearly"
+          ],
+          "name": "schedule"
+        },
+        {
+          "type": "string",
+          "description": "Ending condition of a task",
+          "default": "None",
+          "enum": [
+            "None",
+            "Count",
+            "Date"
+          ],
+          "name": "endingCondition"
+        },
+        {
+          "maximum": 10,
+          "minimum": 1,
+          "type": "integer",
+          "format": "int32",
+          "description": "Count of iterations of periodic tasks",
+          "name": "endingAfter"
+        },
+        {
+          "type": "string",
+          "description": "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) \nformat, UTC time zone\n",
+          "format": "date-time",
+          "name": "endingOn"
+        }
+      ]
+    },
+    {
       "name": "TMUpdateTaskRequest",
       "fields": [
         {
@@ -43602,7 +44219,7 @@
           "name": "description"
         },
         {
-          "$ref": "TMUpdateTaskRequestRecurrence",
+          "$ref": "TaskRecurrenceInfo",
           "name": "recurrence"
         },
         {
@@ -43770,8 +44387,7 @@
           "name": "description"
         },
         {
-          "description": "Task details",
-          "$ref": "TMTaskInfoRecurrence",
+          "$ref": "TaskRecurrenceInfo",
           "name": "recurrence"
         },
         {
@@ -43856,6 +44472,46 @@
       ]
     },
     {
+      "name": "EventRecurrenceInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Event recurrence settings. For non-periodic events the value \nis `None`. Must be greater or equal to event duration: 1- Day/Weekday; \n7 - Week; 28 - Month; 365 - Year\n",
+          "enum": [
+            "None",
+            "Day",
+            "Weekday",
+            "Week",
+            "Month",
+            "Year"
+          ],
+          "name": "schedule"
+        },
+        {
+          "type": "string",
+          "description": "Condition of ending an event",
+          "enum": [
+            "None",
+            "Count",
+            "Date"
+          ],
+          "name": "endingCondition"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
+          "name": "endingAfter"
+        },
+        {
+          "type": "string",
+          "description": "Iterations ending datetime for periodic events in \n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format\n",
+          "format": "date-time",
+          "name": "endingOn"
+        }
+      ]
+    },
+    {
       "name": "TMEventInfo",
       "fields": [
         {
@@ -43892,39 +44548,8 @@
           "name": "allDay"
         },
         {
-          "type": "string",
-          "description": "Event recurrence settings",
-          "enum": [
-            "None",
-            "Day",
-            "Weekday",
-            "Week",
-            "Month",
-            "Year"
-          ],
+          "$ref": "EventRecurrenceInfo",
           "name": "recurrence"
-        },
-        {
-          "type": "string",
-          "description": "Condition of ending an event",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
-          "format": "date-time",
-          "name": "endingOn"
         },
         {
           "type": "string",
@@ -44014,42 +44639,8 @@
           "required": false
         },
         {
-          "type": "string",
-          "description": "Event recurrence settings. For non-periodic events the value\nis `None`. Must be greater or equal to event duration: 1- Day/Weekday;\n7 - Week; 28 - Month; 365 - Year\n",
-          "enum": [
-            "None",
-            "Day",
-            "Weekday",
-            "Week",
-            "Month",
-            "Year"
-          ],
+          "$ref": "EventRecurrenceInfo",
           "name": "recurrence",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Condition of ending an event",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition",
-          "required": false
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
-          "name": "endingAfter",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
-          "format": "date-time",
-          "name": "endingOn",
           "required": false
         },
         {
@@ -44286,7 +44877,7 @@
           "required": false
         },
         {
-          "$ref": "TMCreateTaskRequestRecurrence",
+          "$ref": "TaskRecurrenceInfo",
           "name": "recurrence",
           "required": false
         },
@@ -44393,39 +44984,8 @@
           "name": "allDay"
         },
         {
-          "type": "string",
-          "description": "Event recurrence settings.",
-          "enum": [
-            "None",
-            "Day",
-            "Weekday",
-            "Week",
-            "Month",
-            "Year"
-          ],
+          "$ref": "EventRecurrenceInfo",
           "name": "recurrence"
-        },
-        {
-          "type": "string",
-          "description": "Condition of ending an event",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "Iterations ending datetime for periodic events in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
-          "format": "date-time",
-          "name": "endingOn"
         },
         {
           "type": "string",
@@ -46224,8 +46784,27 @@
         {
           "type": "boolean",
           "description": "Indicates that recording will be shown after the webinar and in emails.",
-          "default": true,
           "name": "viewRecording"
+        },
+        {
+          "type": "string",
+          "description": "Duration of on-demand webinar. The default value can only be used if the session is on demand.",
+          "enum": [
+            "OneMonth",
+            "TwoMonths",
+            "ThreeMonths",
+            "SixMonths",
+            "OneYear"
+          ],
+          "default": "SixMonths",
+          "name": "onDemandDuration"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates that recording exists for the session.",
+          "readOnly": true,
+          "nullable": true,
+          "name": "recordingExist"
         }
       ]
     },
@@ -47555,49 +48134,6 @@
       ]
     },
     {
-      "name": "TMUpdateTaskRequestRecurrence",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Task recurrence settings.",
-          "default": "None",
-          "enum": [
-            "None",
-            "Daily",
-            "Weekdays",
-            "Weekly",
-            "Monthly",
-            "Yearly"
-          ],
-          "name": "schedule"
-        },
-        {
-          "type": "string",
-          "description": "Task ending condition",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition"
-        },
-        {
-          "maximum": 10,
-          "minimum": 1,
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of iterations of periodic tasks",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "End date of a periodic task in UTC time zone",
-          "format": "date-time",
-          "name": "endingOn"
-        }
-      ]
-    },
-    {
       "name": "TMTaskInfoCreator",
       "fields": [
         {
@@ -47627,48 +48163,6 @@
       ]
     },
     {
-      "name": "TMTaskInfoRecurrence",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Task recurrence settings. None for non-periodic tasks",
-          "enum": [
-            "None",
-            "Daily",
-            "Weekdays",
-            "Weekly",
-            "Monthly",
-            "Yearly"
-          ],
-          "name": "schedule"
-        },
-        {
-          "type": "string",
-          "description": "Task ending condition",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition"
-        },
-        {
-          "maximum": 10,
-          "minimum": 1,
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of iterations of periodic tasks",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format",
-          "format": "date-time",
-          "name": "endingOn"
-        }
-      ]
-    },
-    {
       "name": "TMCompleteTaskRequestAssignees",
       "fields": [
         {
@@ -47685,50 +48179,6 @@
           "type": "string",
           "description": "Internal identifier of an assignee",
           "name": "id"
-        }
-      ]
-    },
-    {
-      "name": "TMCreateTaskRequestRecurrence",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Task recurrence settings.",
-          "default": "None",
-          "enum": [
-            "None",
-            "Daily",
-            "Weekdays",
-            "Weekly",
-            "Monthly",
-            "Yearly"
-          ],
-          "name": "schedule"
-        },
-        {
-          "type": "string",
-          "description": "Task ending condition.",
-          "default": "None",
-          "enum": [
-            "None",
-            "Count",
-            "Date"
-          ],
-          "name": "endingCondition"
-        },
-        {
-          "maximum": 10,
-          "minimum": 1,
-          "type": "integer",
-          "format": "int32",
-          "description": "Count of iterations of periodic tasks",
-          "name": "endingAfter"
-        },
-        {
-          "type": "string",
-          "description": "End date of a periodic task in UTC time zone",
-          "format": "date-time",
-          "name": "endingOn"
         }
       ]
     },
@@ -48676,11 +49126,11 @@
           "endpoint": "/restapi/oauth/token",
           "method": "post",
           "tags": [
-            "OAuth/OIDC"
+            "OAuth 2.0 / OpenID Connect"
           ],
           "method2": "post",
-          "description": "Returns access (and potentially refresh) tokens for making API requests.\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
-          "summary": "Get OAuth Token",
+          "description": "Returns access (and potentially refresh) tokens for making API requests.\n\nFor confidential client application types\nthis endpoint requires client authentication using one of the supported\nmethods (`client_secret_basic`, `client_secret_jwt` or `private_key_jwt`)\n\nFor non-confidential client application types\nthe client identifier must be provided via `client_id` request attribute.\n",
+          "summary": "OAuth 2.0 Token Endpoint",
           "operationId": "getToken",
           "rateLimitGroup": "Auth",
           "withParameter": false,
@@ -48836,11 +49286,11 @@
           "endpoint": "/restapi/oauth/revoke",
           "method": "post",
           "tags": [
-            "OAuth/OIDC"
+            "OAuth 2.0 / OpenID Connect"
           ],
           "method2": "post",
-          "description": "Revokes all active access/refresh tokens and invalidates the OAuth session basing on token provided.\n`token` parameter may be passed in query string or body and may represent access or refresh token.\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
-          "summary": "Revoke Token",
+          "description": "Revokes all active access/refresh tokens and invalidates the OAuth session basing on token provided.\nThe `token` parameter may be passed in query string or body and may represent access or refresh token.\n\nThis endpoint is defined by [RFC-7009 \"OAuth 2.0 Token Revocation\"](https://datatracker.ietf.org/doc/html/rfc7009)\n\nFor confidential client application types\nthis endpoint requires client authentication using one of the supported\nmethods (`client_secret_basic`, `client_secret_jwt` or `private_key_jwt`)\n",
+          "summary": "OAuth 2.0 Token Revocation Endpoint",
           "operationId": "revokeToken",
           "rateLimitGroup": "Auth",
           "withParameter": false,
@@ -49424,24 +49874,25 @@
           "endpoint": "/restapi/oauth/authorize",
           "method": "get",
           "tags": [
-            "OAuth/OIDC"
+            "OAuth 2.0 / OpenID Connect"
           ],
           "method2": "get",
-          "description": "Performs OAuth 2.0 authorization (GET version)",
-          "summary": "OAuth 2.0 Authorization",
+          "description": "Performs Authentication of the End-User by sending the User Agent to the Authorization Server's\nAuthorization Endpoint for Authentication and Authorization,\nusing request parameters defined by OAuth 2.0 [RFC-6749](https://datatracker.ietf.org/doc/html/rfc6749#section-3.1)\nand additional parameters and parameter values defined by\n[OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint).\n\nThis is the version that uses HTTP `GET` method.\n",
+          "summary": "OAuth 2.0 Authorization Endpoint",
           "operationId": "authorize",
           "rateLimitGroup": "Auth",
-          "withParameter": false
+          "withParameter": false,
+          "queryParameters": "authorizeParameters"
         },
         {
           "endpoint": "/restapi/oauth/authorize",
           "method": "post",
           "tags": [
-            "OAuth/OIDC"
+            "OAuth 2.0 / OpenID Connect"
           ],
           "method2": "post",
-          "description": "Performs OAuth 2.0 authorization (POST version)",
-          "summary": "OAuth 2.0 Authorization (POST)",
+          "description": "Performs Authentication of the End-User by sending the User Agent to the Authorization Server's\nAuthorization Endpoint for Authentication and Authorization,\nusing request parameters defined by OAuth 2.0 [RFC-6749](https://datatracker.ietf.org/doc/html/rfc6749#section-3.1)\nand additional parameters and parameter values defined by\n[OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint).\n\nThis is the version that uses HTTP `POST` method.\n",
+          "summary": "OAuth 2.0 Authorization Endpoint (POST)",
           "operationId": "authorize2",
           "rateLimitGroup": "Auth",
           "withParameter": false,
@@ -49768,34 +50219,6 @@
         }
       ],
       "parameter": "eventId"
-    },
-    {
-      "paths": [
-        "restapi",
-        "oauth",
-        "introspect"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/oauth/introspect",
-          "method": "post",
-          "tags": [
-            "OAuth/OIDC"
-          ],
-          "method2": "post",
-          "description": "Determines state and metadata for a given token (access token, refresh token\nor authorization code)\n\nDepending on client application type\nrequests to this endpoint may require authentication with HTTP Basic scheme\nusing registered client ID and client secret as login and password, correspondingly.\n",
-          "summary": "Token Introspection",
-          "operationId": "introspectToken",
-          "rateLimitGroup": "Auth",
-          "appPermission": "Interoperability",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "TokenIntrospectionResponse"
-          },
-          "bodyParameters": "introspectTokenRequest",
-          "formUrlEncoded": true
-        }
-      ]
     },
     {
       "paths": [
@@ -50419,31 +50842,6 @@
           "withParameter": false,
           "responseSchema": {
             "$ref": "ScimProviderConfig"
-          }
-        }
-      ]
-    },
-    {
-      "paths": [
-        "restapi",
-        "oauth",
-        "session-info"
-      ],
-      "operations": [
-        {
-          "endpoint": "/restapi/oauth/session-info",
-          "method": "get",
-          "tags": [
-            "OAuth/OIDC"
-          ],
-          "method2": "get",
-          "description": "Returns information about current OAuth session\n",
-          "summary": "Session info",
-          "operationId": "getOAuthSessionInfo",
-          "rateLimitGroup": "Auth",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "SessionInfoResponse"
           }
         }
       ]
@@ -51248,7 +51646,7 @@
           "operationId": "readAccountServiceInfo",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
-          "userPermission": "ReadServicePlanInfo",
+          "userPermission": "ReadCompanyInfo",
           "withParameter": false,
           "responseSchema": {
             "$ref": "AccountServiceInfo"
@@ -53400,13 +53798,13 @@
             "Identities"
           ],
           "method2": "list",
-          "description": "List identities by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nThe query parameters provided shall be considered an AND operation to filter the list.\n\nA query parameter not specified or a query parameter provided with no value is treated as not required for\nfiltering the list.\n",
-          "summary": "List All Identities",
-          "operationId": "socMsgListIdentities",
+          "description": "Returns a list of identities filtered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with \nthe access token provided in the Authorization header.\n\nThe query parameters provided will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
+          "summary": "List Identities",
+          "operationId": "listSocialMessagingIdentities",
           "rateLimitGroup": "Light",
           "appPermission": "SocialMessaging",
           "withParameter": false,
-          "queryParameters": "socMsgListIdentitiesParameters"
+          "queryParameters": "listSocialMessagingIdentitiesParameters"
         },
         {
           "endpoint": "/cx/social-messaging/v1/identities/{identityId}",
@@ -53415,9 +53813,9 @@
             "Identities"
           ],
           "method2": "get",
-          "description": "Renders an identity from given id.\n",
+          "description": "Returns an identity by ID specified in path.",
           "summary": "Get Identity",
-          "operationId": "socMsgGetIdentity",
+          "operationId": "readSocialMessagingIdentity",
           "rateLimitGroup": "Light",
           "appPermission": "SocialMessaging",
           "withParameter": true
@@ -55694,6 +56092,101 @@
           "bodyParameters": "assignedRolesResource"
         }
       ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "message-store-templates"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates",
+          "method": "get",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "list",
+          "description": "Returns a list of company text message templates.",
+          "summary": "List Company Message Templates",
+          "operationId": "listCompanyMessageTemplates",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageTemplatesListResponse"
+          },
+          "queryParameters": "listCompanyMessageTemplatesParameters"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates",
+          "method": "post",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "post",
+          "description": "Creates a new text message template on a company level. Maximum number of company templates is 50.",
+          "summary": "Create Company Message Template",
+          "operationId": "createCompanyMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          },
+          "bodyParameters": "messageTemplateRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates/{templateId}",
+          "method": "get",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "get",
+          "description": "Returns a company text message template by ID.",
+          "summary": "Get Company Message Template",
+          "operationId": "readCompanyMessageTemplate",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          }
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates/{templateId}",
+          "method": "put",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "put",
+          "description": "Updates a company text message template.",
+          "summary": "Update Company Message Template",
+          "operationId": "updateCompanyMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditAccounts",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          },
+          "bodyParameters": "messageTemplateUpdateRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates/{templateId}",
+          "method": "delete",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "delete",
+          "description": "Deletes a company text message template.",
+          "summary": "Delete Company Message Template",
+          "operationId": "deleteCompanyMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditAccounts",
+          "withParameter": true
+        }
+      ],
+      "parameter": "templateId"
     },
     {
       "paths": [
@@ -58174,6 +58667,102 @@
           "bodyParameters": "pickupTarget"
         }
       ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "extension",
+        "message-store-templates"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates",
+          "method": "get",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "list",
+          "description": "Returns a list of user's personal text message templates.",
+          "summary": "List User Message Templates",
+          "operationId": "listUserMessageTemplates",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageTemplatesListResponse"
+          },
+          "queryParameters": "listUserMessageTemplatesParameters"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates",
+          "method": "post",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "post",
+          "description": "Creates a user personal text message template. \nMaximum number of personal templates is 25 per user. \nMax length of the `body` property is 1000 symbols (2-byte UTF-16 encoded).\n",
+          "summary": "Create User Message Template",
+          "operationId": "createUserMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditExtensions",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          },
+          "bodyParameters": "messageTemplateRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates/{templateId}",
+          "method": "get",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "get",
+          "description": "Returns a user personal text message template by ID.",
+          "summary": "Get User Message Template",
+          "operationId": "readUserMessageTemplate",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          }
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates/{templateId}",
+          "method": "put",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "put",
+          "description": "Updates a user personal text message template.",
+          "summary": "Update User Message Template",
+          "operationId": "updateUserMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditExtensions",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "MessageTemplateResponse"
+          },
+          "bodyParameters": "messageTemplateUpdateRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates/{templateId}",
+          "method": "delete",
+          "tags": [
+            "SMS Templates"
+          ],
+          "method2": "delete",
+          "description": "Deletes a user personal text message template.",
+          "summary": "Delete User Message Template",
+          "operationId": "deleteUserMessageTemplate",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditExtensions",
+          "withParameter": true
+        }
+      ],
+      "parameter": "templateId"
     },
     {
       "paths": [
