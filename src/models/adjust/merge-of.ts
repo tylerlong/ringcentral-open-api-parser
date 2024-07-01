@@ -32,7 +32,7 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
           const name = (item.$ref as string).split('/').pop()!;
           mergeWith(schema, mergeOne(schemas.find((s) => s.name === name)!), { name: schema.name }, customizer);
         } else {
-          mergeWith(schema, item, customizer);
+          mergeWith(schema, mergeOne(item as NamedSchema), customizer);
         }
       }
       delete schema.allOf;

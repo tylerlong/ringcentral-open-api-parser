@@ -11584,7 +11584,8 @@
       ]
     },
     {
-      "name": "GetTokenRequest",
+      "name": "AuthCodeTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type",
       "fields": [
         {
           "type": "string",
@@ -11657,6 +11658,106 @@
           "format": "int32",
           "default": 604800,
           "name": "refresh_token_ttl",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `otp` grant type only.\nOne-time password code\n",
+          "name": "code",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "For `authorization_code` grant type only. This is a callback URI which determines where the response\nis sent. The value of this parameter must exactly match one of\nthe URIs you have provided for your app upon registration\n",
+          "name": "redirect_uri",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `authorization_code` grant type only.\nThe code verifier as defined by  the PKCE specification -\n[RFC-7636 \"Proof Key for Code Exchange by OAuth Public Clients\"](https://datatracker.ietf.org/doc/html/rfc7636)\n",
+          "name": "code_verifier",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `password` grant type only. User login name: email or phone number in E.164 format\n",
+          "name": "username",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "For `password` grant type only. User's password",
+          "format": "password",
+          "name": "password",
+          "required": true
+        },
+        {
+          "type": "string",
+          "deprecated": true,
+          "description": "For `password` grant type only. Optional. Extension short number. If a company number\nis specified as a username, and extension is not specified, the\nserver will attempt to authenticate client as main company administrator\n\nDEPRECATED: use extension number embedded into username string like `+16501234567*101`\n",
+          "name": "extension",
+          "required": false
+        },
+        {
+          "type": "string",
+          "deprecated": true,
+          "description": "IVR pin for pin-based authentication.\n\nDEPRECATED: use a dedicated `ivr_pin` grant type instead\n",
+          "name": "pin",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "For `urn:ietf:params:oauth:grant-type:jwt-bearer` or `partner_jwt` grant types only.\nAuthorization grant assertion (JWT)\nas defined by [RFC-7523](https://datatracker.ietf.org/doc/html/rfc7523#section-2.1).\n",
+          "name": "assertion",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "For `refresh_token` grant type only. Previously issued refresh token.\n",
+          "name": "refresh_token",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "For `ivr_pin` grant type only. User's IVR pin.",
+          "name": "ivr_pin",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "For `urn:ietf:params:oauth:grant-type:device_code` grant type only.\nThe device verification code as defined by [RFC-8628](https://datatracker.ietf.org/doc/html/rfc8628#section-3.4)\n",
+          "name": "device_code",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "RingCentral Brand identifier.",
+          "name": "brand_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "RingCentral internal account ID",
+          "name": "account_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The ID of the account on RingCentral partner's side",
+          "name": "partner_account_id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Resource type for the guest access.",
+          "name": "resource_type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Resource URL for the guest access.",
+          "name": "resource",
           "required": false
         }
       ]
@@ -39324,7 +39425,7 @@
       ]
     },
     {
-      "name": "JobStatusResponse",
+      "name": "SummaryApiOutput",
       "fields": [
         {
           "type": "string",
@@ -39344,6 +39445,22 @@
           "type": "string",
           "format": "date-time",
           "name": "expirationTime"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Success",
+            "Fail"
+          ],
+          "name": "status"
+        },
+        {
+          "$ref": "SummaryApiOutputResponse",
+          "name": "response",
+          "items": {
+            "$ref": "EmotionSegment"
+          },
+          "type": "array"
         }
       ]
     },
@@ -47514,6 +47631,62 @@
             "$ref": "DiarizeSegment"
           },
           "name": "utterances"
+        }
+      ]
+    },
+    {
+      "name": "SummaryApiOutputResponse",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int32",
+          "example": 2,
+          "description": "The number of speakers detected. Field is set only when enableSpeakerDiarization is true.",
+          "name": "speakerCount"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "UtteranceObject"
+          },
+          "description": "Speaker wise utterances. Field is set only when enableSpeakerDiarization is true.",
+          "name": "utterances"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "WordSegment"
+          },
+          "name": "words"
+        },
+        {
+          "type": "number",
+          "description": "Overall transcription confidence.",
+          "format": "float",
+          "name": "confidence"
+        },
+        {
+          "type": "string",
+          "description": "The entire transcript with/without punctuations according to the input.",
+          "name": "transcript"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "UtteranceInsightsObject"
+          },
+          "name": "utteranceInsights"
+        },
+        {
+          "$ref": "SpeakerInsightsObject",
+          "name": "speakerInsights"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "ConversationalInsightsUnit"
+          },
+          "name": "conversationalInsights"
         }
       ]
     },
