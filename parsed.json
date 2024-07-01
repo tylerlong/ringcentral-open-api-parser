@@ -11584,7 +11584,7 @@
       ]
     },
     {
-      "name": "AuthCodeTokenRequest",
+      "name": "GetTokenRequest",
       "description": "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type",
       "fields": [
         {
@@ -13545,8 +13545,8 @@
         {
           "description": "Only \"address\" is supported at the moment",
           "required": true,
-          "$ref": "BulkAddDevicesItemEmergency",
-          "name": "emergency"
+          "name": "emergency",
+          "$ref": "BulkAddDevicesItemEmergency"
         },
         {
           "description": "To be used to assign a number by ID",
@@ -13672,8 +13672,8 @@
         {
           "description": "Only \"address\" is supported at the moment",
           "required": true,
-          "$ref": "DeviceDefinitionEmergency",
-          "name": "emergency"
+          "name": "emergency",
+          "$ref": "DeviceDefinitionEmergency"
         },
         {
           "description": "To be used to assign a number by ID",
@@ -13915,10 +13915,10 @@
         {
           "type": "array",
           "items": {
+            "name": "BulkItemResultModel",
             "required": [
               "bulkItemSuccessful"
             ],
-            "name": "BulkItemResultModel",
             "$ref": "BulkDeleteUsersResponseRecords"
           },
           "name": "records",
@@ -39425,7 +39425,7 @@
       ]
     },
     {
-      "name": "SummaryApiOutput",
+      "name": "JobStatusResponse",
       "fields": [
         {
           "type": "string",
@@ -39455,7 +39455,7 @@
           "name": "status"
         },
         {
-          "$ref": "SummaryApiOutputResponse",
+          "$ref": "JobStatusResponseResponse",
           "name": "response",
           "items": {
             "$ref": "EmotionSegment"
@@ -45654,8 +45654,8 @@
         },
         {
           "description": "Specifies a background image oa a card. Acceptable formats are PNG, JPEG, and GIF",
-          "required": false,
           "name": "backgroundImage",
+          "required": false,
           "$ref": "BackgroundImage"
         },
         {
@@ -47635,7 +47635,7 @@
       ]
     },
     {
-      "name": "SummaryApiOutputResponse",
+      "name": "JobStatusResponseResponse",
       "fields": [
         {
           "type": "integer",
