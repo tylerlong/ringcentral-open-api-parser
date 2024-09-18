@@ -28,8 +28,9 @@ x-tagGroups:
   - "Call Control"
   - "Call Forwarding"
   - "Call Handling Rules"
-  - "Interaction Rules"
+  - "States"
   - "State-based Rules"
+  - "Interaction Rules"
   - "Call Flip"
   - "Call Log"
   - "Call History"
@@ -109,7 +110,7 @@ x-tagGroups:
   - "Status"
 - name: "Authentication"
   tags:
-  - "OAuth 2.0 / OpenID Connect"
+  - "OAuth and OpenID Connect"
   - "Interoperability"
 - name: "Account"
   tags:
@@ -130,6 +131,7 @@ x-tagGroups:
   - "Appearance Customization"
   - "Account Integrations"
   - "Custom Preferences"
+  - "Credentials Policy"
 - name: "Provisioning"
   tags:
   - "Automatic Location Updates"
@@ -165,7 +167,20 @@ x-tagGroups:
   - "Role Management"
   - "Site Administration"
   - "User Groups"
-- name: "Events & Notifications"
+- name: "Billing"
+  tags:
+  - "Billing Information"
+  - "Payment Method Info"
+  - "Billing Statements"
+  - "Contract Information"
+  - "Tax Settings"
+  - "Billing Contact Info"
+  - "Order"
+  - "Package Operations"
+  - "Sales Operations"
+  - "Service Categories"
+  - "MixPanel"
+- name: "Events and Notifications"
   tags:
   - "Subscriptions"
 - name: "User Integrations"
@@ -181,7 +196,8 @@ x-tagGroups:
 - name: "Rooms"
   tags:
   - "Rooms Client API"
-  - "Rooms Management API"
+  - "Rooms Management"
+  - "Rooms Administration"
 - name: "App Management"
   tags:
   - "App Gallery"
@@ -193,6 +209,9 @@ x-tagGroups:
   - "Flow Editor"
   - "Flow Log"
   - "Flow Templates"
+- name: "RingCX"
+  tags:
+  - "RingCX Provisioning"
 - name: "Utilities"
   tags:
   - "API Info"
@@ -245,6 +264,7 @@ tags:
 - name: "Extensions"
 - name: "Role Management"
 - name: "IVR"
+- name: "Cost Centers"
 - name: "SMS"
 - name: "Greetings"
 - name: "Audit Trail"
@@ -262,6 +282,8 @@ tags:
 - name: "High Volume SMS"
 - name: "Webinars and Sessions"
   description: "External APIs for webinar and session management"
+- name: "OAuth and OpenID Connect"
+  description: "Public OAuth 2.0 and OpenID Connect 1.0 Resources"
 - name: "Chats"
 - name: "Delegation Management"
 - name: "Calendar Events"
@@ -280,8 +302,7 @@ tags:
 - name: "Call Blocking"
 - name: "Historical Webinars"
   description: "Historical webinars and sessions information"
-- name: "OAuth 2.0 / OpenID Connect"
-  description: "Public OAuth 2.0 and OpenID Connect Resources"
+- name: "Call Flip"
 - name: "Teams"
 - name: "RCM Meetings (Legacy)"
 - name: "SCIM"
@@ -1582,7 +1603,7 @@ paths:
       operationId: "readAccountGreetingContent"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/CallHandlingGreetingId"
       - $ref: "#/components/parameters/ContentDisposition"
       - $ref: "#/components/parameters/ContentDispositionFilename"
       responses:
@@ -1616,7 +1637,7 @@ paths:
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/CallHandlingGreetingId"
       - $ref: "#/components/parameters/ContentDisposition"
       - $ref: "#/components/parameters/ContentDispositionFilename"
       responses:
@@ -1721,7 +1742,10 @@ paths:
       tags:
       - "IVR"
       summary: "Get IVR Prompt Content"
-      description: "Returns media content of an IVR prompt by ID."
+      description: |
+        Returns media content of an IVR prompt by ID.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
       operationId: "readIVRPromptContent"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -2202,7 +2226,7 @@ paths:
   /restapi/oauth/token:
     post:
       tags:
-      - "OAuth 2.0 / OpenID Connect"
+      - "OAuth and OpenID Connect"
       summary: "OAuth 2.0 Token Endpoint"
       description: |
         Returns access (and potentially refresh) tokens for making API requests.
@@ -2240,7 +2264,7 @@ paths:
   /restapi/oauth/authorize:
     get:
       tags:
-      - "OAuth 2.0 / OpenID Connect"
+      - "OAuth and OpenID Connect"
       summary: "OAuth 2.0 Authorization Endpoint"
       description: |
         Performs Authentication of the End-User by sending the User Agent to the Authorization Server's
@@ -2379,7 +2403,7 @@ paths:
       x-throttling-group: "Auth"
     post:
       tags:
-      - "OAuth 2.0 / OpenID Connect"
+      - "OAuth and OpenID Connect"
       summary: "OAuth 2.0 Authorization Endpoint (POST)"
       description: |
         Performs Authentication of the End-User by sending the User Agent to the Authorization Server's
@@ -2411,7 +2435,7 @@ paths:
   /restapi/oauth/revoke:
     post:
       tags:
-      - "OAuth 2.0 / OpenID Connect"
+      - "OAuth and OpenID Connect"
       summary: "OAuth 2.0 Token Revocation Endpoint"
       description: |
         Revokes all active access/refresh tokens and invalidates the OAuth session basing on token provided.
@@ -2633,7 +2657,7 @@ paths:
         description: "Statuses of extensions to return phone numbers for"
         required: false
         schema:
-          $ref: "#/components/schemas/ExtensionStatus"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
       - name: "byocNumber"
         in: "query"
         description: "The parameter reflects whether this number is BYOC or not"
@@ -2682,10 +2706,10 @@ paths:
       - "Phone Numbers"
       summary: "Delete Numbers from Inventory"
       description: |
-        This method can only delete numbers that meet one of the following requirements:
-          - numbers that have `"usageType": "Inventory"`
-          - `"Forwarded"` numbers
-          - `"Forwarded Company"` numbers
+        This method can only delete numbers that of the following usage types:
+          - `Inventory`,
+          - `ForwardedNumber`,
+          - `ForwardedCompanyNumber`.
 
         In other words, this method will not delete numbers which are in use on the account - extension direct numbers,
         main number, etc. It is possible to indicate phone numbers to be deleted using their IDs or exact string values
@@ -2737,8 +2761,8 @@ paths:
         Assigns or reassigns a phone number as a company or extension number.
 
         Assign scenarios supported:
-        - from Inventory to a company number;
-        - from Inventory to an extension number.
+        - from inventory to a company number;
+        - from inventory to an extension number.
 
         Reassign scenarios supported:
         - from an extension to another extension;
@@ -2789,7 +2813,7 @@ paths:
       - "Phone Numbers"
       summary: "Replace Phone Number"
       description: |
-        Replaces (swaps) phone numbers from Inventory with the main, company, direct or company fax numbers.
+        Replaces (swaps) phone numbers from inventory with the main, company, direct or company fax numbers.
         This method is used to replace temporary numbers when the porting process is complete.
       operationId: "replacePhoneNumberV2"
       parameters:
@@ -2883,7 +2907,7 @@ paths:
       - "Phone Numbers"
       summary: "Get Add Numbers Task Results"
       description: |
-        Returns the result of asynchronous operation which adds phone numbers to the account Inventory.
+        Returns the result of asynchronous operation which adds phone numbers to the account inventory.
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - name: "taskId"
@@ -2916,11 +2940,41 @@ paths:
       x-throttling-group: "Heavy"
       x-app-permission: "EditAccounts"
       x-user-permission: "EditCompanyPhoneNumbers"
+  /restapi/v2/accounts/{accountId}/cost-centers:
+    get:
+      tags:
+      - "Cost Centers"
+      summary: "List Cost Centers"
+      description: "Returns the list of cost centers of the account specified in path."
+      operationId: "listCostCenters"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CostCenterList"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-availability: "Limited"
+      x-throttling-group: "Light"
+      x-app-permission: "ReadAccounts"
+      x-user-permission: "CostCenterManagement"
   /restapi/v2/accounts/{accountId}/devices/{deviceId}:
     delete:
       tags:
       - "Devices"
-      summary: "Remove phone line"
+      summary: "Remove Phone Line"
       description: |
         Disassociates a phone line (DL & Device) from an extension:
 
@@ -3153,6 +3207,90 @@ paths:
       x-throttling-group: "Medium"
       x-app-permission: "EditAccounts"
       x-user-permission: "EditUserDevices"
+  /restapi/v2/accounts/{accountId}/extensions/{extensionId}/call-flip-numbers:
+    get:
+      tags:
+      - "Call Flip"
+      summary: "Get Call Flip Settings"
+      description: |
+        Returns call flip settings. Call flip destination is an extension level setting.
+        The following numbers can be used for call flip:
+
+        * User's DL numbers (added/removed automatically by the System)
+        * PSTN numbers in E.164 format (added/removed manually by User)
+
+        Call flip list is generally limited up to 10 numbers.
+
+        **Please note:** This API is only working with the new Communication Handling flow.
+        To ensure that please check if the 'NewCallHandlingAndForwarding' feature is supported.
+      operationId: "readCallFlipSettings"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallFlipNumberListResource"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-feature: "ReadExtensionAnsweringRules"
+      x-availability: "Limited"
+      x-throttling-group: "Light"
+      x-app-permission: "ReadAccounts"
+    put:
+      tags:
+      - "Call Flip"
+      summary: "Update Call Flip Settings"
+      operationId: "updateCallFlipSettings"
+      description: |
+        Updates call flip settings. Call flip destination is an extension level setting.
+        The following numbers can be used for call flip:
+
+        * User's DL numbers (added/removed automatically by the System)
+        * PSTN numbers in E.164 format (added/removed manually by User)
+
+        Call flip list is generally limited up to 10 numbers.
+
+        **Please note:** This API is only working with the new Communication Handling flow.
+        To ensure that please check if the 'NewCallHandlingAndForwarding' feature is supported.
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      requestBody:
+        description: "JSON body"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CallFlipNumberListResource"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallFlipNumberListResource"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-feature: "ReadExtensionAnsweringRules"
+      x-availability: "Limited"
+      x-throttling-group: "Medium"
+      x-app-permission: "EditExtensions"
   /restapi/v1.0/account/{accountId}:
     get:
       tags:
@@ -3566,7 +3704,7 @@ paths:
       operationId: "deleteCallRecordingCustomGreeting"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/CallHandlingGreetingId"
       responses:
         "200":
           description: "Success"
@@ -4583,7 +4721,7 @@ paths:
       operationId: "updateCompanyMessageTemplate"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       requestBody:
         description: "JSON body"
         content:
@@ -4614,7 +4752,7 @@ paths:
       operationId: "readCompanyMessageTemplate"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       responses:
         "200":
           description: "Company text message template"
@@ -4636,7 +4774,7 @@ paths:
       operationId: "deleteCompanyMessageTemplate"
       parameters:
       - $ref: "#/components/parameters/AccountId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       responses:
         "204":
           description: "No content"
@@ -6052,7 +6190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CallQueues"
+                $ref: "#/components/schemas/CallQueueList"
       x-feature: "ReadExtensions"
       x-availability: "High"
       x-throttling-group: "Medium"
@@ -6103,7 +6241,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CallQueueDetails"
+              $ref: "#/components/schemas/CallQueueDetailsForUpdate"
         required: true
       responses:
         "200":
@@ -6841,6 +6979,11 @@ paths:
           group within the result
         schema:
           type: "string"
+      - name: "siteId"
+        in: "query"
+        description: "Internal identifier of a site"
+        schema:
+          type: "string"
       responses:
         "200":
           description: "Call monitoring groups information"
@@ -7336,6 +7479,7 @@ paths:
       operationId: "listDirectoryEntries"
       parameters:
       - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/AccessibleSitesOnly"
       - name: "showFederated"
         in: "query"
         description: "If `true` then contacts of all accounts in federation are returned. If `false` then only contacts of the current account are returned, and account section is eliminated in this case"
@@ -7431,6 +7575,7 @@ paths:
       operationId: "readDirectoryEntry"
       parameters:
       - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/AccessibleSitesOnly"
       - name: "entryId"
         in: "path"
         description: "Internal identifier of extension to read information for"
@@ -7473,6 +7618,7 @@ paths:
       operationId: "searchDirectoryEntries"
       parameters:
       - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/AccessibleSitesOnly"
       - name: "accountId"
         in: "query"
         description: "A list of Account IDs"
@@ -8393,7 +8539,7 @@ paths:
       - name: "status"
         in: "query"
         description: |
-          Extension current state. Multiple values are supported. If 'Unassigned'
+          Extension status. Multiple values are supported. If `Unassigned`
           is specified, then extensions without `extensionNumber` attribute are returned.
           If not specified, then all extensions are returned
         allowEmptyValue: true
@@ -8402,12 +8548,7 @@ paths:
         schema:
           type: "array"
           items:
-            type: "string"
-            enum:
-            - "Enabled"
-            - "Disabled"
-            - "NotActivated"
-            - "Unassigned"
+            $ref: "#/components/schemas/ExtensionStatusEnumFull"
       - name: "type"
         in: "query"
         description: |
@@ -9006,7 +9147,10 @@ paths:
       tags:
       - "SMS Templates"
       summary: "Create User Message Template"
-      description: "Creates a user personal text message template. \nMaximum number of personal templates is 25 per user. \nMax length of the `body` property is 1000 symbols (2-byte UTF-16 encoded).\n"
+      description: |
+        Creates a user personal text message template.
+        Maximum number of personal templates is 25 per user.
+        Max length of the `body` property is 1000 symbols (2-byte UTF-16 encoded).
       operationId: "createUserMessageTemplate"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -9081,7 +9225,7 @@ paths:
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       requestBody:
         description: "JSON body"
         content:
@@ -9113,7 +9257,7 @@ paths:
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       responses:
         "200":
           description: "User personal text message template"
@@ -9136,7 +9280,7 @@ paths:
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/TemplateId"
+      - $ref: "#/components/parameters/MessageTemplateId"
       responses:
         "204":
           description: "No content"
@@ -9807,7 +9951,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AnsweringRuleInfo"
+                $ref: "#/components/schemas/CallHandlingRuleInfo"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "404":
@@ -9844,7 +9988,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AnsweringRuleInfo"
+                $ref: "#/components/schemas/CallHandlingRuleInfo"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "404":
@@ -10647,7 +10791,14 @@ paths:
       tags:
       - "Presence"
       summary: "Get User Presence Status"
-      description: "Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline \n(the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types: \nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.\nIf the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions \nin one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error\ncode InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.\n"
+      description: |
+        Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline
+        (the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types:
+        Department/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.
+        If the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.
+        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions
+        in one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error
+        code InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.
       operationId: "readUserPresenceStatus"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -10747,9 +10898,7 @@ paths:
                     a fax message is sent immediately
                   format: "date-time"
                 isoCode:
-                  type: "string"
-                  description: "Alpha-2 ISO Code of a country"
-                  example: "US"
+                  $ref: "#/components/schemas/CountryIsoCode"
                 coverIndex:
                   type: "integer"
                   description: |
@@ -11932,7 +12081,7 @@ paths:
       parameters:
       - $ref: "#/components/parameters/AccountId"
       - $ref: "#/components/parameters/ExtensionId"
-      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/CallHandlingGreetingId"
       responses:
         "200":
           description: "OK"
@@ -12176,7 +12325,9 @@ paths:
       tags:
       - "Call Blocking"
       summary: "Get Blocked/Allowed Number"
-      description: "Returns blocked or allowed phone number(s) by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Returns blocked or allowed phone number(s) by their ID(s).
+        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
       operationId: "readBlockedAllowedNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -12203,7 +12354,9 @@ paths:
       tags:
       - "Call Blocking"
       summary: "Update Blocked/Allowed Number"
-      description: "Updates blocked or allowed phone number(s) by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Updates blocked or allowed phone number(s) by their ID(s).
+        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
       operationId: "updateBlockedAllowedNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -12334,12 +12487,7 @@ paths:
         in: "query"
         description: "Status of a phone number"
         schema:
-          type: "string"
-          enum:
-          - "Normal"
-          - "Pending"
-          - "PortedIn"
-          - "Temporary"
+          $ref: "#/components/schemas/PhoneNumberStatus"
       - name: "usageType"
         in: "query"
         description: "Usage type of phone number"
@@ -13456,12 +13604,7 @@ paths:
         in: "query"
         description: "Status of a phone number"
         schema:
-          type: "string"
-          enum:
-          - "Normal"
-          - "Pending"
-          - "PortedIn"
-          - "Temporary"
+          $ref: "#/components/schemas/PhoneNumberStatus"
       responses:
         "200":
           description: "Success"
@@ -14179,7 +14322,7 @@ paths:
       description: "Returns a standard greeting by ID."
       operationId: "readStandardGreeting"
       parameters:
-      - $ref: "#/components/parameters/GreetingId"
+      - $ref: "#/components/parameters/CallHandlingGreetingId"
       responses:
         "200":
           description: "OK"
@@ -14914,26 +15057,26 @@ paths:
     get:
       tags:
       - "Contents"
-      summary: "List All Contents"
+      summary: "List Contents"
       description: |
-        List contents by creation date. The default creation order is descending.
+        Returns a list of social messaging contents ordered by creation date. The default order is descending.
 
-        The account context of this request is determined by the RC Account Id associated with the access token provided
-        in the Authorization header.
+        The account context of this request is determined by the RC Account ID associated with
+        the access token provided in the Authorization header.
 
-        The query parameters provided shall be considered an AND operation to filter the list.
+        The query parameters provided in request will be considered an AND operation to filter the list.
 
-        A query parameter not specified or a query parameter provided with no value is treated as not required for
-        filtering the list.
-      operationId: "socMsgListContents"
+        A query parameter which is not specified or provided with the null value will be ignored.
+      operationId: "listSocialMessagingContents"
       parameters:
-      - $ref: "#/components/parameters/InterventionFilter"
-      - $ref: "#/components/parameters/IdentityFilter"
-      - $ref: "#/components/parameters/IdentityGroupFilter"
-      - $ref: "#/components/parameters/SourceFilter"
-      - $ref: "#/components/parameters/ThreadFilter"
-      - $ref: "#/components/parameters/TextFilter"
-      - $ref: "#/components/parameters/StatusFilter"
+      - $ref: "#/components/parameters/FilterInterventionIds"
+      - $ref: "#/components/parameters/FilterAuthorIdentityIds"
+      - $ref: "#/components/parameters/FilterAuthorIdentityGroupIds"
+      - $ref: "#/components/parameters/FilterChannelIds"
+      - $ref: "#/components/parameters/FilterContentDirection"
+      - $ref: "#/components/parameters/FilterThreadIds"
+      - $ref: "#/components/parameters/FilterText"
+      - $ref: "#/components/parameters/FilterStatus"
       - $ref: "#/components/parameters/SocMsgOrderBy"
       - $ref: "#/components/parameters/PageToken"
       - $ref: "#/components/parameters/PerPage"
@@ -14951,54 +15094,31 @@ paths:
       - "Contents"
       summary: "Create Content"
       description: |
-        Creates new content for use in discussions.
+        Creates the new social messaging content for use in discussions.
 
-        This request is used to reply to already-posted content or to initiate a discussion. If authorized, the
+        This request is used to reply to an already posted content or to initiate a discussion. If authorized, the
         authenticated user will be used as the content author.
 
         Content will be created and pushed asynchronously to the channel. When the content is successfully pushed to
-        the channel, the Content.Exported event will be reported.
+        the channel, the `Content.Exported` event will be reported.
 
-        The account context of this request is determined by the RC Account Id associated with the access token provided
+        The account context of this request is determined by the RC Account ID associated with the access token provided
         in the Authorization header.
 
         Replying to customer content is usually possible unless the channel or conversation is read only. Composing
         content, on the contrary, depends on the channel itself.
 
-        * The channel may not support it (and be purely reactive like Instagram, Messenger, etc.).
+        - The channel may not support it and be purely reactive like Instagram, Messenger, etc.
 
-        * Some channels (usually public accounts like Twitter or Facebook pages) allow for the publishing of content
+        - Some channels (usually public accounts, like Twitter or Facebook pages) allow content publishing
         without targeting specific individuals.
 
-        * Some channels (usually non-public media) require specific targeting (phone number for SMS, email address
+        - Some channels (usually non-public media) require specific targeting (phone number for SMS, email address
         for email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the
         generic parameters.
-      operationId: "socMsgCreateContent"
+      operationId: "createSocialMessagingContent"
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateContentRequest"
-            examples:
-              Create content with inReplyToContentId:
-                $ref: "#/components/examples/CreateContentWithInReplyToContentId"
-              Create content with sourceId:
-                $ref: "#/components/examples/CreateContentWithSourceId"
-              Create content with attachments:
-                $ref: "#/components/examples/CreateContentWithAttachments"
-              Create content with specified authorIdentityId:
-                $ref: "#/components/examples/CreateContentWithAuthorIdentityId"
-              Create content with context data:
-                $ref: "#/components/examples/CreateContentWithContextData"
-              Create content for Email channel:
-                $ref: "#/components/examples/CreateContentOnEmailChannel"
-              Reply to a content for Email channel:
-                $ref: "#/components/examples/ReplyContentOnEmailChannel"
-              Create content for WhatsApp channel:
-                $ref: "#/components/examples/CreateOutboundContentOnWhatsappChannel"
-              Reply to a whatsapp content:
-                $ref: "#/components/examples/ReplyContentOnWhatsappChannel"
+        $ref: "#/components/requestBodies/CreateContentRequest"
       responses:
         "201":
           $ref: "#/components/responses/SocCreateContentResponse201"
@@ -15017,9 +15137,8 @@ paths:
       tags:
       - "Contents"
       summary: "Get Content"
-      description: |
-        Retrieves the content from the given id.
-      operationId: "socMsgGetContent"
+      description: "Returns the social messaging content by ID specified in path."
+      operationId: "readSocialMessagingContent"
       parameters:
       - $ref: "#/components/parameters/ContentId"
       responses:
@@ -15034,13 +15153,22 @@ paths:
       tags:
       - "Identities"
       summary: "List Identities"
-      description: "Returns a list of identities filtered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with \nthe access token provided in the Authorization header.\n\nThe query parameters provided will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n"
+      description: |
+        Returns a list of identities ordered by creation date. The default order is descending.
+
+        The account context of this request is determined by the RC Account ID associated with
+        the access token provided in the Authorization header.
+
+        The query parameters provided will be considered an AND operation to filter the list.
+
+        A query parameter which is not specified or provided with the null value will be ignored.
       operationId: "listSocialMessagingIdentities"
       parameters:
-      - $ref: "#/components/parameters/SourceId"
-      - $ref: "#/components/parameters/IdentityGroupIds"
-      - $ref: "#/components/parameters/UserId"
-      - $ref: "#/components/parameters/UUID"
+      - $ref: "#/components/parameters/FilterChannelId"
+      - $ref: "#/components/parameters/FilterIdentityGroupIds"
+      - $ref: "#/components/parameters/FilterIdentityType"
+      - $ref: "#/components/parameters/FilterUserId"
+      - $ref: "#/components/parameters/FilterUUID"
       - $ref: "#/components/parameters/SocMsgOrderBy"
       - $ref: "#/components/parameters/PageToken"
       - $ref: "#/components/parameters/PerPage"
@@ -16249,7 +16377,7 @@ paths:
       tags:
       - "Posts"
       summary: "Create Post"
-      description: "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body."
+      description: "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of \nthe request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, \nTask, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. \nAttachments can also be added to a post by passing the type and ID of attachment(s) in request body.\n"
       operationId: "createGlipPostNew"
       parameters:
       - name: "chatId"
@@ -17783,7 +17911,7 @@ components:
           schema:
             $ref: "#/components/schemas/ApiErrorResponseModel"
     SocCreateContentResponse201:
-      description: "Successful response."
+      description: "Successful response"
       content:
         application/json:
           schema:
@@ -17800,7 +17928,7 @@ components:
             EDI-032:
               $ref: "#/components/examples/EDI-032"
     SocMsgListContentsResponse422:
-      description: "Error 422 on content list"
+      description: "Error 422 on content list."
       content:
         application/json:
           schema:
@@ -17813,7 +17941,7 @@ components:
             EDI-036:
               $ref: "#/components/examples/EDI-036"
     SocMsgCreateContentResponse400:
-      description: "Error 400 on content creation"
+      description: "Error 400 on content creation."
       content:
         application/json:
           schema:
@@ -17834,7 +17962,7 @@ components:
             EDI-040:
               $ref: "#/components/examples/EDI-040"
     SocMsgCreateContentResponse403:
-      description: "Error 403 on content creation"
+      description: "Error 403 on content creation."
       content:
         application/json:
           schema:
@@ -17865,13 +17993,13 @@ components:
             EDI-024:
               $ref: "#/components/examples/EDI-024"
     SocMsgListContentsResponse200:
-      description: "Successful response."
+      description: "Successful response"
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ContentList"
     SocMsgCreateContentResponse422:
-      description: "Error 422 on content creation"
+      description: "Error 422 on content creation."
       content:
         application/json:
           schema:
@@ -17904,7 +18032,7 @@ components:
             EDI-033:
               $ref: "#/components/examples/EDI-033"
     SocMsgListContentsResponse400:
-      description: "Error 400 on content creation"
+      description: "Error 400 on content creation."
       content:
         application/json:
           schema:
@@ -19226,6 +19354,12 @@ components:
           description: "The current number of registrants"
           readOnly: true
           example: 10
+        postWebinarRegistrantCount:
+          type: "integer"
+          format: "int32"
+          description: "The current number of post webinar registrants"
+          readOnly: true
+          example: 10
         hasRealRegistrants:
           type: "boolean"
           description: "Indicates that there are non-test registrants"
@@ -19278,6 +19412,15 @@ components:
             recordingExist:
               type: "boolean"
               description: "Indicates that recording exists for the session."
+              readOnly: true
+              nullable: true
+            autoOpenPostWebinarRegistration:
+              type: "boolean"
+              description: "Indicates that post webinar registration will be opened automatically when webinar ends."
+            postWebinarRegistrationClosingTime:
+              type: "string"
+              description: "The time after which the post webinar will be closed automatically."
+              format: "date-time"
               readOnly: true
               nullable: true
     RegistrantModelResponsePostWithQuestionnaire:
@@ -20681,6 +20824,7 @@ components:
       description: |
         Token endpoint request parameters used in the "IVR Pin" authorization flow with the `ivr_pin` grant type
       required:
+      - "grant_type"
       - "ivr_pin"
       properties:
         grant_type:
@@ -20693,7 +20837,11 @@ components:
           description: "For `ivr_pin` grant type only. User's IVR pin."
     ClientCredentialsBase:
       type: "object"
-      description: "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type"
+      description: |
+        Token endpoint request parameters used in the "Client Credentials" authorization flow
+        with the `client_credentials` grant type
+      required:
+      - "grant_type"
       properties:
         grant_type:
           type: "string"
@@ -20713,6 +20861,7 @@ components:
         Token endpoint request parameters used in the "Device Authorization" flow
         with the `urn:ietf:params:oauth:grant-type:device_code` grant type
       required:
+      - "grant_type"
       - "device_code"
       properties:
         grant_type:
@@ -20756,7 +20905,13 @@ components:
     GuestTokenRequest:
       title: "Guest"
       type: "object"
-      description: "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type"
+      description: |
+        Token endpoint request parameters used in the "Guest" authorization flow
+        with the `guest` grant type
+      required:
+      - "grant_type"
+      - "resource_type"
+      - "resource"
       properties:
         grant_type:
           type: "string"
@@ -20779,6 +20934,7 @@ components:
         Token endpoint request parameters used in the "Authorization Code" and "Authorization code with PKCE" flows
         with the `authorization_code` grant type
       required:
+      - "grant_type"
       - "code"
       properties:
         grant_type:
@@ -20835,6 +20991,7 @@ components:
         Token endpoint request parameters used in the "Personal JWT", "JWT Bearer" and "Partner JWT" authorization flows
         with the `urn:ietf:params:oauth:grant-type:jwt-bearer` and `partner_jwt` grant types
       required:
+      - "grant_type"
       - "assertion"
       properties:
         grant_type:
@@ -20908,6 +21065,7 @@ components:
         Token endpoint request parameters used in the "Refresh Token" flow
         with the `refresh_token` grant type
       required:
+      - "grant_type"
       - "refresh_token"
       properties:
         grant_type:
@@ -20922,8 +21080,11 @@ components:
     OtpTokenRequest:
       title: "One-time Password (OTP)"
       type: "object"
-      description: "Token endpoint request parameters used in the \"One-time Password\" (OTP) authorization flow with the `otp` grant type"
+      description: |
+        Token endpoint request parameters used in the "One-time Password" (OTP) authorization flow
+        with the `otp` grant type
       required:
+      - "grant_type"
       - "code"
       properties:
         grant_type:
@@ -20943,6 +21104,7 @@ components:
         Token endpoint request parameters used in the "Password" (also known as "Resource Owner Password Credentials" - ROPC)
         authorization flow with the `password` grant type
       required:
+      - "grant_type"
       - "username"
       - "password"
       properties:
@@ -21139,10 +21301,6 @@ components:
           type: "string"
           description: "Sub-brand unique ID"
           example: "111.222"
-        name:
-          type: "string"
-          description: "Sub-brand name"
-          example: "Sub-brand name"
       description: "Account sub-brand information"
     AccountInfo:
       type: "object"
@@ -21165,16 +21323,7 @@ components:
         mainNumber:
           $ref: "#/components/schemas/PhoneNumberE164"
         status:
-          description: "Account status"
-          type: "string"
-          enum:
-          - "Initial"
-          - "Unconfirmed"
-          - "Confirmed"
-          - "Disabled"
-          example: "Confirmed"
-        statusInfo:
-          $ref: "#/components/schemas/AccountStatusInfo"
+          $ref: "#/components/schemas/AccountStatusEnumFull"
         companyName:
           description: "Company name"
           type: "string"
@@ -21190,6 +21339,14 @@ components:
           type: "string"
           description: "Opportunity identifier (typically created by SalesForce)"
           example: "0061800000DwZzJAAV"
+    AccountStatusEnumFull:
+      type: "string"
+      description: "Status of an account"
+      enum:
+      - "Initial"
+      - "Unconfirmed"
+      - "Confirmed"
+      - "Disabled"
     BasicContactInfo:
       description: "Personal contact information"
       type: "object"
@@ -21218,10 +21375,12 @@ components:
       properties:
         package:
           $ref: "#/components/schemas/ServiceInfoPackage"
+        partnerPackage:
+          $ref: "#/components/schemas/ServiceInfoPackage"
         brand:
           $ref: "#/components/schemas/ServiceInfoBrand"
         contractedCountry:
-          $ref: "#/components/schemas/ServiceInfoCountryShortModel"
+          $ref: "#/components/schemas/ServiceInfoContractedCountryId"
         uBrand:
           $ref: "#/components/schemas/ServiceInfoUBrand"
         servicePlan:
@@ -21235,39 +21394,18 @@ components:
         name:
           type: "string"
           description: "Name of a service plan"
-        edition:
-          type: "string"
-          description: "Edition of a service plan"
         freemiumProductType:
           type: "string"
           enum:
           - "Freyja"
           - "Phoenix"
       description: "Information on account service plan"
-    AccountStatusInfo:
+    ServiceInfoContractedCountryId:
       type: "object"
-      description: "Optional information to be used when account is moved to \"Disabled\" status"
       properties:
-        reason:
+        id:
           type: "string"
-          description: "Type of suspension, voluntarily or not"
-          enum:
-          - "SuspendedVoluntarily"
-          - "SuspendedInvoluntarily"
-          - "CancelledVoluntarily"
-          - "CancelledInvoluntarily"
-          example: "CancelledVoluntarily"
-        comment:
-          type: "string"
-          description: "A meaningful description of the reason to change the status"
-          minLength: 1
-          maxLength: 256
-          example: "By customer request. Case ABC123"
-        till:
-          type: "string"
-          description: "Date after which the account will get deleted. Parameter can be used to overwrite default retention period"
-          format: "date-time"
-          example: "2023-03-26T11:30:45.940Z"
+          description: "Internal identifier of a country"
     ServiceInfoBrand:
       description: "Internal RC \"brand\" information"
       type: "object"
@@ -21320,42 +21458,6 @@ components:
           description: "Billing package version"
           enum:
           - "1"
-    CountryInfoMinimalModel:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a country"
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Canonical URI of a country resource"
-    ServiceInfoCountryShortModel:
-      allOf:
-      - $ref: "#/components/schemas/CountryInfoBasicModel"
-      - type: "object"
-        properties:
-          isoCode:
-            type: "string"
-            description: |
-              A ISO country code value complying with the
-              [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-              format.
-          callingCode:
-            type: "string"
-            description: |
-              Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)
-              recommendations [E.123](http://en.wikipedia.org/wiki/E.123) and
-              [E.164](http://en.wikipedia.org/wiki/E.164),
-              see [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)
-    CountryInfoBasicModel:
-      allOf:
-      - $ref: "#/components/schemas/CountryInfoMinimalModel"
-      - type: "object"
-        properties:
-          name:
-            type: "string"
-            description: "The official name of a country"
     PhoneNumberE164:
       type: "string"
       pattern: "^\\+[1-9]\\d{1,14}$"
@@ -21552,7 +21654,10 @@ components:
       example: "Toll"
     PhoneNumberStatus:
       type: "string"
-      description: "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise, it is an external number not yet ported to RingCentral"
+      description: |
+        Status of a phone number. If the value is `Normal`, the phone
+        number is ready to be used. Otherwise, it is an external number not yet
+        ported to RingCentral
       enum:
       - "Normal"
       - "Pending"
@@ -21601,7 +21706,7 @@ components:
             $ref: "#/components/schemas/PhoneNumberE164"
     PhoneNumberType:
       type: "string"
-      description: "Type of phone number"
+      description: "Type of a phone number"
       nullable: true
       enum:
       - "VoiceFax"
@@ -21609,12 +21714,21 @@ components:
       - "FaxOnly"
     DeletePhoneNumbersRequestItem:
       type: "object"
-      description: "The indication of a number to be deleted - either \"id\" or \"phoneNumber\" must be specified."
+      description: "The indication of a number to be deleted - either `id` or `phoneNumber` must be specified."
       properties:
         id:
           $ref: "#/components/schemas/PhoneNumberId"
         phoneNumber:
           $ref: "#/components/schemas/PhoneNumberE164"
+    ExtensionStatusEnumFull:
+      type: "string"
+      description: "Extension status"
+      enum:
+      - "Enabled"
+      - "Disabled"
+      - "Frozen"
+      - "NotActivated"
+      - "Unassigned"
     ContactCenterProvider:
       type: "object"
       properties:
@@ -21664,15 +21778,6 @@ components:
               example: "1234567"
             extensionNumber:
               $ref: "#/components/schemas/ExtensionNumber"
-    ExtensionStatus:
-      type: "string"
-      description: "Extension status"
-      enum:
-      - "Enabled"
-      - "Disabled"
-      - "Frozen"
-      - "NotActivated"
-      - "Unassigned"
     BulkItemResultModel:
       type: "object"
       required:
@@ -21712,7 +21817,6 @@ components:
           - "MainCompanyNumber"
           - "CompanyNumber"
           - "DirectNumber"
-          - "PhoneLine"
           - "ContactCenterNumber"
         extension:
           type: "object"
@@ -21753,6 +21857,8 @@ components:
           - "Inventory"
           - "InventoryPartnerBusinessMobileNumber"
           - "PartnerBusinessMobileNumber"
+        activationStatus:
+          $ref: "#/components/schemas/PhoneNumberActivationStatus"
     AddPhoneNumbersResponse:
       type: "object"
       required:
@@ -21764,6 +21870,12 @@ components:
           description: "List of account phone numbers"
           items:
             $ref: "#/components/schemas/AddPhoneNumbersResponseItem"
+    PhoneNumberActivationStatus:
+      type: "string"
+      description: "Phone number activation status. Determine whether phone number migration is completed on the partner side."
+      enum:
+      - "Active"
+      - "Inactive"
     AddPhoneNumbersRequest:
       type: "object"
       required:
@@ -21786,6 +21898,8 @@ components:
             $ref: "#/components/schemas/PhoneNumberId"
           phoneNumber:
             $ref: "#/components/schemas/PhoneNumberE164"
+          activationStatus:
+            $ref: "#/components/schemas/PhoneNumberActivationStatus"
     AddPhoneNumbersTask:
       type: "object"
       properties:
@@ -21800,6 +21914,86 @@ components:
           type: "string"
           description: "Task status"
           example: "Accepted"
+    CostCenterBase:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          description: "Internal identifier of a cost center"
+          readOnly: true
+          example: 981086004
+        name:
+          type: "string"
+          description: "Cost Center name"
+          example: "My Cost Center"
+        billingCode:
+          type: "string"
+          description: "Billing code associated with a cost center"
+          example: "BC 101"
+    CostCenterItem:
+      allOf:
+      - $ref: "#/components/schemas/CostCenterBase"
+      - type: "object"
+        required:
+        - "taxLocation"
+        properties:
+          taxLocation:
+            $ref: "#/components/schemas/TaxLocation"
+          parentId:
+            type: "integer"
+            format: "int64"
+            description: "Internal identifier of a parent cost center"
+            example: 45878
+    CostCenterList:
+      type: "object"
+      required:
+      - "records"
+      properties:
+        records:
+          type: "array"
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/CostCenterItem"
+    TaxLocation:
+      type: "object"
+      required:
+      - "id"
+      - "name"
+      - "type"
+      - "address"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          description: "Internal identifier of a tax location"
+          readOnly: true
+          example: 981086004
+        name:
+          type: "string"
+          description: "Tax location name"
+          example: "Tax_Location"
+        type:
+          description: "Type of the location object. Only 'TaxLocation' is currently supported for POST method"
+          type: "string"
+          enum:
+          - "BillingAddress"
+          - "TaxLocation"
+          - "Site"
+          example: "TaxLocation"
+        externalLocationId:
+          type: "string"
+          description: "Unique identifier of a tax location in the partner's system"
+          maxLength: 30
+          example: "4587834894962936"
+        effectiveDate:
+          type: "string"
+          format: "date-time"
+          example: "2022-06-05T10:11:12Z"
+          description: |
+            Effective date in the ISO 8601 (`YYYY-MM-DDThh:mm:ssTZD`) format, including date, time, and timezone
+        address:
+          $ref: "#/components/schemas/PostalAddress"
     RemoveLineResponse:
       type: "object"
       required:
@@ -22196,6 +22390,40 @@ components:
           type: "string"
           description: "Internal identifier of a target device, to which the current one will be swapped"
           example: "8459879873"
+    CallFlipNumberResource:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a call flip number"
+          example: "409926525004"
+        phoneNumber:
+          type: "string"
+          description: "Flip number in E.164 format with '+'"
+          example: "+16502096935"
+        type:
+          type: "string"
+          enum:
+          - "PhoneLine"
+          - "External"
+          description: "Flip number type"
+          example: "PhoneLine"
+        label:
+          type: "string"
+          description: "Flip number label, device name for Digital Line case"
+          example: "My Mobile Number"
+        flipNumber:
+          type: "string"
+          description: "Speed dial/flip number, the range is 1-8"
+          example: "5"
+    CallFlipNumberListResource:
+      type: "object"
+      properties:
+        records:
+          type: "array"
+          description: "List of call flip numbers"
+          items:
+            $ref: "#/components/schemas/CallFlipNumberResource"
     GetAccountInfoResponse:
       type: "object"
       properties:
@@ -22229,13 +22457,7 @@ components:
         signupInfo:
           $ref: "#/components/schemas/SignupInfoResource"
         status:
-          type: "string"
-          description: "Status of the current account"
-          enum:
-          - "Initial"
-          - "Confirmed"
-          - "Unconfirmed"
-          - "Disabled"
+          $ref: "#/components/schemas/AccountStatusEnumFull"
         statusInfo:
           $ref: "#/components/schemas/AccountStatusInfo"
         regionalSettings:
@@ -22307,6 +22529,13 @@ components:
             Though in response URIs contain the corresponding account IDs and extension
             IDs. In all request and response bodies these values are reflected via
             partnerId attributes of account and extension
+    CountryCallingCode:
+      type: "string"
+      description: |
+        Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)
+        recommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and
+        [E.164](http://en.wikipedia.org/wiki/E.164).
+        See also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)
     TimezoneInfo:
       type: "object"
       properties:
@@ -22459,6 +22688,13 @@ components:
           description: "The timestamp of account creation"
           example: "2023-03-10T18:07:52.534Z"
       description: "Account sign up data"
+    TimeFormatEnum:
+      type: "string"
+      description: "Time format (12-hours or 24-hours)."
+      enum:
+      - "12h"
+      - "24h"
+      default: "12h"
     AccountRegionalSettings:
       type: "object"
       properties:
@@ -22473,11 +22709,7 @@ components:
         formattingLocale:
           $ref: "#/components/schemas/FormattingLocaleInfo"
         timeFormat:
-          type: "string"
-          description: "Time format setting. The default value is '12h' = ['12h', '24h']"
-          enum:
-          - "12h"
-          - "24h"
+          $ref: "#/components/schemas/TimeFormatEnum"
         currency:
           $ref: "#/components/schemas/CurrencyInfo"
       description: |
@@ -22514,6 +22746,12 @@ components:
           - "Freyja"
           - "Phoenix"
       description: "Information on account service plan"
+    CountryIsoCode:
+      type: "string"
+      minLength: 2
+      maxLength: 2
+      description: "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format"
+      example: "US"
     ServiceInfo:
       type: "object"
       properties:
@@ -22568,6 +22806,33 @@ components:
           description: "Official name of a formatting language"
       description: |
         Formatting language preferences for numbers, dates and currencies
+    AccountStatusInfo:
+      type: "object"
+      description: "Optional information to be used when account is moved to \"Disabled\" status"
+      properties:
+        reason:
+          type: "string"
+          description: "Type of suspension, voluntarily or not"
+          enum:
+          - "SuspendedVoluntarily"
+          - "SuspendedInvoluntarily"
+          - "CancelledVoluntarily"
+          - "CancelledInvoluntarily"
+          example: "CancelledVoluntarily"
+        comment:
+          type: "string"
+          description: "A meaningful description of the reason to change the status"
+          minLength: 1
+          maxLength: 256
+          example: "By customer request. Case ABC123"
+        till:
+          type: "string"
+          description: |
+            Date after which the disabled account will get deleted.
+            Parameter can be used to overwrite default retention period
+            (that is 30 days after disabling the account)
+          format: "date-time"
+          example: "2023-03-26T11:30:45.940Z"
     UBrandInfo:
       type: "object"
       properties:
@@ -22580,6 +22845,16 @@ components:
           description: "Sub-brand name"
           example: "Sub-brand name"
       description: "Account sub-brand information"
+    CountryInfoMinimalModel:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a country"
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Canonical URI of a country resource"
     BrandInfo:
       type: "object"
       properties:
@@ -22592,24 +22867,23 @@ components:
         homeCountry:
           $ref: "#/components/schemas/CountryInfoShortModel"
       description: "Information on account brand"
+    CountryInfoBasicModel:
+      allOf:
+      - $ref: "#/components/schemas/CountryInfoMinimalModel"
+      - type: "object"
+        properties:
+          name:
+            type: "string"
+            description: "The official name of a country"
     CountryInfoShortModel:
       allOf:
       - $ref: "#/components/schemas/CountryInfoBasicModel"
       - type: "object"
         properties:
           isoCode:
-            type: "string"
-            description: |
-              A ISO country code value complying with the
-              [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-              format.
+            $ref: "#/components/schemas/CountryIsoCode"
           callingCode:
-            type: "string"
-            description: |
-              Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)
-              recommendations [E.123](http://en.wikipedia.org/wiki/E.123) and
-              [E.164](http://en.wikipedia.org/wiki/E.164),
-              see [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)
+            $ref: "#/components/schemas/CountryCallingCode"
     SetupWizardStateEnum:
       type: "string"
       description: "Initial configuration wizard state"
@@ -22752,8 +23026,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         country:
           type: "string"
           description: "Country name"
@@ -22825,8 +23098,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         countryName:
           type: "string"
           description: "Full name of a country"
@@ -23170,7 +23442,10 @@ components:
             If true, enables users to log in to this phone as a common phone.
         hotDeskDevice:
           type: "boolean"
-          description: "This flag indicates whether this device is used for hot desking or not"
+          description: |
+            Indicates whether this device is used for hot desking or not.
+            Returned if `useAsCommonPhone` is set to false
+          readOnly: true
         inCompanyNet:
           type: "boolean"
           description: |
@@ -23480,12 +23755,7 @@ components:
             number is ready to be used. Otherwise, it is an external number not yet
             ported to RingCentral
         type:
-          type: "string"
-          description: "Phone number type"
-          enum:
-          - "VoiceFax"
-          - "FaxOnly"
-          - "VoiceOnly"
+          $ref: "#/components/schemas/PhoneNumberType"
         usageType:
           type: "string"
           description: "Usage type of the phone number"
@@ -23590,6 +23860,24 @@ components:
         displayName:
           type: "string"
           description: "Custom field display name"
+    CallRecordingGreetingResource:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          enum:
+          - "StartRecording"
+          - "StopRecording"
+          - "AutomaticRecording"
+        mode:
+          type: "string"
+          description: |
+            Here `Default` indicates that all greetings of that type
+            (in all languages) are default. If at least one greeting (in any language)
+            of the specified type is custom, then `Custom` is returned.
+          enum:
+          - "Default"
+          - "Custom"
     AutomaticRecordingResource:
       type: "object"
       properties:
@@ -23617,24 +23905,6 @@ components:
           type: "integer"
           format: "int32"
           description: "Maximum number of automatic call recordings per account, the default value is 100 000"
-    GreetingResource:
-      type: "object"
-      properties:
-        type:
-          type: "string"
-          enum:
-          - "StartRecording"
-          - "StopRecording"
-          - "AutomaticRecording"
-        mode:
-          type: "string"
-          description: |
-            Here `Default` indicates that all greetings of that type
-            (in all languages) are default. If at least one greeting (in any language)
-            of the specified type is custom, then `Custom` is returned.
-          enum:
-          - "Default"
-          - "Custom"
     OnDemandResource:
       type: "object"
       properties:
@@ -23656,7 +23926,7 @@ components:
           type: "array"
           description: "Collection of Greeting Info"
           items:
-            $ref: "#/components/schemas/GreetingResource"
+            $ref: "#/components/schemas/CallRecordingGreetingResource"
     CallRecordingCustomGreeting:
       type: "object"
       properties:
@@ -23864,6 +24134,11 @@ components:
           description: "Active recordings list"
           items:
             $ref: "#/components/schemas/RecordingInfo"
+        metadata:
+          type: "array"
+          description: "Call metadata."
+          items:
+            $ref: "#/components/schemas/MetaData"
       description: "Information on a party of a call session"
     OwnerInfo:
       type: "object"
@@ -23896,6 +24171,27 @@ components:
           description: "Internal identifier of a device"
           example: "59474004"
       description: "Instance id of the caller. It corresponds to the 1st leg of the CallOut call."
+    MetaData:
+      type: "object"
+      description: "Call metadata."
+      required:
+      - "values"
+      properties:
+        values:
+          type: "array"
+          description: "Identifier of metadata category"
+          items:
+            type: "object"
+            required:
+            - "id"
+            - "value"
+            properties:
+              id:
+                type: "string"
+                description: "Unique identifier"
+              value:
+                type: "string"
+                description: "Value"
     PartyInfo:
       type: "object"
       properties:
@@ -24551,6 +24847,15 @@ components:
           description: "If `true` then the party is not connected to a session voice conference, `false` means the party is connected to other parties in a session"
         status:
           $ref: "#/components/schemas/CallStatusInfo"
+    BillingPackageInfo:
+      type: "object"
+      properties:
+        version:
+          type: "string"
+          description: "Billing package version"
+        id:
+          type: "string"
+          description: "Billing package identifier"
     AccountServiceInfoRequest:
       type: "object"
       properties:
@@ -24579,18 +24884,9 @@ components:
         limits:
           $ref: "#/components/schemas/AccountLimits"
         package:
-          $ref: "#/components/schemas/PackageInfo"
+          $ref: "#/components/schemas/BillingPackageInfo"
       description: |
         Account service information, including brand, service plan and billing plan
-    PackageInfo:
-      type: "object"
-      properties:
-        version:
-          type: "string"
-          description: "Billing package version"
-        id:
-          type: "string"
-          description: "Billing package identifier"
     AccountServiceInfo:
       allOf:
       - $ref: "#/components/schemas/AccountServiceInfoRequest"
@@ -24671,6 +24967,16 @@ components:
           type: "boolean"
           description: |
             Feature status, shows feature availability for the extension
+    MessageTemplateInfo:
+      type: "object"
+      description: "Text message template information"
+      required:
+      - "text"
+      properties:
+        text:
+          type: "string"
+          description: |
+            Text of a message template. Maximum length is 1000 symbols (2-byte UTF-16 encoded)
     MessageTemplateRequest:
       type: "object"
       required:
@@ -24681,22 +24987,14 @@ components:
           type: "string"
           description: "Name of a template"
         body:
-          $ref: "#/components/schemas/TemplateInfo"
+          $ref: "#/components/schemas/MessageTemplateInfo"
         site:
           $ref: "#/components/schemas/Site"
-    TemplateInfo:
-      type: "object"
-      description: "Text message template information"
-      required:
-      - "text"
-      properties:
-        text:
-          type: "string"
-          description: |
-            Text of a message template. Maximum length is 1000 symbols (2-byte UTF-16 encoded)
     Site:
       type: "object"
-      description: "Specifies a site that message template is associated with. Supported only if the Sites feature is enabled. \nThe default is `main-site` value.\n"
+      description: |
+        Specifies a site that message template is associated with. Supported only if the Sites feature is enabled.
+        The default is `main-site` value.
       properties:
         id:
           type: "string"
@@ -24728,7 +25026,7 @@ components:
           type: "string"
           description: "Name of a template"
         body:
-          $ref: "#/components/schemas/TemplateInfo"
+          $ref: "#/components/schemas/MessageTemplateInfo"
         scope:
           $ref: "#/components/schemas/VisibilityType"
         site:
@@ -24742,7 +25040,7 @@ components:
           type: "string"
           description: "Name of a template"
         body:
-          $ref: "#/components/schemas/TemplateInfo"
+          $ref: "#/components/schemas/MessageTemplateInfo"
         site:
           $ref: "#/components/schemas/Site"
     BaseCallLogFromParty:
@@ -25414,6 +25712,14 @@ components:
         id:
           type: "string"
           description: "Internal identifier of a country"
+    ExtensionStatusEnumForUpdate:
+      type: "string"
+      description: "Extension status"
+      enum:
+      - "Enabled"
+      - "Disabled"
+      - "Frozen"
+      - "NotActivated"
     ProvisioningSiteInfo:
       type: "object"
       properties:
@@ -25468,12 +25774,7 @@ components:
         currency:
           $ref: "#/components/schemas/ExtensionCurrencyInfoRequest"
         timeFormat:
-          type: "string"
-          description: "Time format setting"
-          default: "12h"
-          enum:
-          - "12h"
-          - "24h"
+          $ref: "#/components/schemas/TimeFormatEnum"
     UserTransitionInfo:
       type: "object"
       properties:
@@ -25486,9 +25787,9 @@ components:
           type: "boolean"
           description: |
             Specifies if a welcome/activation email is sent to the new users (within extension status changing from
-            'Unassigned' to 'NotActivated/Disabled')
+            `Unassigned` to `NotActivated/Disabled`)
       description: |
-        For NotActivated extensions only. Welcome email settings
+        For `NotActivated` extensions only. Welcome email settings
     ExtensionCurrencyInfoRequest:
       type: "object"
       properties:
@@ -25578,6 +25879,8 @@ components:
         product terminology
     ExtensionStatusInfo:
       type: "object"
+      description: |
+        Status information (reason, comment). Returned for `Disabled` extensions only
       properties:
         comment:
           type: "string"
@@ -25586,19 +25889,8 @@ components:
           type: "string"
           description: "Type of suspension"
           enum:
-          - "SuspendedVoluntarily"
-          - "SuspendedInvoluntarily"
-          - "CancelledVoluntarily"
-          - "CancelledInvoluntarily"
-        till:
-          type: "string"
-          format: "date-time"
-          description: |
-            Date until which an account will get deleted. The default
-            value is 30 days since the current date
-      description: |
-        Status information (reason, comment). Returned for 'Disabled'
-        status only
+          - "Voluntarily"
+          - "Involuntarily"
     ReferenceInfo:
       type: "object"
       properties:
@@ -25627,12 +25919,7 @@ components:
           type: "string"
           description: "Internal identifier of an extension"
         status:
-          type: "string"
-          enum:
-          - "Disabled"
-          - "Enabled"
-          - "NotActivated"
-          - "Frozen"
+          $ref: "#/components/schemas/ExtensionStatusEnumForUpdate"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
         reason:
@@ -25768,12 +26055,15 @@ components:
             $ref: "#/components/schemas/ExtensionBulkUpdateInfo"
     ExtensionBulkUpdateTaskResult:
       type: "object"
-      description: "Result record on multiple extension update task"
+      description: "Resulting record of a task on multiple extensions update"
       properties:
         affectedItems:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/ExtensionUpdateShortResult"
+          type: "object"
+          properties:
+            result:
+              type: "array"
+              items:
+                $ref: "#/components/schemas/ExtensionUpdateShortResult"
         errors:
           type: "array"
           items:
@@ -25814,6 +26104,32 @@ components:
           $ref: "#/components/schemas/PageNavigationModel"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
+    TemplateInfo:
+      type: "object"
+      properties:
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Link to a template"
+        id:
+          type: "string"
+          description: "Internal identifier of a template"
+        type:
+          type: "string"
+          enum:
+          - "UserSettings"
+          - "CallHandling"
+        name:
+          type: "string"
+          description: "Name of a template"
+        creationTime:
+          type: "string"
+          format: "date-time"
+          description: "Time of a template creation"
+        lastModifiedTime:
+          type: "string"
+          format: "date-time"
+          description: "Time of the last template modification"
     MessageStatusesResponse:
       type: "object"
       description: "The messages status object with details of each status"
@@ -25879,33 +26195,39 @@ components:
           items:
             $ref: "#/components/schemas/MessageListMessageResponse"
         paging:
-          $ref: "#/components/schemas/PagingResource"
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
       description: "List of messages retrieved for an account and other filter criteria such as `batchId` and `fromPhoneNumber` specified in the request"
-    PagingResource:
+    NonEnumeratedPagingModel:
       type: "object"
-      description: "Pagination details"
+      required:
+      - "perPage"
+      additionalProperties: false
       properties:
-        pageToken:
-          type: "string"
-          description: "Page token of the current response list"
-          example: "pgt1"
         perPage:
           type: "integer"
           format: "int32"
-          description: "Number of records per page"
-          example: 3
-        firstPageToken:
+          minimum: 1
+          maximum: 1000
+          description: |
+            Current page size, describes how many items are in each page.
+            Matches "perPage" parameter from the request.
+          example: 50
+        pageToken:
           type: "string"
-          description: "First page token of the current filter criteria"
-          example: "fpgt1"
-        previousPageToken:
-          type: "string"
-          description: "Previous page token of the current filter criteria"
-          example: "lpgt1"
+          description: |
+            Current page token. May be omitted if result is empty (because non-existent page
+            was specified or perPage=0 was requested)
         nextPageToken:
           type: "string"
-          description: "Next page token of the current filter criteria"
-          example: "npgt1"
+          description: "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one."
+        previousPageToken:
+          type: "string"
+          description: |
+            A page token to be used to fetch the previous page of the result set.
+            May be omitted if the current page is the first one or if the result set does not support backward navigation.
+        firstPageToken:
+          type: "string"
+          description: "A page token to be used to fetch the first page of the result set."
     MessageListMessageResponse:
       type: "object"
       description: "The short detail of the message in the get batch response"
@@ -26032,7 +26354,7 @@ components:
           items:
             $ref: "#/components/schemas/OptOutResponse"
         paging:
-          $ref: "#/components/schemas/PagingResource"
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
     OptOutResponse:
       type: "object"
       description: "Opt-out record"
@@ -26271,7 +26593,7 @@ components:
           items:
             $ref: "#/components/schemas/MessageBatchResponse"
         paging:
-          $ref: "#/components/schemas/PagingResource"
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
     CompanyAnsweringRuleCallersInfoRequest:
       type: "object"
       properties:
@@ -26914,18 +27236,15 @@ components:
           type: "string"
           description: "Name of a call queue"
         status:
-          type: "string"
-          description: "Call queue status"
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "NotActivated"
+          $ref: "#/components/schemas/ExtensionStatusEnumGroup"
         subType:
           type: "string"
           description: "Indicates whether it is an emergency call queue extension or not"
           enum:
           - "Emergency"
-    CallQueues:
+        site:
+          $ref: "#/components/schemas/SiteBasicInfo"
+    CallQueueList:
       required:
       - "navigation"
       - "paging"
@@ -26946,6 +27265,13 @@ components:
           $ref: "#/components/schemas/PageNavigationModel"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
+    ExtensionStatusEnumGroup:
+      type: "string"
+      description: "Group extension status"
+      enum:
+      - "Enabled"
+      - "Disabled"
+      - "NotActivated"
     CallQueueServiceLevelSettings:
       type: "object"
       properties:
@@ -26973,6 +27299,12 @@ components:
             Abandoned calls that are shorter than the defined period of
             time in seconds will not be included into the calculation of Service Level
       description: "Call queue service level settings"
+    SiteReference:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a site"
     CallQueueDetails:
       allOf:
       - $ref: "#/components/schemas/CallQueueInfo"
@@ -26984,27 +27316,54 @@ components:
             type: "boolean"
             description: "Allows members to change their queue status"
           alertTimer:
-            type: "integer"
-            format: "int32"
-            description: |
-              Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued
-            enum:
-            - 5
-            - 10
-            - 15
-            - 20
-            - 30
-            - 45
-            - 60
-            - 120
-            - 180
-            - 240
-            - 300
-            - 360
-            - 420
-            - 480
-            - 540
-            - 600
+            $ref: "#/components/schemas/CallQueueAlertTimerEnum"
+    CallQueueDetailsForUpdate:
+      type: "object"
+      properties:
+        extensionNumber:
+          type: "string"
+          description: "Extension number of a call queue"
+        name:
+          type: "string"
+          description: "Name of a call queue"
+        status:
+          $ref: "#/components/schemas/ExtensionStatusEnumGroup"
+        subType:
+          type: "string"
+          description: "Indicates whether it is an emergency call queue extension or not"
+          enum:
+          - "Emergency"
+        site:
+          $ref: "#/components/schemas/SiteReference"
+        serviceLevelSettings:
+          $ref: "#/components/schemas/CallQueueServiceLevelSettings"
+        editableMemberStatus:
+          type: "boolean"
+          description: "Allows members to change their queue status"
+        alertTimer:
+          $ref: "#/components/schemas/CallQueueAlertTimerEnum"
+    CallQueueAlertTimerEnum:
+      type: "integer"
+      format: "int32"
+      description: |
+        Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued
+      enum:
+      - 5
+      - 10
+      - 15
+      - 20
+      - 30
+      - 45
+      - 60
+      - 120
+      - 180
+      - 240
+      - 300
+      - 360
+      - 420
+      - 480
+      - 540
+      - 600
     CallQueuePresenceEvent:
       type: "object"
       properties:
@@ -27023,16 +27382,6 @@ components:
           description: "Internal identifier of a subscription"
         body:
           $ref: "#/components/schemas/CallQueuePresenceEventBody"
-    SiteResource:
-      type: "object"
-      description: "Site extension information"
-      properties:
-        id:
-          type: "string"
-          description: "Site extension identifier"
-        name:
-          type: "string"
-          description: "Site extension name"
     CallQueuePresenceEventBody:
       type: "object"
       description: "Notification payload body"
@@ -27068,7 +27417,7 @@ components:
           type: "string"
           description: "Extension number"
         site:
-          $ref: "#/components/schemas/SiteResource"
+          $ref: "#/components/schemas/SiteBasicInfo"
     CallQueueMemberId:
       type: "object"
       description: "Call queue member information"
@@ -27148,15 +27497,51 @@ components:
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
     EmergencyLocationRequestResource:
-      allOf:
-      - $ref: "#/components/schemas/EmergencyLocationInfoRequest"
-      - type: "object"
-        properties:
-          trusted:
-            type: "boolean"
-            description: "If 'true' address validation for non-us addresses is skipped"
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of an emergency response location"
+        address:
+          $ref: "#/components/schemas/CommonEmergencyLocationAddressInfo"
+        name:
+          type: "string"
+          description: "Emergency response location name"
+        site:
+          $ref: "#/components/schemas/ShortSiteInfo"
+        addressStatus:
+          type: "string"
+          description: "Emergency address status"
+          enum:
+          - "Valid"
+          - "Invalid"
+        usageStatus:
+          type: "string"
+          description: "Status of an emergency response location usage."
+          enum:
+          - "Active"
+          - "Inactive"
+        addressFormatId:
+          type: "string"
+          description: "Address format ID"
+        visibility:
+          type: "string"
+          description: |
+            Visibility of an emergency response location. If `Private`
+            is set, then a location is visible only for restricted number of users,
+            specified in `owners` array
+          default: "Public"
+          enum:
+          - "Public"
+        trusted:
+          type: "boolean"
+          default: false
+          description: |
+            Specifies emergency address validation during the ERL creation/update.
+            If set to 'true', then address validation for non-US addresses is skipped
     EmergencyAddressStatus:
       type: "string"
+      description: "Emergency address status"
       enum:
       - "Valid"
       - "Invalid"
@@ -27171,8 +27556,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         countryName:
           type: "string"
           description: "Full name of a country"
@@ -27243,13 +27627,6 @@ components:
         pageEnd:
           type: "integer"
           format: "int32"
-    AddressStatus:
-      type: "string"
-      description: "Emergency address status"
-      enum:
-      - "Valid"
-      - "Invalid"
-      - "Provisioning"
     SyncStatus:
       type: "string"
       description: |
@@ -27282,8 +27659,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         countryName:
           type: "string"
           description: "Full name of a country"
@@ -27338,44 +27714,6 @@ components:
       enum:
       - "LocationWithElins"
       - "LocationWithEndpoint"
-    EmergencyLocationInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: |
-            Internal identifier of an emergency response location
-        address:
-          $ref: "#/components/schemas/CommonEmergencyLocationAddressInfo"
-        name:
-          type: "string"
-          description: "Emergency response location name"
-        site:
-          $ref: "#/components/schemas/ShortSiteInfo"
-        addressStatus:
-          type: "string"
-          description: "Emergency address status"
-          enum:
-          - "Valid"
-          - "Invalid"
-        usageStatus:
-          type: "string"
-          description: "Status of an emergency response location usage."
-          enum:
-          - "Active"
-          - "Inactive"
-        addressFormatId:
-          type: "string"
-          description: "Address format ID"
-        visibility:
-          type: "string"
-          description: |
-            Visibility of an emergency response location. If `Private`
-            is set, then a location is visible only for restricted number of users,
-            specified in `owners` array
-          default: "Public"
-          enum:
-          - "Public"
     CommonEmergencyLocationResource:
       type: "object"
       properties:
@@ -27391,7 +27729,7 @@ components:
         site:
           $ref: "#/components/schemas/ShortSiteInfo"
         addressStatus:
-          $ref: "#/components/schemas/AddressStatus"
+          $ref: "#/components/schemas/EmergencyAddressStatus"
         usageStatus:
           $ref: "#/components/schemas/UsageStatus"
         syncStatus:
@@ -27399,7 +27737,7 @@ components:
         addressType:
           $ref: "#/components/schemas/EmergencyAddressType"
         visibility:
-          $ref: "#/components/schemas/Visibility"
+          $ref: "#/components/schemas/EmergencyLocationVisibility"
         owners:
           type: "array"
           description: "List of private location owners"
@@ -27441,7 +27779,17 @@ components:
         name:
           type: "string"
           description: "Extension user first name"
-    Visibility:
+    EmergencyLocationResponseResource:
+      allOf:
+      - $ref: "#/components/schemas/CommonEmergencyLocationResource"
+      - type: "object"
+        properties:
+          trusted:
+            type: "boolean"
+            description: |
+              Specifies emergency address validation during the ERL creation/update.
+              If set to 'true', then address validation for non-US addresses is skipped
+    EmergencyLocationVisibility:
       type: "string"
       description: |
         Visibility of an emergency response location. If `Private`
@@ -27451,14 +27799,6 @@ components:
       enum:
       - "Private"
       - "Public"
-    EmergencyLocationResponseResource:
-      allOf:
-      - $ref: "#/components/schemas/CommonEmergencyLocationResource"
-      - type: "object"
-        properties:
-          trusted:
-            type: "boolean"
-            description: "If 'true' address validation for non-us addresses is skipped"
     LocationDeletionInfo:
       type: "object"
       properties:
@@ -28019,7 +28359,9 @@ components:
           description: "If set to `true` - enables other extensions to see the extension presence status"
         callerIdVisibility:
           type: "string"
-          description: "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n"
+          description: |
+            Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,
+            the following visibility options are supported via this parameter - All, None, PermittedUsers
           enum:
           - "All"
           - "None"
@@ -28271,13 +28613,6 @@ components:
           enum:
           - "Completed"
           - "Processing"
-    MeetingRecordingsNavigationInfoUri:
-      type: "object"
-      properties:
-        uri:
-          type: "string"
-          format: "uri"
-      description: "Canonical URI for the corresponding page of the list"
     MeetingInfo:
       type: "object"
       properties:
@@ -28299,36 +28634,9 @@ components:
           items:
             $ref: "#/components/schemas/MeetingRecordings"
         paging:
-          $ref: "#/components/schemas/MeetingRecordingsPagingInfo"
+          $ref: "#/components/schemas/EnumeratedPagingModel"
         navigation:
-          $ref: "#/components/schemas/MeetingRecordingsNavigationInfo"
-    MeetingRecordingsPagingInfo:
-      type: "object"
-      properties:
-        page:
-          type: "integer"
-          format: "int32"
-          description: "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty (because non-existent page was specified or perPage=0 was requested)"
-        perPage:
-          type: "integer"
-          format: "int32"
-          description: "Current page size, describes how many items are in each page. Default value is 100. Maximum value is 1000. If perPage value in the request is greater than 1000, the maximum value (1000) is applied"
-        pageStart:
-          type: "integer"
-          format: "int32"
-          description: "The zero-based number of the first element on the current page. Omitted if the page is omitted or result is empty"
-        pageEnd:
-          type: "integer"
-          format: "int32"
-          description: "The zero-based index of the last element on the current page. Omitted if the page is omitted or result is empty"
-        totalPages:
-          type: "integer"
-          format: "int32"
-          description: "The total number of pages in a dataset. May be omitted for some resources due to performance reasons"
-        totalElements:
-          type: "integer"
-          format: "int32"
-          description: "The total number of elements in a dataset. May be omitted for some resource due to performance reasons"
+          $ref: "#/components/schemas/PageNavigationModel"
     MeetingRecordings:
       type: "object"
       properties:
@@ -28338,17 +28646,6 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/MeetingRecordingInfo"
-    MeetingRecordingsNavigationInfo:
-      type: "object"
-      properties:
-        firstPage:
-          $ref: "#/components/schemas/MeetingRecordingsNavigationInfoUri"
-        nextPage:
-          $ref: "#/components/schemas/MeetingRecordingsNavigationInfoUri"
-        previousPage:
-          $ref: "#/components/schemas/MeetingRecordingsNavigationInfoUri"
-        lastPage:
-          $ref: "#/components/schemas/MeetingRecordingsNavigationInfoUri"
     ForwardAllCompanyCallsRequest:
       type: "object"
       required:
@@ -29696,11 +29993,7 @@ components:
         formattingLocale:
           $ref: "#/components/schemas/FormattingLocaleInfo"
         timeFormat:
-          type: "string"
-          description: "Time format setting. The default value is '12h' = ['12h', '24h']"
-          enum:
-          - "12h"
-          - "24h"
+          $ref: "#/components/schemas/TimeFormatEnum"
       description: |
         Regional data (timezone, home country, language) of an extension/account.
         The default is Company (Auto-Receptionist) settings
@@ -29733,12 +30026,20 @@ components:
           $ref: "#/components/schemas/ContactBusinessAddressInfo"
         regionalSettings:
           $ref: "#/components/schemas/RegionalSettings"
+        siteAccess:
+          $ref: "#/components/schemas/SiteAccessStatus"
         operator:
           $ref: "#/components/schemas/OperatorInfo"
         code:
           type: "string"
           description: |
             Site code value. Returned only if specified
+    SiteAccessStatus:
+      type: "string"
+      description: "Site access status for cross-site limitation"
+      enum:
+      - "Limited"
+      - "Unlimited"
     SitesList:
       type: "object"
       properties:
@@ -29778,6 +30079,13 @@ components:
           $ref: "#/components/schemas/RegionalSettings"
         operator:
           $ref: "#/components/schemas/SiteOperatorReference"
+        siteAccess:
+          $ref: "#/components/schemas/SiteAccessStatus"
+        accessibleSiteIds:
+          type: "array"
+          items:
+            type: "string"
+            description: "Site id that is accessible for the current site"
         code:
           type: "string"
           description: "Site code value"
@@ -29835,6 +30143,13 @@ components:
           $ref: "#/components/schemas/RegionalSettings"
         operator:
           $ref: "#/components/schemas/OperatorInfo"
+        siteAccess:
+          $ref: "#/components/schemas/SiteAccessStatus"
+        accessibleSiteIds:
+          type: "array"
+          items:
+            type: "string"
+            description: "Site id that is accessible for the current site"
     SiteMembersBulkUpdate:
       type: "object"
       properties:
@@ -30072,7 +30387,7 @@ components:
           description: "Internal identifier of an answering rule"
         type:
           type: "string"
-          description: "Type of company greeting"
+          description: "Type of a company greeting"
           enum:
           - "Company"
           - "StartRecording"
@@ -30451,17 +30766,7 @@ components:
         site:
           $ref: "#/components/schemas/ProvisioningSiteInfo"
         status:
-          type: "string"
-          description: |
-            Extension current state. If 'Unassigned' is specified, then
-            extensions without `extensionNumber` are returned. If not specified, then
-            all extensions are returned
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "Frozen"
-          - "NotActivated"
-          - "Unassigned"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
         type:
@@ -30574,10 +30879,10 @@ components:
           description: "Internal identifier of an assigned country"
         uri:
           type: "string"
+          format: "uri"
           description: "Canonical URI of an assigned country resource"
         isoCode:
-          type: "string"
-          description: "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)"
+          $ref: "#/components/schemas/CountryIsoCode"
         name:
           type: "string"
           description: "Official name of a country"
@@ -30618,14 +30923,7 @@ components:
         site:
           $ref: "#/components/schemas/SiteInfo"
         status:
-          type: "string"
-          description: "Extension current state"
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "NotActivated"
-          - "Unassigned"
-          - "Frozen"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
         type:
@@ -30786,21 +31084,11 @@ components:
         profileImage:
           $ref: "#/components/schemas/ProfileImageInfo"
         status:
-          type: "string"
-          description: |
-            Extension current state. If 'Unassigned' is specified, then
-            extensions without `extensionNumber` are returned. If not specified,
-            then all extensions are returned
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "Frozen"
-          - "NotActivated"
-          - "Unassigned"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
         type:
           type: "string"
           description: |
-            Extension type. Please note that legacy 'Department' extension type
+            Extension type. Please note that legacy `Department` extension type
             corresponds to 'Call Queue' extensions in modern RingCentral product
             terminology
           enum:
@@ -30848,26 +31136,12 @@ components:
           $ref: "#/components/schemas/AssignedCountryInfo"
         costCenter:
           $ref: "#/components/schemas/CostCenterInfo"
-    ExtensionInfoEvent:
-      type: "object"
-      properties:
-        uuid:
-          type: "string"
-          description: "Universally unique identifier of a notification"
-        event:
-          type: "string"
-          description: "Event filter URI"
-        timestamp:
+        creationTime:
           type: "string"
           description: |
-            Date/time of sending a notification in
-            [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
-            format including timezone, for example *2016-03-10T18:07:52.534Z*
-        subscriptionId:
-          type: "string"
-          description: "Internal identifier of a subscription"
-        body:
-          $ref: "#/components/schemas/ExtensionInfoEventBody"
+            Extension creation date/time, in ISO 8601 format
+          format: "date-time"
+          example: "2024-06-06T07:01:14.123Z"
     GetExtensionAccountInfo:
       type: "object"
       properties:
@@ -30879,23 +31153,6 @@ components:
           format: "uri"
           description: "Canonical URI of an account resource"
       description: "Account information"
-    DepartmentInfo:
-      type: "object"
-      description: |
-        Please note that the `Department` extension type corresponds to
-        'Call Queue' extensions in modern RingCentral product terminology
-      properties:
-        id:
-          type: "string"
-          format: "uri"
-          description: "Internal identifier of a department extension"
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Canonical URI of an extension resource"
-        extensionNumber:
-          type: "string"
-          description: "Short number of a department extension"
     ExtensionInfoEventBody:
       type: "object"
       properties:
@@ -30930,22 +31187,11 @@ components:
           description: |
             Internal identifier of a subscription owner extension
       description: "Notification payload body"
-    SiteReference:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a site"
     ExtensionUpdateRequest:
       type: "object"
       properties:
         status:
-          type: "string"
-          enum:
-          - "Disabled"
-          - "Enabled"
-          - "NotActivated"
-          - "Frozen"
+          $ref: "#/components/schemas/ExtensionStatusEnumForUpdate"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
         extensionNumber:
@@ -31098,17 +31344,7 @@ components:
         setupWizardState:
           $ref: "#/components/schemas/SetupWizardStateForUpdateEnum"
         status:
-          type: "string"
-          description: |
-            Extension current state. If 'Unassigned' is specified, then
-            extensions without `extensionNumber` are returned. If not specified,
-            then all extensions are returned
-          enum:
-          - "Enabled"
-          - "Disabled"
-          - "Frozen"
-          - "NotActivated"
-          - "Unassigned"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
         statusInfo:
           $ref: "#/components/schemas/ExtensionStatusInfo"
         type:
@@ -31161,6 +31397,51 @@ components:
           $ref: "#/components/schemas/ProvisioningSiteInfo"
         assignedCountry:
           $ref: "#/components/schemas/AssignedCountryInfo"
+        creationTime:
+          type: "string"
+          description: |
+            Extension creation date/time, in ISO 8601 format
+          format: "date-time"
+          example: "2024-06-06T07:01:14.123Z"
+        siteAccess:
+          $ref: "#/components/schemas/SiteAccessStatus"
+    ExtensionInfoEvent:
+      type: "object"
+      properties:
+        uuid:
+          type: "string"
+          description: "Universally unique identifier of a notification"
+        event:
+          type: "string"
+          description: "Event filter URI"
+        timestamp:
+          type: "string"
+          description: |
+            Date/time of sending a notification in
+            [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
+            format including timezone, for example *2016-03-10T18:07:52.534Z*
+        subscriptionId:
+          type: "string"
+          description: "Internal identifier of a subscription"
+        body:
+          $ref: "#/components/schemas/ExtensionInfoEventBody"
+    DepartmentInfo:
+      type: "object"
+      description: |
+        Please note that the `Department` extension type corresponds to
+        'Call Queue' extensions in modern RingCentral product terminology
+      properties:
+        id:
+          type: "string"
+          format: "uri"
+          description: "Internal identifier of a department extension"
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Canonical URI of an extension resource"
+        extensionNumber:
+          type: "string"
+          description: "Short number of a department extension"
     Roles:
       type: "object"
       properties:
@@ -31934,9 +32215,6 @@ components:
             Message creation date/time in ISO 8601 format including timezone,
             for example 2016-03-10T18:07:52.534Z
           format: "date-time"
-        deliveryErrorCode:
-          type: "string"
-          description: "SMS only. Delivery error code returned by gateway"
         direction:
           $ref: "#/components/schemas/MessageDirectionEnum"
         faxPageCount:
@@ -32287,9 +32565,9 @@ components:
           type: "string"
           description: |
             Phone number to which the call is forwarded. In addition to
-            common e.164 format, the following number patterns are supported: 11xxxxxxxxxxx,
+            common E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,
             444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in
-            e.164 format (without '+' sign) and yyyy is an external short extension number.
+            E.164 format (without '+' sign) and yyyy is an external short extension number.
             Max number of digits is 15
         action:
           type: "string"
@@ -32416,6 +32694,80 @@ components:
           extensionNumber:
             type: "string"
             description: "Extension number"
+    CallHandlingRuleInfo:
+      type: "object"
+      properties:
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Canonical URI to an answering rule resource"
+        id:
+          type: "string"
+          description: "Internal identifier of an answering rule"
+        type:
+          type: "string"
+          description: "Type of an answering rule"
+          enum:
+          - "BusinessHours"
+          - "AfterHours"
+          - "Custom"
+        name:
+          type: "string"
+          description: "Name of an answering rule specified by user"
+        enabled:
+          type: "boolean"
+          description: "Specifies if an answering rule is active or inactive"
+        schedule:
+          $ref: "#/components/schemas/ScheduleInfo"
+        calledNumbers:
+          type: "array"
+          description: "Answering rules are applied when calling to selected number(s)"
+          items:
+            $ref: "#/components/schemas/CalledNumberInfo"
+        callers:
+          type: "array"
+          description: "Answering rules are applied when calls are received from specified caller(s)"
+          items:
+            $ref: "#/components/schemas/CallersInfo"
+        callHandlingAction:
+          type: "string"
+          description: "Specifies how incoming calls are forwarded"
+          enum:
+          - "ForwardCalls"
+          - "UnconditionalForwarding"
+          - "AgentQueue"
+          - "TransferToExtension"
+          - "TakeMessagesOnly"
+          - "PlayAnnouncementOnly"
+          - "SharedLines"
+        forwarding:
+          $ref: "#/components/schemas/ForwardingInfo"
+        unconditionalForwarding:
+          $ref: "#/components/schemas/UnconditionalForwardingInfo"
+        queue:
+          $ref: "#/components/schemas/QueueInfo"
+        transfer:
+          $ref: "#/components/schemas/TransferredExtensionInfo"
+        voicemail:
+          $ref: "#/components/schemas/VoicemailInfo"
+        greetings:
+          type: "array"
+          description: "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List"
+          items:
+            $ref: "#/components/schemas/GreetingInfo"
+        screening:
+          type: "string"
+          description: "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'"
+          enum:
+          - "Off"
+          - "NoCallerId"
+          - "UnknownCallerId"
+          - "Always"
+          default: "Off"
+        sharedLines:
+          $ref: "#/components/schemas/SharedLinesInfo"
+        missedCall:
+          $ref: "#/components/schemas/MissedCallInfo"
     CreateAnsweringRuleForwardingNumberInfo:
       type: "object"
       properties:
@@ -32506,7 +32858,7 @@ components:
       properties:
         phoneNumber:
           type: "string"
-          description: "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in e.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15"
+          description: "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15"
     CustomAnsweringRuleInfo:
       type: "object"
       properties:
@@ -32665,7 +33017,7 @@ components:
           type: "array"
           description: "List of answering rules"
           items:
-            $ref: "#/components/schemas/AnsweringRuleInfo"
+            $ref: "#/components/schemas/CallHandlingRuleInfo"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
         navigation:
@@ -32735,80 +33087,6 @@ components:
         recipient:
           $ref: "#/components/schemas/RecipientInfo"
       description: "Specifies whether to take a voicemail and who should do it"
-    AnsweringRuleInfo:
-      type: "object"
-      properties:
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Canonical URI to an answering rule resource"
-        id:
-          type: "string"
-          description: "Internal identifier of an answering rule"
-        type:
-          type: "string"
-          description: "Type of an answering rule"
-          enum:
-          - "BusinessHours"
-          - "AfterHours"
-          - "Custom"
-        name:
-          type: "string"
-          description: "Name of an answering rule specified by user"
-        enabled:
-          type: "boolean"
-          description: "Specifies if an answering rule is active or inactive"
-        schedule:
-          $ref: "#/components/schemas/ScheduleInfo"
-        calledNumbers:
-          type: "array"
-          description: "Answering rules are applied when calling to selected number(s)"
-          items:
-            $ref: "#/components/schemas/CalledNumberInfo"
-        callers:
-          type: "array"
-          description: "Answering rules are applied when calls are received from specified caller(s)"
-          items:
-            $ref: "#/components/schemas/CallersInfo"
-        callHandlingAction:
-          type: "string"
-          description: "Specifies how incoming calls are forwarded"
-          enum:
-          - "ForwardCalls"
-          - "UnconditionalForwarding"
-          - "AgentQueue"
-          - "TransferToExtension"
-          - "TakeMessagesOnly"
-          - "PlayAnnouncementOnly"
-          - "SharedLines"
-        forwarding:
-          $ref: "#/components/schemas/ForwardingInfo"
-        unconditionalForwarding:
-          $ref: "#/components/schemas/UnconditionalForwardingInfo"
-        queue:
-          $ref: "#/components/schemas/QueueInfo"
-        transfer:
-          $ref: "#/components/schemas/TransferredExtensionInfo"
-        voicemail:
-          $ref: "#/components/schemas/VoicemailInfo"
-        greetings:
-          type: "array"
-          description: "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List"
-          items:
-            $ref: "#/components/schemas/GreetingInfo"
-        screening:
-          type: "string"
-          description: "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'"
-          enum:
-          - "Off"
-          - "NoCallerId"
-          - "UnknownCallerId"
-          - "Always"
-          default: "Off"
-        sharedLines:
-          $ref: "#/components/schemas/SharedLinesInfo"
-        missedCall:
-          $ref: "#/components/schemas/MissedCallInfo"
     FixedOrderAgentsExtensionInfo:
       type: "object"
       properties:
@@ -33183,7 +33461,10 @@ components:
           description: "Address format ID"
         trusted:
           type: "boolean"
-          description: "If 'true' address validation for non-us addresses is skipped"
+          default: false
+          description: |
+            Specifies emergency address validation during the ERL creation/update.
+            If set to 'true', then address validation for non-US addresses is skipped
         address:
           $ref: "#/components/schemas/CommonEmergencyLocationAddressInfo"
     GetExtensionForwardingNumberListResponse:
@@ -33371,30 +33652,9 @@ components:
           items:
             $ref: "#/components/schemas/MeetingResponseResource"
         paging:
-          $ref: "#/components/schemas/MeetingsPagingInfo"
+          $ref: "#/components/schemas/EnumeratedPagingModel"
         navigation:
-          $ref: "#/components/schemas/MeetingsNavigationInfo"
-    MeetingsPagingInfo:
-      type: "object"
-      properties:
-        page:
-          type: "integer"
-          format: "int32"
-        totalPages:
-          type: "integer"
-          format: "int32"
-        perPage:
-          type: "integer"
-          format: "int32"
-        totalElements:
-          type: "integer"
-          format: "int32"
-        pageStart:
-          type: "integer"
-          format: "int32"
-        pageEnd:
-          type: "integer"
-          format: "int32"
+          $ref: "#/components/schemas/PageNavigationModel"
     MeetingRequestResource:
       type: "object"
       properties:
@@ -33462,23 +33722,6 @@ components:
             type: "string"
         alternativeHosts:
           type: "string"
-    MeetingsNavigationInfoUri:
-      type: "object"
-      properties:
-        uri:
-          type: "string"
-          format: "uri"
-    MeetingsNavigationInfo:
-      type: "object"
-      properties:
-        nextPage:
-          $ref: "#/components/schemas/MeetingsNavigationInfoUri"
-        previousPage:
-          $ref: "#/components/schemas/MeetingsNavigationInfoUri"
-        firstPage:
-          $ref: "#/components/schemas/MeetingsNavigationInfoUri"
-        lastPage:
-          $ref: "#/components/schemas/MeetingsNavigationInfoUri"
     MeetingUserSettingsResponse:
       type: "object"
       properties:
@@ -33655,9 +33898,9 @@ components:
         name:
           type: "string"
         isoCode:
-          type: "string"
+          $ref: "#/components/schemas/CountryIsoCode"
         callingCode:
-          type: "string"
+          $ref: "#/components/schemas/CountryCallingCode"
         emergencyCalling:
           type: "boolean"
           default: false
@@ -34017,7 +34260,9 @@ components:
           default: false
         callerIdVisibility:
           type: "string"
-          description: "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n"
+          description: |
+            Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,
+            the following visibility options are supported via this parameter - All, None, PermittedUsers
           enum:
           - "All"
           - "None"
@@ -34163,7 +34408,9 @@ components:
           default: false
         callerIdVisibility:
           type: "string"
-          description: "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n"
+          description: |
+            Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,
+            the following visibility options are supported via this parameter - All, None, PermittedUsers
           enum:
           - "All"
           - "None"
@@ -34563,9 +34810,9 @@ components:
         name:
           type: "string"
         isoCode:
-          type: "string"
+          $ref: "#/components/schemas/CountryIsoCode"
         callingCode:
-          type: "string"
+          $ref: "#/components/schemas/CountryCallingCode"
         emergencyCalling:
           type: "boolean"
         numberSelling:
@@ -34576,19 +34823,6 @@ components:
           type: "boolean"
         signupAllowed:
           type: "boolean"
-    CurrencyResource:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        code:
-          type: "string"
-        name:
-          type: "string"
-        symbol:
-          type: "string"
-        minorSymbol:
-          type: "string"
     BusinessSiteCollectionRequest:
       type: "object"
       properties:
@@ -34632,19 +34866,6 @@ components:
           type: "string"
         extensionNumber:
           type: "string"
-    ContactAddressInfoResource:
-      type: "object"
-      properties:
-        street:
-          type: "string"
-        city:
-          type: "string"
-        state:
-          type: "string"
-        zip:
-          type: "string"
-        country:
-          type: "string"
     RolesTimezoneResource:
       type: "object"
       properties:
@@ -34668,6 +34889,32 @@ components:
           type: "string"
         localeCode:
           type: "string"
+    CurrencyResource:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        code:
+          type: "string"
+        name:
+          type: "string"
+        symbol:
+          type: "string"
+        minorSymbol:
+          type: "string"
+    ContactAddressInfoResource:
+      type: "object"
+      properties:
+        street:
+          type: "string"
+        city:
+          type: "string"
+        state:
+          type: "string"
+        zip:
+          type: "string"
+        country:
+          type: "string"
     RolesRegionalSettingsResource:
       type: "object"
       properties:
@@ -34682,10 +34929,7 @@ components:
         formattingLocale:
           $ref: "#/components/schemas/RolesLanguageResource"
         timeFormat:
-          type: "string"
-          enum:
-          - "12h"
-          - "24h"
+          $ref: "#/components/schemas/TimeFormatEnum"
         currency:
           $ref: "#/components/schemas/CurrencyResource"
     UserContactsGroupsInfo:
@@ -35078,10 +35322,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         isoCode:
-          type: "string"
-          minLength: 2
-          maxLength: 2
-          description: "ISO 3166-1 alpha-2 code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
     GetSMSMessageInfoResponse:
       type: "object"
       properties:
@@ -35114,9 +35355,6 @@ components:
             Message creation date/time in ISO 8601 format including timezone,
             for example 2016-03-10T18:07:52.534Z
           format: "date-time"
-        deliveryErrorCode:
-          type: "string"
-          description: "SMS only. Delivery error code returned by gateway"
         direction:
           $ref: "#/components/schemas/MessageDirectionEnum"
         from:
@@ -35456,13 +35694,7 @@ components:
           type: "string"
           description: "User extension number"
         status:
-          type: "string"
-          description: "Current state of an extension"
-          enum:
-          - "Enabled"
-          - "Disable"
-          - "NotActivated"
-          - "Unassigned"
+          $ref: "#/components/schemas/ExtensionStatusEnumFull"
         emailAddresses:
           type: "array"
           description: |
@@ -36353,26 +36585,6 @@ components:
         nextPageUri:
           type: "string"
           format: "uri"
-    GetExtensionPhoneNumbersResponse:
-      required:
-      - "navigation"
-      - "paging"
-      - "records"
-      type: "object"
-      properties:
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Link to the user phone number list resource"
-        records:
-          type: "array"
-          description: "List of phone numbers"
-          items:
-            $ref: "#/components/schemas/UserPhoneNumberInfo"
-        navigation:
-          $ref: "#/components/schemas/PageNavigationModel"
-        paging:
-          $ref: "#/components/schemas/EnumeratedPagingModel"
     UserPhoneNumberExtensionInfo:
       type: "object"
       properties:
@@ -36473,23 +36685,9 @@ components:
             Indicates if a phone number is primary, i.e. displayed as 'main number' and called by default
           example: false
         status:
-          type: "string"
-          description: |
-            Status of a phone number. If the value is 'Normal', the phone
-            number is ready to be used. Otherwise, it is an external number not yet
-            ported to RingCentral
-          enum:
-          - "Normal"
-          - "Pending"
-          - "PortedIn"
-          - "Temporary"
+          $ref: "#/components/schemas/PhoneNumberStatus"
         type:
-          type: "string"
-          description: "Phone number type"
-          enum:
-          - "VoiceFax"
-          - "FaxOnly"
-          - "VoiceOnly"
+          $ref: "#/components/schemas/PhoneNumberType"
         subType:
           type: "string"
           description: |
@@ -36530,6 +36728,26 @@ components:
             - "MmsSender"
             - "InternationalSmsSender"
             - "Delegated"
+    GetExtensionPhoneNumbersResponse:
+      required:
+      - "navigation"
+      - "paging"
+      - "records"
+      type: "object"
+      properties:
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Link to the user phone number list resource"
+        records:
+          type: "array"
+          description: "List of phone numbers"
+          items:
+            $ref: "#/components/schemas/UserPhoneNumberInfo"
+        navigation:
+          $ref: "#/components/schemas/PageNavigationModel"
+        paging:
+          $ref: "#/components/schemas/EnumeratedPagingModel"
     CallQueueOverflowSettingsRequestResource:
       type: "object"
       properties:
@@ -36728,11 +36946,6 @@ components:
         name:
           type: "string"
           description: "Name pf a site"
-    CreateMultipleWirelessPointsResponse:
-      type: "object"
-      properties:
-        task:
-          $ref: "#/components/schemas/BulkTaskInfo"
     CreateMultipleWirelessPointsRequest:
       type: "object"
       properties:
@@ -36758,6 +36971,11 @@ components:
           $ref: "#/components/schemas/EmergencyAddressInfo"
         emergencyLocation:
           $ref: "#/components/schemas/EmergencyLocationInfo"
+    CreateMultipleWirelessPointsResponse:
+      type: "object"
+      properties:
+        task:
+          $ref: "#/components/schemas/BulkTaskInfo"
     EmergencyLocationInfo:
       type: "object"
       required:
@@ -36929,8 +37147,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         countryName:
           type: "string"
           description: "Full name of a country"
@@ -37339,6 +37556,13 @@ components:
           items:
             type: "string"
             description: "List of common devices for feature disabling"
+    CreateMultipleSwitchesRequest:
+      type: "object"
+      properties:
+        records:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CreateSwitchInfo"
     CreateMultipleSwitchesResponse:
       type: "object"
       properties:
@@ -37347,13 +37571,6 @@ components:
           items:
             $ref: "#/components/schemas/BulkTaskInfo"
       description: "Information on a task for multiple switches creation"
-    CreateMultipleSwitchesRequest:
-      type: "object"
-      properties:
-        records:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/CreateSwitchInfo"
     UpdateMultipleWirelessPointsResponse:
       type: "object"
       properties:
@@ -37405,23 +37622,9 @@ components:
           type: "string"
           description: "Phone number"
         status:
-          type: "string"
-          description: |
-            Status of a phone number. If the value is 'Normal', the phone
-            number is ready to be used. If the value is 'Pending' it is an
-            external number not yet ported to RingCentral.
-          enum:
-          - "Normal"
-          - "Pending"
-          - "PortedIn"
-          - "Temporary"
+          $ref: "#/components/schemas/PhoneNumberStatus"
         type:
-          type: "string"
-          description: "Phone number type"
-          enum:
-          - "VoiceFax"
-          - "FaxOnly"
-          - "VoiceOnly"
+          $ref: "#/components/schemas/PhoneNumberType"
         usageType:
           type: "string"
           description: |
@@ -37453,6 +37656,8 @@ components:
         primary:
           type: "boolean"
           description: "Specifies if a phone number is primary, i.e. displayed as 'main number' and called by default"
+        activationStatus:
+          $ref: "#/components/schemas/PhoneNumberActivationStatus"
     TemporaryNumberInfo:
       type: "object"
       properties:
@@ -37515,20 +37720,30 @@ components:
           format: "uri"
           description: "Canonical URI of a country resource"
         callingCode:
-          type: "string"
-          description: |
-            Country calling code defined by ITU-T recommendations `E.123`
-            and `E.164`, see Calling Codes
-          example: "1"
+          $ref: "#/components/schemas/CountryCallingCode"
         isoCode:
-          type: "string"
-          description: "Country code in `ISO 3166` alpha-2 format"
-          pattern: "^[A-Za-z]{2}$"
-          example: "US"
+          $ref: "#/components/schemas/CountryIsoCode"
         name:
           type: "string"
           description: "The official name of the country."
           example: "United States"
+    ParsePhoneNumberResponse:
+      required:
+      - "homeCountry"
+      - "phoneNumbers"
+      type: "object"
+      properties:
+        uri:
+          type: "string"
+          format: "uri"
+          description: "Canonical URI of a resource"
+        homeCountry:
+          $ref: "#/components/schemas/GetCountryInfoNumberParser"
+        phoneNumbers:
+          type: "array"
+          description: "Parsed phone numbers information"
+          items:
+            $ref: "#/components/schemas/PhoneNumberInfoNumberParser"
     PhoneNumberInfoNumberParser:
       type: "object"
       properties:
@@ -37590,23 +37805,6 @@ components:
             type: "string"
             maxLength: 64
             example: "(650) 722-1621"
-    ParsePhoneNumberResponse:
-      required:
-      - "homeCountry"
-      - "phoneNumbers"
-      type: "object"
-      properties:
-        uri:
-          type: "string"
-          format: "uri"
-          description: "Canonical URI of a resource"
-        homeCountry:
-          $ref: "#/components/schemas/GetCountryInfoNumberParser"
-        phoneNumbers:
-          type: "array"
-          description: "Parsed phone numbers information"
-          items:
-            $ref: "#/components/schemas/PhoneNumberInfoNumberParser"
     ContractedCountryListResponse:
       type: "object"
       required:
@@ -37654,10 +37852,7 @@ components:
             description: |
               Emergency calling feature availability/emergency address requirement indicator
           isoCode:
-            type: "string"
-            description: |
-              Country code according to the ISO standard, see
-              [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)
+            $ref: "#/components/schemas/CountryIsoCode"
           name:
             type: "string"
             description: "The official name of a country"
@@ -37863,8 +38058,7 @@ components:
           type: "string"
           description: "Localization code of a language"
         isoCode:
-          type: "string"
-          description: "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)"
+          $ref: "#/components/schemas/CountryIsoCode"
         name:
           type: "string"
           description: "Official name of a language"
@@ -38189,8 +38383,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         country:
           type: "string"
           description: "Country name"
@@ -38452,8 +38645,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         country:
           type: "string"
           description: "Country name"
@@ -38526,8 +38718,7 @@ components:
           type: "string"
           description: "Internal identifier of a country"
         countryIsoCode:
-          type: "string"
-          description: "ISO code of a country"
+          $ref: "#/components/schemas/CountryIsoCode"
         country:
           type: "string"
           description: "Country name"
@@ -39490,11 +39681,11 @@ components:
       type: "string"
       example: "+33634231224"
     ContentPublished:
-      description: "True if the content is published on the remote channel."
+      description: "If set to `true`, then the content is published on remote channel"
       type: "boolean"
       example: true
     ContentCreatedFrom:
-      description: "Created from of the content."
+      description: "Source of content"
       type: "string"
       enum:
       - "Synchronizer"
@@ -39504,42 +39695,43 @@ components:
       - "AutoResponseTrigger"
       - "AutoRequestEmail"
     ContentSynchronizationError:
-      description: "Synchronization error details."
+      description: "Synchronization error details"
       type: "string"
+    SocMsgAttachmentSize:
+      description: "Size of attachment"
+      type: "integer"
+      format: "int32"
+      example: 217571
     SocMsgCreationTime:
       description: "Creation time of the resource."
       format: "date-time"
       type: "string"
       example: "2023-02-04T12:43:07Z"
     ContentInReplyToAuthorIdentityId:
-      description: "The identity identifier of the content to which this content is a reply to."
+      description: |
+        Identifier of the content identity to which this content is a reply to.
+        If the channel does not support discussion initiation, this parameter is mandatory
       type: "string"
-      example: "541014e17asdd8ccf000023"
     ContentAttachments:
       description: |
-        An array containing the attachments that are attached to the content.
+        Array of attachments to be added to the content
       type: "array"
       minItems: 0
       items:
-        $ref: "#/components/schemas/ContentAttachment"
+        $ref: "#/components/schemas/SocMsgContentAttachment"
     ContentTemplateName:
       type: "string"
       description: |
-        Applicable to WhatsApp channels only.
-
-        Name of the Whatsapp template to use for the content.
-
-        All available template names are visible on the Whatsapp Business Manager interface.
+        Applicable to WhatsApp channels only. Name of the WhatsApp template to use for the content.
+        All available template names are visible on the WhatsApp Business Manager interface
       example: "customer_order_shipment_template"
     ContentComponents:
       type: "array"
       minItems: 0
       description: |
-        Applicable to WhatsApp channels only.
-
-        Component configuration of the Whatsapp template to use for the content.
-
-        All available components are visible on the Whatsapp Business Manager interface.
+        Applicable to WhatsApp channels only. Component configuration of the WhatsApp
+        template to use for the content. All available components are visible on
+        the WhatsApp Business Manager interface
       items:
         type: "object"
         properties:
@@ -39575,17 +39767,8 @@ components:
       format: "date-time"
       type: "string"
       example: "2023-02-04T12:43:07Z"
-    SocMsgCreationTimeOrder:
-      description: "Ordering by creationTime is descending by default."
-      type: "string"
-      enum:
-      - "-creationTime"
-      - "+creationTime"
-      - "creationTime"
-      default: "-creationTime"
-      example: "+creationTime"
     ContentType:
-      description: "Type of the content."
+      description: "Type of the content"
       type: "string"
       enum:
       - "Album"
@@ -39629,9 +39812,13 @@ components:
           - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,
           - doesn't get included in statistics
       type: "boolean"
+    SocMsgAttachmentFilename:
+      description: "Filename of attachment"
+      type: "string"
+      example: "0.jpeg"
     ContentCategoryIds:
       description: |
-        List of the category identifiers of the content.
+        List of the category identifiers of the content
       items:
         type: "string"
       type: "array"
@@ -39639,7 +39826,7 @@ components:
       - "541014e17aa58d8ccf000023"
       - "541014e17aa58d8ccf002023"
     ContentStatus:
-      description: "Content status."
+      description: "Content status"
       type: "string"
       enum:
       - "New"
@@ -39663,28 +39850,29 @@ components:
           $ref: "#/components/schemas/NonEnumeratedPagingModel"
     ContentBody:
       description: |
-        The content's body.
+        Content body. On creation this field is mandatory except for WhatsApp content
+        using templates. The following are the channels supported and their **max length**
+        restrictions (in brackets):
 
-        On creation this field is mandatory except for WhatsApp content using templates.
-
-        The following are the max length restrictions for the different channels supported.
-        Channel and max length
-          * Apple Messages For Business (max length 10000)
-          * Email (max length 262144)
-          * RingCX Digital Messaging (max length 1024)
-          * Facebook (max length 8000)
-          * GoogleBusinessMessages (max length 3000)
-          * Google My Business (max length 4000)
-          * Instagram (max length 950)
-          * Instagram Messaging (max length 1000)
-          * LinkedIn (max length 3000)
-          * Messenger (max length 2000)
-          * Twitter (max length 280)
-          * Viber (max length 7000)
-          * WhatsApp (max length 3800)
-          * Youtube (max length 8000)
+          - *Apple Messages For Business* (10000)
+          - *Email* (262144)
+          - *RingCX Digital Messaging* (1024)
+          - *Facebook* (8000)
+          - *Google My Business* (4000)
+          - *Instagram* (950)
+          - *Instagram Messaging* (1000)
+          - *LinkedIn* (3000)
+          - *Messenger* (2000)
+          - *Twitter* (280)
+          - *Viber* (7000)
+          - *WhatsApp* (3800)
+          - *Youtube* (8000)
       type: "string"
       example: "Body of the content"
+    ChannelUri:
+      description: "External URI of a content channel"
+      type: "string"
+      format: "uri"
     ContentModel:
       type: "object"
       required:
@@ -39707,9 +39895,9 @@ components:
       - "published"
       - "rating"
       - "remotelyDeleted"
-      - "sourceId"
-      - "sourceType"
-      - "sourceUri"
+      - "channelId"
+      - "channelType"
+      - "channelUri"
       - "status"
       - "synchronizationStatus"
       - "synchronizationError"
@@ -39733,6 +39921,8 @@ components:
           $ref: "#/components/schemas/ContentBodyInputFormat"
         categoryIds:
           $ref: "#/components/schemas/ContentCategoryIds"
+        contentDirection:
+          $ref: "#/components/schemas/ContentDirection"
         contextData:
           $ref: "#/components/schemas/ContentContextData"
         creationTime:
@@ -39741,6 +39931,8 @@ components:
           $ref: "#/components/schemas/ContentCreatedFrom"
         creatorId:
           $ref: "#/components/schemas/ContentCreatorId"
+        firstInThread:
+          $ref: "#/components/schemas/ContentFirstInThread"
         foreignCategories:
           $ref: "#/components/schemas/ContentForeignCategories"
         id:
@@ -39761,12 +39953,12 @@ components:
           $ref: "#/components/schemas/ContentRating"
         remotelyDeleted:
           $ref: "#/components/schemas/ContentRemotelyDeleted"
-        sourceId:
-          $ref: "#/components/schemas/ContentSourceId"
-        sourceType:
-          $ref: "#/components/schemas/ContentSourceType"
-        sourceUri:
-          $ref: "#/components/schemas/ContentSourceUri"
+        channelId:
+          $ref: "#/components/schemas/SocMsgChannelId"
+        channelType:
+          $ref: "#/components/schemas/SocMsgChannelType"
+        channelUri:
+          $ref: "#/components/schemas/ChannelUri"
         status:
           $ref: "#/components/schemas/ContentStatus"
         synchronizationStatus:
@@ -39783,8 +39975,55 @@ components:
           $ref: "#/components/schemas/SocMsgLastModifiedTime"
         capabilitiesSupported:
           $ref: "#/components/schemas/ContentCapabilitiesSupported"
+    SocMsgOrder:
+      description: "Ordering by creationTime and lastModifiedTime is descending by default."
+      type: "string"
+      enum:
+      - "-creationTime"
+      - "+creationTime"
+      - "creationTime"
+      - "-lastModifiedTime"
+      - "+lastModifiedTime"
+      - "lastModifiedTime"
+      default: "-creationTime"
+      example: "+creationTime"
+    SocMsgAttachmentEmbedded:
+      description: "Specifies if attachment is embedded in content"
+      type: "boolean"
+      example: false
+    SocMsgAttachmentContentType:
+      description: |
+        Type of attachment, which is generally a MIME attachment type like `image/jpeg`, etc.
+        Security level in RingCX determines what type of attachment is allowed.
+        Based on the security level the following attachment types are supported.
+
+        *'Strict'* level allows safe extensions below:
+        Content name and supported types:
+
+        - audio (AAC, MP3, OGG, M4A)
+        - image (BMP, GIF, JPG, JPEG, PNG, SVG, WEBP)
+        - pdf (PDF)
+        - text (CSV, TXT, LOG)
+        - video (AVI, FLV, M4V, MKV, MOV, MP4, MPG, QT, WMV)
+        - other (AMR, DMS, VCARD, TIF, TIFF, MPEG)
+
+        *'Relaxed'* level allows documents:
+        Content name and supported types:
+
+        - excel (XLS, XLSM, XLSX, XLC, XLT, XLTM, XLTX)
+        - presentation (KEY, ODP, OTP)
+        - powerpoint (PPS, PPT, PPTX, POT)
+        - spreadsheet (Numbers - ODS, OTS)
+        - word (DOC, DOCM, DOCX, DOTM, DOTX)
+        - word_processing (Pages - ODT, OTT, RTF)
+
+        *'Permissive'* level allows all documents.
+
+        However, there are no security level restrictions for content posted through the channel
+      type: "string"
+      example: "image/jpeg"
     ContentLanguage:
-      description: "Language of the content."
+      description: "Language of the content"
       type: "string"
       example: "En"
     ContentEmailAddresses:
@@ -39793,157 +40032,67 @@ components:
       items:
         $ref: "#/components/schemas/SocMsgEmailAddress"
       description: |
-        Applicable on Email channels only.
-
+        Applicable to Email channels only.
         An array containing the email addresses used in sections of the email.
-
-        This parameter is mandatory when initiating a discussion.
-    ContentAttachmentIds:
-      description: |
-        An array containing the attachment identifiers that need to be attached to the content.
-      type: "array"
-      minItems: 0
-      items:
-        $ref: "#/components/schemas/AttachmentId"
-      example:
-      - "541014e17aa58d8ccf000023"
-      - "541014e17aa58d8ccf000023"
+        This parameter is mandatory when initiating a discussion
     ContentAuthorIdentityId:
       description: |
-        Identity identifier of the author of content.
-
-        Not mandatory on creation, by default it uses the token's user first identity on channel.
+        Identity identifier of the content author. Not mandatory on creation,
+        by default it uses the token's user first identity on channel
       type: "string"
-      example: "541014e17aa58d8ccf000023"
     ContentTemplateLanguage:
       type: "string"
       description: |
-        Applicable to WhatsApp channels only.
-
-        Language of the Whatsapp template to use for the content. All available template languages are visible on the Whatsapp Business Manager interface.
-
-        Language specified must conform to the ISO 639-1 alpha-2 codes for representing the names of languages.
+        Applicable to WhatsApp channels only. Language of the WhatsApp template
+        to use for the content. All available template languages are visible on
+        the WhatsApp Business Manager interface. Language specified must conform
+        to the ISO 639-1 alpha-2 codes for representing the names of languages
       example: "fr"
     ContentInterventionId:
-      description: "The intervention identifier of the content."
+      description: "Intervention identifier of the content"
       type: "string"
-      example: "123415437asdd8ccf000023"
-    ContentAttachment:
-      type: "object"
-      properties:
-        contentType:
-          description: |
-            Type of the attachment, which is generally a MIME attachment type like "image/jpeg", etc.
-
-            Security level in ED determines what type of attachment is allowed.
-
-            Based on the security level the following attachment types are supported.
-
-            "Strict" level allows safe extensions below:
-            Content name and supported types
-            * audio (supports aac mp3 ogg m4a)
-            * image (supports bmp gif jpg jpeg png svg webp)
-            * pdf (supports pdf)
-            * text (supports csv txt log)
-            * video (supports avi flv m4v mkv mov mp4 mpg qt wmv)
-            * other (supports amr dms vcard tif tiff mpeg)
-
-            "Relaxed" level allows documents:
-            Content name and supported types
-            * excel (supports xls xlsm xlsx xlc xlt xltm xltx)
-            * presentation (supports key odp otp)
-            * powerpoint (supports pps ppt pptx pot)
-            * spreadsheet (supports numbers ods ots)
-            * word (supports doc docm docx dotm dotx)
-            * word_processing (supports pages odt ott rtf)
-
-            "Permissive" level allows all documents.
-
-            However, there are no security level restrictions for content posted through the channel.
-          type: "string"
-          example: "image/jpeg"
-        creationTime:
-          description: "Creation time of the attachment."
-          format: "date-time"
-          type: "string"
-          example: "2023-02-04T12:43:07Z"
-        embedded:
-          description: "Embedded in a content."
-          type: "boolean"
-          example: false
-        filename:
-          description: "Filename of the attachment."
-          type: "string"
-          example: "0.jpeg"
-        id:
-          description: "Identifier of the attachment."
-          type: "string"
-          example: "54085e5b7aa58d8b5d00006c"
-        public:
-          description: "Privacy setting of the attachment."
-          type: "boolean"
-          example: false
-        size:
-          description: "Size of the attachment."
-          type: "integer"
-          format: "int32"
-          example: 217571
-        lastModifiedTime:
-          description: "The time when the last modification was completed."
-          format: "date-time"
-          type: "string"
-          example: "2023-02-04T12:43:07Z"
-        uri:
-          description: "Uri of the attachment."
-          type: "string"
-          format: "uri"
-          example: "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c"
     ContentCapabilitiesSupported:
-      description: "Types of structured messages that can be used to reply to this type of message."
+      description: "Types of structured messages that can be used to reply to this type of message"
       items:
         type: "string"
       type: "array"
+    SocMsgAttachmentUri:
+      description: "Attachment URI"
+      type: "string"
+      format: "uri"
+      example: "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c"
     SocMsgEmailAddress:
       description: "Email address."
       type: "string"
       format: "email"
       example: "user@example.com"
-    AttachmentId:
-      type: "string"
-      description: "Attachment identifier."
-      example: "506d9e817aa58d1259000f12"
     ContentRating:
       description: |
-        Rating of the content.
-
-        Present only if the content supports rating and rating is filled.
+        Rating of content. Present only if the content supports rating and rating is filled
       type: "integer"
       format: "int32"
       example: 4
     ContentId:
-      description: "Identifier of the content."
+      description: "Content identifier"
       type: "string"
-      example: "541014e17aa58d8ccf000023"
     ContentSynchronizationStatus:
-      description: "Synchronization status."
+      description: "Synchronization status"
       type: "string"
       example: "success"
     ContentRemotelyDeleted:
-      description: "True if the content has been deleted on the remote channel."
+      description: "Set to `true` if content has been deleted on remote channel"
       type: "boolean"
       example: false
     ContentPublic:
       description: |
-        True if the content is publicly visible on the remote channel (default).
-
-        Private content is NOT supported on every channel.
+        If set to `true`, then the content is publicly visible on remote channel.
+        Private content is NOT supported on every channel
       type: "boolean"
       default: true
     ContentContextData:
       description: |
         Additional data of the content.
-
-        The contextData hash keys are the custom fields keys.
+        The `contextData` hash keys are the custom fields keys
       type: "object"
       additionalProperties:
         type: "string"
@@ -39952,83 +40101,110 @@ components:
         test2: "value2"
     ContentInReplyToContentId:
       description: |
-        The content identifier to which this content is a reply to.
-
-        On creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.
+        Content identifier to which this content is a reply to. On creation, if omitted,
+        a new discussion will be created. If the channel does not support discussion initiation,
+        this parameter is mandatory
       type: "string"
-      example: "123414e17asdd8ccf000023"
-    CreateContentRequest:
-      type: "object"
-      properties:
-        authorIdentityId:
-          $ref: "#/components/schemas/ContentAuthorIdentityId"
-        body:
-          $ref: "#/components/schemas/ContentBody"
-        inReplyToContentId:
-          $ref: "#/components/schemas/ContentInReplyToContentId"
-        public:
-          $ref: "#/components/schemas/ContentPublic"
-        sourceId:
-          $ref: "#/components/schemas/ContentSourceId"
-        attachmentIds:
-          $ref: "#/components/schemas/ContentAttachmentIds"
-        title:
-          $ref: "#/components/schemas/ContentTitle"
-        to:
-          anyOf:
-          - $ref: "#/components/schemas/ContentPhoneNumbers"
-          - $ref: "#/components/schemas/ContentEmailAddresses"
-        cc:
-          $ref: "#/components/schemas/ContentEmailAddresses"
-        bcc:
-          $ref: "#/components/schemas/ContentEmailAddresses"
-        templateName:
-          $ref: "#/components/schemas/ContentTemplateName"
-        templateLanguage:
-          $ref: "#/components/schemas/ContentTemplateLanguage"
-        components:
-          $ref: "#/components/schemas/ContentComponents"
-        contextData:
-          $ref: "#/components/schemas/ContentContextData"
-        autoSubmitted:
-          $ref: "#/components/schemas/ContentAutoSubmittedField"
     ContentPhoneNumbers:
       type: "array"
       minItems: 0
       items:
         $ref: "#/components/schemas/SocMsgPhoneNumber"
-      description: |
-        Applicable on SMS/WhatsApp channels only.
-
-        Must be a phone number to which the message will be sent. It must be in the E.164 format. For example: +33634231224.
-
-        This parameter is mandatory when initiating a discussion.
+      description: "Applicable to SMS, WhatsApp, and RingCX Messaging channels. \n\nFor WhatsApp and SMS contents, the phone number must be in E.164 format, for example, +33634231224.\nThis parameter is mandatory when initiating a new conversation. \n\nFor RingCX Messaging content, the value should be the foreign ID of the recipient's identity. \nThe outbound messaging option must be enabled. \nThis parameter is required when starting a new discussion and is forbidden when replying to an existing message.\n"
     ContentBodyInputFormat:
-      description: "Values can be Text or Html."
+      description: "Content input format"
       enum:
       - "Text"
       - "Html"
       type: "string"
+    ContentDirection:
+      description: |
+        Direction of the content.
+
+        * Incoming contents are received from a channel.
+        * Outgoing contents are exported to a channel.
+      enum:
+      - "Incoming"
+      - "Outgoing"
+      type: "string"
+      example: "Incoming"
+    SocMsgChannelId:
+      description: "Channel identifier."
+      type: "string"
+      example: "506d9e817aa58d1259000f12"
+    SocMsgContentAttachment:
+      type: "object"
+      properties:
+        contentType:
+          $ref: "#/components/schemas/SocMsgAttachmentContentType"
+        creationTime:
+          $ref: "#/components/schemas/SocMsgCreationTime"
+        embedded:
+          $ref: "#/components/schemas/SocMsgAttachmentEmbedded"
+        filename:
+          $ref: "#/components/schemas/SocMsgAttachmentFilename"
+        id:
+          $ref: "#/components/schemas/SocMsgAttachmentId"
+        public:
+          $ref: "#/components/schemas/SocMsgAttachmentPublic"
+        size:
+          $ref: "#/components/schemas/SocMsgAttachmentSize"
+        lastModifiedTime:
+          $ref: "#/components/schemas/SocMsgLastModifiedTime"
+        uri:
+          $ref: "#/components/schemas/SocMsgAttachmentUri"
     ContentForeignCategories:
       description: |
         External categories of the content.
-
-        Present only if the content has foreignCategories.
+        Returned only if the content has `foreignCategories`
       items:
         type: "string"
       type: "array"
       minItems: 0
       example:
       - "foreign_category_id"
-    ContentSourceType:
-      description: "Type of the channel."
+    ContentFirstInThread:
+      description: "True if the content is the first in the thread."
+      type: "boolean"
+      example: false
+    ContentThreadId:
+      description: "Content thread identifier"
+      type: "string"
+    SocMsgAttachmentIds:
+      description: "List of attachment identifiers to be added to the content"
+      type: "array"
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/SocMsgAttachmentId"
+      example:
+      - "541014e17aa58d8ccf000023"
+      - "541014e17aa58d8ccf000023"
+    ContentBodyFormatted:
+      description: "Text and HTML formatted versions of the content body"
+      type: "object"
+      properties:
+        html:
+          type: "string"
+        text:
+          type: "string"
+    ContentTitle:
+      description: |
+        Applicable to Email channels only. The subject of the email.
+        This field is mandatory when initiating a discussion
+      type: "string"
+      example: "An email title"
+    SocMsgAttachmentId:
+      description: "Identifier of the attachment."
+      type: "string"
+      example: "54085e5b7aa58d8b5d00006c"
+    SocMsgChannelType:
+      description: "Type of a channel"
       type: "string"
       enum:
       - "AppleMessagesForBusiness"
       - "Email"
       - "EngageMessaging"
       - "Facebook"
-      - "GoogleBusinessMessages"
       - "GoogleMyBusiness"
       - "Instagram"
       - "InstagramMessaging"
@@ -40038,70 +40214,13 @@ components:
       - "Viber"
       - "WhatsApp"
       - "Youtube"
-    ContentThreadId:
-      description: "Content thread identifier of the content."
-      type: "string"
-    NonEnumeratedPagingModel:
-      type: "object"
-      required:
-      - "perPage"
-      additionalProperties: false
-      properties:
-        perPage:
-          type: "integer"
-          format: "int32"
-          minimum: 1
-          maximum: 1000
-          description: |
-            Current page size, describes how many items are in each page.
-            Matches "perPage" parameter from the request.
-          example: 50
-        pageToken:
-          type: "string"
-          description: |
-            Current page token. May be omitted if result is empty (because non-existent page
-            was specified or perPage=0 was requested)
-        nextPageToken:
-          type: "string"
-          description: "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one."
-        previousPageToken:
-          type: "string"
-          description: |
-            A page token to be used to fetch the previous page of the result set.
-            May be omitted if the current page is the first one or if the result set does not support backward navigation.
-        firstPageToken:
-          type: "string"
-          description: "A page token to be used to fetch the first page of the result set."
-    ContentSourceUri:
-      description: "External Uri of the content channel."
-      type: "string"
-      format: "uri"
-    ContentBodyFormatted:
-      description: "Text and HTML formatted versions of the content body."
-      type: "object"
-      properties:
-        html:
-          type: "string"
-        text:
-          type: "string"
-    ContentTitle:
-      description: |
-        Applicable to Email channels only.
-
-        The subject of the email.
-
-        This field is mandatory when initiating a discussion.
-      type: "string"
-      example: "An email title"
-    ContentSourceId:
-      description: |
-        Identifier of the channel.
-
-        On creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.
-      type: "string"
-      example: "fff415437asdd8ccf000023"
+    SocMsgAttachmentPublic:
+      description: "Attachment privacy setting"
+      type: "boolean"
+      example: false
+      default: true
     ContentCreatorId:
-      description: "RC user id of the creator"
+      description: "RingCentral user identifier of the creator"
       type: "string"
       example: "2683222036"
     ContentStatuses:
@@ -40112,6 +40231,12 @@ components:
       description: "Twitter description of the identity. Applicable to Twitter channels only"
       type: "string"
       example: "Software Engineer"
+    IdentityIdentityType:
+      description: "Either Agent or Customer"
+      type: "string"
+      enum:
+      - "Agent"
+      - "Customer"
     IdentityTwLocation:
       description: "Twitter location of the identity. Applicable to Twitter channels only"
       type: "string"
@@ -40190,6 +40315,8 @@ components:
           $ref: "#/components/schemas/SocMsgPhoneNumber"
         identityGroupId:
           $ref: "#/components/schemas/IdentityGroupId"
+        identityType:
+          $ref: "#/components/schemas/IdentityIdentityType"
         lastName:
           $ref: "#/components/schemas/SocMsgLastName"
         mobilePhone:
@@ -40335,7 +40462,6 @@ components:
       - "Email"
       - "EngageMessaging"
       - "Facebook"
-      - "GoogleBusinessMessages"
       - "GoogleMyBusiness"
       - "Instagram"
       - "Linkedin"
@@ -42646,7 +42772,7 @@ components:
         attachments:
           type: "array"
           items:
-            $ref: "#/components/schemas/TMAttachmentInfo"
+            $ref: "#/components/schemas/TaskAttachment"
     TMMessageAttachmentInfo:
       type: "object"
       properties:
@@ -44052,7 +44178,7 @@ components:
         type: "string"
         default: "~"
       example: "~"
-    GreetingId:
+    CallHandlingGreetingId:
       name: "greetingId"
       in: "path"
       description: "Internal identifier of a greeting"
@@ -44179,7 +44305,7 @@ components:
       required: true
       schema:
         type: "string"
-    TemplateId:
+    MessageTemplateId:
       name: "templateId"
       in: "path"
       description: "Internal identifier of a text message template"
@@ -44443,6 +44569,14 @@ components:
       schema:
         type: "string"
       example: "400142200026-400142200026-bd162f24028442489385eb3f44c18354"
+    AccessibleSitesOnly:
+      name: "accessibleSitesOnly"
+      in: "query"
+      required: false
+      schema:
+        type: "boolean"
+      description: "Flag to enable cross-site limitation checking"
+      example: true
     IfNoneMatch:
       name: "If-None-Match"
       in: "header"
@@ -44538,72 +44672,57 @@ components:
       schema:
         type: "string"
       example: "JohnDoe"
-    IdentityGroupFilter:
+    FilterInterventionIds:
       in: "query"
-      name: "identityGroup"
+      name: "interventionIds"
       required: false
       schema:
         type: "array"
         items:
           type: "string"
-      description: "Filter based on the specified identity group identifiers."
+      description: "Filter based on the specified intervention identifiers"
       example:
       - "7f946431b6eebffafae642cc"
       - "re946431b6eebffafae642cc"
-    ThreadFilter:
+    FilterAuthorIdentityGroupIds:
       in: "query"
-      name: "thread"
+      name: "authorIdentityGroupIds"
       required: false
       schema:
         type: "array"
         items:
           type: "string"
-      description: "Filter based on the specified thread identifiers."
+      description: "Filter based on the specified identity group identifiers"
       example:
       - "7f946431b6eebffafae642cc"
-    SourceFilter:
+      - "re946431b6eebffafae642cc"
+    FilterContentDirection:
       in: "query"
-      name: "source"
+      name: "contentDirection"
       required: false
+      description: "Filter for specified content direction."
+      example: "Incoming"
       schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified channel identifiers."
-      example:
-      - "7f946431b6eebffafae642cc"
-    StatusFilter:
+        $ref: "#/components/schemas/ContentDirection"
+    FilterStatus:
       in: "query"
       name: "status"
       required: false
-      description: "Filter for specified status."
+      description: "Filter for specified status"
       schema:
         $ref: "#/components/schemas/ContentStatuses"
-    InterventionFilter:
+    FilterThreadIds:
       in: "query"
-      name: "intervention"
+      name: "threadIds"
       required: false
       schema:
         type: "array"
         items:
           type: "string"
-      description: "Filter based on the specified intervention identifiers."
+      description: "Filter based on the specified thread identifiers"
       example:
       - "7f946431b6eebffafae642cc"
-      - "re946431b6eebffafae642cc"
-    IdentityFilter:
-      in: "query"
-      name: "identity"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified identity identifiers."
-      example:
-      - "7f946431b6eebffafae642cc"
-      - "re946431b6eebffafae642cc"
-    TextFilter:
+    FilterText:
       in: "query"
       name: "text"
       required: false
@@ -44611,28 +44730,52 @@ components:
         type: "array"
         items:
           type: "string"
-      description: "Filter based on the specified text(s). Provided multiple times, the values are ANDed."
+      description: "Filter based on the specified text(s). Provided multiple times, the values are ANDed"
+    FilterChannelIds:
+      in: "query"
+      name: "channelIds"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified channel identifiers"
+      example:
+      - "7f946431b6eebffafae642cc"
     SocMsgOrderBy:
       in: "query"
       name: "orderBy"
       required: false
       description: "Order results by specified field."
       schema:
-        $ref: "#/components/schemas/SocMsgCreationTimeOrder"
+        $ref: "#/components/schemas/SocMsgOrder"
+    FilterAuthorIdentityIds:
+      in: "query"
+      name: "authorIdentityIds"
+      required: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
+      description: "Filter based on the specified identity identifiers"
+      example:
+      - "7f946431b6eebffafae642cc"
+      - "re946431b6eebffafae642cc"
     ContentId:
       in: "path"
       name: "contentId"
+      description: "Internal identifier of the content"
       required: true
       schema:
         type: "string"
-    UUID:
-      name: "uuid"
-      description: "Filter based on the specified `uuid`"
+    FilterIdentityType:
+      name: "identityType"
+      description: "Filter based on the specified `identityType`"
       in: "query"
       required: false
       schema:
-        type: "string"
-    IdentityGroupIds:
+        $ref: "#/components/schemas/IdentityIdentityType"
+    FilterIdentityGroupIds:
       name: "identityGroupIds"
       description: "Filter based on the specified `identityGroupIds` (separated by commas)"
       in: "query"
@@ -44643,16 +44786,23 @@ components:
         type: "array"
         items:
           type: "string"
-    SourceId:
-      name: "sourceId"
-      description: "Filter based on the specified `sourceId`"
+    FilterUUID:
+      name: "uuid"
+      description: "Filter based on the specified `uuid`"
       in: "query"
       required: false
       schema:
         type: "string"
-    UserId:
+    FilterUserId:
       name: "userId"
       description: "Filter based on the specified `userId`"
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+    FilterChannelId:
+      name: "channelId"
+      description: "Filter based on the specified channelId."
       in: "query"
       required: false
       schema:
@@ -44745,6 +44895,10 @@ components:
           usageType: "Inventory"
         - phoneNumber: "+16501234567"
           usageType: "Inventory"
+          activationStatus: "Active"
+        - phoneNumber: "+16501234568"
+          usageType: "Inventory"
+          activationStatus: "Inactive"
     AddPhoneNumbersResponse:
       value:
         records:
@@ -44819,11 +44973,13 @@ components:
       value:
         errors:
         - errorCode: "EDI-005"
-          message: "Source does not support this type of structured content"
+          message: "Channel does not support this type of structured content"
     EDI-008:
-      summary: "Parameter type is invalid"
+      summary: "Invalid parameter type"
       value:
         errors:
+        - errorCode: "EDI-008"
+          message: "[${parameter}] param value must be a [${expectedClass}], got [${extraValuesClass}]"
         - errorCode: "EDI-008"
           message: "[${parameterName}] must be a hash, got [${extraValuesClass}]"
     EDI-007:
@@ -44859,13 +45015,13 @@ components:
       value:
         errors:
         - errorCode: "EDI-004"
-          message: "Compose is not supported on this source"
+          message: "Compose is not supported on this channel"
     EDI-003:
       summary: "Private compose is not supported on the channel"
       value:
         errors:
         - errorCode: "EDI-003"
-          message: "Private compose is not supported on this source, try adding public=true parameter"
+          message: "Private compose is not supported on this channel, try adding public=true parameter"
     ReplyContentOnEmailChannel:
       summary: "Reply to a content on an Email channel"
       value:
@@ -44891,6 +45047,11 @@ components:
         inReplyToContentId: "541014e17aa58d8ccf000063"
         body: "This is a sample content body for a private content with authorIdentityId specified"
         public: false
+    CreateContentWithChannelId:
+      summary: "An example for Create content with channelId"
+      value:
+        channelId: "541014e17aa58d8ccf000023"
+        body: "This is a sample content body"
     EDI-028:
       summary: "Search query is invalid"
       value:
@@ -44958,7 +45119,7 @@ components:
         bcc:
         - "test.bcc@test.com"
         body: "Sample email content"
-        sourceId: "541014e17aa58d8ccf000093"
+        channelId: "541014e17aa58d8ccf000093"
     EDI-017:
       summary: "The agent is not authorized to create a new discussion on this channel"
       value:
@@ -45019,10 +45180,10 @@ components:
         errors:
         - errorCode: "EDI-010"
           message: "Attachments are not supported for this type of content"
-    CreateOutboundContentOnWhatsappChannel:
+    CreateOutboundContentOnWhatsAppChannel:
       summary: "An example for Create outbound content for WhatsApp channel"
       value:
-        sourceId: "5c1bd9c7d6cb0053da1e9d78"
+        channelId: "5c1bd9c7d6cb0053da1e9d78"
         to:
         - "+33620202020"
         templateName: "test_template_name"
@@ -45038,11 +45199,6 @@ components:
         errors:
         - errorCode: "EDI-040"
           message: "Invalid parameters provided"
-    ReplyContentOnWhatsappChannel:
-      summary: "A reply example to a WhatsApp channel content"
-      value:
-        body: "test whatsapp content"
-        inReplyToContentId: "63e664a9713368687b6ef4e4"
     EDI-038:
       summary: "A pagination attribute is invalid"
       value:
@@ -45116,11 +45272,11 @@ components:
         errors:
         - errorCode: "EDI-032"
           message: "Invalid id: [${invalidId}]"
-    CreateContentWithSourceId:
-      summary: "An example for Create content with sourceId"
+    ReplyContentOnWhatsAppChannel:
+      summary: "A reply example to a WhatsApp channel content"
       value:
-        sourceId: "541014e17aa58d8ccf000023"
-        body: "This is a sample content body"
+        body: "Test whatsApp content"
+        inReplyToContentId: "63e664a9713368687b6ef4e4"
   requestBodies:
     SummaryCallbackRequest:
       description: "Summary Callback Output"
@@ -45304,3 +45460,61 @@ components:
                   format: "date-time"
             - $ref: "#/components/schemas/InteractionApiResponse"
       required: true
+    CreateContentRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              authorIdentityId:
+                $ref: "#/components/schemas/ContentAuthorIdentityId"
+              body:
+                $ref: "#/components/schemas/ContentBody"
+              inReplyToContentId:
+                $ref: "#/components/schemas/ContentInReplyToContentId"
+              public:
+                $ref: "#/components/schemas/ContentPublic"
+              channelId:
+                $ref: "#/components/schemas/SocMsgChannelId"
+              attachmentIds:
+                $ref: "#/components/schemas/SocMsgAttachmentIds"
+              title:
+                $ref: "#/components/schemas/ContentTitle"
+              to:
+                anyOf:
+                - $ref: "#/components/schemas/ContentPhoneNumbers"
+                - $ref: "#/components/schemas/ContentEmailAddresses"
+              cc:
+                $ref: "#/components/schemas/ContentEmailAddresses"
+              bcc:
+                $ref: "#/components/schemas/ContentEmailAddresses"
+              templateName:
+                $ref: "#/components/schemas/ContentTemplateName"
+              templateLanguage:
+                $ref: "#/components/schemas/ContentTemplateLanguage"
+              components:
+                $ref: "#/components/schemas/ContentComponents"
+              contextData:
+                $ref: "#/components/schemas/ContentContextData"
+              autoSubmitted:
+                $ref: "#/components/schemas/ContentAutoSubmittedField"
+          examples:
+            Create content with inReplyToContentId:
+              $ref: "#/components/examples/CreateContentWithInReplyToContentId"
+            Create content with channelId:
+              $ref: "#/components/examples/CreateContentWithChannelId"
+            Create content with attachments:
+              $ref: "#/components/examples/CreateContentWithAttachments"
+            Create content with specified authorIdentityId:
+              $ref: "#/components/examples/CreateContentWithAuthorIdentityId"
+            Create content with context data:
+              $ref: "#/components/examples/CreateContentWithContextData"
+            Create content for Email channel:
+              $ref: "#/components/examples/CreateContentOnEmailChannel"
+            Reply to a content for Email channel:
+              $ref: "#/components/examples/ReplyContentOnEmailChannel"
+            Create content for WhatsApp channel:
+              $ref: "#/components/examples/CreateOutboundContentOnWhatsAppChannel"
+            Reply to a whatsapp content:
+              $ref: "#/components/examples/ReplyContentOnWhatsAppChannel"

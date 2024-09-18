@@ -1015,7 +1015,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "description": "Type of phone number",
+            "description": "Type of a phone number",
             "nullable": true,
             "enum": [
               "VoiceFax",
@@ -1055,7 +1055,7 @@
         },
         {
           "name": "status",
-          "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise, it is an external number not yet ported to RingCentral",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "type": "string",
           "enum": [
             "Normal",
@@ -1832,6 +1832,7 @@
         {
           "name": "addressStatus",
           "type": "string",
+          "description": "Emergency address status",
           "enum": [
             "Valid",
             "Invalid",
@@ -2028,6 +2029,11 @@
           "name": "memberExtensionId",
           "description": "Internal identifier of an extension that is a member of every\ngroup within the result\n",
           "type": "string"
+        },
+        {
+          "name": "siteId",
+          "description": "Internal identifier of a site",
+          "type": "string"
         }
       ]
     },
@@ -2055,6 +2061,12 @@
       "name": "ListDirectoryEntriesParameters",
       "description": "Query parameters for operation listDirectoryEntries",
       "fields": [
+        {
+          "name": "accessibleSitesOnly",
+          "description": "Flag to enable cross-site limitation checking",
+          "example": true,
+          "type": "boolean"
+        },
         {
           "name": "showFederated",
           "description": "If `true` then contacts of all accounts in federation are returned. If `false` then only contacts of the current account are returned, and account section is eliminated in this case",
@@ -2114,9 +2126,27 @@
       ]
     },
     {
+      "name": "ReadDirectoryEntryParameters",
+      "description": "Query parameters for operation readDirectoryEntry",
+      "fields": [
+        {
+          "name": "accessibleSitesOnly",
+          "description": "Flag to enable cross-site limitation checking",
+          "example": true,
+          "type": "boolean"
+        }
+      ]
+    },
+    {
       "name": "SearchDirectoryEntriesParameters",
       "description": "Query parameters for operation searchDirectoryEntries",
       "fields": [
+        {
+          "name": "accessibleSitesOnly",
+          "description": "Flag to enable cross-site limitation checking",
+          "example": true,
+          "type": "boolean"
+        },
         {
           "name": "accountId",
           "description": "A list of Account IDs",
@@ -2314,16 +2344,18 @@
         },
         {
           "name": "status",
-          "description": "Extension current state. Multiple values are supported. If 'Unassigned'\nis specified, then extensions without `extensionNumber` attribute are returned.\nIf not specified, then all extensions are returned\n",
+          "description": "Extension status. Multiple values are supported. If `Unassigned`\nis specified, then extensions without `extensionNumber` attribute are returned.\nIf not specified, then all extensions are returned\n",
           "allowEmptyValue": true,
           "style": "form",
           "explode": true,
           "type": "array",
           "items": {
             "type": "string",
+            "description": "Extension status",
             "enum": [
               "Enabled",
               "Disabled",
+              "Frozen",
               "NotActivated",
               "Unassigned"
             ]
@@ -3620,13 +3652,14 @@
       "fields": [
         {
           "name": "status",
-          "description": "Status of a phone number",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "type": "string",
           "enum": [
             "Normal",
             "Pending",
             "PortedIn",
-            "Temporary"
+            "Temporary",
+            "Unknown"
           ]
         },
         {
@@ -3964,13 +3997,14 @@
         },
         {
           "name": "status",
-          "description": "Status of a phone number",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "type": "string",
           "enum": [
             "Normal",
             "Pending",
             "PortedIn",
-            "Temporary"
+            "Temporary",
+            "Unknown"
           ]
         }
       ]
@@ -4451,12 +4485,12 @@
       ]
     },
     {
-      "name": "SocMsgListContentsParameters",
-      "description": "Query parameters for operation socMsgListContents",
+      "name": "ListSocialMessagingContentsParameters",
+      "description": "Query parameters for operation listSocialMessagingContents",
       "fields": [
         {
-          "name": "intervention",
-          "description": "Filter based on the specified intervention identifiers.",
+          "name": "interventionIds",
+          "description": "Filter based on the specified intervention identifiers",
           "example": [
             "7f946431b6eebffafae642cc",
             "re946431b6eebffafae642cc"
@@ -4467,8 +4501,8 @@
           }
         },
         {
-          "name": "identity",
-          "description": "Filter based on the specified identity identifiers.",
+          "name": "authorIdentityIds",
+          "description": "Filter based on the specified identity identifiers",
           "example": [
             "7f946431b6eebffafae642cc",
             "re946431b6eebffafae642cc"
@@ -4479,8 +4513,8 @@
           }
         },
         {
-          "name": "identityGroup",
-          "description": "Filter based on the specified identity group identifiers.",
+          "name": "authorIdentityGroupIds",
+          "description": "Filter based on the specified identity group identifiers",
           "example": [
             "7f946431b6eebffafae642cc",
             "re946431b6eebffafae642cc"
@@ -4491,8 +4525,8 @@
           }
         },
         {
-          "name": "source",
-          "description": "Filter based on the specified channel identifiers.",
+          "name": "channelIds",
+          "description": "Filter based on the specified channel identifiers",
           "example": [
             "7f946431b6eebffafae642cc"
           ],
@@ -4502,8 +4536,18 @@
           }
         },
         {
-          "name": "thread",
-          "description": "Filter based on the specified thread identifiers.",
+          "name": "contentDirection",
+          "description": "Direction of the content.\n\n* Incoming contents are received from a channel.\n* Outgoing contents are exported to a channel.\n",
+          "example": "Incoming",
+          "enum": [
+            "Incoming",
+            "Outgoing"
+          ],
+          "type": "string"
+        },
+        {
+          "name": "threadIds",
+          "description": "Filter based on the specified thread identifiers",
           "example": [
             "7f946431b6eebffafae642cc"
           ],
@@ -4514,7 +4558,7 @@
         },
         {
           "name": "text",
-          "description": "Filter based on the specified text(s). Provided multiple times, the values are ANDed.",
+          "description": "Filter based on the specified text(s). Provided multiple times, the values are ANDed",
           "type": "array",
           "items": {
             "type": "string"
@@ -4522,10 +4566,10 @@
         },
         {
           "name": "status",
-          "description": "Filter for specified status.",
+          "description": "Filter for specified status",
           "type": "array",
           "items": {
-            "description": "Content status.",
+            "description": "Content status",
             "type": "string",
             "enum": [
               "New",
@@ -4539,12 +4583,15 @@
         },
         {
           "name": "orderBy",
-          "description": "Ordering by creationTime is descending by default.",
+          "description": "Ordering by creationTime and lastModifiedTime is descending by default.",
           "type": "string",
           "enum": [
             "-creationTime",
             "+creationTime",
-            "creationTime"
+            "creationTime",
+            "-lastModifiedTime",
+            "+lastModifiedTime",
+            "lastModifiedTime"
           ],
           "default": "-creationTime",
           "example": "+creationTime"
@@ -4573,8 +4620,8 @@
       "description": "Query parameters for operation listSocialMessagingIdentities",
       "fields": [
         {
-          "name": "sourceId",
-          "description": "Filter based on the specified `sourceId`",
+          "name": "channelId",
+          "description": "Filter based on the specified channelId.",
           "type": "string"
         },
         {
@@ -4588,6 +4635,15 @@
           }
         },
         {
+          "name": "identityType",
+          "description": "Either Agent or Customer",
+          "type": "string",
+          "enum": [
+            "Agent",
+            "Customer"
+          ]
+        },
+        {
           "name": "userId",
           "description": "Filter based on the specified `userId`",
           "type": "string"
@@ -4599,12 +4655,15 @@
         },
         {
           "name": "orderBy",
-          "description": "Ordering by creationTime is descending by default.",
+          "description": "Ordering by creationTime and lastModifiedTime is descending by default.",
           "type": "string",
           "enum": [
             "-creationTime",
             "+creationTime",
-            "creationTime"
+            "creationTime",
+            "-lastModifiedTime",
+            "+lastModifiedTime",
+            "lastModifiedTime"
           ],
           "default": "-creationTime",
           "example": "+creationTime"
@@ -5182,7 +5241,9 @@
         },
         {
           "type": "string",
-          "description": "Alpha-2 ISO Code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
           "example": "US",
           "name": "isoCode",
           "required": false
@@ -5242,6 +5303,181 @@
           "$ref": "GreetingAnsweringRuleId",
           "name": "answeringRule",
           "required": false
+        }
+      ]
+    },
+    {
+      "name": "CreateSocialMessagingContentRequest",
+      "description": "Request body for operation createSocialMessagingContent",
+      "fields": [
+        {
+          "description": "Identity identifier of the content author. Not mandatory on creation,\nby default it uses the token's user first identity on channel\n",
+          "type": "string",
+          "name": "authorIdentityId"
+        },
+        {
+          "description": "Content body. On creation this field is mandatory except for WhatsApp content\nusing templates. The following are the channels supported and their **max length**\nrestrictions (in brackets):\n\n  - *Apple Messages For Business* (10000)\n  - *Email* (262144)\n  - *RingCX Digital Messaging* (1024)\n  - *Facebook* (8000)\n  - *Google My Business* (4000)\n  - *Instagram* (950)\n  - *Instagram Messaging* (1000)\n  - *LinkedIn* (3000)\n  - *Messenger* (2000)\n  - *Twitter* (280)\n  - *Viber* (7000)\n  - *WhatsApp* (3800)\n  - *Youtube* (8000)\n",
+          "type": "string",
+          "example": "Body of the content",
+          "name": "body"
+        },
+        {
+          "description": "Content identifier to which this content is a reply to. On creation, if omitted,\na new discussion will be created. If the channel does not support discussion initiation,\nthis parameter is mandatory\n",
+          "type": "string",
+          "name": "inReplyToContentId"
+        },
+        {
+          "description": "If set to `true`, then the content is publicly visible on remote channel.\nPrivate content is NOT supported on every channel\n",
+          "type": "boolean",
+          "default": true,
+          "name": "public"
+        },
+        {
+          "description": "Channel identifier.",
+          "type": "string",
+          "example": "506d9e817aa58d1259000f12",
+          "name": "channelId"
+        },
+        {
+          "description": "List of attachment identifiers to be added to the content",
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Identifier of the attachment.",
+            "type": "string",
+            "example": "54085e5b7aa58d8b5d00006c"
+          },
+          "example": [
+            "541014e17aa58d8ccf000023",
+            "541014e17aa58d8ccf000023"
+          ],
+          "name": "attachmentIds"
+        },
+        {
+          "description": "Applicable to Email channels only. The subject of the email.\nThis field is mandatory when initiating a discussion\n",
+          "type": "string",
+          "example": "An email title",
+          "name": "title"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
+          "name": "to"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
+          "name": "cc"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "description": "Email address.",
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
+          "name": "bcc"
+        },
+        {
+          "type": "string",
+          "description": "Applicable to WhatsApp channels only. Name of the WhatsApp template to use for the content.\nAll available template names are visible on the WhatsApp Business Manager interface\n",
+          "example": "customer_order_shipment_template",
+          "name": "templateName"
+        },
+        {
+          "type": "string",
+          "description": "Applicable to WhatsApp channels only. Language of the WhatsApp template\nto use for the content. All available template languages are visible on\nthe WhatsApp Business Manager interface. Language specified must conform\nto the ISO 639-1 alpha-2 codes for representing the names of languages\n",
+          "example": "fr",
+          "name": "templateLanguage"
+        },
+        {
+          "type": "array",
+          "minItems": 0,
+          "description": "Applicable to WhatsApp channels only. Component configuration of the WhatsApp\ntemplate to use for the content. All available components are visible on\nthe WhatsApp Business Manager interface\n",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "array",
+                "minItems": 0,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": [
+            {
+              "Message1": [
+                {
+                  "param11": {
+                    "type": "Name",
+                    "text": "John"
+                  }
+                },
+                {
+                  "param12": {
+                    "type": "Message",
+                    "text": "Product rocks!"
+                  }
+                }
+              ]
+            },
+            {
+              "Message2": [
+                {
+                  "param21": {
+                    "type": "Agent Name",
+                    "text": "Alice"
+                  }
+                },
+                {
+                  "param22": {
+                    "type": "Message",
+                    "text": "Thank you"
+                  }
+                }
+              ]
+            }
+          ],
+          "name": "components"
+        },
+        {
+          "$ref": "ContentContextData",
+          "name": "contextData"
+        },
+        {
+          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
+          "type": "boolean",
+          "name": "autoSubmitted"
         }
       ]
     },
@@ -8401,6 +8637,15 @@
           "example": 10,
           "name": "registrantCount",
           "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "The current number of post webinar registrants",
+          "readOnly": true,
+          "example": 10,
+          "name": "postWebinarRegistrantCount",
+          "required": false
         },
         {
           "type": "boolean",
@@ -11585,7 +11830,7 @@
     },
     {
       "name": "GetTokenRequest",
-      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type",
+      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow\nwith the `guest` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -11752,13 +11997,13 @@
           "type": "string",
           "description": "Resource type for the guest access.",
           "name": "resource_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
           "description": "Resource URL for the guest access.",
           "name": "resource",
-          "required": false
+          "required": true
         }
       ]
     },
@@ -11873,7 +12118,7 @@
             "ivr_pin"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -11885,21 +12130,7 @@
     },
     {
       "name": "ClientCredentialsBase",
-      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Grant type",
-          "enum": [
-            "client_credentials"
-          ],
-          "name": "grant_type"
-        }
-      ]
-    },
-    {
-      "name": "ClientCredentialsTokenRequest",
-      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow\nwith the `client_credentials` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -11908,7 +12139,22 @@
             "client_credentials"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ClientCredentialsTokenRequest",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow\nwith the `client_credentials` grant type\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Grant type",
+          "enum": [
+            "client_credentials"
+          ],
+          "name": "grant_type",
+          "required": true
         },
         {
           "type": "string",
@@ -11941,7 +12187,7 @@
             "urn:ietf:params:oauth:grant-type:device_code"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -11971,7 +12217,7 @@
     },
     {
       "name": "ClientCredentialsByAccount",
-      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow\nwith the `client_credentials` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -11980,7 +12226,7 @@
             "client_credentials"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -11992,7 +12238,7 @@
     },
     {
       "name": "GuestTokenRequest",
-      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow with the `guest` grant type",
+      "description": "Token endpoint request parameters used in the \"Guest\" authorization flow\nwith the `guest` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -12000,22 +12246,26 @@
           "enum": [
             "guest"
           ],
-          "name": "grant_type"
+          "name": "grant_type",
+          "required": true
         },
         {
           "type": "string",
           "description": "RingCentral Brand identifier.",
-          "name": "brand_id"
+          "name": "brand_id",
+          "required": false
         },
         {
           "type": "string",
           "description": "Resource type for the guest access.",
-          "name": "resource_type"
+          "name": "resource_type",
+          "required": true
         },
         {
           "type": "string",
           "description": "Resource URL for the guest access.",
-          "name": "resource"
+          "name": "resource",
+          "required": true
         }
       ]
     },
@@ -12030,7 +12280,7 @@
             "authorization_code"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12055,7 +12305,7 @@
     },
     {
       "name": "ClientCredentialsByBrand",
-      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow\nwith the `client_credentials` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -12064,7 +12314,7 @@
             "client_credentials"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12076,7 +12326,7 @@
     },
     {
       "name": "ClientCredentialsByPartnerAccount",
-      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow with the `client_credentials` grant type",
+      "description": "Token endpoint request parameters used in the \"Client Credentials\" authorization flow\nwith the `client_credentials` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -12085,7 +12335,7 @@
             "client_credentials"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12113,7 +12363,7 @@
             "partner_jwt"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12197,7 +12447,7 @@
             "refresh_token"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12209,7 +12459,7 @@
     },
     {
       "name": "OtpTokenRequest",
-      "description": "Token endpoint request parameters used in the \"One-time Password\" (OTP) authorization flow with the `otp` grant type",
+      "description": "Token endpoint request parameters used in the \"One-time Password\" (OTP) authorization flow\nwith the `otp` grant type\n",
       "fields": [
         {
           "type": "string",
@@ -12218,7 +12468,7 @@
             "otp"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12239,7 +12489,7 @@
             "password"
           ],
           "name": "grant_type",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -12510,12 +12760,6 @@
           "description": "Sub-brand unique ID",
           "example": "111.222",
           "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Sub-brand name",
-          "example": "Sub-brand name",
-          "name": "name"
         }
       ]
     },
@@ -12547,22 +12791,16 @@
           "required": false
         },
         {
-          "description": "Account status",
           "type": "string",
+          "description": "Status of an account",
           "enum": [
             "Initial",
             "Unconfirmed",
             "Confirmed",
             "Disabled"
           ],
-          "example": "Confirmed",
           "name": "status",
           "required": true
-        },
-        {
-          "$ref": "AccountStatusInfo",
-          "name": "statusInfo",
-          "required": false
         },
         {
           "description": "Company name",
@@ -12634,12 +12872,17 @@
           "required": true
         },
         {
+          "$ref": "ServiceInfoPackage",
+          "name": "partnerPackage",
+          "required": false
+        },
+        {
           "$ref": "ServiceInfoBrand",
           "name": "brand",
           "required": false
         },
         {
-          "$ref": "ServiceInfoCountryShortModel",
+          "$ref": "ServiceInfoContractedCountryId",
           "name": "contractedCountry",
           "required": false
         },
@@ -12671,11 +12914,6 @@
         },
         {
           "type": "string",
-          "description": "Edition of a service plan",
-          "name": "edition"
-        },
-        {
-          "type": "string",
           "enum": [
             "Freyja",
             "Phoenix"
@@ -12685,35 +12923,12 @@
       ]
     },
     {
-      "name": "AccountStatusInfo",
-      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "name": "ServiceInfoContractedCountryId",
       "fields": [
         {
           "type": "string",
-          "description": "Type of suspension, voluntarily or not",
-          "enum": [
-            "SuspendedVoluntarily",
-            "SuspendedInvoluntarily",
-            "CancelledVoluntarily",
-            "CancelledInvoluntarily"
-          ],
-          "example": "CancelledVoluntarily",
-          "name": "reason"
-        },
-        {
-          "type": "string",
-          "description": "A meaningful description of the reason to change the status",
-          "minLength": 1,
-          "maxLength": 256,
-          "example": "By customer request. Case ABC123",
-          "name": "comment"
-        },
-        {
-          "type": "string",
-          "description": "Date after which the account will get deleted. Parameter can be used to overwrite default retention period",
-          "format": "date-time",
-          "example": "2023-03-26T11:30:45.940Z",
-          "name": "till"
+          "description": "Internal identifier of a country",
+          "name": "id"
         }
       ]
     },
@@ -12814,74 +13029,6 @@
           ],
           "name": "version",
           "required": true
-        }
-      ]
-    },
-    {
-      "name": "CountryInfoMinimalModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country resource",
-          "name": "uri"
-        }
-      ]
-    },
-    {
-      "name": "ServiceInfoCountryShortModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "The official name of a country",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "description": "A ISO country code value complying with the\n[ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\nformat.\n",
-          "name": "isoCode"
-        },
-        {
-          "type": "string",
-          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164),\nsee [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
-          "name": "callingCode"
-        }
-      ]
-    },
-    {
-      "name": "CountryInfoBasicModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a country resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "The official name of a country",
-          "name": "name"
         }
       ]
     },
@@ -13129,7 +13276,7 @@
     },
     {
       "name": "DeletePhoneNumbersRequestItem",
-      "description": "The indication of a number to be deleted - either \"id\" or \"phoneNumber\" must be specified.",
+      "description": "The indication of a number to be deleted - either `id` or `phoneNumber` must be specified.",
       "fields": [
         {
           "type": "string",
@@ -13188,7 +13335,7 @@
         },
         {
           "type": "string",
-          "description": "Type of phone number",
+          "description": "Type of a phone number",
           "nullable": true,
           "enum": [
             "VoiceFax",
@@ -13245,7 +13392,7 @@
         },
         {
           "type": "string",
-          "description": "Status of a phone number. If the value is 'Normal', the phone number is ready to be used. Otherwise, it is an external number not yet ported to RingCentral",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "enum": [
             "Normal",
             "Pending",
@@ -13291,7 +13438,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Type of phone number",
+          "description": "Type of a phone number",
           "nullable": true,
           "enum": [
             "VoiceFax",
@@ -13308,7 +13455,6 @@
             "MainCompanyNumber",
             "CompanyNumber",
             "DirectNumber",
-            "PhoneLine",
             "ContactCenterNumber"
           ],
           "name": "usageType",
@@ -13364,6 +13510,16 @@
           ],
           "name": "usageType",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Phone number activation status. Determine whether phone number migration is completed on the partner side.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "activationStatus",
+          "required": false
         }
       ]
     },
@@ -13434,6 +13590,16 @@
           "example": "+16501234567",
           "name": "phoneNumber",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Phone number activation status. Determine whether phone number migration is completed on the partner side.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "activationStatus",
+          "required": false
         }
       ]
     },
@@ -13456,6 +13622,140 @@
           "description": "Task status",
           "example": "Accepted",
           "name": "status"
+        }
+      ]
+    },
+    {
+      "name": "CostCenterBase",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Internal identifier of a cost center",
+          "readOnly": true,
+          "example": 981086004,
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Cost Center name",
+          "example": "My Cost Center",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Billing code associated with a cost center",
+          "example": "BC 101",
+          "name": "billingCode"
+        }
+      ]
+    },
+    {
+      "name": "CostCenterItem",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Internal identifier of a cost center",
+          "readOnly": true,
+          "example": 981086004,
+          "name": "id",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Cost Center name",
+          "example": "My Cost Center",
+          "name": "name",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Billing code associated with a cost center",
+          "example": "BC 101",
+          "name": "billingCode",
+          "required": false
+        },
+        {
+          "$ref": "TaxLocation",
+          "name": "taxLocation",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Internal identifier of a parent cost center",
+          "example": 45878,
+          "name": "parentId",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "CostCenterList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "CostCenterItem"
+          },
+          "name": "records",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "TaxLocation",
+      "fields": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Internal identifier of a tax location",
+          "readOnly": true,
+          "example": 981086004,
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Tax location name",
+          "example": "Tax_Location",
+          "name": "name",
+          "required": true
+        },
+        {
+          "description": "Type of the location object. Only 'TaxLocation' is currently supported for POST method",
+          "type": "string",
+          "enum": [
+            "BillingAddress",
+            "TaxLocation",
+            "Site"
+          ],
+          "example": "TaxLocation",
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Unique identifier of a tax location in the partner's system",
+          "maxLength": 30,
+          "example": "4587834894962936",
+          "name": "externalLocationId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05T10:11:12Z",
+          "description": "Effective date in the ISO 8601 (`YYYY-MM-DDThh:mm:ssTZD`) format, including date, time, and timezone\n",
+          "name": "effectiveDate",
+          "required": false
+        },
+        {
+          "$ref": "PostalAddress",
+          "name": "address",
+          "required": true
         }
       ]
     },
@@ -13939,6 +14239,58 @@
       ]
     },
     {
+      "name": "CallFlipNumberResource",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a call flip number",
+          "example": "409926525004",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Flip number in E.164 format with '+'",
+          "example": "+16502096935",
+          "name": "phoneNumber"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "PhoneLine",
+            "External"
+          ],
+          "description": "Flip number type",
+          "example": "PhoneLine",
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Flip number label, device name for Digital Line case",
+          "example": "My Mobile Number",
+          "name": "label"
+        },
+        {
+          "type": "string",
+          "description": "Speed dial/flip number, the range is 1-8",
+          "example": "5",
+          "name": "flipNumber"
+        }
+      ]
+    },
+    {
+      "name": "CallFlipNumberListResource",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of call flip numbers",
+          "items": {
+            "$ref": "CallFlipNumberResource"
+          },
+          "name": "records"
+        }
+      ]
+    },
+    {
       "name": "GetAccountInfoResponse",
       "fields": [
         {
@@ -13993,11 +14345,11 @@
         },
         {
           "type": "string",
-          "description": "Status of the current account",
+          "description": "Status of an account",
           "enum": [
             "Initial",
-            "Confirmed",
             "Unconfirmed",
+            "Confirmed",
             "Disabled"
           ],
           "name": "status"
@@ -14328,11 +14680,12 @@
         },
         {
           "type": "string",
-          "description": "Time format setting. The default value is '12h' = ['12h', '24h']",
+          "description": "Time format (12-hours or 24-hours).",
           "enum": [
             "12h",
             "24h"
           ],
+          "default": "12h",
           "name": "timeFormat"
         },
         {
@@ -14478,6 +14831,39 @@
       ]
     },
     {
+      "name": "AccountStatusInfo",
+      "description": "Optional information to be used when account is moved to \"Disabled\" status",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Type of suspension, voluntarily or not",
+          "enum": [
+            "SuspendedVoluntarily",
+            "SuspendedInvoluntarily",
+            "CancelledVoluntarily",
+            "CancelledInvoluntarily"
+          ],
+          "example": "CancelledVoluntarily",
+          "name": "reason"
+        },
+        {
+          "type": "string",
+          "description": "A meaningful description of the reason to change the status",
+          "minLength": 1,
+          "maxLength": 256,
+          "example": "By customer request. Case ABC123",
+          "name": "comment"
+        },
+        {
+          "type": "string",
+          "description": "Date after which the disabled account will get deleted.\nParameter can be used to overwrite default retention period\n(that is 30 days after disabling the account)\n",
+          "format": "date-time",
+          "example": "2023-03-26T11:30:45.940Z",
+          "name": "till"
+        }
+      ]
+    },
+    {
       "name": "UBrandInfo",
       "description": "Account sub-brand information",
       "fields": [
@@ -14492,6 +14878,22 @@
           "description": "Sub-brand name",
           "example": "Sub-brand name",
           "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "CountryInfoMinimalModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a country resource",
+          "name": "uri"
         }
       ]
     },
@@ -14516,6 +14918,27 @@
       ]
     },
     {
+      "name": "CountryInfoBasicModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a country resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "The official name of a country",
+          "name": "name"
+        }
+      ]
+    },
+    {
       "name": "CountryInfoShortModel",
       "fields": [
         {
@@ -14536,12 +14959,15 @@
         },
         {
           "type": "string",
-          "description": "A ISO country code value complying with the\n[ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)\nformat.\n",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
           "type": "string",
-          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164),\nsee [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164).\nSee also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
           "name": "callingCode"
         }
       ]
@@ -14708,7 +15134,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -14798,7 +15227,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -15240,7 +15672,8 @@
         },
         {
           "type": "boolean",
-          "description": "This flag indicates whether this device is used for hot desking or not",
+          "description": "Indicates whether this device is used for hot desking or not.\nReturned if `useAsCommonPhone` is set to false\n",
+          "readOnly": true,
           "name": "hotDeskDevice"
         },
         {
@@ -15690,11 +16123,12 @@
         },
         {
           "type": "string",
-          "description": "Phone number type",
+          "description": "Type of a phone number",
+          "nullable": true,
           "enum": [
             "VoiceFax",
-            "FaxOnly",
-            "VoiceOnly"
+            "VoiceOnly",
+            "FaxOnly"
           ],
           "name": "type"
         },
@@ -15865,6 +16299,29 @@
       ]
     },
     {
+      "name": "CallRecordingGreetingResource",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "StartRecording",
+            "StopRecording",
+            "AutomaticRecording"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Here `Default` indicates that all greetings of that type\n(in all languages) are default. If at least one greeting (in any language)\nof the specified type is custom, then `Custom` is returned.\n",
+          "enum": [
+            "Default",
+            "Custom"
+          ],
+          "name": "mode"
+        }
+      ]
+    },
+    {
       "name": "AutomaticRecordingResource",
       "fields": [
         {
@@ -15908,29 +16365,6 @@
       ]
     },
     {
-      "name": "GreetingResource",
-      "fields": [
-        {
-          "type": "string",
-          "enum": [
-            "StartRecording",
-            "StopRecording",
-            "AutomaticRecording"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Here `Default` indicates that all greetings of that type\n(in all languages) are default. If at least one greeting (in any language)\nof the specified type is custom, then `Custom` is returned.\n",
-          "enum": [
-            "Default",
-            "Custom"
-          ],
-          "name": "mode"
-        }
-      ]
-    },
-    {
       "name": "OnDemandResource",
       "fields": [
         {
@@ -15961,7 +16395,7 @@
           "type": "array",
           "description": "Collection of Greeting Info",
           "items": {
-            "$ref": "GreetingResource"
+            "$ref": "CallRecordingGreetingResource"
           },
           "name": "greetings"
         }
@@ -16294,6 +16728,14 @@
             "$ref": "RecordingInfo"
           },
           "name": "recordings"
+        },
+        {
+          "type": "array",
+          "description": "Call metadata.",
+          "items": {
+            "$ref": "MetaData"
+          },
+          "name": "metadata"
         }
       ]
     },
@@ -16337,6 +16779,25 @@
           "description": "Internal identifier of a device",
           "example": "59474004",
           "name": "deviceId"
+        }
+      ]
+    },
+    {
+      "name": "MetaData",
+      "description": "Call metadata.",
+      "fields": [
+        {
+          "type": "array",
+          "description": "Identifier of metadata category",
+          "items": {
+            "required": [
+              "id",
+              "value"
+            ],
+            "$ref": "MetaDataValues"
+          },
+          "name": "values",
+          "required": true
         }
       ]
     },
@@ -17355,6 +17816,21 @@
       ]
     },
     {
+      "name": "BillingPackageInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Billing package version",
+          "name": "version"
+        },
+        {
+          "type": "string",
+          "description": "Billing package identifier",
+          "name": "id"
+        }
+      ]
+    },
+    {
       "name": "AccountServiceInfoRequest",
       "description": "Account service information, including brand, service plan and billing plan\n",
       "fields": [
@@ -17402,23 +17878,8 @@
           "name": "limits"
         },
         {
-          "$ref": "PackageInfo",
+          "$ref": "BillingPackageInfo",
           "name": "package"
-        }
-      ]
-    },
-    {
-      "name": "PackageInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Billing package version",
-          "name": "version"
-        },
-        {
-          "type": "string",
-          "description": "Billing package identifier",
-          "name": "id"
         }
       ]
     },
@@ -17470,7 +17931,7 @@
           "name": "limits"
         },
         {
-          "$ref": "PackageInfo",
+          "$ref": "BillingPackageInfo",
           "name": "package"
         },
         {
@@ -17557,28 +18018,7 @@
       ]
     },
     {
-      "name": "MessageTemplateRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Name of a template",
-          "name": "displayName",
-          "required": true
-        },
-        {
-          "$ref": "TemplateInfo",
-          "name": "body",
-          "required": true
-        },
-        {
-          "$ref": "Site",
-          "name": "site",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "TemplateInfo",
+      "name": "MessageTemplateInfo",
       "description": "Text message template information",
       "fields": [
         {
@@ -17590,8 +18030,29 @@
       ]
     },
     {
+      "name": "MessageTemplateRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a template",
+          "name": "displayName",
+          "required": true
+        },
+        {
+          "$ref": "MessageTemplateInfo",
+          "name": "body",
+          "required": true
+        },
+        {
+          "$ref": "Site",
+          "name": "site",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "Site",
-      "description": "Specifies a site that message template is associated with. Supported only if the Sites feature is enabled. \nThe default is `main-site` value.\n",
+      "description": "Specifies a site that message template is associated with. Supported only if the Sites feature is enabled.\nThe default is `main-site` value.\n",
       "fields": [
         {
           "type": "string",
@@ -17632,7 +18093,7 @@
           "name": "displayName"
         },
         {
-          "$ref": "TemplateInfo",
+          "$ref": "MessageTemplateInfo",
           "name": "body"
         },
         {
@@ -17660,7 +18121,7 @@
           "required": false
         },
         {
-          "$ref": "TemplateInfo",
+          "$ref": "MessageTemplateInfo",
           "name": "body",
           "required": true
         },
@@ -19241,19 +19702,19 @@
         },
         {
           "type": "string",
-          "description": "Time format setting",
-          "default": "12h",
+          "description": "Time format (12-hours or 24-hours).",
           "enum": [
             "12h",
             "24h"
           ],
+          "default": "12h",
           "name": "timeFormat"
         }
       ]
     },
     {
       "name": "UserTransitionInfo",
-      "description": "For NotActivated extensions only. Welcome email settings\n",
+      "description": "For `NotActivated` extensions only. Welcome email settings\n",
       "fields": [
         {
           "type": "boolean",
@@ -19262,7 +19723,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\n",
+          "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n`Unassigned` to `NotActivated/Disabled`)\n",
           "name": "sendWelcomeEmail"
         }
       ]
@@ -19388,7 +19849,7 @@
     },
     {
       "name": "ExtensionStatusInfo",
-      "description": "Status information (reason, comment). Returned for 'Disabled'\nstatus only\n",
+      "description": "Status information (reason, comment). Returned for `Disabled` extensions only\n",
       "fields": [
         {
           "type": "string",
@@ -19399,18 +19860,10 @@
           "type": "string",
           "description": "Type of suspension",
           "enum": [
-            "SuspendedVoluntarily",
-            "SuspendedInvoluntarily",
-            "CancelledVoluntarily",
-            "CancelledInvoluntarily"
+            "Voluntarily",
+            "Involuntarily"
           ],
           "name": "reason"
-        },
-        {
-          "type": "string",
-          "format": "date-time",
-          "description": "Date until which an account will get deleted. The default\nvalue is 30 days since the current date\n",
-          "name": "till"
         }
       ]
     },
@@ -19458,11 +19911,12 @@
         },
         {
           "type": "string",
+          "description": "Extension status",
           "enum": [
-            "Disabled",
             "Enabled",
-            "NotActivated",
-            "Frozen"
+            "Disabled",
+            "Frozen",
+            "NotActivated"
           ],
           "name": "status"
         },
@@ -19674,13 +20128,10 @@
     },
     {
       "name": "ExtensionBulkUpdateTaskResult",
-      "description": "Result record on multiple extension update task",
+      "description": "Resulting record of a task on multiple extensions update",
       "fields": [
         {
-          "type": "array",
-          "items": {
-            "$ref": "ExtensionUpdateShortResult"
-          },
+          "$ref": "ExtensionBulkUpdateTaskResultAffectedItems",
           "name": "affectedItems"
         },
         {
@@ -19746,6 +20197,47 @@
           "$ref": "EnumeratedPagingModel",
           "name": "paging",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "TemplateInfo",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to a template",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a template",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "UserSettings",
+            "CallHandling"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Name of a template",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time of a template creation",
+          "name": "creationTime"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time of the last template modification",
+          "name": "lastModifiedTime"
         }
       ]
     },
@@ -19838,45 +20330,47 @@
           "name": "records"
         },
         {
-          "$ref": "PagingResource",
+          "$ref": "NonEnumeratedPagingModel",
           "name": "paging"
         }
       ]
     },
     {
-      "name": "PagingResource",
-      "description": "Pagination details",
+      "name": "NonEnumeratedPagingModel",
       "fields": [
-        {
-          "type": "string",
-          "description": "Page token of the current response list",
-          "example": "pgt1",
-          "name": "pageToken"
-        },
         {
           "type": "integer",
           "format": "int32",
-          "description": "Number of records per page",
-          "example": 3,
-          "name": "perPage"
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Current page size, describes how many items are in each page.\nMatches \"perPage\" parameter from the request.\n",
+          "example": 50,
+          "name": "perPage",
+          "required": true
         },
         {
           "type": "string",
-          "description": "First page token of the current filter criteria",
-          "example": "fpgt1",
-          "name": "firstPageToken"
+          "description": "Current page token. May be omitted if result is empty (because non-existent page\nwas specified or perPage=0 was requested)\n",
+          "name": "pageToken",
+          "required": false
         },
         {
           "type": "string",
-          "description": "Previous page token of the current filter criteria",
-          "example": "lpgt1",
-          "name": "previousPageToken"
+          "description": "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one.",
+          "name": "nextPageToken",
+          "required": false
         },
         {
           "type": "string",
-          "description": "Next page token of the current filter criteria",
-          "example": "npgt1",
-          "name": "nextPageToken"
+          "description": "A page token to be used to fetch the previous page of the result set.\nMay be omitted if the current page is the first one or if the result set does not support backward navigation.\n",
+          "name": "previousPageToken",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "A page token to be used to fetch the first page of the result set.",
+          "name": "firstPageToken",
+          "required": false
         }
       ]
     },
@@ -20083,7 +20577,7 @@
           "name": "records"
         },
         {
-          "$ref": "PagingResource",
+          "$ref": "NonEnumeratedPagingModel",
           "name": "paging"
         }
       ]
@@ -20371,7 +20865,7 @@
           "name": "records"
         },
         {
-          "$ref": "PagingResource",
+          "$ref": "NonEnumeratedPagingModel",
           "name": "paging"
         }
       ]
@@ -21353,7 +21847,7 @@
         },
         {
           "type": "string",
-          "description": "Call queue status",
+          "description": "Group extension status",
           "enum": [
             "Enabled",
             "Disabled",
@@ -21368,11 +21862,15 @@
             "Emergency"
           ],
           "name": "subType"
+        },
+        {
+          "$ref": "SiteBasicInfo",
+          "name": "site"
         }
       ]
     },
     {
-      "name": "CallQueues",
+      "name": "CallQueueList",
       "fields": [
         {
           "type": "string",
@@ -21432,6 +21930,16 @@
       ]
     },
     {
+      "name": "SiteReference",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a site",
+          "name": "id"
+        }
+      ]
+    },
+    {
       "name": "CallQueueDetails",
       "fields": [
         {
@@ -21457,7 +21965,7 @@
         },
         {
           "type": "string",
-          "description": "Call queue status",
+          "description": "Group extension status",
           "enum": [
             "Enabled",
             "Disabled",
@@ -21472,6 +21980,80 @@
             "Emergency"
           ],
           "name": "subType"
+        },
+        {
+          "$ref": "SiteBasicInfo",
+          "name": "site"
+        },
+        {
+          "$ref": "CallQueueServiceLevelSettings",
+          "name": "serviceLevelSettings"
+        },
+        {
+          "type": "boolean",
+          "description": "Allows members to change their queue status",
+          "name": "editableMemberStatus"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Alert timer or pickup setting. Delay time in seconds before call queue group members are notified when calls are queued\n",
+          "enum": [
+            5,
+            10,
+            15,
+            20,
+            30,
+            45,
+            60,
+            120,
+            180,
+            240,
+            300,
+            360,
+            420,
+            480,
+            540,
+            600
+          ],
+          "name": "alertTimer"
+        }
+      ]
+    },
+    {
+      "name": "CallQueueDetailsForUpdate",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Extension number of a call queue",
+          "name": "extensionNumber"
+        },
+        {
+          "type": "string",
+          "description": "Name of a call queue",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Group extension status",
+          "enum": [
+            "Enabled",
+            "Disabled",
+            "NotActivated"
+          ],
+          "name": "status"
+        },
+        {
+          "type": "string",
+          "description": "Indicates whether it is an emergency call queue extension or not",
+          "enum": [
+            "Emergency"
+          ],
+          "name": "subType"
+        },
+        {
+          "$ref": "SiteReference",
+          "name": "site"
         },
         {
           "$ref": "CallQueueServiceLevelSettings",
@@ -21539,22 +22121,6 @@
       ]
     },
     {
-      "name": "SiteResource",
-      "description": "Site extension information",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Site extension identifier",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Site extension name",
-          "name": "name"
-        }
-      ]
-    },
-    {
       "name": "CallQueuePresenceEventBody",
       "description": "Notification payload body",
       "fields": [
@@ -21609,7 +22175,7 @@
           "name": "extensionNumber"
         },
         {
-          "$ref": "SiteResource",
+          "$ref": "SiteBasicInfo",
           "name": "site"
         }
       ]
@@ -21745,7 +22311,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Internal identifier of an emergency response location\n",
+          "description": "Internal identifier of an emergency response location",
           "name": "id"
         },
         {
@@ -21795,7 +22361,8 @@
         },
         {
           "type": "boolean",
-          "description": "If 'true' address validation for non-us addresses is skipped",
+          "default": false,
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
           "name": "trusted"
         }
       ]
@@ -21815,7 +22382,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -21957,7 +22527,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -22047,7 +22620,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -22119,61 +22695,6 @@
           "type": "string",
           "description": "Building/street number",
           "name": "buildingNumber"
-        }
-      ]
-    },
-    {
-      "name": "EmergencyLocationInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of an emergency response location\n",
-          "name": "id"
-        },
-        {
-          "$ref": "CommonEmergencyLocationAddressInfo",
-          "name": "address"
-        },
-        {
-          "type": "string",
-          "description": "Emergency response location name",
-          "name": "name"
-        },
-        {
-          "$ref": "ShortSiteInfo",
-          "name": "site"
-        },
-        {
-          "type": "string",
-          "description": "Emergency address status",
-          "enum": [
-            "Valid",
-            "Invalid"
-          ],
-          "name": "addressStatus"
-        },
-        {
-          "type": "string",
-          "description": "Status of an emergency response location usage.",
-          "enum": [
-            "Active",
-            "Inactive"
-          ],
-          "name": "usageStatus"
-        },
-        {
-          "type": "string",
-          "description": "Address format ID",
-          "name": "addressFormatId"
-        },
-        {
-          "type": "string",
-          "description": "Visibility of an emergency response location. If `Private`\nis set, then a location is visible only for restricted number of users,\nspecified in `owners` array\n",
-          "default": "Public",
-          "enum": [
-            "Public"
-          ],
-          "name": "visibility"
         }
       ]
     },
@@ -22388,7 +22909,7 @@
         },
         {
           "type": "boolean",
-          "description": "If 'true' address validation for non-us addresses is skipped",
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
           "name": "trusted"
         }
       ]
@@ -23272,7 +23793,7 @@
         },
         {
           "type": "string",
-          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,\nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
           "enum": [
             "All",
             "None",
@@ -23656,17 +24177,6 @@
       ]
     },
     {
-      "name": "MeetingRecordingsNavigationInfoUri",
-      "description": "Canonical URI for the corresponding page of the list",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "name": "uri"
-        }
-      ]
-    },
-    {
       "name": "MeetingInfo",
       "fields": [
         {
@@ -23700,53 +24210,12 @@
           "name": "records"
         },
         {
-          "$ref": "MeetingRecordingsPagingInfo",
+          "$ref": "EnumeratedPagingModel",
           "name": "paging"
         },
         {
-          "$ref": "MeetingRecordingsNavigationInfo",
+          "$ref": "PageNavigationModel",
           "name": "navigation"
-        }
-      ]
-    },
-    {
-      "name": "MeetingRecordingsPagingInfo",
-      "fields": [
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty (because non-existent page was specified or perPage=0 was requested)",
-          "name": "page"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Current page size, describes how many items are in each page. Default value is 100. Maximum value is 1000. If perPage value in the request is greater than 1000, the maximum value (1000) is applied",
-          "name": "perPage"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "The zero-based number of the first element on the current page. Omitted if the page is omitted or result is empty",
-          "name": "pageStart"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "The zero-based index of the last element on the current page. Omitted if the page is omitted or result is empty",
-          "name": "pageEnd"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "The total number of pages in a dataset. May be omitted for some resources due to performance reasons",
-          "name": "totalPages"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "The total number of elements in a dataset. May be omitted for some resource due to performance reasons",
-          "name": "totalElements"
         }
       ]
     },
@@ -23763,27 +24232,6 @@
             "$ref": "MeetingRecordingInfo"
           },
           "name": "recordings"
-        }
-      ]
-    },
-    {
-      "name": "MeetingRecordingsNavigationInfo",
-      "fields": [
-        {
-          "$ref": "MeetingRecordingsNavigationInfoUri",
-          "name": "firstPage"
-        },
-        {
-          "$ref": "MeetingRecordingsNavigationInfoUri",
-          "name": "nextPage"
-        },
-        {
-          "$ref": "MeetingRecordingsNavigationInfoUri",
-          "name": "previousPage"
-        },
-        {
-          "$ref": "MeetingRecordingsNavigationInfoUri",
-          "name": "lastPage"
         }
       ]
     },
@@ -25774,11 +26222,12 @@
         },
         {
           "type": "string",
-          "description": "Time format setting. The default value is '12h' = ['12h', '24h']",
+          "description": "Time format (12-hours or 24-hours).",
           "enum": [
             "12h",
             "24h"
           ],
+          "default": "12h",
           "name": "timeFormat"
         }
       ]
@@ -25825,6 +26274,15 @@
         {
           "$ref": "RegionalSettings",
           "name": "regionalSettings"
+        },
+        {
+          "type": "string",
+          "description": "Site access status for cross-site limitation",
+          "enum": [
+            "Limited",
+            "Unlimited"
+          ],
+          "name": "siteAccess"
         },
         {
           "$ref": "OperatorInfo",
@@ -25898,6 +26356,23 @@
         {
           "$ref": "SiteOperatorReference",
           "name": "operator"
+        },
+        {
+          "type": "string",
+          "description": "Site access status for cross-site limitation",
+          "enum": [
+            "Limited",
+            "Unlimited"
+          ],
+          "name": "siteAccess"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Site id that is accessible for the current site"
+          },
+          "name": "accessibleSiteIds"
         },
         {
           "type": "string",
@@ -25985,6 +26460,25 @@
         {
           "$ref": "OperatorInfo",
           "name": "operator",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Site access status for cross-site limitation",
+          "enum": [
+            "Limited",
+            "Unlimited"
+          ],
+          "name": "siteAccess",
+          "required": false
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Site id that is accessible for the current site"
+          },
+          "name": "accessibleSiteIds",
           "required": false
         }
       ]
@@ -26327,7 +26821,7 @@
         },
         {
           "type": "string",
-          "description": "Type of company greeting",
+          "description": "Type of a company greeting",
           "enum": [
             "Company",
             "StartRecording",
@@ -26874,7 +27368,7 @@
         },
         {
           "type": "string",
-          "description": "Extension current state. If 'Unassigned' is specified, then\nextensions without `extensionNumber` are returned. If not specified, then\nall extensions are returned\n",
+          "description": "Extension status",
           "enum": [
             "Enabled",
             "Disabled",
@@ -27010,12 +27504,16 @@
         },
         {
           "type": "string",
+          "format": "uri",
           "description": "Canonical URI of an assigned country resource",
           "name": "uri"
         },
         {
           "type": "string",
-          "description": "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
@@ -27092,13 +27590,13 @@
         },
         {
           "type": "string",
-          "description": "Extension current state",
+          "description": "Extension status",
           "enum": [
             "Enabled",
             "Disabled",
+            "Frozen",
             "NotActivated",
-            "Unassigned",
-            "Frozen"
+            "Unassigned"
           ],
           "name": "status"
         },
@@ -27322,7 +27820,7 @@
         },
         {
           "type": "string",
-          "description": "Extension current state. If 'Unassigned' is specified, then\nextensions without `extensionNumber` are returned. If not specified,\nthen all extensions are returned\n",
+          "description": "Extension status",
           "enum": [
             "Enabled",
             "Disabled",
@@ -27334,7 +27832,7 @@
         },
         {
           "type": "string",
-          "description": "Extension type. Please note that legacy 'Department' extension type\ncorresponds to 'Call Queue' extensions in modern RingCentral product\nterminology\n",
+          "description": "Extension type. Please note that legacy `Department` extension type\ncorresponds to 'Call Queue' extensions in modern RingCentral product\nterminology\n",
           "enum": [
             "User",
             "FaxUser",
@@ -27391,35 +27889,13 @@
         {
           "$ref": "CostCenterInfo",
           "name": "costCenter"
-        }
-      ]
-    },
-    {
-      "name": "ExtensionInfoEvent",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Universally unique identifier of a notification",
-          "name": "uuid"
         },
         {
           "type": "string",
-          "description": "Event filter URI",
-          "name": "event"
-        },
-        {
-          "type": "string",
-          "description": "Date/time of sending a notification in\n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)\nformat including timezone, for example *2016-03-10T18:07:52.534Z*\n",
-          "name": "timestamp"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of a subscription",
-          "name": "subscriptionId"
-        },
-        {
-          "$ref": "ExtensionInfoEventBody",
-          "name": "body"
+          "description": "Extension creation date/time, in ISO 8601 format\n",
+          "format": "date-time",
+          "example": "2024-06-06T07:01:14.123Z",
+          "name": "creationTime"
         }
       ]
     },
@@ -27437,29 +27913,6 @@
           "format": "uri",
           "description": "Canonical URI of an account resource",
           "name": "uri"
-        }
-      ]
-    },
-    {
-      "name": "DepartmentInfo",
-      "description": "Please note that the `Department` extension type corresponds to\n'Call Queue' extensions in modern RingCentral product terminology\n",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Internal identifier of a department extension",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of an extension resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Short number of a department extension",
-          "name": "extensionNumber"
         }
       ]
     },
@@ -27510,25 +27963,16 @@
       ]
     },
     {
-      "name": "SiteReference",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a site",
-          "name": "id"
-        }
-      ]
-    },
-    {
       "name": "ExtensionUpdateRequest",
       "fields": [
         {
           "type": "string",
+          "description": "Extension status",
           "enum": [
-            "Disabled",
             "Enabled",
-            "NotActivated",
-            "Frozen"
+            "Disabled",
+            "Frozen",
+            "NotActivated"
           ],
           "name": "status"
         },
@@ -27750,7 +28194,7 @@
         },
         {
           "type": "string",
-          "description": "Extension current state. If 'Unassigned' is specified, then\nextensions without `extensionNumber` are returned. If not specified,\nthen all extensions are returned\n",
+          "description": "Extension status",
           "enum": [
             "Enabled",
             "Disabled",
@@ -27820,6 +28264,74 @@
         {
           "$ref": "AssignedCountryInfo",
           "name": "assignedCountry"
+        },
+        {
+          "type": "string",
+          "description": "Extension creation date/time, in ISO 8601 format\n",
+          "format": "date-time",
+          "example": "2024-06-06T07:01:14.123Z",
+          "name": "creationTime"
+        },
+        {
+          "type": "string",
+          "description": "Site access status for cross-site limitation",
+          "enum": [
+            "Limited",
+            "Unlimited"
+          ],
+          "name": "siteAccess"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionInfoEvent",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Universally unique identifier of a notification",
+          "name": "uuid"
+        },
+        {
+          "type": "string",
+          "description": "Event filter URI",
+          "name": "event"
+        },
+        {
+          "type": "string",
+          "description": "Date/time of sending a notification in\n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)\nformat including timezone, for example *2016-03-10T18:07:52.534Z*\n",
+          "name": "timestamp"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a subscription",
+          "name": "subscriptionId"
+        },
+        {
+          "$ref": "ExtensionInfoEventBody",
+          "name": "body"
+        }
+      ]
+    },
+    {
+      "name": "DepartmentInfo",
+      "description": "Please note that the `Department` extension type corresponds to\n'Call Queue' extensions in modern RingCentral product terminology\n",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Internal identifier of a department extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of an extension resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Short number of a department extension",
+          "name": "extensionNumber"
         }
       ]
     },
@@ -28786,11 +29298,6 @@
         },
         {
           "type": "string",
-          "description": "SMS only. Delivery error code returned by gateway",
-          "name": "deliveryErrorCode"
-        },
-        {
-          "type": "string",
           "enum": [
             "Inbound",
             "Outbound"
@@ -29248,7 +29755,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Phone number to which the call is forwarded. In addition to\ncommon e.164 format, the following number patterns are supported: 11xxxxxxxxxxx,\n444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in\ne.164 format (without '+' sign) and yyyy is an external short extension number.\nMax number of digits is 15\n",
+          "description": "Phone number to which the call is forwarded. In addition to\ncommon E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,\n444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in\nE.164 format (without '+' sign) and yyyy is an external short extension number.\nMax number of digits is 15\n",
           "name": "phoneNumber"
         },
         {
@@ -29432,6 +29939,124 @@
       ]
     },
     {
+      "name": "CallHandlingRuleInfo",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI to an answering rule resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an answering rule",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Type of an answering rule",
+          "enum": [
+            "BusinessHours",
+            "AfterHours",
+            "Custom"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Name of an answering rule specified by user",
+          "name": "name"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if an answering rule is active or inactive",
+          "name": "enabled"
+        },
+        {
+          "$ref": "ScheduleInfo",
+          "name": "schedule"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calling to selected number(s)",
+          "items": {
+            "$ref": "CalledNumberInfo"
+          },
+          "name": "calledNumbers"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calls are received from specified caller(s)",
+          "items": {
+            "$ref": "CallersInfo"
+          },
+          "name": "callers"
+        },
+        {
+          "type": "string",
+          "description": "Specifies how incoming calls are forwarded",
+          "enum": [
+            "ForwardCalls",
+            "UnconditionalForwarding",
+            "AgentQueue",
+            "TransferToExtension",
+            "TakeMessagesOnly",
+            "PlayAnnouncementOnly",
+            "SharedLines"
+          ],
+          "name": "callHandlingAction"
+        },
+        {
+          "$ref": "ForwardingInfo",
+          "name": "forwarding"
+        },
+        {
+          "$ref": "UnconditionalForwardingInfo",
+          "name": "unconditionalForwarding"
+        },
+        {
+          "$ref": "QueueInfo",
+          "name": "queue"
+        },
+        {
+          "$ref": "TransferredExtensionInfo",
+          "name": "transfer"
+        },
+        {
+          "$ref": "VoicemailInfo",
+          "name": "voicemail"
+        },
+        {
+          "type": "array",
+          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
+          "items": {
+            "$ref": "GreetingInfo"
+          },
+          "name": "greetings"
+        },
+        {
+          "type": "string",
+          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
+          "enum": [
+            "Off",
+            "NoCallerId",
+            "UnknownCallerId",
+            "Always"
+          ],
+          "default": "Off",
+          "name": "screening"
+        },
+        {
+          "$ref": "SharedLinesInfo",
+          "name": "sharedLines"
+        },
+        {
+          "$ref": "MissedCallInfo",
+          "name": "missedCall"
+        }
+      ]
+    },
+    {
       "name": "CreateAnsweringRuleForwardingNumberInfo",
       "fields": [
         {
@@ -29565,7 +30190,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in e.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15",
+          "description": "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15",
           "name": "phoneNumber"
         }
       ]
@@ -29811,7 +30436,7 @@
           "type": "array",
           "description": "List of answering rules",
           "items": {
-            "$ref": "AnsweringRuleInfo"
+            "$ref": "CallHandlingRuleInfo"
           },
           "name": "records"
         },
@@ -29924,124 +30549,6 @@
         {
           "$ref": "RecipientInfo",
           "name": "recipient"
-        }
-      ]
-    },
-    {
-      "name": "AnsweringRuleInfo",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI to an answering rule resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an answering rule",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Type of an answering rule",
-          "enum": [
-            "BusinessHours",
-            "AfterHours",
-            "Custom"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of an answering rule specified by user",
-          "name": "name"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if an answering rule is active or inactive",
-          "name": "enabled"
-        },
-        {
-          "$ref": "ScheduleInfo",
-          "name": "schedule"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calling to selected number(s)",
-          "items": {
-            "$ref": "CalledNumberInfo"
-          },
-          "name": "calledNumbers"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calls are received from specified caller(s)",
-          "items": {
-            "$ref": "CallersInfo"
-          },
-          "name": "callers"
-        },
-        {
-          "type": "string",
-          "description": "Specifies how incoming calls are forwarded",
-          "enum": [
-            "ForwardCalls",
-            "UnconditionalForwarding",
-            "AgentQueue",
-            "TransferToExtension",
-            "TakeMessagesOnly",
-            "PlayAnnouncementOnly",
-            "SharedLines"
-          ],
-          "name": "callHandlingAction"
-        },
-        {
-          "$ref": "ForwardingInfo",
-          "name": "forwarding"
-        },
-        {
-          "$ref": "UnconditionalForwardingInfo",
-          "name": "unconditionalForwarding"
-        },
-        {
-          "$ref": "QueueInfo",
-          "name": "queue"
-        },
-        {
-          "$ref": "TransferredExtensionInfo",
-          "name": "transfer"
-        },
-        {
-          "$ref": "VoicemailInfo",
-          "name": "voicemail"
-        },
-        {
-          "type": "array",
-          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
-          "items": {
-            "$ref": "GreetingInfo"
-          },
-          "name": "greetings"
-        },
-        {
-          "type": "string",
-          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
-          "enum": [
-            "Off",
-            "NoCallerId",
-            "UnknownCallerId",
-            "Always"
-          ],
-          "default": "Off",
-          "name": "screening"
-        },
-        {
-          "$ref": "SharedLinesInfo",
-          "name": "sharedLines"
-        },
-        {
-          "$ref": "MissedCallInfo",
-          "name": "missedCall"
         }
       ]
     },
@@ -30626,7 +31133,8 @@
         },
         {
           "type": "boolean",
-          "description": "If 'true' address validation for non-us addresses is skipped",
+          "default": false,
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
           "name": "trusted"
         },
         {
@@ -30903,47 +31411,12 @@
           "name": "records"
         },
         {
-          "$ref": "MeetingsPagingInfo",
+          "$ref": "EnumeratedPagingModel",
           "name": "paging"
         },
         {
-          "$ref": "MeetingsNavigationInfo",
+          "$ref": "PageNavigationModel",
           "name": "navigation"
-        }
-      ]
-    },
-    {
-      "name": "MeetingsPagingInfo",
-      "fields": [
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "page"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "totalPages"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "perPage"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "totalElements"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "pageStart"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "name": "pageEnd"
         }
       ]
     },
@@ -31052,37 +31525,6 @@
         {
           "type": "string",
           "name": "alternativeHosts"
-        }
-      ]
-    },
-    {
-      "name": "MeetingsNavigationInfoUri",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "name": "uri"
-        }
-      ]
-    },
-    {
-      "name": "MeetingsNavigationInfo",
-      "fields": [
-        {
-          "$ref": "MeetingsNavigationInfoUri",
-          "name": "nextPage"
-        },
-        {
-          "$ref": "MeetingsNavigationInfoUri",
-          "name": "previousPage"
-        },
-        {
-          "$ref": "MeetingsNavigationInfoUri",
-          "name": "firstPage"
-        },
-        {
-          "$ref": "MeetingsNavigationInfoUri",
-          "name": "lastPage"
         }
       ]
     },
@@ -31378,10 +31820,15 @@
         },
         {
           "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
           "type": "string",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164).\nSee also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
           "name": "callingCode"
         },
         {
@@ -31956,7 +32403,7 @@
         },
         {
           "type": "string",
-          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,\nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
           "enum": [
             "All",
             "None",
@@ -32178,7 +32625,7 @@
         },
         {
           "type": "string",
-          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`, \nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
+          "description": "Configures the user presence visibility. When the `allowSeeMyPresence` parameter is set to `true`,\nthe following visibility options are supported via this parameter - All, None, PermittedUsers\n",
           "enum": [
             "All",
             "None",
@@ -32809,10 +33256,15 @@
         },
         {
           "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
           "type": "string",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164).\nSee also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
           "name": "callingCode"
         },
         {
@@ -32834,31 +33286,6 @@
         {
           "type": "boolean",
           "name": "signupAllowed"
-        }
-      ]
-    },
-    {
-      "name": "CurrencyResource",
-      "fields": [
-        {
-          "type": "string",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "name": "code"
-        },
-        {
-          "type": "string",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "name": "symbol"
-        },
-        {
-          "type": "string",
-          "name": "minorSymbol"
         }
       ]
     },
@@ -32949,31 +33376,6 @@
       ]
     },
     {
-      "name": "ContactAddressInfoResource",
-      "fields": [
-        {
-          "type": "string",
-          "name": "street"
-        },
-        {
-          "type": "string",
-          "name": "city"
-        },
-        {
-          "type": "string",
-          "name": "state"
-        },
-        {
-          "type": "string",
-          "name": "zip"
-        },
-        {
-          "type": "string",
-          "name": "country"
-        }
-      ]
-    },
-    {
       "name": "RolesTimezoneResource",
       "fields": [
         {
@@ -33017,6 +33419,56 @@
       ]
     },
     {
+      "name": "CurrencyResource",
+      "fields": [
+        {
+          "type": "string",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "name": "code"
+        },
+        {
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "name": "symbol"
+        },
+        {
+          "type": "string",
+          "name": "minorSymbol"
+        }
+      ]
+    },
+    {
+      "name": "ContactAddressInfoResource",
+      "fields": [
+        {
+          "type": "string",
+          "name": "street"
+        },
+        {
+          "type": "string",
+          "name": "city"
+        },
+        {
+          "type": "string",
+          "name": "state"
+        },
+        {
+          "type": "string",
+          "name": "zip"
+        },
+        {
+          "type": "string",
+          "name": "country"
+        }
+      ]
+    },
+    {
       "name": "RolesRegionalSettingsResource",
       "fields": [
         {
@@ -33041,10 +33493,12 @@
         },
         {
           "type": "string",
+          "description": "Time format (12-hours or 24-hours).",
           "enum": [
             "12h",
             "24h"
           ],
+          "default": "12h",
           "name": "timeFormat"
         },
         {
@@ -33632,7 +34086,8 @@
           "type": "string",
           "minLength": 2,
           "maxLength": 2,
-          "description": "ISO 3166-1 alpha-2 code of a country",
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         }
       ]
@@ -33685,11 +34140,6 @@
           "description": "Message creation date/time in ISO 8601 format including timezone,\nfor example 2016-03-10T18:07:52.534Z\n",
           "format": "date-time",
           "name": "creationTime"
-        },
-        {
-          "type": "string",
-          "description": "SMS only. Delivery error code returned by gateway",
-          "name": "deliveryErrorCode"
         },
         {
           "type": "string",
@@ -34156,10 +34606,11 @@
         },
         {
           "type": "string",
-          "description": "Current state of an extension",
+          "description": "Extension status",
           "enum": [
             "Enabled",
-            "Disable",
+            "Disabled",
+            "Frozen",
             "NotActivated",
             "Unassigned"
           ],
@@ -35523,37 +35974,6 @@
       ]
     },
     {
-      "name": "GetExtensionPhoneNumbersResponse",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Link to the user phone number list resource",
-          "name": "uri",
-          "required": false
-        },
-        {
-          "type": "array",
-          "description": "List of phone numbers",
-          "items": {
-            "$ref": "UserPhoneNumberInfo"
-          },
-          "name": "records",
-          "required": true
-        },
-        {
-          "$ref": "PageNavigationModel",
-          "name": "navigation",
-          "required": true
-        },
-        {
-          "$ref": "EnumeratedPagingModel",
-          "name": "paging",
-          "required": true
-        }
-      ]
-    },
-    {
       "name": "UserPhoneNumberExtensionInfo",
       "description": "Information on the extension, to which the phone number is assigned.\nReturned only for the request of Account phone number list\n",
       "fields": [
@@ -35673,22 +36093,24 @@
         },
         {
           "type": "string",
-          "description": "Status of a phone number. If the value is 'Normal', the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "enum": [
             "Normal",
             "Pending",
             "PortedIn",
-            "Temporary"
+            "Temporary",
+            "Unknown"
           ],
           "name": "status"
         },
         {
           "type": "string",
-          "description": "Phone number type",
+          "description": "Type of a phone number",
+          "nullable": true,
           "enum": [
             "VoiceFax",
-            "FaxOnly",
-            "VoiceOnly"
+            "VoiceOnly",
+            "FaxOnly"
           ],
           "name": "type"
         },
@@ -35739,6 +36161,37 @@
             ]
           },
           "name": "features"
+        }
+      ]
+    },
+    {
+      "name": "GetExtensionPhoneNumbersResponse",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to the user phone number list resource",
+          "name": "uri",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "List of phone numbers",
+          "items": {
+            "$ref": "UserPhoneNumberInfo"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "PageNavigationModel",
+          "name": "navigation",
+          "required": true
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging",
+          "required": true
         }
       ]
     },
@@ -36035,7 +36488,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -36139,15 +36595,6 @@
       ]
     },
     {
-      "name": "CreateMultipleWirelessPointsResponse",
-      "fields": [
-        {
-          "$ref": "BulkTaskInfo",
-          "name": "task"
-        }
-      ]
-    },
-    {
       "name": "CreateMultipleWirelessPointsRequest",
       "fields": [
         {
@@ -36188,6 +36635,15 @@
           "$ref": "EmergencyLocationInfo",
           "name": "emergencyLocation",
           "required": false
+        }
+      ]
+    },
+    {
+      "name": "CreateMultipleWirelessPointsResponse",
+      "fields": [
+        {
+          "$ref": "BulkTaskInfo",
+          "name": "task"
         }
       ]
     },
@@ -36473,7 +36929,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -37125,6 +37584,18 @@
       ]
     },
     {
+      "name": "CreateMultipleSwitchesRequest",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "CreateSwitchInfo"
+          },
+          "name": "records"
+        }
+      ]
+    },
+    {
       "name": "CreateMultipleSwitchesResponse",
       "description": "Information on a task for multiple switches creation",
       "fields": [
@@ -37134,18 +37605,6 @@
             "$ref": "BulkTaskInfo"
           },
           "name": "task"
-        }
-      ]
-    },
-    {
-      "name": "CreateMultipleSwitchesRequest",
-      "fields": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "CreateSwitchInfo"
-          },
-          "name": "records"
         }
       ]
     },
@@ -37244,22 +37703,24 @@
         },
         {
           "type": "string",
-          "description": "Status of a phone number. If the value is 'Normal', the phone\nnumber is ready to be used. If the value is 'Pending' it is an\nexternal number not yet ported to RingCentral.\n",
+          "description": "Status of a phone number. If the value is `Normal`, the phone\nnumber is ready to be used. Otherwise, it is an external number not yet\nported to RingCentral\n",
           "enum": [
             "Normal",
             "Pending",
             "PortedIn",
-            "Temporary"
+            "Temporary",
+            "Unknown"
           ],
           "name": "status"
         },
         {
           "type": "string",
-          "description": "Phone number type",
+          "description": "Type of a phone number",
+          "nullable": true,
           "enum": [
             "VoiceFax",
-            "FaxOnly",
-            "VoiceOnly"
+            "VoiceOnly",
+            "FaxOnly"
           ],
           "name": "type"
         },
@@ -37301,6 +37762,15 @@
           "type": "boolean",
           "description": "Specifies if a phone number is primary, i.e. displayed as 'main number' and called by default",
           "name": "primary"
+        },
+        {
+          "type": "string",
+          "description": "Phone number activation status. Determine whether phone number migration is completed on the partner side.",
+          "enum": [
+            "Active",
+            "Inactive"
+          ],
+          "name": "activationStatus"
         }
       ]
     },
@@ -37446,14 +37916,14 @@
         },
         {
           "type": "string",
-          "description": "Country calling code defined by ITU-T recommendations `E.123`\nand `E.164`, see Calling Codes\n",
-          "example": "1",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164).\nSee also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
           "name": "callingCode"
         },
         {
           "type": "string",
-          "description": "Country code in `ISO 3166` alpha-2 format",
-          "pattern": "^[A-Za-z]{2}$",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
           "example": "US",
           "name": "isoCode"
         },
@@ -37462,6 +37932,32 @@
           "description": "The official name of the country.",
           "example": "United States",
           "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "ParsePhoneNumberResponse",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a resource",
+          "name": "uri",
+          "required": false
+        },
+        {
+          "$ref": "GetCountryInfoNumberParser",
+          "name": "homeCountry",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "Parsed phone numbers information",
+          "items": {
+            "$ref": "PhoneNumberInfoNumberParser"
+          },
+          "name": "phoneNumbers",
+          "required": true
         }
       ]
     },
@@ -37553,32 +38049,6 @@
       ]
     },
     {
-      "name": "ParsePhoneNumberResponse",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a resource",
-          "name": "uri",
-          "required": false
-        },
-        {
-          "$ref": "GetCountryInfoNumberParser",
-          "name": "homeCountry",
-          "required": true
-        },
-        {
-          "type": "array",
-          "description": "Parsed phone numbers information",
-          "items": {
-            "$ref": "PhoneNumberInfoNumberParser"
-          },
-          "name": "phoneNumbers",
-          "required": true
-        }
-      ]
-    },
-    {
       "name": "ContractedCountryListResponse",
       "fields": [
         {
@@ -37644,12 +38114,15 @@
         },
         {
           "type": "string",
-          "description": "Country code according to the ISO standard, see\n[ISO 3166](https://www.iso.org/iso-3166-country-codes.html)\n",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
           "type": "string",
-          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164),\nsee [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
+          "description": "Country calling code defined by [ITU-T](http://en.wikipedia.org/wiki/ITU-T)\nrecommendations, [E.123](http://en.wikipedia.org/wiki/E.123) and\n[E.164](http://en.wikipedia.org/wiki/E.164).\nSee also [Calling Codes](http://en.wikipedia.org/wiki/List_of_country_calling_codes)\n",
           "name": "callingCode"
         },
         {
@@ -37975,7 +38448,10 @@
         },
         {
           "type": "string",
-          "description": "Country code according to the ISO standard, see [ISO 3166](https://www.iso.org/iso-3166-country-codes.html)",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "isoCode"
         },
         {
@@ -38496,7 +38972,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -38903,7 +39382,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -39021,7 +39503,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -40772,19 +41257,18 @@
       "name": "ContentModel",
       "fields": [
         {
-          "description": "An array containing the attachments that are attached to the content.\n",
+          "description": "Array of attachments to be added to the content\n",
           "type": "array",
           "minItems": 0,
           "items": {
-            "$ref": "ContentAttachment"
+            "$ref": "SocMsgContentAttachment"
           },
           "name": "attachments",
           "required": true
         },
         {
-          "description": "Identity identifier of the author of content.\n\nNot mandatory on creation, by default it uses the token's user first identity on channel.\n",
+          "description": "Identity identifier of the content author. Not mandatory on creation,\nby default it uses the token's user first identity on channel\n",
           "type": "string",
-          "example": "541014e17aa58d8ccf000023",
           "name": "authorIdentityId",
           "required": true
         },
@@ -40795,7 +41279,7 @@
           "required": true
         },
         {
-          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * RingCX Digital Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
+          "description": "Content body. On creation this field is mandatory except for WhatsApp content\nusing templates. The following are the channels supported and their **max length**\nrestrictions (in brackets):\n\n  - *Apple Messages For Business* (10000)\n  - *Email* (262144)\n  - *RingCX Digital Messaging* (1024)\n  - *Facebook* (8000)\n  - *Google My Business* (4000)\n  - *Instagram* (950)\n  - *Instagram Messaging* (1000)\n  - *LinkedIn* (3000)\n  - *Messenger* (2000)\n  - *Twitter* (280)\n  - *Viber* (7000)\n  - *WhatsApp* (3800)\n  - *Youtube* (8000)\n",
           "type": "string",
           "example": "Body of the content",
           "name": "body",
@@ -40807,7 +41291,7 @@
           "required": true
         },
         {
-          "description": "Values can be Text or Html.",
+          "description": "Content input format",
           "enum": [
             "Text",
             "Html"
@@ -40817,7 +41301,7 @@
           "required": true
         },
         {
-          "description": "List of the category identifiers of the content.\n",
+          "description": "List of the category identifiers of the content\n",
           "items": {
             "type": "string"
           },
@@ -40828,6 +41312,17 @@
           ],
           "name": "categoryIds",
           "required": true
+        },
+        {
+          "description": "Direction of the content.\n\n* Incoming contents are received from a channel.\n* Outgoing contents are exported to a channel.\n",
+          "enum": [
+            "Incoming",
+            "Outgoing"
+          ],
+          "type": "string",
+          "example": "Incoming",
+          "name": "contentDirection",
+          "required": false
         },
         {
           "$ref": "ContentContextData",
@@ -40843,7 +41338,7 @@
           "required": true
         },
         {
-          "description": "Created from of the content.",
+          "description": "Source of content",
           "type": "string",
           "enum": [
             "Synchronizer",
@@ -40857,14 +41352,21 @@
           "required": true
         },
         {
-          "description": "RC user id of the creator",
+          "description": "RingCentral user identifier of the creator",
           "type": "string",
           "example": "2683222036",
           "name": "creatorId",
           "required": true
         },
         {
-          "description": "External categories of the content.\n\nPresent only if the content has foreignCategories.\n",
+          "description": "True if the content is the first in the thread.",
+          "type": "boolean",
+          "example": false,
+          "name": "firstInThread",
+          "required": false
+        },
+        {
+          "description": "External categories of the content.\nReturned only if the content has `foreignCategories`\n",
           "items": {
             "type": "string"
           },
@@ -40877,56 +41379,52 @@
           "required": false
         },
         {
-          "description": "Identifier of the content.",
+          "description": "Content identifier",
           "type": "string",
-          "example": "541014e17aa58d8ccf000023",
           "name": "id",
           "required": true
         },
         {
-          "description": "The identity identifier of the content to which this content is a reply to.",
+          "description": "Identifier of the content identity to which this content is a reply to.\nIf the channel does not support discussion initiation, this parameter is mandatory\n",
           "type": "string",
-          "example": "541014e17asdd8ccf000023",
           "name": "inReplyToAuthorIdentityId",
           "required": true
         },
         {
-          "description": "The content identifier to which this content is a reply to.\n\nOn creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.\n",
+          "description": "Content identifier to which this content is a reply to. On creation, if omitted,\na new discussion will be created. If the channel does not support discussion initiation,\nthis parameter is mandatory\n",
           "type": "string",
-          "example": "123414e17asdd8ccf000023",
           "name": "inReplyToContentId",
           "required": true
         },
         {
-          "description": "The intervention identifier of the content.",
+          "description": "Intervention identifier of the content",
           "type": "string",
-          "example": "123415437asdd8ccf000023",
           "name": "interventionId",
           "required": true
         },
         {
-          "description": "Language of the content.",
+          "description": "Language of the content",
           "type": "string",
           "example": "En",
           "name": "language",
           "required": true
         },
         {
-          "description": "True if the content is publicly visible on the remote channel (default).\n\nPrivate content is NOT supported on every channel.\n",
+          "description": "If set to `true`, then the content is publicly visible on remote channel.\nPrivate content is NOT supported on every channel\n",
           "type": "boolean",
           "default": true,
           "name": "public",
           "required": true
         },
         {
-          "description": "True if the content is published on the remote channel.",
+          "description": "If set to `true`, then the content is published on remote channel",
           "type": "boolean",
           "example": true,
           "name": "published",
           "required": true
         },
         {
-          "description": "Rating of the content.\n\nPresent only if the content supports rating and rating is filled.\n",
+          "description": "Rating of content. Present only if the content supports rating and rating is filled\n",
           "type": "integer",
           "format": "int32",
           "example": 4,
@@ -40934,28 +41432,27 @@
           "required": true
         },
         {
-          "description": "True if the content has been deleted on the remote channel.",
+          "description": "Set to `true` if content has been deleted on remote channel",
           "type": "boolean",
           "example": false,
           "name": "remotelyDeleted",
           "required": true
         },
         {
-          "description": "Identifier of the channel.\n\nOn creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.\n",
+          "description": "Channel identifier.",
           "type": "string",
-          "example": "fff415437asdd8ccf000023",
-          "name": "sourceId",
+          "example": "506d9e817aa58d1259000f12",
+          "name": "channelId",
           "required": true
         },
         {
-          "description": "Type of the channel.",
+          "description": "Type of a channel",
           "type": "string",
           "enum": [
             "AppleMessagesForBusiness",
             "Email",
             "EngageMessaging",
             "Facebook",
-            "GoogleBusinessMessages",
             "GoogleMyBusiness",
             "Instagram",
             "InstagramMessaging",
@@ -40966,18 +41463,18 @@
             "WhatsApp",
             "Youtube"
           ],
-          "name": "sourceType",
+          "name": "channelType",
           "required": true
         },
         {
-          "description": "External Uri of the content channel.",
+          "description": "External URI of a content channel",
           "type": "string",
           "format": "uri",
-          "name": "sourceUri",
+          "name": "channelUri",
           "required": true
         },
         {
-          "description": "Content status.",
+          "description": "Content status",
           "type": "string",
           "enum": [
             "New",
@@ -40991,33 +41488,33 @@
           "required": true
         },
         {
-          "description": "Synchronization status.",
+          "description": "Synchronization status",
           "type": "string",
           "example": "success",
           "name": "synchronizationStatus",
           "required": true
         },
         {
-          "description": "Synchronization error details.",
+          "description": "Synchronization error details",
           "type": "string",
           "name": "synchronizationError",
           "required": true
         },
         {
-          "description": "Content thread identifier of the content.",
+          "description": "Content thread identifier",
           "type": "string",
           "name": "threadId",
           "required": true
         },
         {
-          "description": "Applicable to Email channels only.\n\nThe subject of the email.\n\nThis field is mandatory when initiating a discussion.\n",
+          "description": "Applicable to Email channels only. The subject of the email.\nThis field is mandatory when initiating a discussion\n",
           "type": "string",
           "example": "An email title",
           "name": "title",
           "required": true
         },
         {
-          "description": "Type of the content.",
+          "description": "Type of the content",
           "type": "string",
           "enum": [
             "Album",
@@ -41067,7 +41564,7 @@
           "required": true
         },
         {
-          "description": "Types of structured messages that can be used to reply to this type of message.",
+          "description": "Types of structured messages that can be used to reply to this type of message",
           "items": {
             "type": "string"
           },
@@ -41078,29 +41575,34 @@
       ]
     },
     {
-      "name": "ContentAttachment",
+      "name": "ContentContextData",
+      "description": "Additional data of the content.\nThe `contextData` hash keys are the custom fields keys\n",
+      "fields": []
+    },
+    {
+      "name": "SocMsgContentAttachment",
       "fields": [
         {
-          "description": "Type of the attachment, which is generally a MIME attachment type like \"image/jpeg\", etc.\n\nSecurity level in ED determines what type of attachment is allowed.\n\nBased on the security level the following attachment types are supported.\n\n\"Strict\" level allows safe extensions below:\nContent name and supported types\n* audio (supports aac mp3 ogg m4a)\n* image (supports bmp gif jpg jpeg png svg webp)\n* pdf (supports pdf)\n* text (supports csv txt log)\n* video (supports avi flv m4v mkv mov mp4 mpg qt wmv)\n* other (supports amr dms vcard tif tiff mpeg)\n\n\"Relaxed\" level allows documents:\nContent name and supported types\n* excel (supports xls xlsm xlsx xlc xlt xltm xltx)\n* presentation (supports key odp otp)\n* powerpoint (supports pps ppt pptx pot)\n* spreadsheet (supports numbers ods ots)\n* word (supports doc docm docx dotm dotx)\n* word_processing (supports pages odt ott rtf)\n\n\"Permissive\" level allows all documents.\n\nHowever, there are no security level restrictions for content posted through the channel.\n",
+          "description": "Type of attachment, which is generally a MIME attachment type like `image/jpeg`, etc.\nSecurity level in RingCX determines what type of attachment is allowed.\nBased on the security level the following attachment types are supported.\n\n*'Strict'* level allows safe extensions below:\nContent name and supported types:\n\n- audio (AAC, MP3, OGG, M4A)\n- image (BMP, GIF, JPG, JPEG, PNG, SVG, WEBP)\n- pdf (PDF)\n- text (CSV, TXT, LOG)\n- video (AVI, FLV, M4V, MKV, MOV, MP4, MPG, QT, WMV)\n- other (AMR, DMS, VCARD, TIF, TIFF, MPEG)\n\n*'Relaxed'* level allows documents:\nContent name and supported types:\n\n- excel (XLS, XLSM, XLSX, XLC, XLT, XLTM, XLTX)\n- presentation (KEY, ODP, OTP)\n- powerpoint (PPS, PPT, PPTX, POT)\n- spreadsheet (Numbers - ODS, OTS)\n- word (DOC, DOCM, DOCX, DOTM, DOTX)\n- word_processing (Pages - ODT, OTT, RTF)\n\n*'Permissive'* level allows all documents.\n\nHowever, there are no security level restrictions for content posted through the channel\n",
           "type": "string",
           "example": "image/jpeg",
           "name": "contentType"
         },
         {
-          "description": "Creation time of the attachment.",
+          "description": "Creation time of the resource.",
           "format": "date-time",
           "type": "string",
           "example": "2023-02-04T12:43:07Z",
           "name": "creationTime"
         },
         {
-          "description": "Embedded in a content.",
+          "description": "Specifies if attachment is embedded in content",
           "type": "boolean",
           "example": false,
           "name": "embedded"
         },
         {
-          "description": "Filename of the attachment.",
+          "description": "Filename of attachment",
           "type": "string",
           "example": "0.jpeg",
           "name": "filename"
@@ -41112,13 +41614,14 @@
           "name": "id"
         },
         {
-          "description": "Privacy setting of the attachment.",
+          "description": "Attachment privacy setting",
           "type": "boolean",
           "example": false,
+          "default": true,
           "name": "public"
         },
         {
-          "description": "Size of the attachment.",
+          "description": "Size of attachment",
           "type": "integer",
           "format": "int32",
           "example": 217571,
@@ -41132,7 +41635,7 @@
           "name": "lastModifiedTime"
         },
         {
-          "description": "Uri of the attachment.",
+          "description": "Attachment URI",
           "type": "string",
           "format": "uri",
           "example": "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c",
@@ -41141,228 +41644,8 @@
       ]
     },
     {
-      "name": "ContentContextData",
-      "description": "Additional data of the content.\n\nThe contextData hash keys are the custom fields keys.\n",
-      "fields": []
-    },
-    {
-      "name": "CreateContentRequest",
-      "fields": [
-        {
-          "description": "Identity identifier of the author of content.\n\nNot mandatory on creation, by default it uses the token's user first identity on channel.\n",
-          "type": "string",
-          "example": "541014e17aa58d8ccf000023",
-          "name": "authorIdentityId"
-        },
-        {
-          "description": "The content's body.\n\nOn creation this field is mandatory except for WhatsApp content using templates.\n\nThe following are the max length restrictions for the different channels supported.\nChannel and max length\n  * Apple Messages For Business (max length 10000)\n  * Email (max length 262144)\n  * RingCX Digital Messaging (max length 1024)\n  * Facebook (max length 8000)\n  * GoogleBusinessMessages (max length 3000)\n  * Google My Business (max length 4000)\n  * Instagram (max length 950)\n  * Instagram Messaging (max length 1000)\n  * LinkedIn (max length 3000)\n  * Messenger (max length 2000)\n  * Twitter (max length 280)\n  * Viber (max length 7000)\n  * WhatsApp (max length 3800)\n  * Youtube (max length 8000)\n",
-          "type": "string",
-          "example": "Body of the content",
-          "name": "body"
-        },
-        {
-          "description": "The content identifier to which this content is a reply to.\n\nOn creation, if omitted, a new discussion will be created. If the channel does not support to initiate discussion this parameter is mandatory.\n",
-          "type": "string",
-          "example": "123414e17asdd8ccf000023",
-          "name": "inReplyToContentId"
-        },
-        {
-          "description": "True if the content is publicly visible on the remote channel (default).\n\nPrivate content is NOT supported on every channel.\n",
-          "type": "boolean",
-          "default": true,
-          "name": "public"
-        },
-        {
-          "description": "Identifier of the channel.\n\nOn creation if `inReplyToContentId` is specified, the channel will be determined from it. Otherwise, this parameter is mandatory.\n",
-          "type": "string",
-          "example": "fff415437asdd8ccf000023",
-          "name": "sourceId"
-        },
-        {
-          "description": "An array containing the attachment identifiers that need to be attached to the content.\n",
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "type": "string",
-            "description": "Attachment identifier.",
-            "example": "506d9e817aa58d1259000f12"
-          },
-          "example": [
-            "541014e17aa58d8ccf000023",
-            "541014e17aa58d8ccf000023"
-          ],
-          "name": "attachmentIds"
-        },
-        {
-          "description": "Applicable to Email channels only.\n\nThe subject of the email.\n\nThis field is mandatory when initiating a discussion.\n",
-          "type": "string",
-          "example": "An email title",
-          "name": "title"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
-          "name": "to"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
-          "name": "cc"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable on Email channels only.\n\nAn array containing the email addresses used in sections of the email.\n\nThis parameter is mandatory when initiating a discussion.\n",
-          "name": "bcc"
-        },
-        {
-          "type": "string",
-          "description": "Applicable to WhatsApp channels only.\n\nName of the Whatsapp template to use for the content.\n\nAll available template names are visible on the Whatsapp Business Manager interface.\n",
-          "example": "customer_order_shipment_template",
-          "name": "templateName"
-        },
-        {
-          "type": "string",
-          "description": "Applicable to WhatsApp channels only.\n\nLanguage of the Whatsapp template to use for the content. All available template languages are visible on the Whatsapp Business Manager interface.\n\nLanguage specified must conform to the ISO 639-1 alpha-2 codes for representing the names of languages.\n",
-          "example": "fr",
-          "name": "templateLanguage"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "description": "Applicable to WhatsApp channels only.\n\nComponent configuration of the Whatsapp template to use for the content.\n\nAll available components are visible on the Whatsapp Business Manager interface.\n",
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string"
-              },
-              "parameters": {
-                "type": "array",
-                "minItems": 0,
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "text": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": [
-            {
-              "Message1": [
-                {
-                  "param11": {
-                    "type": "Name",
-                    "text": "John"
-                  }
-                },
-                {
-                  "param12": {
-                    "type": "Message",
-                    "text": "Product rocks!"
-                  }
-                }
-              ]
-            },
-            {
-              "Message2": [
-                {
-                  "param21": {
-                    "type": "Agent Name",
-                    "text": "Alice"
-                  }
-                },
-                {
-                  "param22": {
-                    "type": "Message",
-                    "text": "Thank you"
-                  }
-                }
-              ]
-            }
-          ],
-          "name": "components"
-        },
-        {
-          "$ref": "ContentContextData",
-          "name": "contextData"
-        },
-        {
-          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
-          "type": "boolean",
-          "name": "autoSubmitted"
-        }
-      ]
-    },
-    {
-      "name": "NonEnumeratedPagingModel",
-      "fields": [
-        {
-          "type": "integer",
-          "format": "int32",
-          "minimum": 1,
-          "maximum": 1000,
-          "description": "Current page size, describes how many items are in each page.\nMatches \"perPage\" parameter from the request.\n",
-          "example": 50,
-          "name": "perPage",
-          "required": true
-        },
-        {
-          "type": "string",
-          "description": "Current page token. May be omitted if result is empty (because non-existent page\nwas specified or perPage=0 was requested)\n",
-          "name": "pageToken",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "A page token to be used to fetch the next page of the result set. May be omitted if the current page is the last one.",
-          "name": "nextPageToken",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "A page token to be used to fetch the previous page of the result set.\nMay be omitted if the current page is the first one or if the result set does not support backward navigation.\n",
-          "name": "previousPageToken",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "A page token to be used to fetch the first page of the result set.",
-          "name": "firstPageToken",
-          "required": false
-        }
-      ]
-    },
-    {
       "name": "ContentBodyFormatted",
-      "description": "Text and HTML formatted versions of the content body.",
+      "description": "Text and HTML formatted versions of the content body",
       "fields": [
         {
           "type": "string",
@@ -41480,6 +41763,16 @@
           "required": false
         },
         {
+          "description": "Either Agent or Customer",
+          "type": "string",
+          "enum": [
+            "Agent",
+            "Customer"
+          ],
+          "name": "identityType",
+          "required": false
+        },
+        {
           "description": "LastName.",
           "type": "string",
           "example": "Doe",
@@ -41508,7 +41801,6 @@
             "Email",
             "EngageMessaging",
             "Facebook",
-            "GoogleBusinessMessages",
             "GoogleMyBusiness",
             "Instagram",
             "Linkedin",
@@ -45001,7 +45293,7 @@
         {
           "type": "array",
           "items": {
-            "$ref": "TMAttachmentInfo"
+            "$ref": "TaskAttachment"
           },
           "name": "attachments",
           "required": false
@@ -46922,6 +47214,19 @@
           "readOnly": true,
           "nullable": true,
           "name": "recordingExist"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates that post webinar registration will be opened automatically when webinar ends.",
+          "name": "autoOpenPostWebinarRegistration"
+        },
+        {
+          "type": "string",
+          "description": "The time after which the post webinar will be closed automatically.",
+          "format": "date-time",
+          "readOnly": true,
+          "nullable": true,
+          "name": "postWebinarRegistrationClosingTime"
         }
       ]
     },
@@ -47365,6 +47670,21 @@
       ]
     },
     {
+      "name": "MetaDataValues",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Unique identifier",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Value",
+          "name": "value"
+        }
+      ]
+    },
+    {
       "name": "CallLogRecordTransferTarget",
       "fields": [
         {
@@ -47421,6 +47741,18 @@
           "type": "string",
           "description": "Internal Identifier of Telephony Session, which belongs to transferee in case of Warm Transfer",
           "name": "telephonySessionId"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionBulkUpdateTaskResultAffectedItems",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "ExtensionUpdateShortResult"
+          },
+          "name": "result"
         }
       ]
     },
@@ -47569,7 +47901,10 @@
         },
         {
           "type": "string",
-          "description": "ISO code of a country",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter country code in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format",
+          "example": "US",
           "name": "countryIsoCode"
         },
         {
@@ -49299,7 +49634,7 @@
           "endpoint": "/restapi/oauth/token",
           "method": "post",
           "tags": [
-            "OAuth 2.0 / OpenID Connect"
+            "OAuth and OpenID Connect"
           ],
           "method2": "post",
           "description": "Returns access (and potentially refresh) tokens for making API requests.\n\nFor confidential client application types\nthis endpoint requires client authentication using one of the supported\nmethods (`client_secret_basic`, `client_secret_jwt` or `private_key_jwt`)\n\nFor non-confidential client application types\nthe client identifier must be provided via `client_id` request attribute.\n",
@@ -49459,7 +49794,7 @@
           "endpoint": "/restapi/oauth/revoke",
           "method": "post",
           "tags": [
-            "OAuth 2.0 / OpenID Connect"
+            "OAuth and OpenID Connect"
           ],
           "method2": "post",
           "description": "Revokes all active access/refresh tokens and invalidates the OAuth session basing on token provided.\nThe `token` parameter may be passed in query string or body and may represent access or refresh token.\n\nThis endpoint is defined by [RFC-7009 \"OAuth 2.0 Token Revocation\"](https://datatracker.ietf.org/doc/html/rfc7009)\n\nFor confidential client application types\nthis endpoint requires client authentication using one of the supported\nmethods (`client_secret_basic`, `client_secret_jwt` or `private_key_jwt`)\n",
@@ -50047,7 +50382,7 @@
           "endpoint": "/restapi/oauth/authorize",
           "method": "get",
           "tags": [
-            "OAuth 2.0 / OpenID Connect"
+            "OAuth and OpenID Connect"
           ],
           "method2": "get",
           "description": "Performs Authentication of the End-User by sending the User Agent to the Authorization Server's\nAuthorization Endpoint for Authentication and Authorization,\nusing request parameters defined by OAuth 2.0 [RFC-6749](https://datatracker.ietf.org/doc/html/rfc6749#section-3.1)\nand additional parameters and parameter values defined by\n[OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint).\n\nThis is the version that uses HTTP `GET` method.\n",
@@ -50061,7 +50396,7 @@
           "endpoint": "/restapi/oauth/authorize",
           "method": "post",
           "tags": [
-            "OAuth 2.0 / OpenID Connect"
+            "OAuth and OpenID Connect"
           ],
           "method2": "post",
           "description": "Performs Authentication of the End-User by sending the User Agent to the Authorization Server's\nAuthorization Endpoint for Authentication and Authorization,\nusing request parameters defined by OAuth 2.0 [RFC-6749](https://datatracker.ietf.org/doc/html/rfc6749#section-3.1)\nand additional parameters and parameter values defined by\n[OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthorizationEndpoint).\n\nThis is the version that uses HTTP `POST` method.\n",
@@ -51265,7 +51600,7 @@
           "userPermission": "ReadExtensions",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "CallQueues"
+            "$ref": "CallQueueList"
           },
           "queryParameters": "listCallQueuesParameters"
         },
@@ -51304,7 +51639,7 @@
           "responseSchema": {
             "$ref": "CallQueueDetails"
           },
-          "bodyParameters": "callQueueDetails"
+          "bodyParameters": "callQueueDetailsForUpdate"
         }
       ],
       "parameter": "groupId"
@@ -51325,7 +51660,7 @@
           ],
           "method2": "delete",
           "description": "Disassociates a phone line (DL & Device) from an extension:\n\n - if the value of `keepAssetsInInventory` is `true`,\nthe given device is moved to unassigned devices and the number is moved to the number inventory;\n - if the value of `keepAssetsInInventory` is `false`, the given device and number is removed from the account;\n - if the parameter `keepAssetsInInventory` is not set (empty body), default value `true` is set.\n",
-          "summary": "Remove phone line",
+          "summary": "Remove Phone Line",
           "operationId": "removeLineJWSPublic",
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
@@ -52221,7 +52556,7 @@
             "Posts"
           ],
           "method2": "post",
-          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. Attachments of the following types (File, Card, Event, Note) can also be added to a post by passing type and ID of attachment(s) in request body.",
+          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of \nthe request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, \nTask, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. \nAttachments can also be added to a post by passing the type and ID of attachment(s) in request body.\n",
           "summary": "Create Post",
           "operationId": "createGlipPostNew",
           "rateLimitGroup": "Medium",
@@ -53066,13 +53401,13 @@
             "Contents"
           ],
           "method2": "list",
-          "description": "List contents by creation date. The default creation order is descending.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nThe query parameters provided shall be considered an AND operation to filter the list.\n\nA query parameter not specified or a query parameter provided with no value is treated as not required for\nfiltering the list.\n",
-          "summary": "List All Contents",
-          "operationId": "socMsgListContents",
+          "description": "Returns a list of social messaging contents ordered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with\nthe access token provided in the Authorization header.\n\nThe query parameters provided in request will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
+          "summary": "List Contents",
+          "operationId": "listSocialMessagingContents",
           "rateLimitGroup": "Light",
           "appPermission": "SocialMessaging",
           "withParameter": false,
-          "queryParameters": "socMsgListContentsParameters"
+          "queryParameters": "listSocialMessagingContentsParameters"
         },
         {
           "endpoint": "/cx/social-messaging/v1/contents",
@@ -53081,13 +53416,13 @@
             "Contents"
           ],
           "method2": "post",
-          "description": "Creates new content for use in discussions.\n\nThis request is used to reply to already-posted content or to initiate a discussion. If authorized, the\nauthenticated user will be used as the content author.\n\nContent will be created and pushed asynchronously to the channel. When the content is successfully pushed to\nthe channel, the Content.Exported event will be reported.\n\nThe account context of this request is determined by the RC Account Id associated with the access token provided\nin the Authorization header.\n\nReplying to customer content is usually possible unless the channel or conversation is read only. Composing\ncontent, on the contrary, depends on the channel itself.\n\n* The channel may not support it (and be purely reactive like Instagram, Messenger, etc.).\n\n* Some channels (usually public accounts like Twitter or Facebook pages) allow for the publishing of content\nwithout targeting specific individuals.\n\n* Some channels (usually non-public media) require specific targeting (phone number for SMS, email address\nfor email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the\ngeneric parameters.\n",
+          "description": "Creates the new social messaging content for use in discussions.\n\nThis request is used to reply to an already posted content or to initiate a discussion. If authorized, the\nauthenticated user will be used as the content author.\n\nContent will be created and pushed asynchronously to the channel. When the content is successfully pushed to\nthe channel, the `Content.Exported` event will be reported.\n\nThe account context of this request is determined by the RC Account ID associated with the access token provided\nin the Authorization header.\n\nReplying to customer content is usually possible unless the channel or conversation is read only. Composing\ncontent, on the contrary, depends on the channel itself.\n\n- The channel may not support it and be purely reactive like Instagram, Messenger, etc.\n\n- Some channels (usually public accounts, like Twitter or Facebook pages) allow content publishing\nwithout targeting specific individuals.\n\n- Some channels (usually non-public media) require specific targeting (phone number for SMS, email address\nfor email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the\ngeneric parameters.\n",
           "summary": "Create Content",
-          "operationId": "socMsgCreateContent",
+          "operationId": "createSocialMessagingContent",
           "rateLimitGroup": "Light",
           "appPermission": "SocialMessaging",
           "withParameter": false,
-          "bodyParameters": "createContentRequest"
+          "bodyParameters": "createSocialMessagingContentRequest"
         },
         {
           "endpoint": "/cx/social-messaging/v1/contents/{contentId}",
@@ -53096,9 +53431,9 @@
             "Contents"
           ],
           "method2": "get",
-          "description": "Retrieves the content from the given id.\n",
+          "description": "Returns the social messaging content by ID specified in path.",
           "summary": "Get Content",
-          "operationId": "socMsgGetContent",
+          "operationId": "readSocialMessagingContent",
           "rateLimitGroup": "Light",
           "appPermission": "SocialMessaging",
           "withParameter": true
@@ -53558,6 +53893,34 @@
     },
     {
       "paths": [
+        "restapi",
+        "v2",
+        "accounts",
+        "cost-centers"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/cost-centers",
+          "method": "get",
+          "tags": [
+            "Cost Centers"
+          ],
+          "method2": "get",
+          "description": "Returns the list of cost centers of the account specified in path.",
+          "summary": "List Cost Centers",
+          "operationId": "listCostCenters",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "userPermission": "CostCenterManagement",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CostCenterList"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
         "team-messaging",
         "v1",
         "tasks",
@@ -53757,7 +54120,7 @@
             "Phone Numbers"
           ],
           "method2": "delete",
-          "description": "This method can only delete numbers that meet one of the following requirements:\n  - numbers that have `\"usageType\": \"Inventory\"`\n  - `\"Forwarded\"` numbers\n  - `\"Forwarded Company\"` numbers\n\nIn other words, this method will not delete numbers which are in use on the account - extension direct numbers,\nmain number, etc. It is possible to indicate phone numbers to be deleted using their IDs or exact string values\nin e.164 format. However, the same lookup method (by ID or by value) must be used for all numbers within the same API call.\n",
+          "description": "This method can only delete numbers that of the following usage types:\n  - `Inventory`,\n  - `ForwardedNumber`,\n  - `ForwardedCompanyNumber`.\n\nIn other words, this method will not delete numbers which are in use on the account - extension direct numbers,\nmain number, etc. It is possible to indicate phone numbers to be deleted using their IDs or exact string values\nin e.164 format. However, the same lookup method (by ID or by value) must be used for all numbers within the same API call.\n",
           "summary": "Delete Numbers from Inventory",
           "operationId": "deleteNumbersFromInventoryV2",
           "rateLimitGroup": "Medium",
@@ -53776,7 +54139,7 @@
             "Phone Numbers"
           ],
           "method2": "patch",
-          "description": "Assigns or reassigns a phone number as a company or extension number.\n\nAssign scenarios supported:\n- from Inventory to a company number;\n- from Inventory to an extension number.\n\nReassign scenarios supported:\n- from an extension to another extension;\n- from an extension to a company number;\n- from a company number to an extension.\n",
+          "description": "Assigns or reassigns a phone number as a company or extension number.\n\nAssign scenarios supported:\n- from inventory to a company number;\n- from inventory to an extension number.\n\nReassign scenarios supported:\n- from an extension to another extension;\n- from an extension to a company number;\n- from a company number to an extension.\n",
           "summary": "Assign Phone Number",
           "operationId": "assignPhoneNumberV2",
           "rateLimitGroup": "Medium",
@@ -53832,7 +54195,8 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "ContactResource"
-          }
+          },
+          "queryParameters": "readDirectoryEntryParameters"
         }
       ],
       "parameter": "entryId"
@@ -53971,7 +54335,7 @@
             "Identities"
           ],
           "method2": "list",
-          "description": "Returns a list of identities filtered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with \nthe access token provided in the Authorization header.\n\nThe query parameters provided will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
+          "description": "Returns a list of identities ordered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with\nthe access token provided in the Authorization header.\n\nThe query parameters provided will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
           "summary": "List Identities",
           "operationId": "listSocialMessagingIdentities",
           "rateLimitGroup": "Light",
@@ -54561,7 +54925,7 @@
             "Presence"
           ],
           "method2": "get",
-          "description": "Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline \n(the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types: \nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.\nIf the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions \nin one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error\ncode InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.\n",
+          "description": "Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline\n(the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types:\nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.\nIf the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions\nin one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error\ncode InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.\n",
           "summary": "Get User Presence Status",
           "operationId": "readUserPresenceStatus",
           "rateLimitGroup": "Light",
@@ -54920,7 +55284,7 @@
             "IVR"
           ],
           "method2": "get",
-          "description": "Returns media content of an IVR prompt by ID.",
+          "description": "Returns media content of an IVR prompt by ID.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
           "summary": "Get IVR Prompt Content",
           "operationId": "readIVRPromptContent",
           "rateLimitGroup": "Heavy",
@@ -56477,7 +56841,7 @@
           "userPermission": "ReadUserAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "AnsweringRuleInfo"
+            "$ref": "CallHandlingRuleInfo"
           },
           "queryParameters": "readAnsweringRuleParameters"
         },
@@ -56496,7 +56860,7 @@
           "userPermission": "EditUserAnsweringRules",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "AnsweringRuleInfo"
+            "$ref": "CallHandlingRuleInfo"
           },
           "bodyParameters": "updateAnsweringRuleRequest"
         },
@@ -56746,7 +57110,7 @@
             "Phone Numbers"
           ],
           "method2": "post",
-          "description": "Replaces (swaps) phone numbers from Inventory with the main, company, direct or company fax numbers.\nThis method is used to replace temporary numbers when the porting process is complete.\n",
+          "description": "Replaces (swaps) phone numbers from inventory with the main, company, direct or company fax numbers.\nThis method is used to replace temporary numbers when the porting process is complete.\n",
           "summary": "Replace Phone Number",
           "operationId": "replacePhoneNumberV2",
           "rateLimitGroup": "Medium",
@@ -57179,7 +57543,7 @@
             "Phone Numbers"
           ],
           "method2": "get",
-          "description": "Returns the result of asynchronous operation which adds phone numbers to the account Inventory.\n",
+          "description": "Returns the result of asynchronous operation which adds phone numbers to the account inventory.\n",
           "summary": "Get Add Numbers Task Results",
           "operationId": "getBulkAddTaskResultsV2",
           "rateLimitGroup": "Heavy",
@@ -58672,6 +59036,52 @@
     {
       "paths": [
         "restapi",
+        "v2",
+        "accounts",
+        "extensions",
+        "call-flip-numbers"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/extensions/{extensionId}/call-flip-numbers",
+          "method": "get",
+          "tags": [
+            "Call Flip"
+          ],
+          "method2": "get",
+          "description": "Returns call flip settings. Call flip destination is an extension level setting.\nThe following numbers can be used for call flip:\n\n* User's DL numbers (added/removed automatically by the System)\n* PSTN numbers in E.164 format (added/removed manually by User)\n\nCall flip list is generally limited up to 10 numbers.\n\n**Please note:** This API is only working with the new Communication Handling flow.\nTo ensure that please check if the 'NewCallHandlingAndForwarding' feature is supported.\n",
+          "summary": "Get Call Flip Settings",
+          "operationId": "readCallFlipSettings",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CallFlipNumberListResource"
+          }
+        },
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/extensions/{extensionId}/call-flip-numbers",
+          "method": "put",
+          "tags": [
+            "Call Flip"
+          ],
+          "method2": "put",
+          "description": "Updates call flip settings. Call flip destination is an extension level setting.\nThe following numbers can be used for call flip:\n\n* User's DL numbers (added/removed automatically by the System)\n* PSTN numbers in E.164 format (added/removed manually by User)\n\nCall flip list is generally limited up to 10 numbers.\n\n**Please note:** This API is only working with the new Communication Handling flow.\nTo ensure that please check if the 'NewCallHandlingAndForwarding' feature is supported.\n",
+          "summary": "Update Call Flip Settings",
+          "operationId": "updateCallFlipSettings",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditExtensions",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CallFlipNumberListResource"
+          },
+          "bodyParameters": "callFlipNumberListResource"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
         "account",
         "telephony",
         "sessions",
@@ -58874,7 +59284,7 @@
             "SMS Templates"
           ],
           "method2": "post",
-          "description": "Creates a user personal text message template. \nMaximum number of personal templates is 25 per user. \nMax length of the `body` property is 1000 symbols (2-byte UTF-16 encoded).\n",
+          "description": "Creates a user personal text message template.\nMaximum number of personal templates is 25 per user.\nMax length of the `body` property is 1000 symbols (2-byte UTF-16 encoded).\n",
           "summary": "Create User Message Template",
           "operationId": "createUserMessageTemplate",
           "rateLimitGroup": "Medium",
@@ -59630,7 +60040,7 @@
             "Call Blocking"
           ],
           "method2": "get",
-          "description": "Returns blocked or allowed phone number(s) by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Returns blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
           "summary": "Get Blocked/Allowed Number",
           "operationId": "readBlockedAllowedNumber",
           "rateLimitGroup": "Light",
@@ -59648,7 +60058,7 @@
             "Call Blocking"
           ],
           "method2": "put",
-          "description": "Updates blocked or allowed phone number(s) by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Updates blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
           "summary": "Update Blocked/Allowed Number",
           "operationId": "updateBlockedAllowedNumber",
           "rateLimitGroup": "Medium",
