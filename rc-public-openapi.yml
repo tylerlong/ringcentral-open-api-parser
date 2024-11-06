@@ -24207,6 +24207,26 @@ components:
         extensionId:
           type: "string"
           description: "Internal identifier of an extension"
+    MobilePickupData:
+      type: "object"
+      properties:
+        ccMailboxes:
+          type: "array"
+          description: "List of extension IDs, configured to pick up a call from Desktop/Mobile applications"
+          items:
+            type: "string"
+        to:
+          type: "string"
+          description: "SIP proxy registration name"
+        sid:
+          type: "string"
+          description: "User data"
+        srvlvl:
+          type: "string"
+          description: "User data"
+        srvLvlExt:
+          type: "string"
+          description: "User data"
     CallSessionObject:
       type: "object"
       properties:
@@ -24245,11 +24265,9 @@ components:
           - "FaxReceive"
           - "Tds"
           - "VoiceMailScreening"
-        peerId:
-          $ref: "#/components/schemas/PeerInfo"
         reason:
           type: "string"
-          description: "Reason for call termination. For 'Disconnected' code only"
+          description: "Reason for a call status, might be specified for some codes"
           enum:
           - "Pickup"
           - "Supervising"
@@ -24280,9 +24298,20 @@ components:
           - "CallSwitch"
           - "CallFinished"
           - "CallDropped"
+          - "Voicemail"
         description:
           type: "string"
           description: "Optional message"
+        parkData:
+          type: "string"
+          description: "Call park data. Returned for calls in 'Parked' state"
+        peerId:
+          $ref: "#/components/schemas/PeerInfo"
+        mobilePickupData:
+          $ref: "#/components/schemas/MobilePickupData"
+        rcc:
+          type: "boolean"
+          description: "Specifies if it's a conference call"
       description: "Status data of a call session"
     PeerInfo:
       type: "object"
@@ -24293,7 +24322,7 @@ components:
           type: "string"
         partyId:
           type: "string"
-      description: "Peer session/party details. Valid in 'Gone' state of a call"
+      description: "Peer (linked) session/party details. Valid in 'Gone' state of a call"
     OriginInfo:
       type: "object"
       properties:
@@ -24394,19 +24423,27 @@ components:
           items:
             $ref: "#/components/schemas/TelephonySessionsEventPartyInfo"
       description: "Notification payload body"
-    CallSessionStatusInfo:
+    UiCallInfo:
       type: "object"
+      description: "Call information on user interface"
       properties:
-        code:
+        primary:
+          $ref: "#/components/schemas/UiCallInfoRecord"
+        additional:
+          $ref: "#/components/schemas/UiCallInfoRecord"
+    SipData:
+      type: "object"
+      description: "SIP (Session Initiation Protocol) information. \nReturned if query parameter sipData is set to 'True'\n"
+      properties:
+        toTag:
           type: "string"
-        reason:
+          description: "Recipient's data"
+        fromTag:
           type: "string"
-        parkData:
+          description: "Sender's data"
+        callId:
           type: "string"
-        peerId:
-          $ref: "#/components/schemas/PeerInfo"
-        mobilePickupData:
-          $ref: "#/components/schemas/MobilePickupData"
+          description: "SIP call identifier"
     ExtensionTelephonySessionsEvent:
       type: "object"
       properties:
@@ -24429,37 +24466,34 @@ components:
           description: "Internal identifier of a subscription owner extension"
         body:
           $ref: "#/components/schemas/TelephonySessionsEventBody"
-    MobilePickupData:
+    UiCallInfoRecord:
       type: "object"
       properties:
-        ccMailboxes:
-          type: "array"
-          description: "List of extension IDs, configured to pick up a call from Desktop/Mobile applications"
-          items:
-            type: "string"
-        to:
+        type:
           type: "string"
-          description: "SIP proxy registration name"
-        sid:
+          description: "UI call info type"
+          enum:
+          - "QueueName"
+          - "CallerIdName"
+        value:
           type: "string"
-          description: "User data"
-        srvlvl:
-          type: "string"
-          description: "User data"
-        srvLvlExt:
-          type: "string"
-          description: "User data"
+          description: "UI call info value"
+          example: "John Doe"
     TelephonySessionsEventPartyInfo:
       type: "object"
       properties:
         accountId:
           type: "string"
+          description: "Internal identifier of an account"
         extensionId:
           type: "string"
+          description: "Internal identifier of an extension"
         id:
           type: "string"
+          description: "Internal identifier of a party"
         direction:
           type: "string"
+          description: "Call direction"
           enum:
           - "Inbound"
           - "Outbound"
@@ -24467,8 +24501,44 @@ components:
           $ref: "#/components/schemas/CallPartyInfo"
         from:
           $ref: "#/components/schemas/CallPartyInfo"
+        recordings:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/RecordingInfo"
         status:
-          $ref: "#/components/schemas/CallSessionStatusInfo"
+          $ref: "#/components/schemas/CallStatusInfo"
+        park:
+          $ref: "#/components/schemas/ParkInfo"
+        queueCall:
+          type: "boolean"
+          description: "Specifies if it's a queue call"
+        missedCall:
+          type: "boolean"
+          description: "Specifies if a call was missed by the party"
+        standAlone:
+          type: "boolean"
+          description: |
+            If `true` then the party is not connected to a session voice
+            conference, `false` means the party is connected to other parties in a
+            session
+        muted:
+          type: "boolean"
+          description: |
+            Specifies if a call participant is muted or not. **Note:**
+            If a call is also controlled via Hard phone or RingCentral App (not only
+            through the API by calling call control methods) then it cannot be fully
+            muted/unmuted via API only, in this case the action should be duplicated
+            via Hard phone/RC App interfaces
+        conferenceRole:
+          type: "string"
+          description: "Defines party role in Server Side Conference"
+          enum:
+          - "Host"
+          - "Participant"
+        sipData:
+          $ref: "#/components/schemas/SipData"
+        uiCallInfo:
+          $ref: "#/components/schemas/UiCallInfo"
     AddPartyRequest:
       required:
       - "partyId"
@@ -24648,7 +24718,10 @@ components:
           $ref: "#/components/schemas/OwnerInfo"
         standAlone:
           type: "boolean"
-          description: "Specifies if a device is stand-alone"
+          description: |
+            If `true` then the party is not connected to a session voice
+            conference, `false` means the party is connected to other parties in a
+            session
         status:
           $ref: "#/components/schemas/CallStatusInfo"
     CallRecordingUpdate:
@@ -28460,7 +28533,7 @@ components:
           default: "~"
         telephonyStatus:
           type: "string"
-          description: "Telephony presence status. Returned if telephony status is changed."
+          description: "Telephony presence status. Returned if telephony status is changed"
           enum:
           - "NoCall"
           - "CallConnected"
@@ -28493,6 +28566,12 @@ components:
           - "DoNotAcceptAnyCalls"
           - "DoNotAcceptDepartmentCalls"
           - "TakeDepartmentCallsOnly"
+        meetingStatus:
+          type: "string"
+          enum:
+          - "Connected"
+          - "Disconnected"
+          description: "Meetings presence status. Specifies if a user is on a meeting"
         allowSeeMyPresence:
           type: "boolean"
           description: "If `true` enables other extensions to see the extension presence status"

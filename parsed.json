@@ -16827,6 +16827,39 @@
       ]
     },
     {
+      "name": "MobilePickupData",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of extension IDs, configured to pick up a call from Desktop/Mobile applications",
+          "items": {
+            "type": "string"
+          },
+          "name": "ccMailboxes"
+        },
+        {
+          "type": "string",
+          "description": "SIP proxy registration name",
+          "name": "to"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "sid"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "srvlvl"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "srvLvlExt"
+        }
+      ]
+    },
+    {
       "name": "CallSessionObject",
       "description": "Call session information",
       "fields": [
@@ -16882,12 +16915,8 @@
           "name": "code"
         },
         {
-          "$ref": "PeerInfo",
-          "name": "peerId"
-        },
-        {
           "type": "string",
-          "description": "Reason for call termination. For 'Disconnected' code only",
+          "description": "Reason for a call status, might be specified for some codes",
           "enum": [
             "Pickup",
             "Supervising",
@@ -16917,7 +16946,8 @@
             "CallReplied",
             "CallSwitch",
             "CallFinished",
-            "CallDropped"
+            "CallDropped",
+            "Voicemail"
           ],
           "name": "reason"
         },
@@ -16925,12 +16955,30 @@
           "type": "string",
           "description": "Optional message",
           "name": "description"
+        },
+        {
+          "type": "string",
+          "description": "Call park data. Returned for calls in 'Parked' state",
+          "name": "parkData"
+        },
+        {
+          "$ref": "PeerInfo",
+          "name": "peerId"
+        },
+        {
+          "$ref": "MobilePickupData",
+          "name": "mobilePickupData"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if it's a conference call",
+          "name": "rcc"
         }
       ]
     },
     {
       "name": "PeerInfo",
-      "description": "Peer session/party details. Valid in 'Gone' state of a call",
+      "description": "Peer (linked) session/party details. Valid in 'Gone' state of a call",
       "fields": [
         {
           "type": "string",
@@ -17105,27 +17153,37 @@
       ]
     },
     {
-      "name": "CallSessionStatusInfo",
+      "name": "UiCallInfo",
+      "description": "Call information on user interface",
+      "fields": [
+        {
+          "$ref": "UiCallInfoRecord",
+          "name": "primary"
+        },
+        {
+          "$ref": "UiCallInfoRecord",
+          "name": "additional"
+        }
+      ]
+    },
+    {
+      "name": "SipData",
+      "description": "SIP (Session Initiation Protocol) information. \nReturned if query parameter sipData is set to 'True'\n",
       "fields": [
         {
           "type": "string",
-          "name": "code"
+          "description": "Recipient's data",
+          "name": "toTag"
         },
         {
           "type": "string",
-          "name": "reason"
+          "description": "Sender's data",
+          "name": "fromTag"
         },
         {
           "type": "string",
-          "name": "parkData"
-        },
-        {
-          "$ref": "PeerInfo",
-          "name": "peerId"
-        },
-        {
-          "$ref": "MobilePickupData",
-          "name": "mobilePickupData"
+          "description": "SIP call identifier",
+          "name": "callId"
         }
       ]
     },
@@ -17164,35 +17222,22 @@
       ]
     },
     {
-      "name": "MobilePickupData",
+      "name": "UiCallInfoRecord",
       "fields": [
         {
-          "type": "array",
-          "description": "List of extension IDs, configured to pick up a call from Desktop/Mobile applications",
-          "items": {
-            "type": "string"
-          },
-          "name": "ccMailboxes"
+          "type": "string",
+          "description": "UI call info type",
+          "enum": [
+            "QueueName",
+            "CallerIdName"
+          ],
+          "name": "type"
         },
         {
           "type": "string",
-          "description": "SIP proxy registration name",
-          "name": "to"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "sid"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "srvlvl"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "srvLvlExt"
+          "description": "UI call info value",
+          "example": "John Doe",
+          "name": "value"
         }
       ]
     },
@@ -17201,18 +17246,22 @@
       "fields": [
         {
           "type": "string",
+          "description": "Internal identifier of an account",
           "name": "accountId"
         },
         {
           "type": "string",
+          "description": "Internal identifier of an extension",
           "name": "extensionId"
         },
         {
           "type": "string",
+          "description": "Internal identifier of a party",
           "name": "id"
         },
         {
           "type": "string",
+          "description": "Call direction",
           "enum": [
             "Inbound",
             "Outbound"
@@ -17228,8 +17277,56 @@
           "name": "from"
         },
         {
-          "$ref": "CallSessionStatusInfo",
+          "type": "array",
+          "items": {
+            "$ref": "RecordingInfo"
+          },
+          "name": "recordings"
+        },
+        {
+          "$ref": "CallStatusInfo",
           "name": "status"
+        },
+        {
+          "$ref": "ParkInfo",
+          "name": "park"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if it's a queue call",
+          "name": "queueCall"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if a call was missed by the party",
+          "name": "missedCall"
+        },
+        {
+          "type": "boolean",
+          "description": "If `true` then the party is not connected to a session voice\nconference, `false` means the party is connected to other parties in a\nsession\n",
+          "name": "standAlone"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if a call participant is muted or not. **Note:**\nIf a call is also controlled via Hard phone or RingCentral App (not only\nthrough the API by calling call control methods) then it cannot be fully\nmuted/unmuted via API only, in this case the action should be duplicated\nvia Hard phone/RC App interfaces\n",
+          "name": "muted"
+        },
+        {
+          "type": "string",
+          "description": "Defines party role in Server Side Conference",
+          "enum": [
+            "Host",
+            "Participant"
+          ],
+          "name": "conferenceRole"
+        },
+        {
+          "$ref": "SipData",
+          "name": "sipData"
+        },
+        {
+          "$ref": "UiCallInfo",
+          "name": "uiCallInfo"
         }
       ]
     },
@@ -17508,7 +17605,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a device is stand-alone",
+          "description": "If `true` then the party is not connected to a session voice\nconference, `false` means the party is connected to other parties in a\nsession\n",
           "name": "standAlone"
         },
         {
@@ -23931,7 +24028,7 @@
         },
         {
           "type": "string",
-          "description": "Telephony presence status. Returned if telephony status is changed.",
+          "description": "Telephony presence status. Returned if telephony status is changed",
           "enum": [
             "NoCall",
             "CallConnected",
@@ -23977,6 +24074,15 @@
             "TakeDepartmentCallsOnly"
           ],
           "name": "dndStatus"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Connected",
+            "Disconnected"
+          ],
+          "description": "Meetings presence status. Specifies if a user is on a meeting",
+          "name": "meetingStatus"
         },
         {
           "type": "boolean",
