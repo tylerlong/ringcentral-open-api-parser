@@ -673,6 +673,26 @@
       ]
     },
     {
+      "name": "ReadMultichannelCallRecordingContentParameters",
+      "description": "Query parameters for operation readMultichannelCallRecordingContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "ReadGreetingContentParameters",
       "description": "Query parameters for operation readGreetingContent",
       "fields": [
@@ -1329,7 +1349,7 @@
         },
         {
           "name": "dateFrom",
-          "description": "The start datetime for resulting records in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is the current moment",
+          "description": "Starting date for the resulting records in ISO 8601 format, including\ntimezone, for example *2016-03-10T18:07:52.534Z*. The range is limited to the last 30 days from the current moment.\nIf not specified, the default value is a log history date (date of account creation/call log deletion), and\nno time range limitation applied\n",
           "type": "string",
           "format": "date-time"
         },
@@ -1490,7 +1510,8 @@
           "type": "string",
           "enum": [
             "UserSettings",
-            "CallHandling"
+            "CallHandling",
+            "LimitedExtensions"
           ]
         },
         {
@@ -2033,7 +2054,10 @@
         {
           "name": "siteId",
           "description": "Internal identifier of a site",
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       ]
     },
@@ -2063,9 +2087,9 @@
       "fields": [
         {
           "name": "accessibleSitesOnly",
-          "description": "Flag to enable cross-site limitation checking",
-          "example": true,
-          "type": "boolean"
+          "description": "Allows to make lookups across a whole directory skipping a filtering logic of Cross-Site access management feature.\n",
+          "type": "boolean",
+          "default": true
         },
         {
           "name": "showFederated",
@@ -2131,9 +2155,9 @@
       "fields": [
         {
           "name": "accessibleSitesOnly",
-          "description": "Flag to enable cross-site limitation checking",
-          "example": true,
-          "type": "boolean"
+          "description": "Allows to make lookups across a whole directory skipping a filtering logic of Cross-Site access management feature.\n",
+          "type": "boolean",
+          "default": true
         }
       ]
     },
@@ -2143,9 +2167,9 @@
       "fields": [
         {
           "name": "accessibleSitesOnly",
-          "description": "Flag to enable cross-site limitation checking",
-          "example": true,
-          "type": "boolean"
+          "description": "Allows to make lookups across a whole directory skipping a filtering logic of Cross-Site access management feature.\n",
+          "type": "boolean",
+          "default": true
         },
         {
           "name": "accountId",
@@ -2448,15 +2472,21 @@
         },
         {
           "name": "feature",
-          "description": "Device feature",
-          "type": "string",
-          "enum": [
-            "BLA",
-            "CommonPhone",
-            "Intercom",
-            "Paging",
-            "HELD"
-          ]
+          "description": "Device feature or multiple features supported",
+          "style": "form",
+          "explode": true,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Device feature",
+            "enum": [
+              "BLA",
+              "CommonPhone",
+              "Intercom",
+              "Paging",
+              "HELD"
+            ]
+          }
         },
         {
           "name": "type",
@@ -2658,10 +2688,17 @@
         },
         {
           "name": "voicemailOwner",
-          "description": "This query parameter will filter voicemail messages based on its owner.\nThis parameter should be controlled by the 'SharedVoicemail' feature.\nIf the feature is disabled this filter shouldn't be applied.\n",
+          "description": "Filters voicemail messages based on the owner extension. Supported if the 'SharedVoicemail' \nfeature is enabled.\n",
           "type": "array",
+          "default": "Personal",
+          "enum": [
+            "Any",
+            "Personal",
+            "Shared"
+          ],
           "items": {
-            "type": "string"
+            "type": "string",
+            "description": "Internal identifier of an extension"
           }
         }
       ]
@@ -2855,7 +2892,7 @@
         },
         {
           "name": "dateFrom",
-          "description": "The start datetime for resulting records in ISO 8601 format including\ntimezone, for example 2016-03-10T18:07:52.534Z. The default value is the\ncurrent moment\n",
+          "description": "Starting date for the resulting records in ISO 8601 format, including\ntimezone, for example *2016-03-10T18:07:52.534Z*. The range is limited to the last 30 days from the current moment.\nIf not specified, the default value is a log history date (date of account creation/call log deletion), and\nno time range limitation applied\n",
           "type": "string",
           "format": "date-time"
         },
@@ -3321,7 +3358,7 @@
       "fields": [
         {
           "name": "dialingPlan",
-          "description": "Country code value complying with the [ISO 3166-1 alpha-2](https://ru.wikipedia.org/wiki/ISO_3166-1_alpha-2) format. \nThe default value is home country of the current extension\n",
+          "description": "Country code value complying with the [ISO 3166-1 alpha-2](https://ru.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.\nThe default value is home country of the current extension\n",
           "type": "string"
         }
       ]
@@ -4471,6 +4508,30 @@
       ]
     },
     {
+      "name": "GetRecordingInsightsParameters",
+      "description": "Query parameters for operation getRecordingInsights",
+      "fields": [
+        {
+          "name": "insightTypes",
+          "description": "AI Insight Types",
+          "style": "form",
+          "explode": false,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "NextSteps",
+              "Transcript",
+              "Summary",
+              "Highlights",
+              "BulletedSummary",
+              "AIScore"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "CaiAnalyzeInteractionParameters",
       "description": "Query parameters for operation caiAnalyzeInteraction",
       "fields": [
@@ -4481,209 +4542,6 @@
           "explode": true,
           "type": "string",
           "format": "uri"
-        }
-      ]
-    },
-    {
-      "name": "ListSocialMessagingContentsParameters",
-      "description": "Query parameters for operation listSocialMessagingContents",
-      "fields": [
-        {
-          "name": "interventionIds",
-          "description": "Filter based on the specified intervention identifiers",
-          "example": [
-            "7f946431b6eebffafae642cc",
-            "re946431b6eebffafae642cc"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "authorIdentityIds",
-          "description": "Filter based on the specified identity identifiers",
-          "example": [
-            "7f946431b6eebffafae642cc",
-            "re946431b6eebffafae642cc"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "authorIdentityGroupIds",
-          "description": "Filter based on the specified identity group identifiers",
-          "example": [
-            "7f946431b6eebffafae642cc",
-            "re946431b6eebffafae642cc"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "channelIds",
-          "description": "Filter based on the specified channel identifiers",
-          "example": [
-            "7f946431b6eebffafae642cc"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "contentDirection",
-          "description": "Direction of the content.\n\n* Incoming contents are received from a channel.\n* Outgoing contents are exported to a channel.\n",
-          "example": "Incoming",
-          "enum": [
-            "Incoming",
-            "Outgoing"
-          ],
-          "type": "string"
-        },
-        {
-          "name": "threadIds",
-          "description": "Filter based on the specified thread identifiers",
-          "example": [
-            "7f946431b6eebffafae642cc"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "text",
-          "description": "Filter based on the specified text(s). Provided multiple times, the values are ANDed",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "status",
-          "description": "Filter for specified status",
-          "type": "array",
-          "items": {
-            "description": "Content status",
-            "type": "string",
-            "enum": [
-              "New",
-              "Assigned",
-              "Replied",
-              "UserReply",
-              "UserInitiated",
-              "Ignored"
-            ]
-          }
-        },
-        {
-          "name": "orderBy",
-          "description": "Ordering by creationTime and lastModifiedTime is descending by default.",
-          "type": "string",
-          "enum": [
-            "-creationTime",
-            "+creationTime",
-            "creationTime",
-            "-lastModifiedTime",
-            "+lastModifiedTime",
-            "lastModifiedTime"
-          ],
-          "default": "-creationTime",
-          "example": "+creationTime"
-        },
-        {
-          "name": "pageToken",
-          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
-          "explode": false,
-          "type": "string"
-        },
-        {
-          "name": "perPage",
-          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
-          "explode": false,
-          "example": 100,
-          "type": "integer",
-          "format": "int32",
-          "minimum": 1,
-          "maximum": 1000,
-          "default": 100
-        }
-      ]
-    },
-    {
-      "name": "ListSocialMessagingIdentitiesParameters",
-      "description": "Query parameters for operation listSocialMessagingIdentities",
-      "fields": [
-        {
-          "name": "channelId",
-          "description": "Filter based on the specified channelId.",
-          "type": "string"
-        },
-        {
-          "name": "identityGroupIds",
-          "description": "Filter based on the specified `identityGroupIds` (separated by commas)",
-          "style": "form",
-          "explode": false,
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "identityType",
-          "description": "Either Agent or Customer",
-          "type": "string",
-          "enum": [
-            "Agent",
-            "Customer"
-          ]
-        },
-        {
-          "name": "userId",
-          "description": "Filter based on the specified `userId`",
-          "type": "string"
-        },
-        {
-          "name": "uuid",
-          "description": "Filter based on the specified `uuid`",
-          "type": "string"
-        },
-        {
-          "name": "orderBy",
-          "description": "Ordering by creationTime and lastModifiedTime is descending by default.",
-          "type": "string",
-          "enum": [
-            "-creationTime",
-            "+creationTime",
-            "creationTime",
-            "-lastModifiedTime",
-            "+lastModifiedTime",
-            "lastModifiedTime"
-          ],
-          "default": "-creationTime",
-          "example": "+creationTime"
-        },
-        {
-          "name": "pageToken",
-          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
-          "explode": false,
-          "type": "string"
-        },
-        {
-          "name": "perPage",
-          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
-          "explode": false,
-          "example": 100,
-          "type": "integer",
-          "format": "int32",
-          "minimum": 1,
-          "maximum": 1000,
-          "default": 100
         }
       ]
     },
@@ -5307,181 +5165,6 @@
       ]
     },
     {
-      "name": "CreateSocialMessagingContentRequest",
-      "description": "Request body for operation createSocialMessagingContent",
-      "fields": [
-        {
-          "description": "Identity identifier of the content author. Not mandatory on creation,\nby default it uses the token's user first identity on channel\n",
-          "type": "string",
-          "name": "authorIdentityId"
-        },
-        {
-          "description": "Content body. On creation this field is mandatory except for WhatsApp content\nusing templates. The following are the channels supported and their **max length**\nrestrictions (in brackets):\n\n  - *Apple Messages For Business* (10000)\n  - *Email* (262144)\n  - *RingCX Digital Messaging* (1024)\n  - *Facebook* (8000)\n  - *Google My Business* (4000)\n  - *Instagram* (950)\n  - *Instagram Messaging* (1000)\n  - *LinkedIn* (3000)\n  - *Messenger* (2000)\n  - *Twitter* (280)\n  - *Viber* (7000)\n  - *WhatsApp* (3800)\n  - *Youtube* (8000)\n",
-          "type": "string",
-          "example": "Body of the content",
-          "name": "body"
-        },
-        {
-          "description": "Content identifier to which this content is a reply to. On creation, if omitted,\na new discussion will be created. If the channel does not support discussion initiation,\nthis parameter is mandatory\n",
-          "type": "string",
-          "name": "inReplyToContentId"
-        },
-        {
-          "description": "If set to `true`, then the content is publicly visible on remote channel.\nPrivate content is NOT supported on every channel\n",
-          "type": "boolean",
-          "default": true,
-          "name": "public"
-        },
-        {
-          "description": "Channel identifier.",
-          "type": "string",
-          "example": "506d9e817aa58d1259000f12",
-          "name": "channelId"
-        },
-        {
-          "description": "List of attachment identifiers to be added to the content",
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Identifier of the attachment.",
-            "type": "string",
-            "example": "54085e5b7aa58d8b5d00006c"
-          },
-          "example": [
-            "541014e17aa58d8ccf000023",
-            "541014e17aa58d8ccf000023"
-          ],
-          "name": "attachmentIds"
-        },
-        {
-          "description": "Applicable to Email channels only. The subject of the email.\nThis field is mandatory when initiating a discussion\n",
-          "type": "string",
-          "example": "An email title",
-          "name": "title"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
-          "name": "to"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
-          "name": "cc"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "description": "Email address.",
-            "type": "string",
-            "format": "email",
-            "example": "user@example.com"
-          },
-          "description": "Applicable to Email channels only.\nAn array containing the email addresses used in sections of the email.\nThis parameter is mandatory when initiating a discussion\n",
-          "name": "bcc"
-        },
-        {
-          "type": "string",
-          "description": "Applicable to WhatsApp channels only. Name of the WhatsApp template to use for the content.\nAll available template names are visible on the WhatsApp Business Manager interface\n",
-          "example": "customer_order_shipment_template",
-          "name": "templateName"
-        },
-        {
-          "type": "string",
-          "description": "Applicable to WhatsApp channels only. Language of the WhatsApp template\nto use for the content. All available template languages are visible on\nthe WhatsApp Business Manager interface. Language specified must conform\nto the ISO 639-1 alpha-2 codes for representing the names of languages\n",
-          "example": "fr",
-          "name": "templateLanguage"
-        },
-        {
-          "type": "array",
-          "minItems": 0,
-          "description": "Applicable to WhatsApp channels only. Component configuration of the WhatsApp\ntemplate to use for the content. All available components are visible on\nthe WhatsApp Business Manager interface\n",
-          "items": {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string"
-              },
-              "parameters": {
-                "type": "array",
-                "minItems": 0,
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string"
-                    },
-                    "text": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": [
-            {
-              "Message1": [
-                {
-                  "param11": {
-                    "type": "Name",
-                    "text": "John"
-                  }
-                },
-                {
-                  "param12": {
-                    "type": "Message",
-                    "text": "Product rocks!"
-                  }
-                }
-              ]
-            },
-            {
-              "Message2": [
-                {
-                  "param21": {
-                    "type": "Agent Name",
-                    "text": "Alice"
-                  }
-                },
-                {
-                  "param22": {
-                    "type": "Message",
-                    "text": "Thank you"
-                  }
-                }
-              ]
-            }
-          ],
-          "name": "components"
-        },
-        {
-          "$ref": "ContentContextData",
-          "name": "contextData"
-        },
-        {
-          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
-          "type": "boolean",
-          "name": "autoSubmitted"
-        }
-      ]
-    },
-    {
       "name": "CreateGlipFileNewRequest",
       "description": "Request body for operation createGlipFileNew",
       "fields": [
@@ -5969,7 +5652,8 @@
             "RC/APNS",
             "RC/GCM",
             "PubNub",
-            "WebSocket"
+            "WebSocket",
+            "Internal"
           ],
           "name": "transportType",
           "required": true
@@ -6037,6 +5721,34 @@
           "readOnly": true,
           "name": "encryptionKey",
           "required": false
+        },
+        {
+          "type": "string",
+          "description": "The name of internal channel (defined in the backend service configuration) to deliver notifications through.\n",
+          "example": "my-server-channel",
+          "name": "configName",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "InternalDeliveryMode",
+      "fields": [
+        {
+          "type": "string",
+          "description": "The transport type for this subscription, or the channel by which an app should be notified of an event",
+          "enum": [
+            "Internal"
+          ],
+          "name": "transportType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The name of internal channel (defined in the backend service configuration) to deliver notifications through.\n",
+          "example": "my-server-channel",
+          "name": "configName",
+          "required": true
         }
       ]
     },
@@ -11897,7 +11609,7 @@
           "required": false
         },
         {
-          "maximum": 604800,
+          "maximum": 2592000,
           "type": "integer",
           "description": "Refresh token lifetime in seconds",
           "format": "int32",
@@ -12426,7 +12138,7 @@
           "required": false
         },
         {
-          "maximum": 604800,
+          "maximum": 2592000,
           "type": "integer",
           "description": "Refresh token lifetime in seconds",
           "format": "int32",
@@ -12835,6 +12547,22 @@
       ]
     },
     {
+      "name": "ServiceInfoPlanV2",
+      "description": "Information on account service plan",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a service plan",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name of a service plan",
+          "name": "name"
+        }
+      ]
+    },
+    {
       "name": "BasicContactInfo",
       "description": "Personal contact information",
       "fields": [
@@ -12892,33 +12620,9 @@
           "required": false
         },
         {
-          "$ref": "ServiceInfoPlan",
+          "$ref": "ServiceInfoPlanV2",
           "name": "servicePlan",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "ServiceInfoPlan",
-      "description": "Information on account service plan",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a service plan",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Name of a service plan",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "enum": [
-            "Freyja",
-            "Phoenix"
-          ],
-          "name": "freemiumProductType"
         }
       ]
     },
@@ -14047,6 +13751,16 @@
       ]
     },
     {
+      "name": "ExtensionFormattingLocaleInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal Identifier of a formatting language",
+          "name": "id"
+        }
+      ]
+    },
+    {
       "name": "BatchProvisionErrorItem",
       "fields": [
         {
@@ -14064,6 +13778,16 @@
           },
           "name": "errors",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "ExtensionCountryInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a country",
+          "name": "id"
         }
       ]
     },
@@ -14125,13 +13849,81 @@
           },
           "name": "devices",
           "required": false
-        },
+        }
+      ]
+    },
+    {
+      "name": "TransitionInfo",
+      "fields": [
         {
           "type": "boolean",
-          "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n'Unassigned' to 'NotActivated/Disabled')\n",
+          "description": "Specifies if a welcome/activation email is sent to the new users\n(with the extension status transition from 'Unassigned' to 'NotActivated/Disabled')\n",
           "default": true,
-          "name": "sendWelcomeEmail",
-          "required": false
+          "name": "sendWelcomeEmail"
+        },
+        {
+          "$ref": "ExtensionRegionalSettingRequest",
+          "name": "regionalSettings"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionTimezoneInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a timezone",
+          "name": "id"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionRegionalSettingRequest",
+      "description": "Regional data (timezone, home country, language) of an extension.\nThe default is Company (Auto-Receptionist) settings\n",
+      "fields": [
+        {
+          "$ref": "ExtensionCountryInfoRequest",
+          "name": "homeCountry"
+        },
+        {
+          "$ref": "ExtensionTimezoneInfoRequest",
+          "name": "timezone"
+        },
+        {
+          "$ref": "ExtensionLanguageInfoRequest",
+          "name": "language"
+        },
+        {
+          "$ref": "ExtensionGreetingLanguageInfoRequest",
+          "name": "greetingLanguage"
+        },
+        {
+          "$ref": "ExtensionFormattingLocaleInfoRequest",
+          "name": "formattingLocale"
+        },
+        {
+          "$ref": "ExtensionCurrencyInfoRequest",
+          "name": "currency"
+        },
+        {
+          "type": "string",
+          "description": "Time format (12-hours or 24-hours).",
+          "enum": [
+            "12h",
+            "24h"
+          ],
+          "default": "12h",
+          "name": "timeFormat"
+        }
+      ]
+    },
+    {
+      "name": "ExtensionCurrencyInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal Identifier of a currency",
+          "name": "id"
         }
       ]
     },
@@ -14152,6 +13944,16 @@
       ]
     },
     {
+      "name": "ExtensionGreetingLanguageInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a greeting language",
+          "name": "id"
+        }
+      ]
+    },
+    {
       "name": "BatchProvisionUsersResponse",
       "fields": [
         {
@@ -14167,6 +13969,16 @@
           },
           "name": "results",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "ExtensionLanguageInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a language",
+          "name": "id"
         }
       ]
     },
@@ -15423,7 +15235,8 @@
           "enum": [
             "Initial",
             "Accepted",
-            "Shipped"
+            "Shipped",
+            "Won't ship"
           ],
           "example": "Shipped",
           "name": "status"
@@ -15704,6 +15517,11 @@
         {
           "$ref": "BillingStatementInfo",
           "name": "billingStatement"
+        },
+        {
+          "type": "boolean",
+          "description": "Ability to access the Voicemail without being prompted to enter a PIN from the hard phone\n",
+          "name": "automaticVoicemailLogin"
         }
       ]
     },
@@ -17168,7 +16986,7 @@
     },
     {
       "name": "SipData",
-      "description": "SIP (Session Initiation Protocol) information. \nReturned if query parameter sipData is set to 'True'\n",
+      "description": "SIP (Session Initiation Protocol) information.\nReturned if query parameter sipData is set to 'True'\n",
       "fields": [
         {
           "type": "string",
@@ -18593,17 +18411,17 @@
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in seconds",
           "name": "duration",
-          "required": true
+          "required": false
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in milliseconds",
           "name": "durationMs",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogRecordingInfo",
@@ -18637,7 +18455,8 @@
             "Vma",
             "LocalNumber",
             "ImsOutgoing",
-            "ImsIncoming"
+            "ImsIncoming",
+            "Unknown"
           ],
           "name": "internalType",
           "required": false
@@ -18994,17 +18813,17 @@
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in seconds",
           "name": "duration",
-          "required": true
+          "required": false
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in milliseconds",
           "name": "durationMs",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogRecordingInfo",
@@ -19038,7 +18857,8 @@
             "Vma",
             "LocalNumber",
             "ImsOutgoing",
-            "ImsIncoming"
+            "ImsIncoming",
+            "Unknown"
           ],
           "name": "internalType",
           "required": false
@@ -19298,17 +19118,17 @@
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in seconds",
           "name": "duration",
-          "required": true
+          "required": false
         },
         {
           "type": "integer",
-          "format": "int32",
+          "format": "int64",
           "description": "Call duration in milliseconds",
           "name": "durationMs",
-          "required": true
+          "required": false
         },
         {
           "$ref": "CallLogRecordingInfo",
@@ -19342,7 +19162,8 @@
             "Vma",
             "LocalNumber",
             "ImsOutgoing",
-            "ImsIncoming"
+            "ImsIncoming",
+            "Unknown"
           ],
           "name": "internalType",
           "required": false
@@ -19380,6 +19201,7 @@
             "Hunting",
             "OutgoingFreeSpDl",
             "ParkLocation",
+            "CallMeCallOut",
             "ConferenceCall",
             "MobileApp",
             "MoveToConference",
@@ -19390,7 +19212,8 @@
             "Pickup",
             "ImsCall",
             "JoinCall",
-            "TextRelay"
+            "TextRelay",
+            "IvaCall"
           ],
           "name": "legType",
           "required": true
@@ -19620,16 +19443,6 @@
       ]
     },
     {
-      "name": "ExtensionFormattingLocaleInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal Identifier of a formatting language",
-          "name": "id"
-        }
-      ]
-    },
-    {
       "name": "ExtensionBulkUpdateTaskResource",
       "description": "Information on a task for updating multiple extensions\n",
       "fields": [
@@ -19704,16 +19517,6 @@
       ]
     },
     {
-      "name": "ExtensionCountryInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a country",
-          "name": "id"
-        }
-      ]
-    },
-    {
       "name": "ProvisioningSiteInfo",
       "description": "Site data. If multi-site feature is turned on for an account,\nthen ID of a site must be specified. In order to assign a wireless\npoint to the main site (company) the site ID should be set to `main-site`\n",
       "fields": [
@@ -19761,55 +19564,6 @@
       ]
     },
     {
-      "name": "ExtensionTimezoneInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a timezone",
-          "name": "id"
-        }
-      ]
-    },
-    {
-      "name": "ExtensionRegionalSettingRequest",
-      "fields": [
-        {
-          "$ref": "ExtensionCountryInfoRequest",
-          "name": "homeCountry"
-        },
-        {
-          "$ref": "ExtensionTimezoneInfoRequest",
-          "name": "timezone"
-        },
-        {
-          "$ref": "ExtensionLanguageInfoRequest",
-          "name": "language"
-        },
-        {
-          "$ref": "ExtensionGreetingLanguageInfoRequest",
-          "name": "greetingLanguage"
-        },
-        {
-          "$ref": "ExtensionFormattingLocaleInfoRequest",
-          "name": "formattingLocale"
-        },
-        {
-          "$ref": "ExtensionCurrencyInfoRequest",
-          "name": "currency"
-        },
-        {
-          "type": "string",
-          "description": "Time format (12-hours or 24-hours).",
-          "enum": [
-            "12h",
-            "24h"
-          ],
-          "default": "12h",
-          "name": "timeFormat"
-        }
-      ]
-    },
-    {
       "name": "UserTransitionInfo",
       "description": "For `NotActivated` extensions only. Welcome email settings\n",
       "fields": [
@@ -19822,16 +19576,6 @@
           "type": "boolean",
           "description": "Specifies if a welcome/activation email is sent to the new users (within extension status changing from\n`Unassigned` to `NotActivated/Disabled`)\n",
           "name": "sendWelcomeEmail"
-        }
-      ]
-    },
-    {
-      "name": "ExtensionCurrencyInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal Identifier of a currency",
-          "name": "id"
         }
       ]
     },
@@ -19985,16 +19729,6 @@
           "type": "string",
           "description": "Primary federation admin account identifier",
           "name": "refAccId"
-        }
-      ]
-    },
-    {
-      "name": "ExtensionGreetingLanguageInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a greeting language",
-          "name": "id"
         }
       ]
     },
@@ -20200,16 +19934,6 @@
       ]
     },
     {
-      "name": "ExtensionLanguageInfoRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a language",
-          "name": "id"
-        }
-      ]
-    },
-    {
       "name": "ExtensionBulkUpdateRequest",
       "description": "List of extensions to be updated",
       "fields": [
@@ -20313,9 +20037,15 @@
         },
         {
           "type": "string",
+          "description": "Description of a template",
+          "name": "description"
+        },
+        {
+          "type": "string",
           "enum": [
             "UserSettings",
-            "CallHandling"
+            "CallHandling",
+            "LimitedExtensions"
           ],
           "name": "type"
         },
@@ -24476,6 +24206,10 @@
           "type": "string",
           "description": "Name of a group",
           "name": "name"
+        },
+        {
+          "$ref": "CallMonitoringGroupSite",
+          "name": "site"
         }
       ]
     },
@@ -24487,6 +24221,11 @@
           "description": "Name of a group",
           "name": "name",
           "required": true
+        },
+        {
+          "$ref": "CreateCallMonitoringGroupRequestSite",
+          "name": "site",
+          "required": false
         }
       ]
     },
@@ -24768,7 +24507,7 @@
           "format": "int32",
           "minimum": 1,
           "maximum": 1000,
-          "description": "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty \n(because non-existent page was specified or perPage=0 was requested)\n",
+          "description": "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty\n(because non-existent page was specified or perPage=0 was requested)\n",
           "name": "page"
         },
         {
@@ -25448,21 +25187,6 @@
       ]
     },
     {
-      "name": "GroupResource",
-      "fields": [
-        {
-          "type": "string",
-          "example": "63723034",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "example": "Leaders",
-          "name": "name"
-        }
-      ]
-    },
-    {
       "name": "PhoneNumberResource",
       "fields": [
         {
@@ -25507,21 +25231,6 @@
           "type": "boolean",
           "description": "Specifies if the number is primary, i.e. displayed as 'main number' and called by default",
           "name": "primary"
-        }
-      ]
-    },
-    {
-      "name": "CallQueueResource",
-      "fields": [
-        {
-          "type": "string",
-          "example": "873014540006",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "example": "Sales CQ",
-          "name": "name"
         }
       ]
     },
@@ -25688,19 +25397,6 @@
           "required": false
         },
         {
-          "$ref": "DirectoryRoleResource",
-          "name": "role",
-          "required": false
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "CallQueueResource"
-          },
-          "name": "callQueues",
-          "required": false
-        },
-        {
           "type": "array",
           "items": {
             "$ref": "CustomFieldResource"
@@ -25709,35 +25405,8 @@
           "required": false
         },
         {
-          "type": "array",
-          "items": {
-            "$ref": "GroupResource"
-          },
-          "name": "groups",
-          "required": false
-        },
-        {
-          "$ref": "CostCenterResource",
-          "name": "costCenter",
-          "required": false
-        },
-        {
           "$ref": "ExternalIntegrationResource",
           "name": "integration",
-          "required": false
-        },
-        {
-          "type": "string",
-          "description": "Extension subtype",
-          "example": "Unknown",
-          "enum": [
-            "Unknown",
-            "VideoPro",
-            "VideoProPlus",
-            "DigitalSignage",
-            "Emergency"
-          ],
-          "name": "subType",
           "required": false
         }
       ]
@@ -25805,51 +25474,6 @@
           "type": "string",
           "example": "5",
           "name": "value"
-        }
-      ]
-    },
-    {
-      "name": "DirectoryRoleResource",
-      "fields": [
-        {
-          "type": "string",
-          "name": "id",
-          "required": true
-        },
-        {
-          "type": "string",
-          "name": "name",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "domain",
-          "required": false
-        },
-        {
-          "type": "string",
-          "name": "displayName",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "CostCenterResource",
-      "fields": [
-        {
-          "type": "string",
-          "example": "83266549237542",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "example": "Main",
-          "name": "code"
-        },
-        {
-          "type": "string",
-          "example": "Cost Center A",
-          "name": "name"
         }
       ]
     },
@@ -27163,6 +26787,11 @@
           "description": "Custom name of a default role",
           "example": "My Custom User Role",
           "name": "displayName"
+        },
+        {
+          "type": "boolean",
+          "description": "Site compatibility of a user role",
+          "name": "siteCompatible"
         }
       ]
     },
@@ -27732,6 +27361,11 @@
           "type": "boolean",
           "description": "Hides extension from showing in company directory. Supported\nfor extensions of 'User' type only. For unassigned extensions the value\nis set to `true` by default. For assigned extensions the value is set\nto `false` by default\n",
           "name": "hidden"
+        },
+        {
+          "type": "string",
+          "description": "Extension name. For user extension types the value is a combination\nof the specified first name and last name\n",
+          "name": "name"
         }
       ]
     },
@@ -29135,6 +28769,22 @@
       ]
     },
     {
+      "name": "VoicemailOwnerResource",
+      "description": "Voicemail owner information. Supported for shared voicemail messages only",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a voicemail owner",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "extensionId"
+        }
+      ]
+    },
+    {
       "name": "GetMessageSyncResponse",
       "fields": [
         {
@@ -29533,6 +29183,10 @@
           "type": "string",
           "description": "Cover page text, entered by the fax sender and printed on the\ncover page. Maximum length is limited to 1024 symbols\n",
           "name": "coverPageText"
+        },
+        {
+          "$ref": "VoicemailOwnerResource",
+          "name": "owner"
         }
       ]
     },
@@ -41219,6 +40873,380 @@
       ]
     },
     {
+      "name": "RecordingInsights",
+      "fields": [
+        {
+          "type": "string",
+          "example": "Call from 1234567890 to 0987654321",
+          "description": "Title of the call",
+          "name": "title",
+          "required": true
+        },
+        {
+          "type": "string",
+          "example": "https://ringsense.ringcentral.com/calls/2e67979e-ff82-4171-ae30-20c0c1f19b27",
+          "description": "URI of the call recording",
+          "name": "rsRecordUri",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Source rc application of the recording",
+          "example": "pbx",
+          "enum": [
+            "pbx"
+          ],
+          "name": "domain",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Recording ID of the domain",
+          "example": "4b57_384543",
+          "name": "sourceRecordId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Session ID of the domain",
+          "example": "cbac2b78-6f74-4257-8167-dff864de2263!us-10-dca09@us-10",
+          "name": "sourceSessionId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Optional call direction in case of phone call recording",
+          "example": "Inbound",
+          "enum": [
+            "Inbound",
+            "Outbound"
+          ],
+          "name": "callDirection",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Extension id of the call recording owner",
+          "example": "123456789",
+          "name": "ownerExtensionId",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Duration of the call recording (in ms)",
+          "example": 112000,
+          "name": "recordingDurationMs",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start time of the call recording",
+          "name": "recordingStartTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation time of the call insights",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last modified time of the call insights",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "List of the participants in the call",
+          "items": {
+            "type": "object",
+            "required": [
+              "speakerId"
+            ],
+            "properties": {
+              "speakerId": {
+                "type": "string",
+                "example": "p-32423",
+                "description": "Participant ID as in the source recording"
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe",
+                "description": "Name of the participant"
+              },
+              "accountId": {
+                "type": "string",
+                "example": "123456789",
+                "description": "RingCentral account ID of the participant"
+              },
+              "extensionId": {
+                "type": "string",
+                "example": "123456789",
+                "description": "RingCentral extension ID of the participant"
+              },
+              "phoneNumber": {
+                "type": "string",
+                "example": "+1234567890",
+                "description": "Optional phone number of the participant in case of phone call recording"
+              }
+            }
+          },
+          "name": "speakerInfo",
+          "required": true
+        },
+        {
+          "$ref": "AIInsights",
+          "name": "insights",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "AIInsights",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "TranscriptInsightUnit"
+          },
+          "name": "Transcript"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "SummaryInsightUnit"
+          },
+          "name": "Summary"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "HighlightsInsightUnit"
+          },
+          "name": "Highlights"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "NextStepsInsightUnit"
+          },
+          "name": "NextSteps"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "BulletedSummaryInsightUnit"
+          },
+          "name": "BulletedSummary"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "AIScoreInsightUnit"
+          },
+          "name": "AIScore"
+        }
+      ]
+    },
+    {
+      "name": "AIScoreInsightUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Value of the score",
+          "example": "7",
+          "name": "value",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "SummaryInsightUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Value of the summary",
+          "example": "conversational insights text",
+          "name": "value",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "Start time of the insight (in sec)",
+          "example": 1.2,
+          "name": "start",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "End time of the insight (in sec)",
+          "example": 4.2,
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "BulletedSummaryInsightUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Value of the summary",
+          "example": "conversational insights text",
+          "name": "value",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "RSConversationalInsightsUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Participant ID",
+          "example": "p-32423",
+          "name": "speakerId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Value of the insight",
+          "example": "conversational insights text",
+          "name": "value",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "Start time of the insight (in sec)",
+          "example": 1.2,
+          "name": "start",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "End time of the insight (in sec)",
+          "example": 4.2,
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "RSConversationalInsightsUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Participant ID",
+          "example": "p-32423",
+          "name": "speakerId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Value of the insight",
+          "example": "conversational insights text",
+          "name": "value",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "Start time of the insight (in sec)",
+          "example": 1.2,
+          "name": "start",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "End time of the insight (in sec)",
+          "example": 4.2,
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "TranscriptInsightUnit",
+      "description": "One utterance of a call. Each utterance is a speakerId, text, start and end time",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Participant ID",
+          "example": "p-32423",
+          "name": "speakerId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Text of the utterance",
+          "example": "Hello user!",
+          "name": "text",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "Start time of the utterance (in sec)",
+          "example": 1.2,
+          "name": "start",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "End time of the utterance (in sec)",
+          "example": 4.2,
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "RSConversationalInsightsUnit",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Participant ID",
+          "example": "p-32423",
+          "name": "speakerId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Value of the insight",
+          "example": "conversational insights text",
+          "name": "value",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "Start time of the insight (in sec)",
+          "example": 1.2,
+          "name": "start",
+          "required": true
+        },
+        {
+          "type": "number",
+          "format": "float",
+          "description": "End time of the insight (in sec)",
+          "example": 4.2,
+          "name": "end",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "InteractionInput",
       "fields": [
         {
@@ -41339,747 +41367,6 @@
           "required": false
         }
       ]
-    },
-    {
-      "name": "ContentList",
-      "fields": [
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "ContentModel"
-          },
-          "name": "records",
-          "required": true
-        },
-        {
-          "$ref": "NonEnumeratedPagingModel",
-          "name": "paging",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "ContentModel",
-      "fields": [
-        {
-          "description": "Array of attachments to be added to the content\n",
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "SocMsgContentAttachment"
-          },
-          "name": "attachments",
-          "required": true
-        },
-        {
-          "description": "Identity identifier of the content author. Not mandatory on creation,\nby default it uses the token's user first identity on channel\n",
-          "type": "string",
-          "name": "authorIdentityId",
-          "required": true
-        },
-        {
-          "description": "Auto submitted content:\n  - won't reopen tasks or interventions\n  - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,\n  - doesn't get included in statistics\n",
-          "type": "boolean",
-          "name": "autoSubmitted",
-          "required": true
-        },
-        {
-          "description": "Content body. On creation this field is mandatory except for WhatsApp content\nusing templates. The following are the channels supported and their **max length**\nrestrictions (in brackets):\n\n  - *Apple Messages For Business* (10000)\n  - *Email* (262144)\n  - *RingCX Digital Messaging* (1024)\n  - *Facebook* (8000)\n  - *Google My Business* (4000)\n  - *Instagram* (950)\n  - *Instagram Messaging* (1000)\n  - *LinkedIn* (3000)\n  - *Messenger* (2000)\n  - *Twitter* (280)\n  - *Viber* (7000)\n  - *WhatsApp* (3800)\n  - *Youtube* (8000)\n",
-          "type": "string",
-          "example": "Body of the content",
-          "name": "body",
-          "required": true
-        },
-        {
-          "$ref": "ContentBodyFormatted",
-          "name": "bodyFormatted",
-          "required": true
-        },
-        {
-          "description": "Content input format",
-          "enum": [
-            "Text",
-            "Html"
-          ],
-          "type": "string",
-          "name": "bodyInputFormat",
-          "required": true
-        },
-        {
-          "description": "List of the category identifiers of the content\n",
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "example": [
-            "541014e17aa58d8ccf000023",
-            "541014e17aa58d8ccf002023"
-          ],
-          "name": "categoryIds",
-          "required": true
-        },
-        {
-          "description": "Direction of the content.\n\n* Incoming contents are received from a channel.\n* Outgoing contents are exported to a channel.\n",
-          "enum": [
-            "Incoming",
-            "Outgoing"
-          ],
-          "type": "string",
-          "example": "Incoming",
-          "name": "contentDirection",
-          "required": false
-        },
-        {
-          "$ref": "ContentContextData",
-          "name": "contextData",
-          "required": false
-        },
-        {
-          "description": "Creation time of the resource.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "creationTime",
-          "required": true
-        },
-        {
-          "description": "Source of content",
-          "type": "string",
-          "enum": [
-            "Synchronizer",
-            "Interface",
-            "Api",
-            "AutoSurvey",
-            "AutoResponseTrigger",
-            "AutoRequestEmail"
-          ],
-          "name": "createdFrom",
-          "required": true
-        },
-        {
-          "description": "RingCentral user identifier of the creator",
-          "type": "string",
-          "example": "2683222036",
-          "name": "creatorId",
-          "required": true
-        },
-        {
-          "description": "True if the content is the first in the thread.",
-          "type": "boolean",
-          "example": false,
-          "name": "firstInThread",
-          "required": false
-        },
-        {
-          "description": "External categories of the content.\nReturned only if the content has `foreignCategories`\n",
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "minItems": 0,
-          "example": [
-            "foreign_category_id"
-          ],
-          "name": "foreignCategories",
-          "required": false
-        },
-        {
-          "description": "Content identifier",
-          "type": "string",
-          "name": "id",
-          "required": true
-        },
-        {
-          "description": "Identifier of the content identity to which this content is a reply to.\nIf the channel does not support discussion initiation, this parameter is mandatory\n",
-          "type": "string",
-          "name": "inReplyToAuthorIdentityId",
-          "required": true
-        },
-        {
-          "description": "Content identifier to which this content is a reply to. On creation, if omitted,\na new discussion will be created. If the channel does not support discussion initiation,\nthis parameter is mandatory\n",
-          "type": "string",
-          "name": "inReplyToContentId",
-          "required": true
-        },
-        {
-          "description": "Intervention identifier of the content",
-          "type": "string",
-          "name": "interventionId",
-          "required": true
-        },
-        {
-          "description": "Language of the content",
-          "type": "string",
-          "example": "En",
-          "name": "language",
-          "required": true
-        },
-        {
-          "description": "If set to `true`, then the content is publicly visible on remote channel.\nPrivate content is NOT supported on every channel\n",
-          "type": "boolean",
-          "default": true,
-          "name": "public",
-          "required": true
-        },
-        {
-          "description": "If set to `true`, then the content is published on remote channel",
-          "type": "boolean",
-          "example": true,
-          "name": "published",
-          "required": true
-        },
-        {
-          "description": "Rating of content. Present only if the content supports rating and rating is filled\n",
-          "type": "integer",
-          "format": "int32",
-          "example": 4,
-          "name": "rating",
-          "required": true
-        },
-        {
-          "description": "Set to `true` if content has been deleted on remote channel",
-          "type": "boolean",
-          "example": false,
-          "name": "remotelyDeleted",
-          "required": true
-        },
-        {
-          "description": "Channel identifier.",
-          "type": "string",
-          "example": "506d9e817aa58d1259000f12",
-          "name": "channelId",
-          "required": true
-        },
-        {
-          "description": "Type of a channel",
-          "type": "string",
-          "enum": [
-            "AppleMessagesForBusiness",
-            "Email",
-            "EngageMessaging",
-            "Facebook",
-            "GoogleMyBusiness",
-            "Instagram",
-            "InstagramMessaging",
-            "Linkedin",
-            "Messenger",
-            "Twitter",
-            "Viber",
-            "WhatsApp",
-            "Youtube"
-          ],
-          "name": "channelType",
-          "required": true
-        },
-        {
-          "description": "External URI of a content channel",
-          "type": "string",
-          "format": "uri",
-          "name": "channelUri",
-          "required": true
-        },
-        {
-          "description": "Content status",
-          "type": "string",
-          "enum": [
-            "New",
-            "Assigned",
-            "Replied",
-            "UserReply",
-            "UserInitiated",
-            "Ignored"
-          ],
-          "name": "status",
-          "required": true
-        },
-        {
-          "description": "Synchronization status",
-          "type": "string",
-          "example": "success",
-          "name": "synchronizationStatus",
-          "required": true
-        },
-        {
-          "description": "Synchronization error details",
-          "type": "string",
-          "name": "synchronizationError",
-          "required": true
-        },
-        {
-          "description": "Content thread identifier",
-          "type": "string",
-          "name": "threadId",
-          "required": true
-        },
-        {
-          "description": "Applicable to Email channels only. The subject of the email.\nThis field is mandatory when initiating a discussion\n",
-          "type": "string",
-          "example": "An email title",
-          "name": "title",
-          "required": true
-        },
-        {
-          "description": "Type of the content",
-          "type": "string",
-          "enum": [
-            "Album",
-            "AuthenticateMessage",
-            "AuthenticateResponse",
-            "Carousel",
-            "CarouselMessage",
-            "Comment",
-            "ContactMessage",
-            "Content",
-            "Email",
-            "FormMessage",
-            "FormResponse",
-            "HsmMessage",
-            "Link",
-            "ListMessage",
-            "Media",
-            "Message",
-            "OutboundMessage",
-            "PaymentMessage",
-            "Photo",
-            "PostbackMessage",
-            "PrivateTweet",
-            "PromptMessage",
-            "Question",
-            "Review",
-            "ReviewResponse",
-            "RichLinkMessage",
-            "SelectMessage",
-            "Status",
-            "TemplateMessage",
-            "TimePickerMessage",
-            "Tweet",
-            "Video",
-            "VideoCallRequestMessage"
-          ],
-          "example": "Email",
-          "name": "type",
-          "required": true
-        },
-        {
-          "description": "The time when the last modification was completed.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "lastModifiedTime",
-          "required": true
-        },
-        {
-          "description": "Types of structured messages that can be used to reply to this type of message",
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "name": "capabilitiesSupported",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "ContentContextData",
-      "description": "Additional data of the content.\nThe `contextData` hash keys are the custom fields keys\n",
-      "fields": []
-    },
-    {
-      "name": "SocMsgContentAttachment",
-      "fields": [
-        {
-          "description": "Type of attachment, which is generally a MIME attachment type like `image/jpeg`, etc.\nSecurity level in RingCX determines what type of attachment is allowed.\nBased on the security level the following attachment types are supported.\n\n*'Strict'* level allows safe extensions below:\nContent name and supported types:\n\n- audio (AAC, MP3, OGG, M4A)\n- image (BMP, GIF, JPG, JPEG, PNG, SVG, WEBP)\n- pdf (PDF)\n- text (CSV, TXT, LOG)\n- video (AVI, FLV, M4V, MKV, MOV, MP4, MPG, QT, WMV)\n- other (AMR, DMS, VCARD, TIF, TIFF, MPEG)\n\n*'Relaxed'* level allows documents:\nContent name and supported types:\n\n- excel (XLS, XLSM, XLSX, XLC, XLT, XLTM, XLTX)\n- presentation (KEY, ODP, OTP)\n- powerpoint (PPS, PPT, PPTX, POT)\n- spreadsheet (Numbers - ODS, OTS)\n- word (DOC, DOCM, DOCX, DOTM, DOTX)\n- word_processing (Pages - ODT, OTT, RTF)\n\n*'Permissive'* level allows all documents.\n\nHowever, there are no security level restrictions for content posted through the channel\n",
-          "type": "string",
-          "example": "image/jpeg",
-          "name": "contentType"
-        },
-        {
-          "description": "Creation time of the resource.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "creationTime"
-        },
-        {
-          "description": "Specifies if attachment is embedded in content",
-          "type": "boolean",
-          "example": false,
-          "name": "embedded"
-        },
-        {
-          "description": "Filename of attachment",
-          "type": "string",
-          "example": "0.jpeg",
-          "name": "filename"
-        },
-        {
-          "description": "Identifier of the attachment.",
-          "type": "string",
-          "example": "54085e5b7aa58d8b5d00006c",
-          "name": "id"
-        },
-        {
-          "description": "Attachment privacy setting",
-          "type": "boolean",
-          "example": false,
-          "default": true,
-          "name": "public"
-        },
-        {
-          "description": "Size of attachment",
-          "type": "integer",
-          "format": "int32",
-          "example": 217571,
-          "name": "size"
-        },
-        {
-          "description": "The time when the last modification was completed.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "lastModifiedTime"
-        },
-        {
-          "description": "Attachment URI",
-          "type": "string",
-          "format": "uri",
-          "example": "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c",
-          "name": "uri"
-        }
-      ]
-    },
-    {
-      "name": "ContentBodyFormatted",
-      "description": "Text and HTML formatted versions of the content body",
-      "fields": [
-        {
-          "type": "string",
-          "name": "html"
-        },
-        {
-          "type": "string",
-          "name": "text"
-        }
-      ]
-    },
-    {
-      "name": "IdentitiesList",
-      "fields": [
-        {
-          "type": "array",
-          "minItems": 0,
-          "items": {
-            "$ref": "IdentityModel"
-          },
-          "name": "records",
-          "required": true
-        },
-        {
-          "$ref": "NonEnumeratedPagingModel",
-          "name": "paging",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "IdentityModel",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Identity identifier.",
-          "example": "506d9e817aa58d1259000f12",
-          "name": "id",
-          "required": true
-        },
-        {
-          "description": "Identity's avatar URI",
-          "type": "string",
-          "format": "uri",
-          "example": "https://example.com/assets/avatar/default-79fd530c58c2a6b83a11fcc0e842ed7023ceb69292cfeb857bc2af2c624b90fd.png",
-          "name": "avatarUri",
-          "required": false
-        },
-        {
-          "description": "Company.",
-          "type": "string",
-          "example": "Test Company",
-          "name": "company",
-          "required": false
-        },
-        {
-          "description": "Creation time of the resource.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "creationTime",
-          "required": true
-        },
-        {
-          "description": "Display name of identity",
-          "type": "string",
-          "example": "John Doe",
-          "name": "displayName",
-          "required": false
-        },
-        {
-          "description": "Email address.",
-          "type": "string",
-          "format": "email",
-          "example": "user@example.com",
-          "name": "emailAddress",
-          "required": false
-        },
-        {
-          "$ref": "IdentityExtraValues",
-          "name": "extraValues",
-          "required": false
-        },
-        {
-          "description": "FirstName.",
-          "type": "string",
-          "example": "John",
-          "name": "firstName",
-          "required": false
-        },
-        {
-          "description": "Gender.",
-          "type": "string",
-          "example": "Woman",
-          "enum": [
-            "Man",
-            "Woman"
-          ],
-          "nullable": true,
-          "name": "gender",
-          "required": false
-        },
-        {
-          "description": "Phone number.",
-          "type": "string",
-          "example": "+33634231224",
-          "name": "homePhone",
-          "required": false
-        },
-        {
-          "description": "Identity group identifier which references the identity group that contains\nall information (phone, notes, etc). Multiple identities may belong to\na single group. If the parameter value is null, it means that identity\ndoes not belong to a group or have extra information\n",
-          "type": "string",
-          "example": "54085e5b7aa58d8b5d00006c",
-          "name": "identityGroupId",
-          "required": false
-        },
-        {
-          "description": "Either Agent or Customer",
-          "type": "string",
-          "enum": [
-            "Agent",
-            "Customer"
-          ],
-          "name": "identityType",
-          "required": false
-        },
-        {
-          "description": "LastName.",
-          "type": "string",
-          "example": "Doe",
-          "name": "lastName",
-          "required": false
-        },
-        {
-          "description": "Phone number.",
-          "type": "string",
-          "example": "+33634231224",
-          "name": "mobilePhone",
-          "required": false
-        },
-        {
-          "description": "Screen name of identity",
-          "type": "string",
-          "example": "John D.",
-          "name": "screenName",
-          "required": false
-        },
-        {
-          "description": "Type of identity",
-          "type": "string",
-          "enum": [
-            "AppleMessagesForBusiness",
-            "Email",
-            "EngageMessaging",
-            "Facebook",
-            "GoogleMyBusiness",
-            "Instagram",
-            "Linkedin",
-            "Twitter",
-            "Viber",
-            "WhatsApp",
-            "Youtube"
-          ],
-          "name": "type",
-          "required": true
-        },
-        {
-          "description": "The time when the last modification was completed.",
-          "format": "date-time",
-          "type": "string",
-          "example": "2023-02-04T12:43:07Z",
-          "name": "lastModifiedTime",
-          "required": true
-        },
-        {
-          "description": "List of the associated user identifiers who can use the identity",
-          "items": {
-            "type": "string",
-            "example": "54085e5b7aa58d8b5d00006c"
-          },
-          "type": "array",
-          "minItems": 0,
-          "name": "userIds",
-          "required": false
-        },
-        {
-          "description": "UUID of identity",
-          "type": "string",
-          "example": "9680ab94-3b78-495c-bb2c-a969954d8260",
-          "name": "uuid",
-          "required": false
-        },
-        {
-          "description": "Device info of the identity. Applicable to RingCX Digital Messaging channels only",
-          "type": "string",
-          "example": "iPhone (iPhone); iOS 15.0.2",
-          "name": "mobileDeviceInfo",
-          "required": false
-        },
-        {
-          "description": "Facebook biography of the identity. Applicable to Facebook and Messenger channels only",
-          "type": "string",
-          "example": "Painter living in Paris",
-          "name": "fbBio",
-          "required": false
-        },
-        {
-          "description": "Facebook category of the identity. Applicable to Facebook and Messenger channels only",
-          "type": "string",
-          "example": "Computers/Internet",
-          "name": "fbCategory",
-          "required": false
-        },
-        {
-          "description": "Facebook locale of the identity. Applicable to Facebook and Messenger channels only",
-          "type": "string",
-          "example": "fr_FR",
-          "name": "fbLocale",
-          "required": false
-        },
-        {
-          "description": "Instagram followers count of the identity. Applicable to Instagram and InstagramMessaging channels only",
-          "type": "integer",
-          "format": "int32",
-          "example": 10,
-          "name": "igFollowersCount",
-          "required": false
-        },
-        {
-          "description": "Twitter description of the identity. Applicable to Twitter channels only",
-          "type": "string",
-          "example": "Software Engineer",
-          "name": "twDescription",
-          "required": false
-        },
-        {
-          "description": "Twitter followers count of the identity. Applicable to Twitter channels only",
-          "type": "integer",
-          "format": "int32",
-          "example": 10,
-          "name": "twFollowersCount",
-          "required": false
-        },
-        {
-          "description": "Count of Twitter accounts followed by the identity. Applicable to Twitter channels only",
-          "type": "integer",
-          "format": "int32",
-          "example": 500,
-          "name": "twFollowingCount",
-          "required": false
-        },
-        {
-          "description": "Count of tweets of the identity. Applicable to Twitter channels only",
-          "type": "integer",
-          "format": "int32",
-          "example": 42,
-          "name": "twStatusesCount",
-          "required": false
-        },
-        {
-          "description": "Twitter location of the identity. Applicable to Twitter channels only",
-          "type": "string",
-          "example": "Paris",
-          "name": "twLocation",
-          "required": false
-        },
-        {
-          "description": "Viber API version of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "10",
-          "name": "apiVersion",
-          "required": false
-        },
-        {
-          "description": "Viber country of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "FR",
-          "name": "country",
-          "required": false
-        },
-        {
-          "description": "Viber device type of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "SM-G970U1",
-          "name": "deviceType",
-          "required": false
-        },
-        {
-          "description": "Viber language of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "fr-FR",
-          "name": "language",
-          "required": false
-        },
-        {
-          "description": "Viber mobile country code of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "1",
-          "name": "mcc",
-          "required": false
-        },
-        {
-          "description": "Viber mobile network code of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "220",
-          "name": "mnc",
-          "required": false
-        },
-        {
-          "description": "Viber primary device OS of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "Android 11",
-          "name": "primaryDeviceOs",
-          "required": false
-        },
-        {
-          "description": "Viber application version of the identity. Applicable to Viber channels only",
-          "type": "string",
-          "example": "19.5.0",
-          "name": "viberVersion",
-          "required": false
-        }
-      ]
-    },
-    {
-      "name": "IdentityExtraValues",
-      "description": "Additional data to store along with identity",
-      "fields": []
     },
     {
       "name": "ScimErrorResponse",
@@ -42340,6 +41627,84 @@
       ]
     },
     {
+      "name": "ScimUserShortInfo",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "User status",
+          "default": false,
+          "name": "active",
+          "required": false
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "ScimEmail"
+          },
+          "name": "emails",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "External unique resource ID defined by provisioning client",
+          "name": "externalId",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Unique resource ID defined by RingCentral",
+          "name": "id",
+          "required": false
+        },
+        {
+          "$ref": "ScimName",
+          "name": "name",
+          "required": true
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "ScimPhoto"
+          },
+          "name": "photos",
+          "required": false
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "urn:ietf:params:scim:schemas:core:2.0:User"
+            ]
+          },
+          "name": "schemas",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "User title",
+          "name": "title",
+          "required": false
+        },
+        {
+          "$ref": "ScimEnterpriseUser",
+          "name": "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "MUST be same as work type email address",
+          "name": "userName",
+          "required": true
+        },
+        {
+          "$ref": "ScimMeta",
+          "name": "meta",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "ScimEnterpriseUser",
       "fields": [
         {
@@ -42393,7 +41758,7 @@
           "type": "array",
           "description": "User list",
           "items": {
-            "$ref": "ScimUserResponse"
+            "$ref": "ScimUserShortInfo"
           },
           "name": "Resources"
         },
@@ -44667,7 +44032,7 @@
         },
         {
           "type": "string",
-          "description": "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) \nformat, UTC time zone\n",
+          "description": "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)\nformat, UTC time zone\n",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -44991,7 +44356,7 @@
       "fields": [
         {
           "type": "string",
-          "description": "Event recurrence settings. For non-periodic events the value \nis `None`. Must be greater or equal to event duration: 1- Day/Weekday; \n7 - Week; 28 - Month; 365 - Year\n",
+          "description": "Event recurrence settings. For non-periodic events the value\nis `None`. Must be greater or equal to event duration: 1- Day/Weekday;\n7 - Week; 28 - Month; 365 - Year\n",
           "enum": [
             "None",
             "Day",
@@ -45015,12 +44380,12 @@
         {
           "type": "integer",
           "format": "int32",
-          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n",
+          "description": "Count of event iterations. For periodic events only. Value range is 1 - 10.\nMust be specified if `endingCondition` is `Count`\n",
           "name": "endingAfter"
         },
         {
           "type": "string",
-          "description": "Iterations ending datetime for periodic events in \n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format\n",
+          "description": "Iterations ending datetime for periodic events in\n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format\n",
           "format": "date-time",
           "name": "endingOn"
         }
@@ -45426,6 +44791,17 @@
             "Task"
           ],
           "name": "type"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to a binary content",
+          "name": "contentUri"
+        },
+        {
+          "type": "string",
+          "description": "Name of a file",
+          "name": "name"
         },
         {
           "type": "string",
@@ -47670,6 +47046,10 @@
           "type": "boolean",
           "default": true,
           "name": "emailAsLoginName"
+        },
+        {
+          "$ref": "TransitionInfo",
+          "name": "transition"
         }
       ]
     },
@@ -47919,6 +47299,31 @@
             }
           ],
           "name": "failed"
+        }
+      ]
+    },
+    {
+      "name": "CallMonitoringGroupSite",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Identifier of a site",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name of a site",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "CreateCallMonitoringGroupRequestSite",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Identifier of a site",
+          "name": "id"
         }
       ]
     },
@@ -49071,13 +48476,6 @@
   "paths": [
     {
       "paths": [
-        "cx"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
         "ai"
       ],
       "operations": [],
@@ -49343,6 +48741,14 @@
     {
       "paths": [
         "ai",
+        "ringsense"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
+        "ai",
         "status",
         "v1"
       ],
@@ -49412,6 +48818,15 @@
     {
       "paths": [
         "team-messaging"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
+        "ai",
+        "ringsense",
+        "v1"
       ],
       "operations": [],
       "noParentParameter": true
@@ -49682,14 +49097,6 @@
       ],
       "operations": [],
       "parameter": "accountId",
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "cx",
-        "social-messaging"
-      ],
-      "operations": [],
       "noParentParameter": true
     },
     {
@@ -50038,9 +49445,10 @@
     },
     {
       "paths": [
-        "cx",
-        "social-messaging",
-        "v1"
+        "ai",
+        "ringsense",
+        "v1",
+        "public"
       ],
       "operations": [],
       "noParentParameter": true
@@ -50624,7 +50032,7 @@
             "Call Log"
           ],
           "method2": "get",
-          "description": "Returns individual call log record(s) by ID. Batch syntax is supported.",
+          "description": "Returns individual call log record(s) by ID. \n[Batch syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Get Company Call Record(s)",
           "operationId": "readCompanyCallRecord",
           "rateLimitGroup": "Heavy",
@@ -51256,7 +50664,7 @@
             "Profile"
           ],
           "method2": "get",
-          "description": "Returns a user or multiple users by their ID(s). Batch request is supported.",
+          "description": "Returns a user or multiple users by their ID(s). \n[Batch requests](https://developers.ringcentral.com/guide/basics/batch-requests) are supported.\n",
           "summary": "Get Person",
           "operationId": "readGlipPersonNew",
           "rateLimitGroup": "Light",
@@ -52227,7 +51635,7 @@
             "Phone Numbers"
           ],
           "method2": "get",
-          "description": "Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Get Phone Number",
           "operationId": "readAccountPhoneNumber",
           "rateLimitGroup": "Light",
@@ -52662,7 +52070,7 @@
             "Posts"
           ],
           "method2": "post",
-          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of \nthe request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, \nTask, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. \nAttachments can also be added to a post by passing the type and ID of attachment(s) in request body.\n",
+          "description": "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of\nthe request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note,\nTask, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type.\nAttachments can also be added to a post by passing the type and ID of attachment(s) in request body.\n",
           "summary": "Create Post",
           "operationId": "createGlipPostNew",
           "rateLimitGroup": "Medium",
@@ -53348,6 +52756,18 @@
     },
     {
       "paths": [
+        "ai",
+        "ringsense",
+        "v1",
+        "public",
+        "accounts"
+      ],
+      "operations": [],
+      "parameter": "accountId",
+      "noParentParameter": true
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -53491,61 +52911,6 @@
           "bodyParameters": "callRecordingIds"
         }
       ]
-    },
-    {
-      "paths": [
-        "cx",
-        "social-messaging",
-        "v1",
-        "contents"
-      ],
-      "operations": [
-        {
-          "endpoint": "/cx/social-messaging/v1/contents",
-          "method": "get",
-          "tags": [
-            "Contents"
-          ],
-          "method2": "list",
-          "description": "Returns a list of social messaging contents ordered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with\nthe access token provided in the Authorization header.\n\nThe query parameters provided in request will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
-          "summary": "List Contents",
-          "operationId": "listSocialMessagingContents",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false,
-          "queryParameters": "listSocialMessagingContentsParameters"
-        },
-        {
-          "endpoint": "/cx/social-messaging/v1/contents",
-          "method": "post",
-          "tags": [
-            "Contents"
-          ],
-          "method2": "post",
-          "description": "Creates the new social messaging content for use in discussions.\n\nThis request is used to reply to an already posted content or to initiate a discussion. If authorized, the\nauthenticated user will be used as the content author.\n\nContent will be created and pushed asynchronously to the channel. When the content is successfully pushed to\nthe channel, the `Content.Exported` event will be reported.\n\nThe account context of this request is determined by the RC Account ID associated with the access token provided\nin the Authorization header.\n\nReplying to customer content is usually possible unless the channel or conversation is read only. Composing\ncontent, on the contrary, depends on the channel itself.\n\n- The channel may not support it and be purely reactive like Instagram, Messenger, etc.\n\n- Some channels (usually public accounts, like Twitter or Facebook pages) allow content publishing\nwithout targeting specific individuals.\n\n- Some channels (usually non-public media) require specific targeting (phone number for SMS, email address\nfor email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the\ngeneric parameters.\n",
-          "summary": "Create Content",
-          "operationId": "createSocialMessagingContent",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false,
-          "bodyParameters": "createSocialMessagingContentRequest"
-        },
-        {
-          "endpoint": "/cx/social-messaging/v1/contents/{contentId}",
-          "method": "get",
-          "tags": [
-            "Contents"
-          ],
-          "method2": "get",
-          "description": "Returns the social messaging content by ID specified in path.",
-          "summary": "Get Content",
-          "operationId": "readSocialMessagingContent",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": true
-        }
-      ],
-      "parameter": "contentId"
     },
     {
       "paths": [
@@ -53731,7 +53096,7 @@
             "Devices"
           ],
           "method2": "get",
-          "description": "Returns devices of an extension or multiple extensions by their ID(s). Batch request\nis supported.\n",
+          "description": "Returns devices of an extension or multiple extensions by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "List Extension Devices",
           "operationId": "listExtensionDevices",
           "rateLimitGroup": "Light",
@@ -54428,46 +53793,6 @@
     },
     {
       "paths": [
-        "cx",
-        "social-messaging",
-        "v1",
-        "identities"
-      ],
-      "operations": [
-        {
-          "endpoint": "/cx/social-messaging/v1/identities",
-          "method": "get",
-          "tags": [
-            "Identities"
-          ],
-          "method2": "list",
-          "description": "Returns a list of identities ordered by creation date. The default order is descending.\n\nThe account context of this request is determined by the RC Account ID associated with\nthe access token provided in the Authorization header.\n\nThe query parameters provided will be considered an AND operation to filter the list.\n\nA query parameter which is not specified or provided with the null value will be ignored.\n",
-          "summary": "List Identities",
-          "operationId": "listSocialMessagingIdentities",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": false,
-          "queryParameters": "listSocialMessagingIdentitiesParameters"
-        },
-        {
-          "endpoint": "/cx/social-messaging/v1/identities/{identityId}",
-          "method": "get",
-          "tags": [
-            "Identities"
-          ],
-          "method2": "get",
-          "description": "Returns an identity by ID specified in path.",
-          "summary": "Get Identity",
-          "operationId": "readSocialMessagingIdentity",
-          "rateLimitGroup": "Light",
-          "appPermission": "SocialMessaging",
-          "withParameter": true
-        }
-      ],
-      "parameter": "identityId"
-    },
-    {
-      "paths": [
         "webinar",
         "configuration",
         "v1",
@@ -54740,6 +54065,16 @@
           "bodyParameters": "diarizeInput"
         }
       ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "telephony",
+        "metadata"
+      ],
+      "operations": [],
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -55031,7 +54366,7 @@
             "Presence"
           ],
           "method2": "get",
-          "description": "Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline\n(the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types:\nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.\nIf the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions\nin one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error\ncode InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.\n",
+          "description": "Returns the presence status of an extension or several extensions by their ID(s). The `presenceStatus` is returned as Offline\n(the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types:\nDepartment/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.\nIf the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported. For batch requests the number of extensions\nin one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error\ncode InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.\n",
           "summary": "Get User Presence Status",
           "operationId": "readUserPresenceStatus",
           "rateLimitGroup": "Light",
@@ -56376,6 +55711,19 @@
     },
     {
       "paths": [
+        "ai",
+        "ringsense",
+        "v1",
+        "public",
+        "accounts",
+        "domains"
+      ],
+      "operations": [],
+      "parameter": "domain",
+      "noParentParameter": false
+    },
+    {
+      "paths": [
         "analytics",
         "calls",
         "v1",
@@ -56517,7 +55865,7 @@
             "Message Store"
           ],
           "method2": "deleteAll",
-          "description": "Deletes conversation(s) by conversation ID(s). Batch request is\nsupported, max number of IDs passed as query/path parameters is 50. Alternative\nsyntax is supported - user conversations can be deleted by passing multiple\nIDs in request body as an array of string, max number of conversation IDs\npassed in request body is 100. In this case asterisk is used in the path instead\nof IDs\n",
+          "description": "Deletes conversation(s) by conversation ID(s). \n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported - maximum number \nof IDs passed as query/path parameters is 50. Alternative syntax is supported - the user's conversations can be deleted \nby passing multiple IDs in request body as an array of string. Maximum number of conversation IDs passed in request body \nis 100. In this case asterisk '*' is used in the path instead of IDs.\n",
           "summary": "Delete Conversation",
           "operationId": "deleteMessageByFilter",
           "rateLimitGroup": "Medium",
@@ -56533,7 +55881,7 @@
             "Message Store"
           ],
           "method2": "get",
-          "description": "Returns an individual message record or multiple records by the given message ID(s).\nThe length of inbound messages is unlimited. Bulk syntax is supported.\n",
+          "description": "Returns an individual message record or multiple records by the given message ID(s). \nThe length of inbound messages is unlimited. [Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) \nis supported.\n",
           "summary": "Get Message(s)",
           "operationId": "readMessage",
           "rateLimitGroup": "Light",
@@ -56551,7 +55899,7 @@
             "Message Store"
           ],
           "method2": "put",
-          "description": "Updates message(s) by their ID(s). Currently, only the `readStatus`\ncan be updated using this method.\n\nBulk syntax is supported, max number of IDs passed as query/path\nparameters is 50. Alternative bulk syntax is also supported - user messages can be updated\nby passing multiple IDs in request body as an array of string, max number\nof IDs passed in the body is 1000. In this case asterisk is used in the\npath instead of IDs.\n",
+          "description": "Updates message(s) by their ID(s). Currently, only the `readStatus`\ncan be updated using this method.\n[Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported, \nmaximum number of IDs passed as query/path parameters is 50. Alternative bulk syntax is also \nsupported - the user's messages can be updated by passing multiple IDs in request body as \nan array of string, maximum number of IDs passed in the body is 1000. In this case asterisk '*'\nis used in the path instead of IDs.\n",
           "summary": "Update Message(s)",
           "operationId": "updateMessage",
           "rateLimitGroup": "Medium",
@@ -58675,7 +58023,7 @@
             "External Contacts"
           ],
           "method2": "get",
-          "description": "Returns the user personal contact(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Returns the user personal contact(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Get User Contact(s)",
           "operationId": "readContact",
           "rateLimitGroup": "Heavy",
@@ -58693,7 +58041,7 @@
             "External Contacts"
           ],
           "method2": "put",
-          "description": "Updates the user personal contact(s) (full resource update). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Updates the user personal contact(s) (full resource update).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Update User Contact(s)",
           "operationId": "updateContact",
           "rateLimitGroup": "Heavy",
@@ -58713,7 +58061,7 @@
             "External Contacts"
           ],
           "method2": "delete",
-          "description": "Deletes the user personal contact(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Deletes the user personal contact(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Delete User Contact(s)",
           "operationId": "deleteContact",
           "rateLimitGroup": "Heavy",
@@ -58855,6 +58203,20 @@
         }
       ],
       "parameter": "taskId"
+    },
+    {
+      "paths": [
+        "ai",
+        "ringsense",
+        "v1",
+        "public",
+        "accounts",
+        "domains",
+        "records"
+      ],
+      "operations": [],
+      "parameter": "sourceRecordId",
+      "noParentParameter": false
     },
     {
       "paths": [
@@ -59802,7 +59164,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Starts a new call recording for the party",
+          "description": "Starts a new call recording for a call party.\n*Please note* this API does not allow conference calls to be recorded.\n",
           "summary": "Create Recording",
           "operationId": "startCallRecording",
           "rateLimitGroup": "Light",
@@ -60146,7 +59508,7 @@
             "Call Blocking"
           ],
           "method2": "get",
-          "description": "Returns blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Returns blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Get Blocked/Allowed Number",
           "operationId": "readBlockedAllowedNumber",
           "rateLimitGroup": "Light",
@@ -60164,7 +59526,7 @@
             "Call Blocking"
           ],
           "method2": "put",
-          "description": "Updates blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n",
+          "description": "Updates blocked or allowed phone number(s) by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Update Blocked/Allowed Number",
           "operationId": "updateBlockedAllowedNumber",
           "rateLimitGroup": "Medium",
@@ -60183,7 +59545,7 @@
             "Call Blocking"
           ],
           "method2": "delete",
-          "description": "Deletes blocked or allowed phone number(s) by their ID(s). Batch request is supported.",
+          "description": "Deletes blocked or allowed phone number(s) by their ID(s). \n[Batch request](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Delete Blocked/Allowed Number",
           "operationId": "deleteBlockedAllowedNumber",
           "rateLimitGroup": "Medium",
@@ -60193,6 +59555,50 @@
         }
       ],
       "parameter": "blockedNumberId"
+    },
+    {
+      "paths": [
+        "ai",
+        "ringsense",
+        "v1",
+        "public",
+        "accounts",
+        "domains",
+        "records",
+        "insights"
+      ],
+      "operations": [
+        {
+          "endpoint": "/ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/records/{sourceRecordId}/insights",
+          "method": "get",
+          "tags": [
+            "RingSense"
+          ],
+          "method2": "get",
+          "description": "Returns the insights of a call recording",
+          "summary": "Get Recording Insights",
+          "operationId": "getRecordingInsights",
+          "rateLimitGroup": "Light",
+          "appPermission": "RingSense",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "RecordingInsights"
+          },
+          "queryParameters": "getRecordingInsightsParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "telephony",
+        "metadata",
+        "multichannel-recordings"
+      ],
+      "operations": [],
+      "parameter": "metadataId",
+      "noParentParameter": true
     },
     {
       "paths": [
@@ -60346,6 +59752,33 @@
           "userPermission": "ConfigureEmergencyMaps",
           "withParameter": false,
           "bodyParameters": "assignMultipleDevicesAutomaticLocationUpdates"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "telephony",
+        "metadata",
+        "multichannel-recordings",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/metadata/multichannel-recordings/{metadataId}/content",
+          "method": "get",
+          "tags": [
+            "Telephony Metadata"
+          ],
+          "method2": "get",
+          "description": "Returns media content of a multichannel call recording\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Multichannel Call Recording Content",
+          "operationId": "readMultichannelCallRecordingContent",
+          "rateLimitGroup": "Heavy",
+          "appPermission": "ReadCallRecording",
+          "withParameter": false,
+          "queryParameters": "readMultichannelCallRecordingContentParameters"
         }
       ]
     },

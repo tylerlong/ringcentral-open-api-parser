@@ -31,6 +31,7 @@ x-tagGroups:
   - "States"
   - "State-based Rules"
   - "Interaction Rules"
+  - "Forwarding Targets"
   - "Call Flip"
   - "Call Log"
   - "Call History"
@@ -44,6 +45,7 @@ x-tagGroups:
   - "IVR"
   - "RingOut"
   - "Verification Calls"
+  - "Telephony Metadata"
 - name: "SMS and Fax"
   popular: true
   tags:
@@ -108,6 +110,7 @@ x-tagGroups:
   - "Audio"
   - "Text"
   - "Status"
+  - "RingSense"
 - name: "Authentication"
   tags:
   - "OAuth and OpenID Connect"
@@ -131,7 +134,7 @@ x-tagGroups:
   - "Appearance Customization"
   - "Account Integrations"
   - "Custom Preferences"
-  - "Credentials Policy"
+  - "Company Policies"
 - name: "Provisioning"
   tags:
   - "Automatic Location Updates"
@@ -235,17 +238,19 @@ tags:
 - name: "Phone Numbers"
 - name: "Invitees"
   description: "External APIs to manage webinar invitees and invitations"
+- name: "Telephony Metadata"
 - name: "API Info"
 - name: "Tasks"
 - name: "User Permissions"
 - name: "Internal Contacts"
-- name: "Identities"
 - name: "Devices"
 - name: "Call Control"
 - name: "Company"
 - name: "Call Log"
 - name: "Fax"
 - name: "User Settings"
+- name: "RingSense"
+  description: "Get the insights of call recordings"
 - name: "Text"
   description: "Conversational AI text processing APIs"
 - name: "External Contacts"
@@ -275,7 +280,6 @@ tags:
 - name: "Business Hours"
 - name: "Registrants"
   description: "External APIs for registrants management"
-- name: "Contents"
 - name: "Posts"
 - name: "Call Handling Rules"
 - name: "Business Analytics"
@@ -1624,6 +1628,39 @@ paths:
       x-availability: "High"
       x-throttling-group: "Heavy"
       x-app-permission: "ReadAccounts"
+  /restapi/v1.0/account/{accountId}/telephony/metadata/multichannel-recordings/{metadataId}/content:
+    get:
+      summary: "Get Multichannel Call Recording Content"
+      description: |
+        Returns media content of a multichannel call recording
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: "readMultichannelCallRecordingContent"
+      tags:
+      - "Telephony Metadata"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/MetadataId"
+      - $ref: "#/components/parameters/ContentDisposition"
+      - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: "Redirect"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-feature: "ReadAccountCallRecordings"
+      x-media-api: true
+      x-throttling-group: "Heavy"
+      x-availability: "Limited"
+      x-app-permission: "ReadCallRecording"
   /restapi/v1.0/account/{accountId}/extension/{extensionId}/greeting/{greetingId}/content:
     get:
       tags:
@@ -4321,7 +4358,9 @@ paths:
       tags:
       - "Call Control"
       summary: "Create Recording"
-      description: "Starts a new call recording for the party"
+      description: |
+        Starts a new call recording for a call party.
+        *Please note* this API does not allow conference calls to be recorded.
       operationId: "startCallRecording"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4847,7 +4886,7 @@ paths:
       tags:
       - "Call Log"
       summary: "Get Company Call Record(s)"
-      description: "Returns individual call log record(s) by ID. Batch syntax is supported."
+      description: "Returns individual call log record(s) by ID. \n[Batch syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n"
       operationId: "readCompanyCallRecord"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4892,7 +4931,11 @@ paths:
           type: "string"
       - name: "dateFrom"
         in: "query"
-        description: "The start datetime for resulting records in ISO 8601 format including timezone, for example 2016-03-10T18:07:52.534Z. The default value is the current moment"
+        description: |
+          Starting date for the resulting records in ISO 8601 format, including
+          timezone, for example *2016-03-10T18:07:52.534Z*. The range is limited to the last 30 days from the current moment.
+          If not specified, the default value is a log history date (date of account creation/call log deletion), and
+          no time range limitation applied
         schema:
           type: "string"
           format: "date-time"
@@ -5063,10 +5106,7 @@ paths:
         description: "Type of template"
         in: "query"
         schema:
-          type: "string"
-          enum:
-          - "UserSettings"
-          - "CallHandling"
+          $ref: "#/components/schemas/TemplateType"
       - name: "page"
         in: "query"
         description: |
@@ -6983,7 +7023,9 @@ paths:
         in: "query"
         description: "Internal identifier of a site"
         schema:
-          type: "string"
+          type: "array"
+          items:
+            type: "string"
       responses:
         "200":
           description: "Call monitoring groups information"
@@ -8869,9 +8911,7 @@ paths:
       tags:
       - "Devices"
       summary: "List Extension Devices"
-      description: |
-        Returns devices of an extension or multiple extensions by their ID(s). Batch request
-        is supported.
+      description: "Returns devices of an extension or multiple extensions by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n"
       operationId: "listExtensionDevices"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -8887,11 +8927,7 @@ paths:
           - "Host"
           - "Guest"
           - "None"
-      - name: "feature"
-        in: "query"
-        description: "Device feature or multiple features supported"
-        schema:
-          $ref: "#/components/schemas/DeviceFeatureEnum"
+      - $ref: "#/components/parameters/DeviceFeature"
       - name: "type"
         in: "query"
         description: "Device type"
@@ -9375,14 +9411,19 @@ paths:
           $ref: "#/components/schemas/SyncTypeEnum"
       - name: "voicemailOwner"
         in: "query"
-        description: |
-          This query parameter will filter voicemail messages based on its owner.
-          This parameter should be controlled by the 'SharedVoicemail' feature.
-          If the feature is disabled this filter shouldn't be applied.
+        description: "Filters voicemail messages based on the owner extension. Supported if the 'SharedVoicemail' \nfeature is enabled.\n"
         schema:
-          type: "array"
-          items:
-            type: "string"
+          oneOf:
+          - type: "string"
+            default: "Personal"
+            enum:
+            - "Any"
+            - "Personal"
+            - "Shared"
+          - type: "array"
+            items:
+              type: "string"
+              description: "Internal identifier of an extension"
       responses:
         "200":
           description: "Success"
@@ -9664,9 +9705,10 @@ paths:
       - name: "dateFrom"
         in: "query"
         description: |
-          The start datetime for resulting records in ISO 8601 format including
-          timezone, for example 2016-03-10T18:07:52.534Z. The default value is the
-          current moment
+          Starting date for the resulting records in ISO 8601 format, including
+          timezone, for example *2016-03-10T18:07:52.534Z*. The range is limited to the last 30 days from the current moment.
+          If not specified, the default value is a log history date (date of account creation/call log deletion), and
+          no time range limitation applied
         schema:
           type: "string"
           format: "date-time"
@@ -10796,7 +10838,7 @@ paths:
         (the parameters `telephonyStatus`, `message`, `userStatus` and `dndStatus` are not returned at all) for the following extension types:
         Department/Announcement Only/Take Messages Only (Voicemail)/Fax User/Paging Only Group/Shared Lines Group/IVR Menu/Application Extension/Park Location.
         If the user requests his/her own presence status, the response contains actual presence status even if the status publication is turned off.
-        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported. For batch requests the number of extensions
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported. For batch requests the number of extensions
         in one request is limited to 30. If more extensions are included in the request, the error code 400 Bad Request is returned with the logical error
         code InvalidMultipartRequest and the corresponding message Extension Presence Info multipart request is limited to 30 extensions.
       operationId: "readUserPresenceStatus"
@@ -11148,7 +11190,9 @@ paths:
       tags:
       - "External Contacts"
       summary: "Get User Contact(s)"
-      description: "Returns the user personal contact(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Returns the user personal contact(s).
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "readContact"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -11170,7 +11214,9 @@ paths:
       tags:
       - "External Contacts"
       summary: "Update User Contact(s)"
-      description: "Updates the user personal contact(s) (full resource update). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Updates the user personal contact(s) (full resource update).
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "updateContact"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -11178,7 +11224,9 @@ paths:
       - $ref: "#/components/parameters/ContactIds"
       - name: "dialingPlan"
         in: "query"
-        description: "Country code value complying with the [ISO 3166-1 alpha-2](https://ru.wikipedia.org/wiki/ISO_3166-1_alpha-2) format. \nThe default value is home country of the current extension\n"
+        description: |
+          Country code value complying with the [ISO 3166-1 alpha-2](https://ru.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
+          The default value is home country of the current extension
         schema:
           type: "string"
       requestBody:
@@ -11239,7 +11287,9 @@ paths:
       tags:
       - "External Contacts"
       summary: "Delete User Contact(s)"
-      description: "Deletes the user personal contact(s). \n[Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.\n"
+      description: |
+        Deletes the user personal contact(s).
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "deleteContact"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -11751,13 +11801,7 @@ paths:
       tags:
       - "Message Store"
       summary: "Delete Conversation"
-      description: |
-        Deletes conversation(s) by conversation ID(s). Batch request is
-        supported, max number of IDs passed as query/path parameters is 50. Alternative
-        syntax is supported - user conversations can be deleted by passing multiple
-        IDs in request body as an array of string, max number of conversation IDs
-        passed in request body is 100. In this case asterisk is used in the path instead
-        of IDs
+      description: "Deletes conversation(s) by conversation ID(s). \n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported - maximum number \nof IDs passed as query/path parameters is 50. Alternative syntax is supported - the user's conversations can be deleted \nby passing multiple IDs in request body as an array of string. Maximum number of conversation IDs passed in request body \nis 100. In this case asterisk '*' is used in the path instead of IDs.\n"
       operationId: "deleteMessageByFilter"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -11817,9 +11861,7 @@ paths:
       tags:
       - "Message Store"
       summary: "Get Message(s)"
-      description: |
-        Returns an individual message record or multiple records by the given message ID(s).
-        The length of inbound messages is unlimited. Bulk syntax is supported.
+      description: "Returns an individual message record or multiple records by the given message ID(s). \nThe length of inbound messages is unlimited. [Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) \nis supported.\n"
       operationId: "readMessage"
       responses:
         "200":
@@ -11848,15 +11890,7 @@ paths:
       tags:
       - "Message Store"
       summary: "Update Message(s)"
-      description: |
-        Updates message(s) by their ID(s). Currently, only the `readStatus`
-        can be updated using this method.
-
-        Bulk syntax is supported, max number of IDs passed as query/path
-        parameters is 50. Alternative bulk syntax is also supported - user messages can be updated
-        by passing multiple IDs in request body as an array of string, max number
-        of IDs passed in the body is 1000. In this case asterisk is used in the
-        path instead of IDs.
+      description: "Updates message(s) by their ID(s). Currently, only the `readStatus`\ncan be updated using this method.\n[Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported, \nmaximum number of IDs passed as query/path parameters is 50. Alternative bulk syntax is also \nsupported - the user's messages can be updated by passing multiple IDs in request body as \nan array of string, maximum number of IDs passed in the body is 1000. In this case asterisk '*'\nis used in the path instead of IDs.\n"
       operationId: "updateMessage"
       requestBody:
         description: "Request body (different formats for regular and bulk syntax)"
@@ -12327,7 +12361,7 @@ paths:
       summary: "Get Blocked/Allowed Number"
       description: |
         Returns blocked or allowed phone number(s) by their ID(s).
-        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "readBlockedAllowedNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -12356,7 +12390,7 @@ paths:
       summary: "Update Blocked/Allowed Number"
       description: |
         Updates blocked or allowed phone number(s) by their ID(s).
-        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "updateBlockedAllowedNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -12391,7 +12425,7 @@ paths:
       tags:
       - "Call Blocking"
       summary: "Delete Blocked/Allowed Number"
-      description: "Deletes blocked or allowed phone number(s) by their ID(s). Batch request is supported."
+      description: "Deletes blocked or allowed phone number(s) by their ID(s). \n[Batch request](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n"
       operationId: "deleteBlockedAllowedNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -12531,6 +12565,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetExtensionPhoneNumbersResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
       x-feature: "ReadExtensionPhoneNumbers"
       x-availability: "High"
       x-throttling-group: "Light"
@@ -13624,7 +13660,7 @@ paths:
       summary: "Get Phone Number"
       description: |
         Returns phone number(s) belonging to a certain account or extension by phoneNumberId(s).
-        [Batch request syntax](https://developers.ringcentral.com/api-reference/Batch-Requests) is supported.
+        [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: "readAccountPhoneNumber"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -13719,6 +13755,8 @@ paths:
                 $ref: "#/components/examples/CreateSubscriptionRequestPubnub"
               CreateSubscriptionRequestWebhook:
                 $ref: "#/components/examples/CreateSubscriptionRequestWebhook"
+              CreateSubscriptionReminderSet:
+                $ref: "#/components/examples/CreateSubscriptionReminderSet"
         required: true
       responses:
         "200":
@@ -15015,6 +15053,39 @@ paths:
                   description: "Callback successfully accepted"
       x-throttling-group: "Heavy"
       x-app-permission: "AI"
+  /ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/records/{sourceRecordId}/insights:
+    get:
+      tags:
+      - "RingSense"
+      summary: "Get Recording Insights"
+      description: "Returns the insights of a call recording"
+      operationId: "getRecordingInsights"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/RecordingDomain"
+      - $ref: "#/components/parameters/SourceRecordId"
+      - $ref: "#/components/parameters/RecordingInsightTypes"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingInsights"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-request-max-body-size: "10m"
+      x-availability: "High"
+      x-throttling-group: "Light"
+      x-app-permission: "RingSense"
   /ai/insights/v1/async/analyze-interaction:
     post:
       tags:
@@ -15053,148 +15124,6 @@ paths:
                   description: "Callback successfully accepted"
       x-throttling-group: "Heavy"
       x-app-permission: "AI"
-  /cx/social-messaging/v1/contents:
-    get:
-      tags:
-      - "Contents"
-      summary: "List Contents"
-      description: |
-        Returns a list of social messaging contents ordered by creation date. The default order is descending.
-
-        The account context of this request is determined by the RC Account ID associated with
-        the access token provided in the Authorization header.
-
-        The query parameters provided in request will be considered an AND operation to filter the list.
-
-        A query parameter which is not specified or provided with the null value will be ignored.
-      operationId: "listSocialMessagingContents"
-      parameters:
-      - $ref: "#/components/parameters/FilterInterventionIds"
-      - $ref: "#/components/parameters/FilterAuthorIdentityIds"
-      - $ref: "#/components/parameters/FilterAuthorIdentityGroupIds"
-      - $ref: "#/components/parameters/FilterChannelIds"
-      - $ref: "#/components/parameters/FilterContentDirection"
-      - $ref: "#/components/parameters/FilterThreadIds"
-      - $ref: "#/components/parameters/FilterText"
-      - $ref: "#/components/parameters/FilterStatus"
-      - $ref: "#/components/parameters/SocMsgOrderBy"
-      - $ref: "#/components/parameters/PageToken"
-      - $ref: "#/components/parameters/PerPage"
-      responses:
-        "200":
-          $ref: "#/components/responses/SocMsgListContentsResponse200"
-        "400":
-          $ref: "#/components/responses/SocMsgListContentsResponse400"
-        "422":
-          $ref: "#/components/responses/SocMsgListContentsResponse422"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-    post:
-      tags:
-      - "Contents"
-      summary: "Create Content"
-      description: |
-        Creates the new social messaging content for use in discussions.
-
-        This request is used to reply to an already posted content or to initiate a discussion. If authorized, the
-        authenticated user will be used as the content author.
-
-        Content will be created and pushed asynchronously to the channel. When the content is successfully pushed to
-        the channel, the `Content.Exported` event will be reported.
-
-        The account context of this request is determined by the RC Account ID associated with the access token provided
-        in the Authorization header.
-
-        Replying to customer content is usually possible unless the channel or conversation is read only. Composing
-        content, on the contrary, depends on the channel itself.
-
-        - The channel may not support it and be purely reactive like Instagram, Messenger, etc.
-
-        - Some channels (usually public accounts, like Twitter or Facebook pages) allow content publishing
-        without targeting specific individuals.
-
-        - Some channels (usually non-public media) require specific targeting (phone number for SMS, email address
-        for email, customer_id, etc.) to be able to create content. This is channel-specific and detailed under the
-        generic parameters.
-      operationId: "createSocialMessagingContent"
-      requestBody:
-        $ref: "#/components/requestBodies/CreateContentRequest"
-      responses:
-        "201":
-          $ref: "#/components/responses/SocCreateContentResponse201"
-        "400":
-          $ref: "#/components/responses/SocMsgCreateContentResponse400"
-        "403":
-          $ref: "#/components/responses/SocMsgCreateContentResponse403"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-        "422":
-          $ref: "#/components/responses/SocMsgCreateContentResponse422"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/contents/{contentId}:
-    get:
-      tags:
-      - "Contents"
-      summary: "Get Content"
-      description: "Returns the social messaging content by ID specified in path."
-      operationId: "readSocialMessagingContent"
-      parameters:
-      - $ref: "#/components/parameters/ContentId"
-      responses:
-        "200":
-          $ref: "#/components/responses/SocMsgGetContentResponse200"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/identities:
-    get:
-      tags:
-      - "Identities"
-      summary: "List Identities"
-      description: |
-        Returns a list of identities ordered by creation date. The default order is descending.
-
-        The account context of this request is determined by the RC Account ID associated with
-        the access token provided in the Authorization header.
-
-        The query parameters provided will be considered an AND operation to filter the list.
-
-        A query parameter which is not specified or provided with the null value will be ignored.
-      operationId: "listSocialMessagingIdentities"
-      parameters:
-      - $ref: "#/components/parameters/FilterChannelId"
-      - $ref: "#/components/parameters/FilterIdentityGroupIds"
-      - $ref: "#/components/parameters/FilterIdentityType"
-      - $ref: "#/components/parameters/FilterUserId"
-      - $ref: "#/components/parameters/FilterUUID"
-      - $ref: "#/components/parameters/SocMsgOrderBy"
-      - $ref: "#/components/parameters/PageToken"
-      - $ref: "#/components/parameters/PerPage"
-      responses:
-        "200":
-          $ref: "#/components/responses/SocMsgListIdentitiesResponse200"
-        "400":
-          $ref: "#/components/responses/SocMsgListIdentitiesResponse400"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
-  /cx/social-messaging/v1/identities/{identityId}:
-    get:
-      tags:
-      - "Identities"
-      summary: "Get Identity"
-      description: "Returns an identity by ID specified in path."
-      operationId: "readSocialMessagingIdentity"
-      parameters:
-      - $ref: "#/components/parameters/IdentityId"
-      responses:
-        "200":
-          $ref: "#/components/responses/SocMsgGetIdentityResponse200"
-        "404":
-          $ref: "#/components/responses/SocMsgResponse404"
-      x-throttling-group: "Light"
-      x-app-permission: "SocialMessaging"
   /scim/v2/Schemas:
     get:
       tags:
@@ -16377,7 +16306,11 @@ paths:
       tags:
       - "Posts"
       summary: "Create Post"
-      description: "Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of \nthe request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note, \nTask, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type. \nAttachments can also be added to a post by passing the type and ID of attachment(s) in request body.\n"
+      description: |
+        Creates a post in the chat specified in path. Any mention can be added within the `text` attribute of
+        the request body in .md format - `![:Type](id)`, where `type` is one of (Person, Team, File, Note,
+        Task, Event, Link, Card) and `id` is a unique identifier of the mentioned object of the specified type.
+        Attachments can also be added to a post by passing the type and ID of attachment(s) in request body.
       operationId: "createGlipPostNew"
       parameters:
       - name: "chatId"
@@ -16910,7 +16843,7 @@ paths:
       parameters:
       - name: "companyId"
         in: "path"
-        description: "Internal identifier of an RC account/Glip company, or tilde (~) to indicate a company the current user belongs to."
+        description: "Internal identifier of an RC account/Glip company, or tilde (~) to indicate a company \nthe current user belongs to.\n"
         required: true
         schema:
           type: "string"
@@ -16938,7 +16871,7 @@ paths:
       tags:
       - "Profile"
       summary: "Get Person"
-      description: "Returns a user or multiple users by their ID(s). Batch request is supported."
+      description: "Returns a user or multiple users by their ID(s). \n[Batch requests](https://developers.ringcentral.com/guide/basics/batch-requests) are supported.\n"
       operationId: "readGlipPersonNew"
       parameters:
       - name: "personId"
@@ -17910,163 +17843,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/ApiErrorResponseModel"
-    SocCreateContentResponse201:
-      description: "Successful response"
+    Unauthorized:
+      description: |
+        General response with **HTTP 401 "Unauthorized"** status.<br>
+        Reasons: user authentication failed.
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ContentModel"
-    SocMsgResponse404:
-      description: "Error 404"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-029:
-              $ref: "#/components/examples/EDI-029"
-            EDI-032:
-              $ref: "#/components/examples/EDI-032"
-    SocMsgListContentsResponse422:
-      description: "Error 422 on content list."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-034:
-              $ref: "#/components/examples/EDI-034"
-            EDI-035:
-              $ref: "#/components/examples/EDI-035"
-            EDI-036:
-              $ref: "#/components/examples/EDI-036"
-    SocMsgCreateContentResponse400:
-      description: "Error 400 on content creation."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-009:
-              $ref: "#/components/examples/EDI-009"
-            EDI-025:
-              $ref: "#/components/examples/EDI-025"
-            EDI-030:
-              $ref: "#/components/examples/EDI-030"
-            EDI-031:
-              $ref: "#/components/examples/EDI-031"
-            EDI-037:
-              $ref: "#/components/examples/EDI-037"
-            EDI-038:
-              $ref: "#/components/examples/EDI-038"
-            EDI-040:
-              $ref: "#/components/examples/EDI-040"
-    SocMsgCreateContentResponse403:
-      description: "Error 403 on content creation."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-013:
-              $ref: "#/components/examples/EDI-013"
-            EDI-014:
-              $ref: "#/components/examples/EDI-014"
-            EDI-015:
-              $ref: "#/components/examples/EDI-015"
-            EDI-016:
-              $ref: "#/components/examples/EDI-016"
-            EDI-017:
-              $ref: "#/components/examples/EDI-017"
-            EDI-018:
-              $ref: "#/components/examples/EDI-018"
-            EDI-019:
-              $ref: "#/components/examples/EDI-019"
-            EDI-020:
-              $ref: "#/components/examples/EDI-020"
-            EDI-021:
-              $ref: "#/components/examples/EDI-021"
-            EDI-022:
-              $ref: "#/components/examples/EDI-022"
-            EDI-023:
-              $ref: "#/components/examples/EDI-023"
-            EDI-024:
-              $ref: "#/components/examples/EDI-024"
-    SocMsgListContentsResponse200:
-      description: "Successful response"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ContentList"
-    SocMsgCreateContentResponse422:
-      description: "Error 422 on content creation."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-010:
-              $ref: "#/components/examples/EDI-010"
-            EDI-011:
-              $ref: "#/components/examples/EDI-011"
-            EDI-012:
-              $ref: "#/components/examples/EDI-012"
-            EDI-027:
-              $ref: "#/components/examples/EDI-027"
-            EDI-001:
-              $ref: "#/components/examples/EDI-001"
-            EDI-002:
-              $ref: "#/components/examples/EDI-002"
-            EDI-003:
-              $ref: "#/components/examples/EDI-003"
-            EDI-004:
-              $ref: "#/components/examples/EDI-004"
-            EDI-005:
-              $ref: "#/components/examples/EDI-005"
-            EDI-006:
-              $ref: "#/components/examples/EDI-006"
-            EDI-007:
-              $ref: "#/components/examples/EDI-007"
-            EDI-008:
-              $ref: "#/components/examples/EDI-008"
-            EDI-033:
-              $ref: "#/components/examples/EDI-033"
-    SocMsgListContentsResponse400:
-      description: "Error 400 on content creation."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-028:
-              $ref: "#/components/examples/EDI-028"
-    SocMsgGetContentResponse200:
-      description: "Successful response."
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ContentModel"
-    SocMsgListIdentitiesResponse200:
-      description: "Successful response"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/IdentitiesList"
-    SocMsgListIdentitiesResponse400:
-      description: "Error 400 on Identity search"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiErrorResponseModel"
-          examples:
-            EDI-028:
-              $ref: "#/components/examples/EDI-028"
-    SocMsgGetIdentityResponse200:
-      description: "Successful response"
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/IdentityModel"
+            $ref: "#/components/schemas/ParameterizedErrorResponseModel"
     ScimNotFound:
       description: "Not found"
       content:
@@ -18130,14 +17914,6 @@ components:
         application/scim+json:
           schema:
             $ref: "#/components/schemas/ScimErrorResponse"
-    Unauthorized:
-      description: |
-        General response with **HTTP 401 "Unauthorized"** status.<br>
-        Reasons: user authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ParameterizedErrorResponseModel"
   schemas:
     SubscriptionListResource:
       type: "object"
@@ -18479,6 +18255,7 @@ components:
       - $ref: "#/components/schemas/MobileDeliveryMode"
       - $ref: "#/components/schemas/PubNubDeliveryMode"
       - $ref: "#/components/schemas/WebSocketDeliveryMode"
+      - $ref: "#/components/schemas/InternalDeliveryMode"
       discriminator:
         propertyName: "transportType"
         mapping:
@@ -18487,6 +18264,23 @@ components:
           RC/GCM: "#/components/schemas/MobileDeliveryMode"
           PubNub: "#/components/schemas/PubNubDeliveryMode"
           WebSocket: "#/components/schemas/WebSocketDeliveryMode"
+          Internal: "#/components/schemas/InternalDeliveryMode"
+    InternalDeliveryMode:
+      type: "object"
+      required:
+      - "transportType"
+      - "configName"
+      properties:
+        transportType:
+          type: "string"
+          description: "The transport type for this subscription, or the channel by which an app should be notified of an event"
+          enum:
+          - "Internal"
+        configName:
+          type: "string"
+          description: |
+            The name of internal channel (defined in the backend service configuration) to deliver notifications through.
+          example: "my-server-channel"
     ApiErrorWithParameter:
       description: |
         The error model with additional attributes which can be used for HTTP 400/409
@@ -21053,7 +20847,7 @@ components:
           format: "int32"
           default: 3600
         refresh_token_ttl:
-          maximum: 604800
+          maximum: 2592000
           type: "integer"
           description: "Refresh token lifetime in seconds"
           format: "int32"
@@ -21347,6 +21141,16 @@ components:
       - "Unconfirmed"
       - "Confirmed"
       - "Disabled"
+    ServiceInfoPlanV2:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a service plan"
+        name:
+          type: "string"
+          description: "Name of a service plan"
+      description: "Information on account service plan"
     BasicContactInfo:
       description: "Personal contact information"
       type: "object"
@@ -21384,22 +21188,7 @@ components:
         uBrand:
           $ref: "#/components/schemas/ServiceInfoUBrand"
         servicePlan:
-          $ref: "#/components/schemas/ServiceInfoPlan"
-    ServiceInfoPlan:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a service plan"
-        name:
-          type: "string"
-          description: "Name of a service plan"
-        freemiumProductType:
-          type: "string"
-          enum:
-          - "Freyja"
-          - "Phoenix"
-      description: "Information on account service plan"
+          $ref: "#/components/schemas/ServiceInfoPlanV2"
     ServiceInfoContractedCountryId:
       type: "object"
       properties:
@@ -22204,6 +21993,12 @@ components:
           type: "string"
           description: "Internal identifier of a RingCentral extension"
           example: "12345"
+    ExtensionFormattingLocaleInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal Identifier of a formatting language"
     BatchProvisionErrorItem:
       type: "object"
       required:
@@ -22219,6 +22014,12 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/ApiErrorWithParameter"
+    ExtensionCountryInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a country"
     BatchProvisionUsersRequestItem:
       description: "Describes request for user extension provisioning"
       type: "object"
@@ -22252,6 +22053,8 @@ components:
                   Please note that email must be unique in this case.
                 type: "boolean"
                 default: true
+              transition:
+                $ref: "#/components/schemas/TransitionInfo"
         costCenter:
           type: "object"
           required:
@@ -22283,12 +22086,56 @@ components:
             properties:
               deviceInfo:
                 $ref: "#/components/schemas/DeviceDefinition"
+    TransitionInfo:
+      type: "object"
+      properties:
         sendWelcomeEmail:
           type: "boolean"
           description: |
-            Specifies if a welcome/activation email is sent to the new users (within extension status changing from
-            'Unassigned' to 'NotActivated/Disabled')
+            Specifies if a welcome/activation email is sent to the new users
+            (with the extension status transition from 'Unassigned' to 'NotActivated/Disabled')
           default: true
+        regionalSettings:
+          $ref: "#/components/schemas/ExtensionRegionalSettingRequest"
+    ExtensionTimezoneInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a timezone"
+    TimeFormatEnum:
+      type: "string"
+      description: "Time format (12-hours or 24-hours)."
+      enum:
+      - "12h"
+      - "24h"
+      default: "12h"
+    ExtensionRegionalSettingRequest:
+      type: "object"
+      description: |
+        Regional data (timezone, home country, language) of an extension.
+        The default is Company (Auto-Receptionist) settings
+      properties:
+        homeCountry:
+          $ref: "#/components/schemas/ExtensionCountryInfoRequest"
+        timezone:
+          $ref: "#/components/schemas/ExtensionTimezoneInfoRequest"
+        language:
+          $ref: "#/components/schemas/ExtensionLanguageInfoRequest"
+        greetingLanguage:
+          $ref: "#/components/schemas/ExtensionGreetingLanguageInfoRequest"
+        formattingLocale:
+          $ref: "#/components/schemas/ExtensionFormattingLocaleInfoRequest"
+        currency:
+          $ref: "#/components/schemas/ExtensionCurrencyInfoRequest"
+        timeFormat:
+          $ref: "#/components/schemas/TimeFormatEnum"
+    ExtensionCurrencyInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal Identifier of a currency"
     BatchProvisionUsersRequest:
       description: "Describes request for user extension provisioning"
       type: "object"
@@ -22301,6 +22148,12 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/BatchProvisionUsersRequestItem"
+    ExtensionGreetingLanguageInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a greeting language"
     BatchProvisionUsersResponse:
       type: "object"
       required:
@@ -22312,6 +22165,12 @@ components:
             anyOf:
             - $ref: "#/components/schemas/BatchProvisionUsersSuccessItem"
             - $ref: "#/components/schemas/BatchProvisionErrorItem"
+    ExtensionLanguageInfoRequest:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a language"
     BatchProvisionUsersSuccessItem:
       type: "object"
       required:
@@ -22688,13 +22547,6 @@ components:
           description: "The timestamp of account creation"
           example: "2023-03-10T18:07:52.534Z"
       description: "Account sign up data"
-    TimeFormatEnum:
-      type: "string"
-      description: "Time format (12-hours or 24-hours)."
-      enum:
-      - "12h"
-      - "24h"
-      default: "12h"
     AccountRegionalSettings:
       type: "object"
       properties:
@@ -23250,6 +23102,7 @@ components:
       - "Initial"
       - "Accepted"
       - "Shipped"
+      - "Won't ship"
       example: "Shipped"
     ShippingInfo:
       type: "object"
@@ -23466,6 +23319,10 @@ components:
           $ref: "#/components/schemas/LinePoolingEnum"
         billingStatement:
           $ref: "#/components/schemas/BillingStatementInfo"
+        automaticVoicemailLogin:
+          type: "boolean"
+          description: |
+            Ability to access the Voicemail without being prompted to enter a PIN from the hard phone
     BillingStatementCharges:
       type: "object"
       properties:
@@ -24433,7 +24290,9 @@ components:
           $ref: "#/components/schemas/UiCallInfoRecord"
     SipData:
       type: "object"
-      description: "SIP (Session Initiation Protocol) information. \nReturned if query parameter sipData is set to 'True'\n"
+      description: |
+        SIP (Session Initiation Protocol) information.
+        Returned if query parameter sipData is set to 'True'
       properties:
         toTag:
           type: "string"
@@ -25165,6 +25024,7 @@ components:
       - "LocalNumber"
       - "ImsOutgoing"
       - "ImsIncoming"
+      - "Unknown"
     CallLogFromParty:
       allOf:
       - $ref: "#/components/schemas/CallLogParty"
@@ -25262,8 +25122,6 @@ components:
       - "direction"
       - "action"
       - "startTime"
-      - "duration"
-      - "durationMs"
       properties:
         extension:
           $ref: "#/components/schemas/ExtensionInfoCallLog"
@@ -25319,11 +25177,11 @@ components:
           format: "date-time"
         duration:
           type: "integer"
-          format: "int32"
+          format: "int64"
           description: "Call duration in seconds"
         durationMs:
           type: "integer"
-          format: "int32"
+          format: "int64"
           description: "Call duration in milliseconds"
         recording:
           $ref: "#/components/schemas/CallLogRecordingInfo"
@@ -25611,6 +25469,7 @@ components:
       - "Hunting"
       - "OutgoingFreeSpDl"
       - "ParkLocation"
+      - "CallMeCallOut"
       - "ConferenceCall"
       - "MobileApp"
       - "MoveToConference"
@@ -25622,6 +25481,7 @@ components:
       - "ImsCall"
       - "JoinCall"
       - "TextRelay"
+      - "IvaCall"
     CallActionEnum:
       type: "string"
       description: "The internal action corresponding to the call operation"
@@ -25710,12 +25570,6 @@ components:
             $ref: "#/components/schemas/CallLogRecord"
         syncInfo:
           $ref: "#/components/schemas/CallLogSyncInfo"
-    ExtensionFormattingLocaleInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal Identifier of a formatting language"
     ExtensionBulkUpdateTaskResource:
       required:
       - "creationTime"
@@ -25779,12 +25633,6 @@ components:
       - "Incomplete"
       - "Completed"
       default: "NotStarted"
-    ExtensionCountryInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a country"
     ExtensionStatusEnumForUpdate:
       type: "string"
       description: "Extension status"
@@ -25825,29 +25673,6 @@ components:
           description: "Custom field value"
         displayName:
           type: "string"
-    ExtensionTimezoneInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a timezone"
-    ExtensionRegionalSettingRequest:
-      type: "object"
-      properties:
-        homeCountry:
-          $ref: "#/components/schemas/ExtensionCountryInfoRequest"
-        timezone:
-          $ref: "#/components/schemas/ExtensionTimezoneInfoRequest"
-        language:
-          $ref: "#/components/schemas/ExtensionLanguageInfoRequest"
-        greetingLanguage:
-          $ref: "#/components/schemas/ExtensionGreetingLanguageInfoRequest"
-        formattingLocale:
-          $ref: "#/components/schemas/ExtensionFormattingLocaleInfoRequest"
-        currency:
-          $ref: "#/components/schemas/ExtensionCurrencyInfoRequest"
-        timeFormat:
-          $ref: "#/components/schemas/TimeFormatEnum"
     UserTransitionInfo:
       type: "object"
       properties:
@@ -25863,12 +25688,6 @@ components:
             `Unassigned` to `NotActivated/Disabled`)
       description: |
         For `NotActivated` extensions only. Welcome email settings
-    ExtensionCurrencyInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal Identifier of a currency"
     ContactInfoUpdateRequest:
       type: "object"
       properties:
@@ -25979,12 +25798,6 @@ components:
         refAccId:
           type: "string"
           description: "Primary federation admin account identifier"
-    ExtensionGreetingLanguageInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a greeting language"
     ExtensionBulkUpdateInfo:
       type: "object"
       properties:
@@ -26110,12 +25923,6 @@ components:
         name:
           type: "string"
           description: "Name of a cost center"
-    ExtensionLanguageInfoRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          description: "Internal identifier of a language"
     ExtensionBulkUpdateRequest:
       required:
       - "records"
@@ -26177,6 +25984,12 @@ components:
           $ref: "#/components/schemas/PageNavigationModel"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
+    TemplateType:
+      type: "string"
+      enum:
+      - "UserSettings"
+      - "CallHandling"
+      - "LimitedExtensions"
     TemplateInfo:
       type: "object"
       properties:
@@ -26187,11 +26000,11 @@ components:
         id:
           type: "string"
           description: "Internal identifier of a template"
-        type:
+        description:
           type: "string"
-          enum:
-          - "UserSettings"
-          - "CallHandling"
+          description: "Description of a template"
+        type:
+          $ref: "#/components/schemas/TemplateType"
         name:
           type: "string"
           description: "Name of a template"
@@ -28822,6 +28635,15 @@ components:
         name:
           type: "string"
           description: "Name of a group"
+        site:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+              description: "Identifier of a site"
+            name:
+              type: "string"
+              description: "Name of a site"
     CreateCallMonitoringGroupRequest:
       required:
       - "name"
@@ -28830,6 +28652,12 @@ components:
         name:
           type: "string"
           description: "Name of a group"
+        site:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+              description: "Identifier of a site"
     CallMonitoringBulkAssign:
       type: "object"
       properties:
@@ -29020,7 +28848,9 @@ components:
           format: "int32"
           minimum: 1
           maximum: 1000
-          description: "The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty \n(because non-existent page was specified or perPage=0 was requested)\n"
+          description: |
+            The current page number. 1-indexed, so the first page is 1 by default. May be omitted if result is empty
+            (because non-existent page was specified or perPage=0 was requested)
         perPage:
           type: "integer"
           format: "int32"
@@ -29476,15 +29306,6 @@ components:
         code:
           type: "string"
           example: "1007"
-    GroupResource:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          example: "63723034"
-        name:
-          type: "string"
-          example: "Leaders"
     PhoneNumberResource:
       type: "object"
       properties:
@@ -29516,25 +29337,6 @@ components:
         primary:
           type: "boolean"
           description: "Specifies if the number is primary, i.e. displayed as 'main number' and called by default"
-    CallQueueResource:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          example: "873014540006"
-        name:
-          type: "string"
-          example: "Sales CQ"
-    ContactSubTypeEnum:
-      type: "string"
-      description: "Extension subtype"
-      example: "Unknown"
-      enum:
-      - "Unknown"
-      - "VideoPro"
-      - "VideoProPlus"
-      - "DigitalSignage"
-      - "Emergency"
     ExternalIntegrationResource:
       type: "object"
       properties:
@@ -29637,26 +29439,12 @@ components:
           $ref: "#/components/schemas/BusinessSiteResource"
         hidden:
           type: "boolean"
-        role:
-          $ref: "#/components/schemas/DirectoryRoleResource"
-        callQueues:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/CallQueueResource"
         customFields:
           type: "array"
           items:
             $ref: "#/components/schemas/CustomFieldResource"
-        groups:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/GroupResource"
-        costCenter:
-          $ref: "#/components/schemas/CostCenterResource"
         integration:
           $ref: "#/components/schemas/ExternalIntegrationResource"
-        subType:
-          $ref: "#/components/schemas/ContactSubTypeEnum"
     AccountResource:
       required:
       - "id"
@@ -29697,31 +29485,6 @@ components:
         value:
           type: "string"
           example: "5"
-    DirectoryRoleResource:
-      required:
-      - "id"
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        name:
-          type: "string"
-        domain:
-          type: "string"
-        displayName:
-          type: "string"
-    CostCenterResource:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-          example: "83266549237542"
-        code:
-          type: "string"
-          example: "Main"
-        name:
-          type: "string"
-          example: "Cost Center A"
     AccountDirectoryProfileImageResource:
       type: "object"
       properties:
@@ -30619,6 +30382,9 @@ components:
           type: "string"
           description: "Custom name of a default role"
           example: "My Custom User Role"
+        siteCompatible:
+          type: "boolean"
+          description: "Site compatibility of a user role"
     DefaultUserRoleRequest:
       type: "object"
       properties:
@@ -31030,6 +30796,11 @@ components:
             for extensions of 'User' type only. For unassigned extensions the value
             is set to `true` by default. For assigned extensions the value is set
             to `false` by default
+        name:
+          type: "string"
+          description: |
+            Extension name. For user extension types the value is a combination
+            of the specified first name and last name
     GetExtensionListResponse:
       required:
       - "records"
@@ -32066,6 +31837,16 @@ components:
             of global phone numbers, for example when calling to direct numbers or
             sending/receiving SMS
       description: "Sender information"
+    VoicemailOwnerResource:
+      type: "object"
+      description: "Voicemail owner information. Supported for shared voicemail messages only"
+      properties:
+        name:
+          type: "string"
+          description: "Name of a voicemail owner"
+        extensionId:
+          type: "string"
+          description: "Internal identifier of an extension"
     GetMessageSyncResponse:
       required:
       - "records"
@@ -32382,6 +32163,8 @@ components:
           description: |
             Cover page text, entered by the fax sender and printed on the
             cover page. Maximum length is limited to 1024 symbols
+        owner:
+          $ref: "#/components/schemas/VoicemailOwnerResource"
     SyncTypeEnum:
       type: "string"
       enum:
@@ -37779,6 +37562,7 @@ components:
           RC/APNS: "#/components/schemas/MobileDeliveryModeRequest"
           RC/GCM: "#/components/schemas/MobileDeliveryModeRequest"
           PubNub: "#/components/schemas/PubNubDeliveryModeRequest"
+          Internal: "#/components/schemas/InternalDeliveryMode"
     CreateSubscriptionRequest:
       allOf:
       - $ref: "#/components/schemas/UpdateSubscriptionRequest"
@@ -39727,6 +39511,258 @@ components:
           enableVoiceActivityDetection:
             type: "boolean"
             description: "Apply voice activity detection."
+    RecordingInsights:
+      type: "object"
+      required:
+      - "title"
+      - "domain"
+      - "sourceRecordId"
+      - "sourceSessionId"
+      - "ownerExtensionId"
+      - "recordingDurationMs"
+      - "recordingStartTime"
+      - "creationTime"
+      - "lastModifiedTime"
+      - "speakerInfo"
+      - "insights"
+      properties:
+        title:
+          type: "string"
+          example: "Call from 1234567890 to 0987654321"
+          description: "Title of the call"
+        rsRecordUri:
+          type: "string"
+          example: "https://ringsense.ringcentral.com/calls/2e67979e-ff82-4171-ae30-20c0c1f19b27"
+          description: "URI of the call recording"
+        domain:
+          $ref: "#/components/schemas/RecordingDomain"
+        sourceRecordId:
+          $ref: "#/components/schemas/SourceRecordId"
+        sourceSessionId:
+          $ref: "#/components/schemas/SourceSessionId"
+        callDirection:
+          $ref: "#/components/schemas/AIInsightsCallDirection"
+        ownerExtensionId:
+          type: "string"
+          description: "Extension id of the call recording owner"
+          example: "123456789"
+        recordingDurationMs:
+          type: "integer"
+          format: "int32"
+          description: "Duration of the call recording (in ms)"
+          example: 112000
+        recordingStartTime:
+          type: "string"
+          format: "date-time"
+          description: "Start time of the call recording"
+        creationTime:
+          type: "string"
+          format: "date-time"
+          description: "Creation time of the call insights"
+        lastModifiedTime:
+          type: "string"
+          format: "date-time"
+          description: "Last modified time of the call insights"
+        speakerInfo:
+          $ref: "#/components/schemas/AIInsightsSpeakerInfo"
+        insights:
+          $ref: "#/components/schemas/AIInsights"
+    SummaryInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/SummaryInsightUnit"
+    AIInsights:
+      type: "object"
+      properties:
+        Transcript:
+          $ref: "#/components/schemas/TranscriptInsights"
+        Summary:
+          $ref: "#/components/schemas/SummaryInsights"
+        Highlights:
+          $ref: "#/components/schemas/HighlightsInsights"
+        NextSteps:
+          $ref: "#/components/schemas/NextStepsInsights"
+        BulletedSummary:
+          $ref: "#/components/schemas/BulletedSummaryInsights"
+        AIScore:
+          $ref: "#/components/schemas/AIScoreInsights"
+    AIScoreInsightUnit:
+      type: "object"
+      required:
+      - "value"
+      properties:
+        value:
+          type: "string"
+          description: "Value of the score"
+          example: "7"
+    AIScoreInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/AIScoreInsightUnit"
+    AIInsightsSpeakerInfo:
+      type: "array"
+      description: "List of the participants in the call"
+      items:
+        type: "object"
+        required:
+        - "speakerId"
+        properties:
+          speakerId:
+            type: "string"
+            example: "p-32423"
+            description: "Participant ID as in the source recording"
+          name:
+            type: "string"
+            example: "John Doe"
+            description: "Name of the participant"
+          accountId:
+            type: "string"
+            example: "123456789"
+            description: "RingCentral account ID of the participant"
+          extensionId:
+            type: "string"
+            example: "123456789"
+            description: "RingCentral extension ID of the participant"
+          phoneNumber:
+            type: "string"
+            example: "+1234567890"
+            description: "Optional phone number of the participant in case of phone call recording"
+    BulletedSummaryInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/BulletedSummaryInsightUnit"
+    SummaryInsightUnit:
+      type: "object"
+      required:
+      - "value"
+      - "start"
+      - "end"
+      properties:
+        value:
+          type: "string"
+          description: "Value of the summary"
+          example: "conversational insights text"
+        start:
+          type: "number"
+          format: "float"
+          description: "Start time of the insight (in sec)"
+          example: 1.2
+        end:
+          type: "number"
+          format: "float"
+          description: "End time of the insight (in sec)"
+          example: 4.2
+    BulletedSummaryInsightUnit:
+      type: "object"
+      required:
+      - "value"
+      properties:
+        value:
+          type: "string"
+          description: "Value of the summary"
+          example: "conversational insights text"
+    HighlightsInsightUnit:
+      $ref: "#/components/schemas/RSConversationalInsightsUnit"
+    AIInsightsCallDirection:
+      type: "string"
+      description: "Optional call direction in case of phone call recording"
+      example: "Inbound"
+      enum:
+      - "Inbound"
+      - "Outbound"
+    TranscriptInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/TranscriptInsightUnit"
+    AIInsightsTypes:
+      type: "array"
+      description: "AI Insight Types"
+      items:
+        type: "string"
+        enum:
+        - "NextSteps"
+        - "Transcript"
+        - "Summary"
+        - "Highlights"
+        - "BulletedSummary"
+        - "AIScore"
+    RecordingDomain:
+      type: "string"
+      description: "Source rc application of the recording"
+      example: "pbx"
+      enum:
+      - "pbx"
+    HighlightsInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/HighlightsInsightUnit"
+    RSConversationalInsightsUnit:
+      type: "object"
+      required:
+      - "speakerId"
+      - "value"
+      - "start"
+      - "end"
+      properties:
+        speakerId:
+          type: "string"
+          description: "Participant ID"
+          example: "p-32423"
+        value:
+          type: "string"
+          description: "Value of the insight"
+          example: "conversational insights text"
+        start:
+          type: "number"
+          format: "float"
+          description: "Start time of the insight (in sec)"
+          example: 1.2
+        end:
+          type: "number"
+          format: "float"
+          description: "End time of the insight (in sec)"
+          example: 4.2
+    TranscriptInsightUnit:
+      type: "object"
+      description: "One utterance of a call. Each utterance is a speakerId, text, start and end time"
+      required:
+      - "speakerId"
+      - "text"
+      - "start"
+      - "end"
+      properties:
+        speakerId:
+          type: "string"
+          description: "Participant ID"
+          example: "p-32423"
+        text:
+          type: "string"
+          description: "Text of the utterance"
+          example: "Hello user!"
+        start:
+          type: "number"
+          format: "float"
+          description: "Start time of the utterance (in sec)"
+          example: 1.2
+        end:
+          type: "number"
+          format: "float"
+          description: "End time of the utterance (in sec)"
+          example: 4.2
+    NextStepsInsightUnit:
+      $ref: "#/components/schemas/RSConversationalInsightsUnit"
+    SourceRecordId:
+      type: "string"
+      description: "Recording ID of the domain"
+      example: "4b57_384543"
+    NextStepsInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/NextStepsInsightUnit"
+    SourceSessionId:
+      type: "string"
+      description: "Session ID of the domain"
+      example: "cbac2b78-6f74-4257-8167-dff864de2263!us-10-dca09@us-10"
     InteractionInput:
       allOf:
       - $ref: "#/components/schemas/DiarizeInput"
@@ -39755,812 +39791,6 @@ components:
       - "Energy"
       - "Pace"
       - "QuestionsAsked"
-    SocMsgPhoneNumber:
-      description: "Phone number."
-      type: "string"
-      example: "+33634231224"
-    ContentPublished:
-      description: "If set to `true`, then the content is published on remote channel"
-      type: "boolean"
-      example: true
-    ContentCreatedFrom:
-      description: "Source of content"
-      type: "string"
-      enum:
-      - "Synchronizer"
-      - "Interface"
-      - "Api"
-      - "AutoSurvey"
-      - "AutoResponseTrigger"
-      - "AutoRequestEmail"
-    ContentSynchronizationError:
-      description: "Synchronization error details"
-      type: "string"
-    SocMsgAttachmentSize:
-      description: "Size of attachment"
-      type: "integer"
-      format: "int32"
-      example: 217571
-    SocMsgCreationTime:
-      description: "Creation time of the resource."
-      format: "date-time"
-      type: "string"
-      example: "2023-02-04T12:43:07Z"
-    ContentInReplyToAuthorIdentityId:
-      description: |
-        Identifier of the content identity to which this content is a reply to.
-        If the channel does not support discussion initiation, this parameter is mandatory
-      type: "string"
-    ContentAttachments:
-      description: |
-        Array of attachments to be added to the content
-      type: "array"
-      minItems: 0
-      items:
-        $ref: "#/components/schemas/SocMsgContentAttachment"
-    ContentTemplateName:
-      type: "string"
-      description: |
-        Applicable to WhatsApp channels only. Name of the WhatsApp template to use for the content.
-        All available template names are visible on the WhatsApp Business Manager interface
-      example: "customer_order_shipment_template"
-    ContentComponents:
-      type: "array"
-      minItems: 0
-      description: |
-        Applicable to WhatsApp channels only. Component configuration of the WhatsApp
-        template to use for the content. All available components are visible on
-        the WhatsApp Business Manager interface
-      items:
-        type: "object"
-        properties:
-          type:
-            type: "string"
-          parameters:
-            type: "array"
-            minItems: 0
-            items:
-              type: "object"
-              properties:
-                type:
-                  type: "string"
-                text:
-                  type: "string"
-      example:
-      - Message1:
-        - param11:
-            type: "Name"
-            text: "John"
-        - param12:
-            type: "Message"
-            text: "Product rocks!"
-      - Message2:
-        - param21:
-            type: "Agent Name"
-            text: "Alice"
-        - param22:
-            type: "Message"
-            text: "Thank you"
-    SocMsgLastModifiedTime:
-      description: "The time when the last modification was completed."
-      format: "date-time"
-      type: "string"
-      example: "2023-02-04T12:43:07Z"
-    ContentType:
-      description: "Type of the content"
-      type: "string"
-      enum:
-      - "Album"
-      - "AuthenticateMessage"
-      - "AuthenticateResponse"
-      - "Carousel"
-      - "CarouselMessage"
-      - "Comment"
-      - "ContactMessage"
-      - "Content"
-      - "Email"
-      - "FormMessage"
-      - "FormResponse"
-      - "HsmMessage"
-      - "Link"
-      - "ListMessage"
-      - "Media"
-      - "Message"
-      - "OutboundMessage"
-      - "PaymentMessage"
-      - "Photo"
-      - "PostbackMessage"
-      - "PrivateTweet"
-      - "PromptMessage"
-      - "Question"
-      - "Review"
-      - "ReviewResponse"
-      - "RichLinkMessage"
-      - "SelectMessage"
-      - "Status"
-      - "TemplateMessage"
-      - "TimePickerMessage"
-      - "Tweet"
-      - "Video"
-      - "VideoCallRequestMessage"
-      example: "Email"
-    ContentAutoSubmittedField:
-      description: |
-        Auto submitted content:
-          - won't reopen tasks or interventions
-          - can be used to send automatic messages like asking an user to follow on twitter, sending a survey, etc,
-          - doesn't get included in statistics
-      type: "boolean"
-    SocMsgAttachmentFilename:
-      description: "Filename of attachment"
-      type: "string"
-      example: "0.jpeg"
-    ContentCategoryIds:
-      description: |
-        List of the category identifiers of the content
-      items:
-        type: "string"
-      type: "array"
-      example:
-      - "541014e17aa58d8ccf000023"
-      - "541014e17aa58d8ccf002023"
-    ContentStatus:
-      description: "Content status"
-      type: "string"
-      enum:
-      - "New"
-      - "Assigned"
-      - "Replied"
-      - "UserReply"
-      - "UserInitiated"
-      - "Ignored"
-    ContentList:
-      type: "object"
-      required:
-      - "records"
-      - "paging"
-      properties:
-        records:
-          type: "array"
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/ContentModel"
-        paging:
-          $ref: "#/components/schemas/NonEnumeratedPagingModel"
-    ContentBody:
-      description: |
-        Content body. On creation this field is mandatory except for WhatsApp content
-        using templates. The following are the channels supported and their **max length**
-        restrictions (in brackets):
-
-          - *Apple Messages For Business* (10000)
-          - *Email* (262144)
-          - *RingCX Digital Messaging* (1024)
-          - *Facebook* (8000)
-          - *Google My Business* (4000)
-          - *Instagram* (950)
-          - *Instagram Messaging* (1000)
-          - *LinkedIn* (3000)
-          - *Messenger* (2000)
-          - *Twitter* (280)
-          - *Viber* (7000)
-          - *WhatsApp* (3800)
-          - *Youtube* (8000)
-      type: "string"
-      example: "Body of the content"
-    ChannelUri:
-      description: "External URI of a content channel"
-      type: "string"
-      format: "uri"
-    ContentModel:
-      type: "object"
-      required:
-      - "id"
-      - "attachments"
-      - "authorIdentityId"
-      - "autoSubmitted"
-      - "body"
-      - "bodyFormatted"
-      - "bodyInputFormat"
-      - "categoryIds"
-      - "creationTime"
-      - "createdFrom"
-      - "creatorId"
-      - "inReplyToAuthorIdentityId"
-      - "inReplyToContentId"
-      - "interventionId"
-      - "language"
-      - "public"
-      - "published"
-      - "rating"
-      - "remotelyDeleted"
-      - "channelId"
-      - "channelType"
-      - "channelUri"
-      - "status"
-      - "synchronizationStatus"
-      - "synchronizationError"
-      - "threadId"
-      - "title"
-      - "type"
-      - "lastModifiedTime"
-      - "capabilitiesSupported"
-      properties:
-        attachments:
-          $ref: "#/components/schemas/ContentAttachments"
-        authorIdentityId:
-          $ref: "#/components/schemas/ContentAuthorIdentityId"
-        autoSubmitted:
-          $ref: "#/components/schemas/ContentAutoSubmittedField"
-        body:
-          $ref: "#/components/schemas/ContentBody"
-        bodyFormatted:
-          $ref: "#/components/schemas/ContentBodyFormatted"
-        bodyInputFormat:
-          $ref: "#/components/schemas/ContentBodyInputFormat"
-        categoryIds:
-          $ref: "#/components/schemas/ContentCategoryIds"
-        contentDirection:
-          $ref: "#/components/schemas/ContentDirection"
-        contextData:
-          $ref: "#/components/schemas/ContentContextData"
-        creationTime:
-          $ref: "#/components/schemas/SocMsgCreationTime"
-        createdFrom:
-          $ref: "#/components/schemas/ContentCreatedFrom"
-        creatorId:
-          $ref: "#/components/schemas/ContentCreatorId"
-        firstInThread:
-          $ref: "#/components/schemas/ContentFirstInThread"
-        foreignCategories:
-          $ref: "#/components/schemas/ContentForeignCategories"
-        id:
-          $ref: "#/components/schemas/ContentId"
-        inReplyToAuthorIdentityId:
-          $ref: "#/components/schemas/ContentInReplyToAuthorIdentityId"
-        inReplyToContentId:
-          $ref: "#/components/schemas/ContentInReplyToContentId"
-        interventionId:
-          $ref: "#/components/schemas/ContentInterventionId"
-        language:
-          $ref: "#/components/schemas/ContentLanguage"
-        public:
-          $ref: "#/components/schemas/ContentPublic"
-        published:
-          $ref: "#/components/schemas/ContentPublished"
-        rating:
-          $ref: "#/components/schemas/ContentRating"
-        remotelyDeleted:
-          $ref: "#/components/schemas/ContentRemotelyDeleted"
-        channelId:
-          $ref: "#/components/schemas/SocMsgChannelId"
-        channelType:
-          $ref: "#/components/schemas/SocMsgChannelType"
-        channelUri:
-          $ref: "#/components/schemas/ChannelUri"
-        status:
-          $ref: "#/components/schemas/ContentStatus"
-        synchronizationStatus:
-          $ref: "#/components/schemas/ContentSynchronizationStatus"
-        synchronizationError:
-          $ref: "#/components/schemas/ContentSynchronizationError"
-        threadId:
-          $ref: "#/components/schemas/ContentThreadId"
-        title:
-          $ref: "#/components/schemas/ContentTitle"
-        type:
-          $ref: "#/components/schemas/ContentType"
-        lastModifiedTime:
-          $ref: "#/components/schemas/SocMsgLastModifiedTime"
-        capabilitiesSupported:
-          $ref: "#/components/schemas/ContentCapabilitiesSupported"
-    SocMsgOrder:
-      description: "Ordering by creationTime and lastModifiedTime is descending by default."
-      type: "string"
-      enum:
-      - "-creationTime"
-      - "+creationTime"
-      - "creationTime"
-      - "-lastModifiedTime"
-      - "+lastModifiedTime"
-      - "lastModifiedTime"
-      default: "-creationTime"
-      example: "+creationTime"
-    SocMsgAttachmentEmbedded:
-      description: "Specifies if attachment is embedded in content"
-      type: "boolean"
-      example: false
-    SocMsgAttachmentContentType:
-      description: |
-        Type of attachment, which is generally a MIME attachment type like `image/jpeg`, etc.
-        Security level in RingCX determines what type of attachment is allowed.
-        Based on the security level the following attachment types are supported.
-
-        *'Strict'* level allows safe extensions below:
-        Content name and supported types:
-
-        - audio (AAC, MP3, OGG, M4A)
-        - image (BMP, GIF, JPG, JPEG, PNG, SVG, WEBP)
-        - pdf (PDF)
-        - text (CSV, TXT, LOG)
-        - video (AVI, FLV, M4V, MKV, MOV, MP4, MPG, QT, WMV)
-        - other (AMR, DMS, VCARD, TIF, TIFF, MPEG)
-
-        *'Relaxed'* level allows documents:
-        Content name and supported types:
-
-        - excel (XLS, XLSM, XLSX, XLC, XLT, XLTM, XLTX)
-        - presentation (KEY, ODP, OTP)
-        - powerpoint (PPS, PPT, PPTX, POT)
-        - spreadsheet (Numbers - ODS, OTS)
-        - word (DOC, DOCM, DOCX, DOTM, DOTX)
-        - word_processing (Pages - ODT, OTT, RTF)
-
-        *'Permissive'* level allows all documents.
-
-        However, there are no security level restrictions for content posted through the channel
-      type: "string"
-      example: "image/jpeg"
-    ContentLanguage:
-      description: "Language of the content"
-      type: "string"
-      example: "En"
-    ContentEmailAddresses:
-      type: "array"
-      minItems: 0
-      items:
-        $ref: "#/components/schemas/SocMsgEmailAddress"
-      description: |
-        Applicable to Email channels only.
-        An array containing the email addresses used in sections of the email.
-        This parameter is mandatory when initiating a discussion
-    ContentAuthorIdentityId:
-      description: |
-        Identity identifier of the content author. Not mandatory on creation,
-        by default it uses the token's user first identity on channel
-      type: "string"
-    ContentTemplateLanguage:
-      type: "string"
-      description: |
-        Applicable to WhatsApp channels only. Language of the WhatsApp template
-        to use for the content. All available template languages are visible on
-        the WhatsApp Business Manager interface. Language specified must conform
-        to the ISO 639-1 alpha-2 codes for representing the names of languages
-      example: "fr"
-    ContentInterventionId:
-      description: "Intervention identifier of the content"
-      type: "string"
-    ContentCapabilitiesSupported:
-      description: "Types of structured messages that can be used to reply to this type of message"
-      items:
-        type: "string"
-      type: "array"
-    SocMsgAttachmentUri:
-      description: "Attachment URI"
-      type: "string"
-      format: "uri"
-      example: "https://example.digital.ringcentral.com/files/attachments/54085e5b7aa58d8b5d00006c"
-    SocMsgEmailAddress:
-      description: "Email address."
-      type: "string"
-      format: "email"
-      example: "user@example.com"
-    ContentRating:
-      description: |
-        Rating of content. Present only if the content supports rating and rating is filled
-      type: "integer"
-      format: "int32"
-      example: 4
-    ContentId:
-      description: "Content identifier"
-      type: "string"
-    ContentSynchronizationStatus:
-      description: "Synchronization status"
-      type: "string"
-      example: "success"
-    ContentRemotelyDeleted:
-      description: "Set to `true` if content has been deleted on remote channel"
-      type: "boolean"
-      example: false
-    ContentPublic:
-      description: |
-        If set to `true`, then the content is publicly visible on remote channel.
-        Private content is NOT supported on every channel
-      type: "boolean"
-      default: true
-    ContentContextData:
-      description: |
-        Additional data of the content.
-        The `contextData` hash keys are the custom fields keys
-      type: "object"
-      additionalProperties:
-        type: "string"
-      example:
-        test1: "value1"
-        test2: "value2"
-    ContentInReplyToContentId:
-      description: |
-        Content identifier to which this content is a reply to. On creation, if omitted,
-        a new discussion will be created. If the channel does not support discussion initiation,
-        this parameter is mandatory
-      type: "string"
-    ContentPhoneNumbers:
-      type: "array"
-      minItems: 0
-      items:
-        $ref: "#/components/schemas/SocMsgPhoneNumber"
-      description: "Applicable to SMS, WhatsApp, and RingCX Messaging channels. \n\nFor WhatsApp and SMS contents, the phone number must be in E.164 format, for example, +33634231224.\nThis parameter is mandatory when initiating a new conversation. \n\nFor RingCX Messaging content, the value should be the foreign ID of the recipient's identity. \nThe outbound messaging option must be enabled. \nThis parameter is required when starting a new discussion and is forbidden when replying to an existing message.\n"
-    ContentBodyInputFormat:
-      description: "Content input format"
-      enum:
-      - "Text"
-      - "Html"
-      type: "string"
-    ContentDirection:
-      description: |
-        Direction of the content.
-
-        * Incoming contents are received from a channel.
-        * Outgoing contents are exported to a channel.
-      enum:
-      - "Incoming"
-      - "Outgoing"
-      type: "string"
-      example: "Incoming"
-    SocMsgChannelId:
-      description: "Channel identifier."
-      type: "string"
-      example: "506d9e817aa58d1259000f12"
-    SocMsgContentAttachment:
-      type: "object"
-      properties:
-        contentType:
-          $ref: "#/components/schemas/SocMsgAttachmentContentType"
-        creationTime:
-          $ref: "#/components/schemas/SocMsgCreationTime"
-        embedded:
-          $ref: "#/components/schemas/SocMsgAttachmentEmbedded"
-        filename:
-          $ref: "#/components/schemas/SocMsgAttachmentFilename"
-        id:
-          $ref: "#/components/schemas/SocMsgAttachmentId"
-        public:
-          $ref: "#/components/schemas/SocMsgAttachmentPublic"
-        size:
-          $ref: "#/components/schemas/SocMsgAttachmentSize"
-        lastModifiedTime:
-          $ref: "#/components/schemas/SocMsgLastModifiedTime"
-        uri:
-          $ref: "#/components/schemas/SocMsgAttachmentUri"
-    ContentForeignCategories:
-      description: |
-        External categories of the content.
-        Returned only if the content has `foreignCategories`
-      items:
-        type: "string"
-      type: "array"
-      minItems: 0
-      example:
-      - "foreign_category_id"
-    ContentFirstInThread:
-      description: "True if the content is the first in the thread."
-      type: "boolean"
-      example: false
-    ContentThreadId:
-      description: "Content thread identifier"
-      type: "string"
-    SocMsgAttachmentIds:
-      description: "List of attachment identifiers to be added to the content"
-      type: "array"
-      minItems: 0
-      items:
-        $ref: "#/components/schemas/SocMsgAttachmentId"
-      example:
-      - "541014e17aa58d8ccf000023"
-      - "541014e17aa58d8ccf000023"
-    ContentBodyFormatted:
-      description: "Text and HTML formatted versions of the content body"
-      type: "object"
-      properties:
-        html:
-          type: "string"
-        text:
-          type: "string"
-    ContentTitle:
-      description: |
-        Applicable to Email channels only. The subject of the email.
-        This field is mandatory when initiating a discussion
-      type: "string"
-      example: "An email title"
-    SocMsgAttachmentId:
-      description: "Identifier of the attachment."
-      type: "string"
-      example: "54085e5b7aa58d8b5d00006c"
-    SocMsgChannelType:
-      description: "Type of a channel"
-      type: "string"
-      enum:
-      - "AppleMessagesForBusiness"
-      - "Email"
-      - "EngageMessaging"
-      - "Facebook"
-      - "GoogleMyBusiness"
-      - "Instagram"
-      - "InstagramMessaging"
-      - "Linkedin"
-      - "Messenger"
-      - "Twitter"
-      - "Viber"
-      - "WhatsApp"
-      - "Youtube"
-    SocMsgAttachmentPublic:
-      description: "Attachment privacy setting"
-      type: "boolean"
-      example: false
-      default: true
-    ContentCreatorId:
-      description: "RingCentral user identifier of the creator"
-      type: "string"
-      example: "2683222036"
-    ContentStatuses:
-      type: "array"
-      items:
-        $ref: "#/components/schemas/ContentStatus"
-    IdentityTwDescription:
-      description: "Twitter description of the identity. Applicable to Twitter channels only"
-      type: "string"
-      example: "Software Engineer"
-    IdentityIdentityType:
-      description: "Either Agent or Customer"
-      type: "string"
-      enum:
-      - "Agent"
-      - "Customer"
-    IdentityTwLocation:
-      description: "Twitter location of the identity. Applicable to Twitter channels only"
-      type: "string"
-      example: "Paris"
-    IdentityAvatarURI:
-      description: "Identity's avatar URI"
-      type: "string"
-      format: "uri"
-      example: "https://example.com/assets/avatar/default-79fd530c58c2a6b83a11fcc0e842ed7023ceb69292cfeb857bc2af2c624b90fd.png"
-    IdentityMcc:
-      description: "Viber mobile country code of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "1"
-    IdentityApiVersion:
-      description: "Viber API version of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "10"
-    IdentityDeviceType:
-      description: "Viber device type of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "SM-G970U1"
-    IdentityTwStatusesCount:
-      description: "Count of tweets of the identity. Applicable to Twitter channels only"
-      type: "integer"
-      format: "int32"
-      example: 42
-    IdentityTwFollowingCount:
-      description: "Count of Twitter accounts followed by the identity. Applicable to Twitter channels only"
-      type: "integer"
-      format: "int32"
-      example: 500
-    SocMsgCompany:
-      description: "Company."
-      type: "string"
-      example: "Test Company"
-    IdentitiesList:
-      type: "object"
-      required:
-      - "records"
-      - "paging"
-      properties:
-        records:
-          type: "array"
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/IdentityModel"
-        paging:
-          $ref: "#/components/schemas/NonEnumeratedPagingModel"
-    IdentityModel:
-      type: "object"
-      required:
-      - "id"
-      - "type"
-      - "creationTime"
-      - "lastModifiedTime"
-      properties:
-        id:
-          $ref: "#/components/schemas/IdentityId"
-        avatarUri:
-          $ref: "#/components/schemas/IdentityAvatarURI"
-        company:
-          $ref: "#/components/schemas/SocMsgCompany"
-        creationTime:
-          $ref: "#/components/schemas/SocMsgCreationTime"
-        displayName:
-          $ref: "#/components/schemas/IdentityDisplayName"
-        emailAddress:
-          $ref: "#/components/schemas/SocMsgEmailAddress"
-        extraValues:
-          $ref: "#/components/schemas/IdentityExtraValues"
-        firstName:
-          $ref: "#/components/schemas/SocMsgFirstName"
-        gender:
-          $ref: "#/components/schemas/SocMsgGender"
-        homePhone:
-          $ref: "#/components/schemas/SocMsgPhoneNumber"
-        identityGroupId:
-          $ref: "#/components/schemas/IdentityGroupId"
-        identityType:
-          $ref: "#/components/schemas/IdentityIdentityType"
-        lastName:
-          $ref: "#/components/schemas/SocMsgLastName"
-        mobilePhone:
-          $ref: "#/components/schemas/SocMsgPhoneNumber"
-        screenName:
-          $ref: "#/components/schemas/IdentityScreenName"
-        type:
-          $ref: "#/components/schemas/IdentityType"
-        lastModifiedTime:
-          $ref: "#/components/schemas/SocMsgLastModifiedTime"
-        userIds:
-          $ref: "#/components/schemas/IdentityUserIds"
-        uuid:
-          $ref: "#/components/schemas/IdentityUUID"
-        mobileDeviceInfo:
-          $ref: "#/components/schemas/IdentityMobileDeviceInfo"
-        fbBio:
-          $ref: "#/components/schemas/IdentityFbBio"
-        fbCategory:
-          $ref: "#/components/schemas/IdentityFbCategory"
-        fbLocale:
-          $ref: "#/components/schemas/IdentityFbLocale"
-        igFollowersCount:
-          $ref: "#/components/schemas/IdentityIgFollowersCount"
-        twDescription:
-          $ref: "#/components/schemas/IdentityTwDescription"
-        twFollowersCount:
-          $ref: "#/components/schemas/IdentityTwFollowersCount"
-        twFollowingCount:
-          $ref: "#/components/schemas/IdentityTwFollowingCount"
-        twStatusesCount:
-          $ref: "#/components/schemas/IdentityTwStatusesCount"
-        twLocation:
-          $ref: "#/components/schemas/IdentityTwLocation"
-        apiVersion:
-          $ref: "#/components/schemas/IdentityApiVersion"
-        country:
-          $ref: "#/components/schemas/IdentityCountry"
-        deviceType:
-          $ref: "#/components/schemas/IdentityDeviceType"
-        language:
-          $ref: "#/components/schemas/IdentityLanguage"
-        mcc:
-          $ref: "#/components/schemas/IdentityMcc"
-        mnc:
-          $ref: "#/components/schemas/IdentityMnc"
-        primaryDeviceOs:
-          $ref: "#/components/schemas/IdentityPrimaryDeviceOs"
-        viberVersion:
-          $ref: "#/components/schemas/IdentityViberVersion"
-    IdentityGroupId:
-      description: |
-        Identity group identifier which references the identity group that contains
-        all information (phone, notes, etc). Multiple identities may belong to
-        a single group. If the parameter value is null, it means that identity
-        does not belong to a group or have extra information
-      type: "string"
-      example: "54085e5b7aa58d8b5d00006c"
-    IdentityPrimaryDeviceOs:
-      description: "Viber primary device OS of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "Android 11"
-    IdentityId:
-      type: "string"
-      description: "Identity identifier."
-      example: "506d9e817aa58d1259000f12"
-    IdentityCountry:
-      description: "Viber country of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "FR"
-    IdentityFbBio:
-      description: "Facebook biography of the identity. Applicable to Facebook and Messenger channels only"
-      type: "string"
-      example: "Painter living in Paris"
-    IdentityLanguage:
-      description: "Viber language of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "fr-FR"
-    SocMsgLastName:
-      description: "LastName."
-      type: "string"
-      example: "Doe"
-    IdentityExtraValues:
-      description: "Additional data to store along with identity"
-      type: "object"
-      additionalProperties:
-        type: "string"
-      example:
-        key: "value"
-    IdentityMnc:
-      description: "Viber mobile network code of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "220"
-    IdentityViberVersion:
-      description: "Viber application version of the identity. Applicable to Viber channels only"
-      type: "string"
-      example: "19.5.0"
-    IdentityFbCategory:
-      description: "Facebook category of the identity. Applicable to Facebook and Messenger channels only"
-      type: "string"
-      example: "Computers/Internet"
-    SocMsgFirstName:
-      description: "FirstName."
-      type: "string"
-      example: "John"
-    SocMsgGender:
-      description: "Gender."
-      type: "string"
-      example: "Woman"
-      enum:
-      - "Man"
-      - "Woman"
-      nullable: true
-    IdentityTwFollowersCount:
-      description: "Twitter followers count of the identity. Applicable to Twitter channels only"
-      type: "integer"
-      format: "int32"
-      example: 10
-    IdentityScreenName:
-      description: "Screen name of identity"
-      type: "string"
-      example: "John D."
-    IdentityFbLocale:
-      description: "Facebook locale of the identity. Applicable to Facebook and Messenger channels only"
-      type: "string"
-      example: "fr_FR"
-    IdentityMobileDeviceInfo:
-      description: "Device info of the identity. Applicable to RingCX Digital Messaging channels only"
-      type: "string"
-      example: "iPhone (iPhone); iOS 15.0.2"
-    IdentityUserIds:
-      description: "List of the associated user identifiers who can use the identity"
-      items:
-        type: "string"
-        example: "54085e5b7aa58d8b5d00006c"
-      type: "array"
-      minItems: 0
-    IdentityType:
-      description: "Type of identity"
-      type: "string"
-      enum:
-      - "AppleMessagesForBusiness"
-      - "Email"
-      - "EngageMessaging"
-      - "Facebook"
-      - "GoogleMyBusiness"
-      - "Instagram"
-      - "Linkedin"
-      - "Twitter"
-      - "Viber"
-      - "WhatsApp"
-      - "Youtube"
-    IdentityIgFollowersCount:
-      description: "Instagram followers count of the identity. Applicable to Instagram and InstagramMessaging channels only"
-      type: "integer"
-      format: "int32"
-      example: 10
-    IdentityDisplayName:
-      description: "Display name of identity"
-      type: "string"
-      example: "John Doe"
-    IdentityUUID:
-      description: "UUID of identity"
-      type: "string"
-      example: "9680ab94-3b78-495c-bb2c-a969954d8260"
     ScimErrorResponse:
       type: "object"
       properties:
@@ -40727,6 +39957,50 @@ components:
             $ref: "#/components/schemas/ScimSchemaAttribute"
         meta:
           $ref: "#/components/schemas/ScimMeta"
+    ScimUserShortInfo:
+      required:
+      - "emails"
+      - "name"
+      - "schemas"
+      - "userName"
+      type: "object"
+      properties:
+        active:
+          type: "boolean"
+          description: "User status"
+          default: false
+        emails:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ScimEmail"
+        externalId:
+          type: "string"
+          description: "External unique resource ID defined by provisioning client"
+        id:
+          type: "string"
+          description: "Unique resource ID defined by RingCentral"
+        name:
+          $ref: "#/components/schemas/ScimName"
+        photos:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ScimPhoto"
+        schemas:
+          type: "array"
+          items:
+            type: "string"
+            enum:
+            - "urn:ietf:params:scim:schemas:core:2.0:User"
+        title:
+          type: "string"
+          description: "User title"
+        urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:
+          $ref: "#/components/schemas/ScimEnterpriseUser"
+        userName:
+          type: "string"
+          description: "MUST be same as work type email address"
+        meta:
+          $ref: "#/components/schemas/ScimMeta"
     ScimEnterpriseUser:
       type: "object"
       properties:
@@ -40758,7 +40032,7 @@ components:
           type: "array"
           description: "User list"
           items:
-            $ref: "#/components/schemas/ScimUserResponse"
+            $ref: "#/components/schemas/ScimUserShortInfo"
         itemsPerPage:
           type: "integer"
           format: "int64"
@@ -42353,7 +41627,9 @@ components:
           description: "Count of iterations of periodic tasks"
         endingOn:
           type: "string"
-          description: "End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) \nformat, UTC time zone\n"
+          description: |
+            End date of a periodic task in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
+            format, UTC time zone
           format: "date-time"
     TMUpdateTaskRequest:
       type: "object"
@@ -42583,7 +41859,10 @@ components:
       properties:
         schedule:
           type: "string"
-          description: "Event recurrence settings. For non-periodic events the value \nis `None`. Must be greater or equal to event duration: 1- Day/Weekday; \n7 - Week; 28 - Month; 365 - Year\n"
+          description: |
+            Event recurrence settings. For non-periodic events the value
+            is `None`. Must be greater or equal to event duration: 1- Day/Weekday;
+            7 - Week; 28 - Month; 365 - Year
           enum:
           - "None"
           - "Day"
@@ -42601,10 +41880,14 @@ components:
         endingAfter:
           type: "integer"
           format: "int32"
-          description: "Count of event iterations. For periodic events only. Value range is 1 - 10. \nMust be specified if `endingCondition` is `Count`\n"
+          description: |
+            Count of event iterations. For periodic events only. Value range is 1 - 10.
+            Must be specified if `endingCondition` is `Count`
         endingOn:
           type: "string"
-          description: "Iterations ending datetime for periodic events in \n[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format\n"
+          description: |
+            Iterations ending datetime for periodic events in
+            [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format
           format: "date-time"
     TMEventInfo:
       type: "object"
@@ -42868,6 +42151,13 @@ components:
           - "File"
           - "Note"
           - "Task"
+        contentUri:
+          type: "string"
+          format: "uri"
+          description: "Link to a binary content"
+        name:
+          type: "string"
+          description: "Name of a file"
         fallback:
           type: "string"
           description: "A string of default text that will be rendered in the case that the client does not support Interactive Messages"
@@ -44264,6 +43554,13 @@ components:
       required: true
       schema:
         type: "string"
+    MetadataId:
+      name: "metadataId"
+      in: "path"
+      description: "Internal identifier of a metadata"
+      required: true
+      schema:
+        type: "string"
     ExtensionId:
       name: "extensionId"
       in: "path"
@@ -44652,10 +43949,11 @@ components:
       name: "accessibleSitesOnly"
       in: "query"
       required: false
+      description: |
+        Allows to make lookups across a whole directory skipping a filtering logic of Cross-Site access management feature.
       schema:
         type: "boolean"
-      description: "Flag to enable cross-site limitation checking"
-      example: true
+        default: true
     IfNoneMatch:
       name: "If-None-Match"
       in: "header"
@@ -44666,6 +43964,16 @@ components:
         otherwise `HTTP 304 Not Modified` status is returned.
       schema:
         type: "string"
+    DeviceFeature:
+      name: "feature"
+      in: "query"
+      description: "Device feature or multiple features supported"
+      style: "form"
+      explode: true
+      schema:
+        type: "array"
+        items:
+          $ref: "#/components/schemas/DeviceFeatureEnum"
     CallLogShowBlocked:
       name: "showBlocked"
       in: "query"
@@ -44751,147 +44059,30 @@ components:
       schema:
         type: "string"
       example: "JohnDoe"
-    FilterInterventionIds:
-      in: "query"
-      name: "interventionIds"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified intervention identifiers"
-      example:
-      - "7f946431b6eebffafae642cc"
-      - "re946431b6eebffafae642cc"
-    FilterAuthorIdentityGroupIds:
-      in: "query"
-      name: "authorIdentityGroupIds"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified identity group identifiers"
-      example:
-      - "7f946431b6eebffafae642cc"
-      - "re946431b6eebffafae642cc"
-    FilterContentDirection:
-      in: "query"
-      name: "contentDirection"
-      required: false
-      description: "Filter for specified content direction."
-      example: "Incoming"
-      schema:
-        $ref: "#/components/schemas/ContentDirection"
-    FilterStatus:
-      in: "query"
-      name: "status"
-      required: false
-      description: "Filter for specified status"
-      schema:
-        $ref: "#/components/schemas/ContentStatuses"
-    FilterThreadIds:
-      in: "query"
-      name: "threadIds"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified thread identifiers"
-      example:
-      - "7f946431b6eebffafae642cc"
-    FilterText:
-      in: "query"
-      name: "text"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified text(s). Provided multiple times, the values are ANDed"
-    FilterChannelIds:
-      in: "query"
-      name: "channelIds"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified channel identifiers"
-      example:
-      - "7f946431b6eebffafae642cc"
-    SocMsgOrderBy:
-      in: "query"
-      name: "orderBy"
-      required: false
-      description: "Order results by specified field."
-      schema:
-        $ref: "#/components/schemas/SocMsgOrder"
-    FilterAuthorIdentityIds:
-      in: "query"
-      name: "authorIdentityIds"
-      required: false
-      schema:
-        type: "array"
-        items:
-          type: "string"
-      description: "Filter based on the specified identity identifiers"
-      example:
-      - "7f946431b6eebffafae642cc"
-      - "re946431b6eebffafae642cc"
-    ContentId:
+    RecordingDomain:
+      name: "domain"
       in: "path"
-      name: "contentId"
-      description: "Internal identifier of the content"
+      description: |
+        The product domain from which a particular recording was originated. The only supported option for now is `pbx`
       required: true
       schema:
-        type: "string"
-    FilterIdentityType:
-      name: "identityType"
-      description: "Filter based on the specified `identityType`"
+        $ref: "#/components/schemas/RecordingDomain"
+    RecordingInsightTypes:
+      name: "insightTypes"
       in: "query"
-      required: false
-      schema:
-        $ref: "#/components/schemas/IdentityIdentityType"
-    FilterIdentityGroupIds:
-      name: "identityGroupIds"
-      description: "Filter based on the specified `identityGroupIds` (separated by commas)"
-      in: "query"
+      description: "Specifies the types of insight objects to be returned in the response. If omitted, all insight types will be returned. Multiple values are supported"
       required: false
       style: "form"
       explode: false
       schema:
-        type: "array"
-        items:
-          type: "string"
-    FilterUUID:
-      name: "uuid"
-      description: "Filter based on the specified `uuid`"
-      in: "query"
-      required: false
-      schema:
-        type: "string"
-    FilterUserId:
-      name: "userId"
-      description: "Filter based on the specified `userId`"
-      in: "query"
-      required: false
-      schema:
-        type: "string"
-    FilterChannelId:
-      name: "channelId"
-      description: "Filter based on the specified channelId."
-      in: "query"
-      required: false
-      schema:
-        type: "string"
-    IdentityId:
+        $ref: "#/components/schemas/AIInsightsTypes"
+    SourceRecordId:
+      name: "sourceRecordId"
       in: "path"
-      name: "identityId"
       required: true
+      description: "Recording ID of the domain"
       schema:
-        $ref: "#/components/schemas/IdentityId"
+        $ref: "#/components/schemas/SourceRecordId"
     ScimUserId:
       name: "scimUserId"
       in: "path"
@@ -45022,6 +44213,20 @@ components:
         deliveryMode:
           transportType: "PubNub"
           encryption: true
+    CreateSubscriptionReminderSet:
+      summary: "ReminderSet"
+      value:
+        uri: "https://platform.ringcentral.com/restapi/v1.0/subscription/dd2f0ff2-580e-4581-a277-76f9c9a54bc11"
+        id: "dd2f0ff2-580e-4581-a277-76f9c9a54bc11"
+        creationTime: "2024-03-30T11:16:23.162Z"
+        status: "Active"
+        eventFilters:
+        - "/restapi/v1.0/account/~/extension/~/unified-presence"
+        - "/restapi/v1.0/subscription/~?threshold=259200&interval=43200"
+        expiresIn: 5000000
+        deliveryMode:
+          transportType: "WebHook"
+          address: "https://consumer-host.example.com/consumer/path"
     CreateSubscriptionResponsePubnub:
       summary: "PubNub"
       value:
@@ -45041,321 +44246,6 @@ components:
           secretKey: "y943yr9834ry394yriy4489yr93y4r983y4r3894ry94"
           encryptionAlgorithm: "AES"
           encryptionKey: "0mWk/6SMiSz191u2dV5drg=="
-    EDI-006:
-      summary: "Invalid content type"
-      value:
-        errors:
-        - errorCode: "EDI-006"
-          message: "Cannot find a content class corresponding to the requested action: [${requestActionType}]"
-    EDI-005:
-      summary: "Structured content type is not supported on the channel"
-      value:
-        errors:
-        - errorCode: "EDI-005"
-          message: "Channel does not support this type of structured content"
-    EDI-008:
-      summary: "Invalid parameter type"
-      value:
-        errors:
-        - errorCode: "EDI-008"
-          message: "[${parameter}] param value must be a [${expectedClass}], got [${extraValuesClass}]"
-        - errorCode: "EDI-008"
-          message: "[${parameterName}] must be a hash, got [${extraValuesClass}]"
-    EDI-007:
-      summary: "Attachment already used on another content"
-      value:
-        errors:
-        - errorCode: "EDI-007"
-          message: "Attachment is already used by an other content"
-    EDI-002:
-      summary: "Structured contents require a type attribute"
-      value:
-        errors:
-        - errorCode: "EDI-002"
-          message: "type is required for structured contents"
-    EDI-001:
-      summary: "Privacy attribute error"
-      value:
-        errors:
-        - errorCode: "EDI-001"
-          message: "Public and private parameters must not be used at the same time, use public parameter only"
-    CreateContentWithAttachments:
-      summary: "An example for Create content with attachments"
-      value:
-        authorIdentityId: "541014e17aa58d8ccf000023"
-        inReplyToContentId: "541014e17aa58d8ccf000023"
-        body: "This is a sample body for a private content with attachments"
-        public: false
-        attachmentIds:
-        - "541014e17aa58d8ccf000023"
-        - "541014e17aa58d8ccf000043"
-    EDI-004:
-      summary: "Compose not supported on the channel"
-      value:
-        errors:
-        - errorCode: "EDI-004"
-          message: "Compose is not supported on this channel"
-    EDI-003:
-      summary: "Private compose is not supported on the channel"
-      value:
-        errors:
-        - errorCode: "EDI-003"
-          message: "Private compose is not supported on this channel, try adding public=true parameter"
-    ReplyContentOnEmailChannel:
-      summary: "Reply to a content on an Email channel"
-      value:
-        inReplyToContentId: "541014e17aa58d8ccf001023"
-        title: "Reply to the message"
-        to:
-        - "test@example.com"
-        cc:
-        - "test.cc@test.com"
-        bcc:
-        - "test.bcc@test.com"
-        body: "Sample email content"
-    EDI-009:
-      summary: "An attribute is missing"
-      value:
-        errors:
-        - errorCode: "EDI-009"
-          message: "[${parameterName}] is required"
-    CreateContentWithAuthorIdentityId:
-      summary: "An example for Create content with authorIdentityId"
-      value:
-        authorIdentityId: "541014e17aa58d8ccf000023"
-        inReplyToContentId: "541014e17aa58d8ccf000063"
-        body: "This is a sample content body for a private content with authorIdentityId specified"
-        public: false
-    CreateContentWithChannelId:
-      summary: "An example for Create content with channelId"
-      value:
-        channelId: "541014e17aa58d8ccf000023"
-        body: "This is a sample content body"
-    EDI-028:
-      summary: "Search query is invalid"
-      value:
-        errors:
-        - errorCode: "EDI-028"
-          message: "Search query is invalid"
-        - errorCode: "EDI-028"
-          message: "Searching identity groups by \"firstname\" only is disabled, please provide \"lastname\""
-    EDI-027:
-      summary: "Attribute array format error"
-      value:
-        errors:
-        - errorCode: "EDI-027"
-          message: "parameters [${brokenParameters}] should be arrays and need to be formatted like this: [${formattedParameters}]"
-    EDI-029:
-      summary: "Resource not found"
-      value:
-        errors:
-        - errorCode: "EDI-029"
-          message: "Resource not found"
-    EDI-024:
-      summary: "Content creation is not permitted (channel-specific validations)"
-      value:
-        errors:
-        - errorCode: "EDI-024"
-          message: "You cannot create the content (channel-specific validations)."
-    EDI-023:
-      summary: "Private messages cannot be sent without a recipient"
-      value:
-        errors:
-        - errorCode: "EDI-023"
-          message: "Cannot send private messages without a recipient."
-    EDI-025:
-      summary: "An attribute is missing"
-      value:
-        errors:
-        - errorCode: "EDI-025"
-          message: "Missing required parameter: \"[${parameterName}]\""
-    EDI-020:
-      summary: "A channel is required to create this message"
-      value:
-        errors:
-        - errorCode: "EDI-020"
-          message: "You need a channel to create this message."
-    EDI-022:
-      summary: "Recipient does not allow private messages"
-      value:
-        errors:
-        - errorCode: "EDI-022"
-          message: "Recipient does not allow private messages."
-    EDI-021:
-      summary: "Replying to this content is not possible for the moment"
-      value:
-        errors:
-        - errorCode: "EDI-021"
-          message: "It is not possible to reply to this content right now."
-    CreateContentOnEmailChannel:
-      summary: "An example for Create content on an Email channel"
-      value:
-        title: "Title of the message"
-        to:
-        - "test@example.com"
-        cc:
-        - "test.cc@test.com"
-        bcc:
-        - "test.bcc@test.com"
-        body: "Sample email content"
-        channelId: "541014e17aa58d8ccf000093"
-    EDI-017:
-      summary: "The agent is not authorized to create a new discussion on this channel"
-      value:
-        errors:
-        - errorCode: "EDI-017"
-          message: "Agent is not authorized to create a new discussion on this channel."
-    EDI-016:
-      summary: "The channel does not support creation of new discussions"
-      value:
-        errors:
-        - errorCode: "EDI-016"
-          message: "Channel does not support creation of new discussions."
-    EDI-019:
-      summary: "The agent is not authorized to reply on this channel"
-      value:
-        errors:
-        - errorCode: "EDI-019"
-          message: "Agent is not authorized to reply on this channel."
-    EDI-018:
-      summary: "An identity is required to reply to this message"
-      value:
-        errors:
-        - errorCode: "EDI-018"
-          message: "You need an identity to reply to this message."
-    EDI-013:
-      summary: "A conversation cannot be open on an agent message"
-      value:
-        errors:
-        - errorCode: "EDI-013"
-          message: "Cannot open a conversation on agent message."
-    EDI-012:
-      summary: "Allowed parameters are limited when sending an outbound message"
-      value:
-        errors:
-        - errorCode: "EDI-012"
-          message: "Only allowed parameters when sending an outbound message are [${parameterNames}]"
-    EDI-015:
-      summary: "The content already has an open conversation"
-      value:
-        errors:
-        - errorCode: "EDI-015"
-          message: "Content already has an open conversation."
-    EDI-014:
-      summary: "Reply to the content is not possible"
-      value:
-        errors:
-        - errorCode: "EDI-014"
-          message: "You cannot reply to ${messageType}."
-    EDI-011:
-      summary: "A parameter must be an array"
-      value:
-        errors:
-        - errorCode: "EDI-011"
-          message: "[${parameterName}] needs to be an array"
-    EDI-010:
-      summary: "Attachments are not supported for this type of content"
-      value:
-        errors:
-        - errorCode: "EDI-010"
-          message: "Attachments are not supported for this type of content"
-    CreateOutboundContentOnWhatsAppChannel:
-      summary: "An example for Create outbound content for WhatsApp channel"
-      value:
-        channelId: "5c1bd9c7d6cb0053da1e9d78"
-        to:
-        - "+33620202020"
-        templateName: "test_template_name"
-        templateLanguage: "en"
-    CreateContentWithInReplyToContentId:
-      summary: "An example for Create content with inReplyToContentId"
-      value:
-        inReplyToContentId: "541014e17aa58d8ccf000023"
-        body: "content body"
-    EDI-040:
-      summary: "Some attributes are invalid"
-      value:
-        errors:
-        - errorCode: "EDI-040"
-          message: "Invalid parameters provided"
-    EDI-038:
-      summary: "A pagination attribute is invalid"
-      value:
-        errors:
-        - errorCode: "EDI-038"
-          message: "\"[${parameterName}]\" param is invalid"
-    CreateContentWithContextData:
-      summary: "An example for Create content with contextData"
-      value:
-        inReplyToContentId: "541014e17aa58d8ccf000093"
-        body: "This is a sample content body for a content with contextData"
-        contextData:
-          additionalContextData1: "context data 1"
-          additionalContextData2: "context data 2"
-    EDI-035:
-      summary: "Inefficient query"
-      value:
-        errors:
-        - errorCode: "EDI-035"
-          message: "Inefficient query"
-    EDI-034:
-      summary: "Invalid offset"
-      value:
-        errors:
-        - errorCode: "EDI-034"
-          message: "Invalid offset"
-    EDI-037:
-      summary: "Impersonation error"
-      value:
-        errors:
-        - errorCode: "EDI-037"
-          message: "Impersonation error"
-    EDI-036:
-      summary: "Inefficient sort"
-      value:
-        errors:
-        - errorCode: "EDI-036"
-          message: "Inefficient sort"
-    EDI-031:
-      summary: "A value in the payload is invalid"
-      value:
-        errors:
-        - errorCode: "EDI-031"
-          message: "Invalid value"
-          details: "Value of type Array cannot be written to a field of type Hash"
-    EDI-030:
-      summary: "The format of the payload is invalid"
-      value:
-        errors:
-        - errorCode: "EDI-030"
-          message: "Invalid format"
-    EDI-033:
-      summary: "Validation error"
-      value:
-        errors:
-        - errorCode: "EDI-033"
-          message: "[${resourceType}] cannot be saved"
-          details: "Author cannot be blank"
-        - errorCode: "EDI-033"
-          message: "[${resourceType}] cannot be saved"
-          details: "Message cannot be blank"
-        - errorCode: "EDI-033"
-          message: "[${resourceType}] cannot be saved"
-          details: "Email format is invalid"
-        - errorCode: "EDI-033"
-          message: "[${resourceType}] cannot be saved"
-          details: "File is invalid"
-    EDI-032:
-      summary: "Invalid id"
-      value:
-        errors:
-        - errorCode: "EDI-032"
-          message: "Invalid id: [${invalidId}]"
-    ReplyContentOnWhatsAppChannel:
-      summary: "A reply example to a WhatsApp channel content"
-      value:
-        body: "Test whatsApp content"
-        inReplyToContentId: "63e664a9713368687b6ef4e4"
   requestBodies:
     SummaryCallbackRequest:
       description: "Summary Callback Output"
@@ -45539,61 +44429,3 @@ components:
                   format: "date-time"
             - $ref: "#/components/schemas/InteractionApiResponse"
       required: true
-    CreateContentRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: "object"
-            properties:
-              authorIdentityId:
-                $ref: "#/components/schemas/ContentAuthorIdentityId"
-              body:
-                $ref: "#/components/schemas/ContentBody"
-              inReplyToContentId:
-                $ref: "#/components/schemas/ContentInReplyToContentId"
-              public:
-                $ref: "#/components/schemas/ContentPublic"
-              channelId:
-                $ref: "#/components/schemas/SocMsgChannelId"
-              attachmentIds:
-                $ref: "#/components/schemas/SocMsgAttachmentIds"
-              title:
-                $ref: "#/components/schemas/ContentTitle"
-              to:
-                anyOf:
-                - $ref: "#/components/schemas/ContentPhoneNumbers"
-                - $ref: "#/components/schemas/ContentEmailAddresses"
-              cc:
-                $ref: "#/components/schemas/ContentEmailAddresses"
-              bcc:
-                $ref: "#/components/schemas/ContentEmailAddresses"
-              templateName:
-                $ref: "#/components/schemas/ContentTemplateName"
-              templateLanguage:
-                $ref: "#/components/schemas/ContentTemplateLanguage"
-              components:
-                $ref: "#/components/schemas/ContentComponents"
-              contextData:
-                $ref: "#/components/schemas/ContentContextData"
-              autoSubmitted:
-                $ref: "#/components/schemas/ContentAutoSubmittedField"
-          examples:
-            Create content with inReplyToContentId:
-              $ref: "#/components/examples/CreateContentWithInReplyToContentId"
-            Create content with channelId:
-              $ref: "#/components/examples/CreateContentWithChannelId"
-            Create content with attachments:
-              $ref: "#/components/examples/CreateContentWithAttachments"
-            Create content with specified authorIdentityId:
-              $ref: "#/components/examples/CreateContentWithAuthorIdentityId"
-            Create content with context data:
-              $ref: "#/components/examples/CreateContentWithContextData"
-            Create content for Email channel:
-              $ref: "#/components/examples/CreateContentOnEmailChannel"
-            Reply to a content for Email channel:
-              $ref: "#/components/examples/ReplyContentOnEmailChannel"
-            Create content for WhatsApp channel:
-              $ref: "#/components/examples/CreateOutboundContentOnWhatsAppChannel"
-            Reply to a whatsapp content:
-              $ref: "#/components/examples/ReplyContentOnWhatsAppChannel"
