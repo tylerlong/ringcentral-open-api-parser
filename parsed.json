@@ -41106,7 +41106,7 @@
       ]
     },
     {
-      "name": "RSConversationalInsightsUnit",
+      "name": "HighlightsInsightUnit",
       "fields": [
         {
           "type": "string",
@@ -41212,7 +41212,7 @@
       ]
     },
     {
-      "name": "RSConversationalInsightsUnit",
+      "name": "NextStepsInsightUnit",
       "fields": [
         {
           "type": "string",
