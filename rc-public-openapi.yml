@@ -15,10 +15,6 @@ servers:
   description: "Production API entry point"
 - url: "https://media.ringcentral.com"
   description: "Production Media entry point"
-- url: "https://platform.devtest.ringcentral.com"
-  description: "Developer sandbox API entry point"
-- url: "https://platform.devtest.ringcentral.com"
-  description: "Developer sandbox Media entry point"
 x-tagGroups:
 - name: "Voice"
   popular: true
@@ -2676,7 +2672,7 @@ paths:
         schema:
           type: "array"
           items:
-            $ref: "#/components/schemas/PhoneNumberUsageType"
+            $ref: "#/components/schemas/PhoneNumberUsageTypeV2"
       - name: "status"
         in: "query"
         required: false
@@ -3164,8 +3160,6 @@ paths:
       description: |
         Deletes user extension(s) and either keeps or destroys the assets - numbers and devices.
         Multiple extensions can be deleted with a single API call.
-
-        **Please note:** This API cannot be tested on Sandbox.
       operationId: "bulkDeleteUsersV2"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -4843,6 +4837,7 @@ paths:
       - $ref: "#/components/parameters/CallLogDateTo"
       - $ref: "#/components/parameters/CallLogSessionId"
       - $ref: "#/components/parameters/CallLogTelephonySessionId"
+      - $ref: "#/components/parameters/CallMetadataCategory"
       - name: "page"
         in: "query"
         description: "Indicates the page number to retrieve. Only positive number values are accepted"
@@ -4960,6 +4955,7 @@ paths:
           default: false
       - $ref: "#/components/parameters/CallLogWithRecording"
       - $ref: "#/components/parameters/CallRecordingType"
+      - $ref: "#/components/parameters/CallMetadataCategory"
       responses:
         "200":
           description: "Success"
@@ -7544,6 +7540,7 @@ paths:
           - "ParkLocation"
           - "Limited"
           - "External"
+          - "DelegatedLinesGroup"
       - name: "typeGroup"
         in: "query"
         description: "Type of extension group"
@@ -7637,6 +7634,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ADGErrorResponse"
+        "404":
+          description: "EntryId is not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ADGErrorResponse"
         "500":
           description: "Some unexpected error during current request processing"
           content:
@@ -7663,33 +7666,44 @@ paths:
       - $ref: "#/components/parameters/AccessibleSitesOnly"
       - name: "accountId"
         in: "query"
-        description: "A list of Account IDs"
+        deprecated: true
+        description: "A list of Account IDs. Deprecated, use the appropriate body field 'accountIds' instead."
         schema:
-          type: "string"
-          example: "400131426008"
+          type: "array"
+          items:
+            type: "string"
+            example: "400131426008"
       - name: "department"
         in: "query"
-        description: "A list of department names"
+        deprecated: true
+        description: "Department name. Deprecated, use the appropriate body field 'department' instead."
         schema:
           type: "string"
           example: "North office"
       - name: "siteId"
         in: "query"
-        description: "A list of Site IDs"
+        deprecated: true
+        description: "A list of Site IDs. Deprecated, use the appropriate body field 'siteIds' instead."
         schema:
-          type: "string"
-          example: "872781797006"
+          type: "array"
+          items:
+            type: "string"
+            example: "872781797006"
       - name: "extensionStatus"
         in: "query"
-        description: "Extension current state"
+        deprecated: true
+        description: "List of extension current statuses. Deprecated, use the appropriate body field 'extensionStatuses' instead."
         schema:
-          type: "string"
-          example: "Enabled"
+          type: "array"
+          items:
+            type: "string"
+            example: "Enabled"
       - name: "extensionType"
         in: "query"
-        description: "Extension types"
+        deprecated: true
+        description: "List of extension types. Deprecated, use the appropriate body field 'extensionTypes' instead."
         schema:
-          $ref: "#/components/schemas/SearchDirectoryExtensionType"
+          $ref: "#/components/schemas/SearchDirectoryExtensionTypes"
       requestBody:
         content:
           application/json:
@@ -7752,6 +7766,12 @@ paths:
                 $ref: "#/components/schemas/FederationResource"
         "400":
           description: "Current request cannot be processed due to error in its body and/or url"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ADGErrorResponse"
+        "404":
+          description: "Account is not federated."
           content:
             application/json:
               schema:
@@ -8966,11 +8986,7 @@ paths:
       tags:
       - "User Settings"
       summary: "List Extension Grants"
-      description: |
-        Returns the list of extensions with information on grants
-        given to the current extension regarding them. Currently the list of grants
-        include: picking up a call, monitoring, calling or receiving a call on behalf
-        of somebody, call delegation and calling paging groups.
+      description: "Returns a list of extensions including information on grants given to the current extension towards them. \nCurrently the list of grants includes: picking up a call, call monitoring, calling or receiving a call on behalf\nof somebody, call delegation and calling paging groups.\n"
       operationId: "listExtensionGrants"
       parameters:
       - $ref: "#/components/parameters/AccountId"
@@ -8979,27 +8995,29 @@ paths:
         in: "query"
         description: |
           Type of extension to be returned. Multiple values are supported.
-          Please note that legacy 'Department' extension type corresponds
-          to 'Call Queue' extensions in modern RingCentral product terminology
+          **Please note that legacy 'Department' extension type corresponds
+          to 'Call Queue' extensions in modern RingCentral product terminology**
         schema:
-          type: "string"
-          enum:
-          - "User"
-          - "FaxUser"
-          - "VirtualUser"
-          - "DigitalUser"
-          - "Department"
-          - "Announcement"
-          - "Voicemail"
-          - "SharedLinesGroup"
-          - "PagingOnly"
-          - "IvrMenu"
-          - "ApplicationExtension"
-          - "ParkLocation"
-          - "Limited"
-          - "Bot"
-          - "Room"
-          - "DelegatedLinesGroup"
+          type: "array"
+          items:
+            type: "string"
+            enum:
+            - "User"
+            - "FaxUser"
+            - "VirtualUser"
+            - "DigitalUser"
+            - "Department"
+            - "Announcement"
+            - "Voicemail"
+            - "SharedLinesGroup"
+            - "PagingOnly"
+            - "IvrMenu"
+            - "ApplicationExtension"
+            - "ParkLocation"
+            - "Limited"
+            - "Bot"
+            - "Room"
+            - "DelegatedLinesGroup"
       - name: "page"
         in: "query"
         description: |
@@ -9411,7 +9429,7 @@ paths:
           $ref: "#/components/schemas/SyncTypeEnum"
       - name: "voicemailOwner"
         in: "query"
-        description: "Filters voicemail messages based on the owner extension. Supported if the 'SharedVoicemail' \nfeature is enabled.\n"
+        description: "Deprecated. Filters voicemail messages based on the owner extension. Supported if the 'SharedVoicemail' \nfeature is enabled.\n"
         schema:
           oneOf:
           - type: "string"
@@ -9424,6 +9442,28 @@ paths:
             items:
               type: "string"
               description: "Internal identifier of an extension"
+      - name: "owner"
+        in: "query"
+        description: "Filters shared messages based on the owner extension. Supported if the 'SharedVoicemail' or 'CallQueueSmsRecipient' \nfeature is enabled.\n"
+        schema:
+          oneOf:
+          - type: "string"
+            default: "Personal"
+            enum:
+            - "Any"
+            - "Personal"
+            - "Shared"
+          - type: "array"
+            items:
+              type: "string"
+              description: "Internal identifier of an extension"
+      - name: "ownerExtensionType"
+        in: "query"
+        description: "Filters shared messages based on the owner extension type. Supported if \"SharedVoicemail\" or \"CallQueueSmsRecipient\" \nfeature is enabled.\n"
+        schema:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ExtensionType"
       responses:
         "200":
           description: "Success"
@@ -9571,6 +9611,7 @@ paths:
       - $ref: "#/components/parameters/CallLogDateTo"
       - $ref: "#/components/parameters/CallLogDateFrom"
       - $ref: "#/components/parameters/CallLogTelephonySessionId"
+      - $ref: "#/components/parameters/CallMetadataCategory"
       - name: "page"
         in: "query"
         description: "Indicates the page number to retrieve. Only positive number values are allowed"
@@ -9732,6 +9773,7 @@ paths:
           default: false
       - $ref: "#/components/parameters/CallLogWithRecording"
       - $ref: "#/components/parameters/CallRecordingType"
+      - $ref: "#/components/parameters/CallMetadataCategory"
       responses:
         "200":
           description: "Successful response"
@@ -11629,6 +11671,7 @@ paths:
         - `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;
         - `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);
         - `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.
+        - `PermissionLimitation` - a feature is unavailable due to a specific permission this extension has.
 
         Also, some features may have additional parameters, e.g. limits, which are returned in `params` attribute as a name-value collection:
 
@@ -11781,6 +11824,27 @@ paths:
           particular phone number only
         schema:
           type: "string"
+      - name: "voicemailOwner"
+        in: "query"
+        description: "Deprecated. Filters voicemail messages based on the owner extension. Supported if the 'SharedVoicemail' \nfeature is enabled.\n"
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      - name: "owner"
+        in: "query"
+        description: "Filters shared messages based on the owner extension. Supported if the 'SharedVoicemail' or 'CallQueueSmsRecipient' \nfeature is enabled.\n"
+        schema:
+          type: "array"
+          items:
+            type: "string"
+      - name: "ownerExtensionType"
+        in: "query"
+        description: "Filters shared messages based on the owner extension type. Supported if \"SharedVoicemail\" or \"CallQueueSmsRecipient\" \nfeature is enabled.\n"
+        schema:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ExtensionType"
       responses:
         "200":
           description: "Message list"
@@ -12524,24 +12588,13 @@ paths:
           $ref: "#/components/schemas/PhoneNumberStatus"
       - name: "usageType"
         in: "query"
-        description: "Usage type of phone number"
+        description: "Usage type of a phone number"
         style: "form"
         explode: true
         schema:
           type: "array"
           items:
-            type: "string"
-            enum:
-            - "MainCompanyNumber"
-            - "AdditionalCompanyNumber"
-            - "CompanyNumber"
-            - "DirectNumber"
-            - "CompanyFaxNumber"
-            - "ForwardedNumber"
-            - "ForwardedCompanyNumber"
-            - "BusinessMobileNumber"
-            - "PartnerBusinessMobileNumber"
-            - "IntegrationNumber"
+            $ref: "#/components/schemas/PhoneNumberUsageType"
       - name: "page"
         in: "query"
         description: |
@@ -12572,6 +12625,35 @@ paths:
       x-throttling-group: "Light"
       x-app-permission: "ReadAccounts"
       x-user-permission: "ReadUserPhoneNumbers"
+  /restapi/v1.0/account/{accountId}/extension/{extensionId}/phone-number/{phoneNumberId}/sms-configuration:
+    get:
+      tags:
+      - "Phone Numbers"
+      summary: "Get SMS Configuration"
+      description: |
+        Returns SMS configuration for the specified phone number of the extension.
+      operationId: "smsConfigurationInfo"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/ExtensionId"
+      - name: "phoneNumberId"
+        in: "path"
+        description: "Internal identifier of a phone number"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SmsConfigurationResource"
+      x-feature: "ReadExtensionPhoneNumbers"
+      x-availability: "High"
+      x-throttling-group: "Light"
+      x-app-permission: "ReadAccounts"
   /restapi/v1.0/account/{accountId}/extension/{callQueueId}/overflow-settings:
     get:
       tags:
@@ -12711,15 +12793,7 @@ paths:
           feature
         schema:
           type: "boolean"
-      - name: "orderBy"
-        in: "query"
-        description: |
-          Comma-separated list of fields to order results prefixed by
-          plus sign '+' (ascending order) or minus sign '-' (descending order).
-          Supported values: 'name', 'modelName', 'siteName', 'featureEnabled'.
-          The default sorting is by `name`
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/OrderByInfo"
       - name: "perPage"
         in: "query"
         description: |
@@ -12826,20 +12900,12 @@ paths:
           is ignored)
         schema:
           type: "string"
-      - name: "orderBy"
-        in: "query"
-        description: |
-          Comma-separated list of fields to order results prefixed by '+'
-          sign (ascending order) or '-' sign (descending order). The default
-          sorting is by `name`
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/OrderByInfo"
       - name: "perPage"
         in: "query"
         description: |
           Indicates a page size (number of items). The values supported:
-          `Max` or numeric value. If not specified, 100 records are returned per one
-          page'
+          `Max` or a numeric value. If not specified, 100 records are returned per page
         schema:
           type: "integer"
           format: "int32"
@@ -13032,14 +13098,7 @@ paths:
           is ignored)
         schema:
           type: "string"
-      - name: "orderBy"
-        in: "query"
-        description: |
-          Comma-separated list of fields to order results prefixed by '+'
-          sign (ascending order) or '-' sign (descending order). The default
-          sorting is by `name`
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/OrderByInfo"
       - name: "perPage"
         in: "query"
         description: |
@@ -13234,14 +13293,7 @@ paths:
           is ignored)
         schema:
           type: "string"
-      - name: "orderBy"
-        in: "query"
-        description: |
-          Comma-separated list of fields to order results prefixed by '+'
-          sign (ascending order) or '-' sign (descending order).The default sorting
-          is by `name`
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/OrderByInfo"
       - name: "perPage"
         in: "query"
         description: |
@@ -13427,15 +13479,7 @@ paths:
           is 0 - 64 characters, not case-sensitive. If empty the filter is ignored
         schema:
           type: "string"
-      - name: "orderBy"
-        in: "query"
-        description: |
-          Comma-separated list of fields to order results prefixed by
-          plus sign '+' (ascending order) or minus sign '-' (descending order).
-          Supported values: 'name', 'modelName', 'siteName', 'featureEnabled'.
-          The default sorting is by `name`
-        schema:
-          type: "string"
+      - $ref: "#/components/parameters/OrderByInfo"
       - name: "perPage"
         in: "query"
         description: |
@@ -13610,30 +13654,16 @@ paths:
           default: 100
       - name: "usageType"
         in: "query"
-        description: "Usage type of phone number"
+        description: "Usage type of a phone number"
         style: "form"
         explode: true
         schema:
           type: "array"
           items:
-            type: "string"
-            enum:
-            - "MainCompanyNumber"
-            - "AdditionalCompanyNumber"
-            - "CompanyNumber"
-            - "DirectNumber"
-            - "CompanyFaxNumber"
-            - "ForwardedNumber"
-            - "ForwardedCompanyNumber"
-            - "ContactCenterNumber"
-            - "ConferencingNumber"
-            - "MeetingsNumber"
-            - "BusinessMobileNumber"
-            - "PartnerBusinessMobileNumber"
-            - "IntegrationNumber"
+            $ref: "#/components/schemas/PhoneNumberUsageType"
       - name: "paymentType"
         in: "query"
-        description: "Payment Type of the number"
+        description: "Payment type of a phone number"
         schema:
           $ref: "#/components/schemas/PlatformPaymentType"
       - name: "status"
@@ -15072,6 +15102,49 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RecordingInsights"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-request-max-body-size: "10m"
+      x-availability: "High"
+      x-throttling-group: "Light"
+      x-app-permission: "RingSense"
+  /ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/sessions/{sourceSessionId}/insights:
+    get:
+      tags:
+      - "RingSense"
+      summary: "Get Session Insights"
+      description: "Returns the insights of all call recordings in a session"
+      operationId: "getSessionInsights"
+      parameters:
+      - $ref: "#/components/parameters/AccountId"
+      - $ref: "#/components/parameters/RecordingDomain"
+      - $ref: "#/components/parameters/SourceSessionId"
+      - $ref: "#/components/parameters/RecordingInsightTypes"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                required:
+                - "records"
+                - "paging"
+                properties:
+                  records:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/RecordingInsights"
+                  paging:
+                    $ref: "#/components/schemas/RSPagingModel"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "401":
@@ -21464,26 +21537,6 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/DeletePhoneNumbersRequestItem"
-    PhoneNumberUsageType:
-      type: "string"
-      description: "Usage type of phone number"
-      enum:
-      - "MainCompanyNumber"
-      - "DirectNumber"
-      - "Inventory"
-      - "InventoryPartnerBusinessMobileNumber"
-      - "PartnerBusinessMobileNumber"
-      - "AdditionalCompanyNumber"
-      - "CompanyNumber"
-      - "PhoneLine"
-      - "CompanyFaxNumber"
-      - "ForwardedNumber"
-      - "ForwardedCompanyNumber"
-      - "ContactCenterNumber"
-      - "ConferencingNumber"
-      - "MeetingsNumber"
-      - "BusinessMobileNumber"
-      - "ELIN"
     DeletePhoneNumbersResponseItem:
       allOf:
       - $ref: "#/components/schemas/BulkItemResultModel"
@@ -21548,7 +21601,7 @@ components:
         tollType:
           $ref: "#/components/schemas/PhoneNumberTollType"
         usageType:
-          $ref: "#/components/schemas/PhoneNumberUsageType"
+          $ref: "#/components/schemas/PhoneNumberUsageTypeV2"
         byocNumber:
           type: "boolean"
         contactCenterProvider:
@@ -21592,6 +21645,27 @@ components:
       description: "Internal unique identifier of a phone number"
       maxLength: 18
       example: "1162820004"
+    PhoneNumberUsageTypeV2:
+      type: "string"
+      description: "Usage type of a phone number"
+      enum:
+      - "MainCompanyNumber"
+      - "DirectNumber"
+      - "Inventory"
+      - "InventoryPartnerBusinessMobileNumber"
+      - "PartnerBusinessMobileNumber"
+      - "AdditionalCompanyNumber"
+      - "CompanyNumber"
+      - "PhoneLine"
+      - "CompanyFaxNumber"
+      - "ForwardedNumber"
+      - "ForwardedCompanyNumber"
+      - "ContactCenterNumber"
+      - "ConferencingNumber"
+      - "MeetingsNumber"
+      - "NumberStorage"
+      - "BusinessMobileNumber"
+      - "ELIN"
     AssignPhoneNumberRequest:
       type: "object"
       required:
@@ -24633,6 +24707,7 @@ components:
           - "RC"
           - "BroadWorks"
           - "DisconnectHolder"
+          - "BroadWorksOrDisconnectHolder"
     PickupTarget:
       required:
       - "deviceId"
@@ -25146,6 +25221,12 @@ components:
         partyId:
           type: "string"
           description: "Internal Identifier of Participant"
+        metadataCategories:
+          type: "array"
+          minItems: 1
+          items:
+            type: "string"
+          description: "List of metadata categories applied to the call"
         transport:
           $ref: "#/components/schemas/CallTransportEnum"
         from:
@@ -26031,8 +26112,18 @@ components:
         sendingFailed:
           $ref: "#/components/schemas/MessageStatusCounts"
     ASGErrorResponse:
+      allOf:
+      - $ref: "#/components/schemas/ErrorEntry"
+      - type: "object"
+        description: "Error response"
+        properties:
+          errors:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ErrorEntry"
+    ErrorEntry:
       type: "object"
-      description: "Error response"
+      description: "Single (of potential multply) error entry in an ASG error response"
       required:
       - "errorCode"
       - "message"
@@ -26434,6 +26525,7 @@ components:
           enum:
           - "Processing"
           - "Completed"
+          - "Sent"
         creationTime:
           type: "string"
           format: "date-time"
@@ -27158,6 +27250,7 @@ components:
       - "Enabled"
       - "Disabled"
       - "NotActivated"
+      - "Unassigned"
     CallQueueServiceLevelSettings:
       type: "object"
       properties:
@@ -27662,6 +27755,7 @@ components:
         id:
           type: "string"
           description: "Internal identifier of a site extension"
+          example: "main-site"
         name:
           type: "string"
           description: "Extension user first name"
@@ -28966,9 +29060,6 @@ components:
           description: "List of action IDs (exact keys) to search for (alternatively \"excludeActionIds\" option can be used)."
           items:
             type: "string"
-            enum:
-            - "CHANGE_SECRET_INFO"
-            - "CHANGE_USER_INFO"
         searchString:
           type: "string"
           example: "542617"
@@ -28989,9 +29080,6 @@ components:
           description: "List of action IDs (exact keys) to exclude from your search (alternatively \"actionIds\" option can be used)."
           items:
             type: "string"
-            enum:
-            - "CHANGE_SECRET_INFO"
-            - "CHANGE_USER_INFO"
     AccountHistoryRecordPublicInitiator:
       type: "object"
       description: "Event initiator info"
@@ -29330,6 +29418,7 @@ components:
           - "ContactNumber"
           - "DirectNumber"
           - "ForwardedNumber"
+          - "PartnerBusinessMobileNumber"
           example: "DirectNumber"
         hidden:
           type: "boolean"
@@ -29900,6 +29989,9 @@ components:
     CreateSiteRequest:
       type: "object"
       properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a site extension"
         name:
           type: "string"
           description: "Extension user first name"
@@ -31255,6 +31347,8 @@ components:
           example: "2024-06-06T07:01:14.123Z"
         siteAccess:
           $ref: "#/components/schemas/SiteAccessStatus"
+        alertTimer:
+          $ref: "#/components/schemas/CallQueueAlertTimerEnum"
     ExtensionInfoEvent:
       type: "object"
       properties:
@@ -31837,16 +31931,6 @@ components:
             of global phone numbers, for example when calling to direct numbers or
             sending/receiving SMS
       description: "Sender information"
-    VoicemailOwnerResource:
-      type: "object"
-      description: "Voicemail owner information. Supported for shared voicemail messages only"
-      properties:
-        name:
-          type: "string"
-          description: "Name of a voicemail owner"
-        extensionId:
-          type: "string"
-          description: "Internal identifier of an extension"
     GetMessageSyncResponse:
       required:
       - "records"
@@ -31874,6 +31958,18 @@ components:
       - "SourceDocument"
       - "RenderedDocument"
       - "MmsAttachment"
+    OwnerResource:
+      type: "object"
+      description: "Message owner information. Supported for shared voicemail and sms messages only"
+      properties:
+        name:
+          type: "string"
+          description: "Name of a voicemail owner"
+        extensionType:
+          $ref: "#/components/schemas/ExtensionType"
+        extensionId:
+          type: "string"
+          description: "Internal identifier of an extension"
     FaxErrorCodeEnum:
       type: "string"
       enum:
@@ -32164,7 +32260,7 @@ components:
             Cover page text, entered by the fax sender and printed on the
             cover page. Maximum length is limited to 1024 symbols
         owner:
-          $ref: "#/components/schemas/VoicemailOwnerResource"
+          $ref: "#/components/schemas/OwnerResource"
     SyncTypeEnum:
       type: "string"
       enum:
@@ -32189,6 +32285,31 @@ components:
       enum:
       - "High"
       - "Low"
+    ExtensionType:
+      type: "string"
+      description: "ExtensionType"
+      enum:
+      - "User"
+      - "Department"
+      - "Announcement"
+      - "Voicemail"
+      - "DigitalUser"
+      - "VirtualUser"
+      - "FaxUser"
+      - "PagingOnly"
+      - "SharedLinesGroup"
+      - "DelegatedLinesGroup"
+      - "GroupCallPickup"
+      - "IvrMenu"
+      - "ApplicationExtension"
+      - "ProxyAdmin"
+      - "RoomConnector"
+      - "ParkLocation"
+      - "Limited"
+      - "Bot"
+      - "Site"
+      - "Room"
+      - "FlexibleUser"
     CallerIdByFeatureInfoRequest:
       type: "object"
       properties:
@@ -33329,6 +33450,8 @@ components:
             If set to 'true', then address validation for non-US addresses is skipped
         address:
           $ref: "#/components/schemas/CommonEmergencyLocationAddressInfo"
+        site:
+          $ref: "#/components/schemas/ShortSiteInfo"
     GetExtensionForwardingNumberListResponse:
       type: "object"
       properties:
@@ -33426,19 +33549,23 @@ components:
     CreateForwardingNumberRequest:
       type: "object"
       properties:
+        id:
+          type: "string"
+          description: "Internal identifier of a forwarding/call flip phone number"
         flipNumber:
           type: "integer"
           format: "int32"
           description: "Number assigned to the call flip phone number, corresponds to the shortcut dial number"
         phoneNumber:
           type: "string"
-          description: "Forwarding/Call flip phone number"
+          description: "Forwarding/call flip phone number"
         label:
           type: "string"
-          description: "Forwarding/Call flip number title"
+          description: "Forwarding/call flip number title"
         type:
           type: "string"
-          description: "Forwarding/Call flip phone type. If specified, 'label' attribute value is ignored. The default value is 'Other'"
+          description: "Forwarding/call flip phone type. If specified, 'label' attribute value is ignored"
+          default: "Other"
           enum:
           - "PhoneLine"
           - "Home"
@@ -35374,6 +35501,17 @@ components:
           description: |
             Specifies if managers' emails are included in the list of emails to which
             notifications are sent
+        includeSmsRecipients:
+          type: "boolean"
+          description: |
+            Specifies if sms recipients' emails are included in the list of emails to which
+            notifications are sent
+        smsRecipients:
+          type: "array"
+          description: |
+            List of sms recipients specified for call queue. Returned only for call queue extension
+          items:
+            $ref: "#/components/schemas/EmailRecipientInfo"
         smsEmailAddresses:
           type: "array"
           description: "List of notification recipient email addresses"
@@ -35571,6 +35709,7 @@ components:
           - "FullAccess"
           - "Messages"
           - "MemberManagement"
+          - "None"
     CreateMMSMessage:
       required:
       - "attachments"
@@ -35612,6 +35751,7 @@ components:
           - "ExtensionLimitation"
           - "InsufficientPermissions"
           - "ConfigurationLimitation"
+          - "PermissionLimitation"
         message:
           type: "string"
           description: "Reason description"
@@ -36561,23 +36701,7 @@ components:
           - "Unknown"
           - "Emergency"
         usageType:
-          type: "string"
-          description: |
-            Usage type of phone number. Numbers of 'NumberPool' type will not be returned for phone number list requests
-          enum:
-          - "MainCompanyNumber"
-          - "AdditionalCompanyNumber"
-          - "CompanyNumber"
-          - "DirectNumber"
-          - "CompanyFaxNumber"
-          - "ForwardedNumber"
-          - "ForwardedCompanyNumber"
-          - "ContactCenterNumber"
-          - "ConferencingNumber"
-          - "NumberPool"
-          - "BusinessMobileNumber"
-          - "PartnerBusinessMobileNumber"
-          - "IntegrationNumber"
+          $ref: "#/components/schemas/PhoneNumberUsageType"
         features:
           type: "array"
           description: "List of features of a phone number"
@@ -36610,6 +36734,86 @@ components:
           $ref: "#/components/schemas/PageNavigationModel"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
+    PhoneNumberUsageType:
+      type: "string"
+      description: "Usage type of a phone number. Numbers of 'NumberPool' and 'NumberStorage' type are not returned in \nphone number list requests\n"
+      enum:
+      - "MainCompanyNumber"
+      - "AdditionalCompanyNumber"
+      - "CompanyNumber"
+      - "DirectNumber"
+      - "CompanyFaxNumber"
+      - "ForwardedNumber"
+      - "ForwardedCompanyNumber"
+      - "ContactCenterNumber"
+      - "ConferencingNumber"
+      - "MeetingsNumber"
+      - "NumberPool"
+      - "NumberStorage"
+      - "BusinessMobileNumber"
+      - "PartnerBusinessMobileNumber"
+      - "IntegrationNumber"
+    SmsConfigurationResource:
+      type: "object"
+      properties:
+        phoneNumberId:
+          type: "string"
+          description: "Internal identifier of a phone number"
+        phoneNumber:
+          type: "string"
+          description: "Phone number in [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) (with '+' sign) format"
+          example: "+18661234567"
+        smsCampaignInfo:
+          $ref: "#/components/schemas/SmsCampaignInfo"
+        smsBrandInfo:
+          $ref: "#/components/schemas/SmsBrandInfo"
+    SmsCampaignInfo:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Identifier of the associated TCR campaign"
+        status:
+          $ref: "#/components/schemas/CampaignStatusInfo"
+        registrationTier:
+          type: "string"
+          description: "Use case of the associated TCR campaign"
+        useCases:
+          type: "array"
+          items:
+            type: "string"
+          description: "List of sub use cases of the associated TCR campaign"
+        errors:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ApiError"
+    SmsBrandInfo:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Identifier of the associated TCR brand"
+        status:
+          $ref: "#/components/schemas/CampaignStatusInfo"
+        errors:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ApiError"
+    CampaignStatusInfo:
+      type: "string"
+      description: "Status of the associated TCR campaign"
+      enum:
+      - "Created"
+      - "Submitted"
+      - "Confirmed"
+      - "SubmitFailed"
+      - "UpdateRequested"
+      - "DeleteRequested"
+      - "CampaignSuspended"
+      - "CampaignExpired"
+      - "Draft"
+      - "PreVetFailed"
+      - "Unconfirmed"
     CallQueueOverflowSettingsRequestResource:
       type: "object"
       properties:
@@ -37468,8 +37672,6 @@ components:
           type: "integer"
           format: "int64"
           description: "Internal identifier of a phone number"
-        country:
-          $ref: "#/components/schemas/CountryInfoBasicModel"
         extension:
           $ref: "#/components/schemas/ExtensionInfo"
         label:
@@ -37488,26 +37690,7 @@ components:
         type:
           $ref: "#/components/schemas/PhoneNumberType"
         usageType:
-          type: "string"
-          description: |
-            Usage type of phone number. Usage type of phone number.
-            Numbers of 'NumberPool' type are not returned in phone number list
-            requests
-          enum:
-          - "MainCompanyNumber"
-          - "AdditionalCompanyNumber"
-          - "CompanyNumber"
-          - "DirectNumber"
-          - "CompanyFaxNumber"
-          - "ForwardedNumber"
-          - "ForwardedCompanyNumber"
-          - "ContactCenterNumber"
-          - "ConferencingNumber"
-          - "MeetingsNumber"
-          - "NumberPool"
-          - "BusinessMobileNumber"
-          - "PartnerBusinessMobileNumber"
-          - "IntegrationNumber"
+          $ref: "#/components/schemas/PhoneNumberUsageType"
         temporaryNumber:
           $ref: "#/components/schemas/TemporaryNumberInfo"
         contactCenterProvider:
@@ -39586,6 +39769,8 @@ components:
           $ref: "#/components/schemas/BulletedSummaryInsights"
         AIScore:
           $ref: "#/components/schemas/AIScoreInsights"
+        CallNotes:
+          $ref: "#/components/schemas/CallNotesInsights"
     AIScoreInsightUnit:
       type: "object"
       required:
@@ -39686,6 +39871,7 @@ components:
         - "Highlights"
         - "BulletedSummary"
         - "AIScore"
+        - "CallNotes"
     RecordingDomain:
       type: "string"
       description: "Source rc application of the recording"
@@ -39751,6 +39937,10 @@ components:
           example: 4.2
     NextStepsInsightUnit:
       $ref: "#/components/schemas/RSConversationalInsightsUnit"
+    CallNotesInsights:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/CallNotesInsightUnit"
     SourceRecordId:
       type: "string"
       description: "Recording ID of the domain"
@@ -39759,10 +39949,35 @@ components:
       type: "array"
       items:
         $ref: "#/components/schemas/NextStepsInsightUnit"
+    CallNotesInsightUnit:
+      type: "object"
+      required:
+      - "value"
+      properties:
+        value:
+          type: "string"
+          description: "Value of the call notes"
+          example: "call notes text"
     SourceSessionId:
       type: "string"
       description: "Session ID of the domain"
       example: "cbac2b78-6f74-4257-8167-dff864de2263!us-10-dca09@us-10"
+    RSPagingModel:
+      allOf:
+      - $ref: "#/components/schemas/EnumeratedPagingModel"
+      - type: "object"
+        required:
+        - "page"
+        - "perPage"
+        - "pageStart"
+        - "pageEnd"
+        - "totalElements"
+        - "sortableFields"
+        properties:
+          sortableFields:
+            type: "array"
+            items:
+              type: "string"
     InteractionInput:
       allOf:
       - $ref: "#/components/schemas/DiarizeInput"
@@ -40384,65 +40599,71 @@ components:
         meta:
           $ref: "#/components/schemas/ScimMeta"
     QueueOpportunities:
+      title: "QueueOpportunities"
+      description: "Queue opportunities data for the specified grouping"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
-          type: "number"
           description: "Value for queue opportunities"
+          type: "number"
           format: "double"
-      description: "Queue opportunities data for the specified grouping"
     QueueSlaOptions:
+      title: "QueueSlaOptions"
       type: "string"
       enum:
       - "InSla"
       - "OutSla"
     CallsByDirection:
+      title: "CallsByDirection"
+      description: "Data for calls with breakdown by direction (Inbound, Outbound)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByDirectionBreakdown"
-      description: "Data for calls with breakdown by direction (Inbound, Outbound)"
     DirectGrouping:
+      title: "DirectGrouping"
+      description: "This grouping allows to specify the `groupBy` option by which the data in the response will be grouped"
+      type: "object"
       required:
       - "groupBy"
-      type: "object"
       properties:
         groupBy:
           $ref: "#/components/schemas/GroupingOptions"
         keys:
+          description: "This field can be used to specify unique identifiers of entities selected in `groupBy` field. The response data will be limited to these entities only"
           type: "array"
           items:
             type: "string"
-          description: "This field can be used to specify unique identifiers of entities selected in `groupBy` field. The response data will be limited to these entities only"
-      description: "This grouping allows to specify the `groupBy` option by which the data in the response will be grouped"
     CallsByOriginBreakdown:
+      title: "CallsByOriginBreakdown"
+      description: "Result breakdown by origin"
+      type: "object"
       required:
       - "internal"
       - "external"
-      type: "object"
       properties:
         internal:
-          type: "number"
           description: "Value for Internal origin"
+          type: "number"
           format: "double"
         external:
-          type: "number"
           description: "Value for External origin"
+          type: "number"
           format: "double"
-      description: "Result breakdown by origin"
     AggregationType:
-      type: "string"
+      title: "AggregationType"
       description: "Counter aggregation type. Can be `Sum`, `Average`, `Min`, `Max` or `Percent`"
+      type: "string"
       enum:
       - "Sum"
       - "Average"
@@ -40450,66 +40671,73 @@ components:
       - "Min"
       - "Percent"
     AggregationInterval:
-      type: "string"
+      title: "AggregationInterval"
       description: "Time interval which will be used for aggregation. Can be `Hour`, `Day`, `Week` or `Month`"
+      type: "string"
       enum:
       - "Hour"
       - "Day"
       - "Week"
       - "Month"
     AdvancedTimeSettings:
+      title: "AdvancedTimeSettings"
+      description: "Allows more granular control over time included in the report"
       type: "object"
       properties:
         includeDays:
+          description: "Days of the week for which the report is calculated"
           type: "array"
           items:
             $ref: "#/components/schemas/DayOfWeek"
-          description: "Days of the week for which the report is calculated"
         includeHours:
+          description: "Hours of the day for which the report is calculated"
           type: "array"
           items:
             $ref: "#/components/schemas/HoursInterval"
-          description: "Hours of the day for which the report is calculated"
-      description: "Allows more granular control over time included in the report"
     CallsByActions:
+      title: "CallsByActions"
+      description: "Data for calls with breakdown by action (HoldOff, HoldOn, ParkOn, ParkOff, BlindTransfer, WarmTransfer, DTMFTransfer)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByActionsBreakdown"
-      description: "Data for calls with breakdown by action (HoldOff, HoldOn, ParkOn, ParkOff, BlindTransfer, WarmTransfer, DTMFTransfer)"
     CallsByResult:
+      title: "CallsByResult"
+      description: "Data for calls with breakdown by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByResultBreakdown"
-      description: "Data for calls with breakdown by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
     CallsByResponse:
+      title: "CallsByResponse"
+      description: "Data for calls with breakdown by response (Answered, NotAnswered, Connected, NotConnected)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByResponseBreakdown"
-      description: "Data for calls with breakdown by response (Answered, NotAnswered, Connected, NotConnected)"
     Origin:
+      title: "Origin"
       type: "string"
       enum:
       - "Internal"
       - "External"
     CallResult:
+      title: "CallResult"
       type: "string"
       enum:
       - "Completed"
@@ -40519,6 +40747,8 @@ components:
       - "Missed"
       - "Accepted"
     CallsCounters:
+      title: "CallsCounters"
+      description: "Call volume data for the specified grouping"
       type: "object"
       properties:
         allCalls:
@@ -40543,42 +40773,45 @@ components:
           $ref: "#/components/schemas/CallsByType"
         queueOpportunities:
           $ref: "#/components/schemas/QueueOpportunities"
-      description: "Call volume data for the specified grouping"
     TimeSettings:
+      title: "TimeSettings"
+      description: "Date-time range for the calls. The call is considered to be within time range if it started within time range. Both borders are inclusive"
+      type: "object"
       required:
       - "timeZone"
       - "timeRange"
-      type: "object"
       properties:
         timeZone:
-          type: "string"
           description: "Name of the timezone that will be used for `includeDays` and `includeHours` filters and aggregation intervals. For example 'America/Los_Angeles', 'Europe/Zurich'. See also *[Time Zones](https://www.iana.org/time-zones)*. Value in this field doesn't affect interpretation of time in `timeRange`, as it already includes offset from UTC"
+          type: "string"
         timeRange:
           $ref: "#/components/schemas/TimeRange"
         advancedTimeSettings:
           $ref: "#/components/schemas/AdvancedTimeSettings"
-      description: "Date-time range for the calls. The call is considered to be within time range if it started within time range. Both borders are inclusive"
     AllCalls:
+      title: "AllCalls"
+      description: "Data for all calls"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
-          type: "number"
           description: "Value for all calls"
+          type: "number"
           format: "double"
-      description: "Data for all calls"
     Grouping:
+      title: "Grouping"
       description: "This field specifies the dimensions by which the response should be grouped and specific keys to narrow the response. See also [Call Aggregate reports](https://developers.ringcentral.com/guide/analytics/aggregate) or [Call Timeline reports](https://developers.ringcentral.com/guide/analytics/timeline) pages in the developer guide for more information"
       oneOf:
       - $ref: "#/components/schemas/DirectGrouping"
       - $ref: "#/components/schemas/GroupingByMembers"
     GroupingOptions:
-      type: "string"
+      title: "GroupingOptions"
       description: "The selected grouping option"
+      type: "string"
       enum:
       - "Company"
       - "CompanyNumbers"
@@ -40590,238 +40823,243 @@ components:
       - "Sites"
       - "Departments"
     AggregationResponseOptionsCounters:
-      type: "object"
-      properties:
-        allCalls:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of all calls count"
-        callsByDirection:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by direction (Inbound, Outbound)"
-        callsByOrigin:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by origin (Internal, External)"
-        callsByResponse:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by response (Answered, NotAnswered, Connected, NotConnected)"
-        callsSegments:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
-        callsByResult:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
-        callsByCompanyHours:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by company hours (BusinessHours, AfterHours)"
-        callsByQueueSla:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by queue SLA (InSLA, OutSLA). This counter is only applicable to Queues grouping"
-        callsByActions:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by action (HoldOff, HoldOn, ParkOn, ParkOff, BlindTransfer, WarmTransfer, DTMFTransfer)"
-        callsByType:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/AggregationType"
-            aggregationInterval:
-              $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls count by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
-        queueOpportunities:
-          required:
-          - "aggregationType"
-          type: "object"
-          properties:
-            aggregationType:
-              $ref: "#/components/schemas/QueueOpportunitiesAggregationType"
-          description: "Aggregation of calls count by the total number of times a Queue call was presented to the user. It is limited to `groupBy` Users and `groupByMembers` (Department, Queue, Site, UserGroup) grouping. Only the listed below options for call filters are applicable to `queueOpportunities` and provide meaningful results: `queues` (selected queue extension ids), `callResults` (Missed, Abandoned), `callResponses` (Answered, NotAnswered), `origins` (Internal, External)"
+      title: "AggregationResponseOptionsCounters"
       description: |-
         The formula is defined by `aggregationType` and `aggregationInterval` for every counter individually.
         If `aggregationType` is `Sum` or `Percent`, `aggregationInterval` is not supported.
         If `aggregationType` is `Min`, `Max` or `Average`, `aggregationInterval` is required
-    AggregationResponseOptionsTimers:
       type: "object"
       properties:
-        allCallsDuration:
+        allCalls:
+          description: "Aggregation of all calls count"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of all calls duration"
-        callsDurationByDirection:
+        callsByDirection:
+          description: "Aggregation of calls count by direction (Inbound, Outbound)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by direction (Inbound, Outbound)"
-        callsDurationByOrigin:
+        callsByOrigin:
+          description: "Aggregation of calls count by origin (Internal, External)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by origin (Internal, External)"
-        callsDurationByResponse:
+        callsByResponse:
+          description: "Aggregation of calls count by response (Answered, NotAnswered, Connected, NotConnected)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by response (Answered, NotAnswered, Connected, NotConnected)"
-        callsSegmentsDuration:
+        callsSegments:
+          description: "Aggregation of calls count by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
-        callsDurationByResult:
+        callsByResult:
+          description: "Aggregation of calls count by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
-        callsDurationByCompanyHours:
+        callsByCompanyHours:
+          description: "Aggregation of calls count by company hours (BusinessHours, AfterHours)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by company hours (BusinessHours, AfterHours)"
-        callsDurationByQueueSla:
+        callsByQueueSla:
+          description: "Aggregation of calls count by queue SLA (InSLA, OutSLA). This counter is only applicable to Queues grouping"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by queue SLA (InSLA, OutSLA). This timer is only applicable to Queues grouping"
-        callsDurationByType:
+        callsByActions:
+          description: "Aggregation of calls count by action (HoldOff, HoldOn, ParkOn, ParkOff, BlindTransfer, WarmTransfer, DTMFTransfer)"
+          type: "object"
           required:
           - "aggregationType"
-          type: "object"
           properties:
             aggregationType:
               $ref: "#/components/schemas/AggregationType"
             aggregationInterval:
               $ref: "#/components/schemas/AggregationInterval"
-          description: "Aggregation of calls duration by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
+        callsByType:
+          description: "Aggregation of calls count by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        queueOpportunities:
+          description: "Aggregation of calls count by the total number of times a Queue call was presented to the user. It is limited to `groupBy` Users and `groupByMembers` (Department, Queue, Site, UserGroup) grouping. Only the listed below options for call filters are applicable to `queueOpportunities` and provide meaningful results: `queues` (selected queue extension ids), `callResults` (Missed, Abandoned), `callResponses` (Answered, NotAnswered), `origins` (Internal, External)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/QueueOpportunitiesAggregationType"
+    AggregationResponseOptionsTimers:
+      title: "AggregationResponseOptionsTimers"
       description: |-
         The formula is defined by `aggregationType` and `aggregationInterval` for every timer individually.
         If `aggregationType` is `Sum` or `Percent`, `aggregationInterval` is not supported.
         If `aggregationType` is `Min`, `Max` or `Average`, `aggregationInterval` is supported, but not required.
         If left empty, aggregation will be performed on per-call basis
+      type: "object"
+      properties:
+        allCallsDuration:
+          description: "Aggregation of all calls duration"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByDirection:
+          description: "Aggregation of calls duration by direction (Inbound, Outbound)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByOrigin:
+          description: "Aggregation of calls duration by origin (Internal, External)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByResponse:
+          description: "Aggregation of calls duration by response (Answered, NotAnswered, Connected, NotConnected)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsSegmentsDuration:
+          description: "Aggregation of calls duration by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByResult:
+          description: "Aggregation of calls duration by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByCompanyHours:
+          description: "Aggregation of calls duration by company hours (BusinessHours, AfterHours)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByQueueSla:
+          description: "Aggregation of calls duration by queue SLA (InSLA, OutSLA). This timer is only applicable to Queues grouping"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
+        callsDurationByType:
+          description: "Aggregation of calls duration by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
+          type: "object"
+          required:
+          - "aggregationType"
+          properties:
+            aggregationType:
+              $ref: "#/components/schemas/AggregationType"
+            aggregationInterval:
+              $ref: "#/components/schemas/AggregationInterval"
     ValueType:
-      type: "string"
+      title: "ValueType"
       description: "Unit of the result value"
+      type: "string"
       enum:
       - "Percent"
       - "Seconds"
       - "Instances"
     TimeSpentFilter:
+      title: "TimeSpentFilter"
+      description: "Filtering of calls based on the time spent by specified mailbox(es) on call"
       type: "object"
       properties:
         minSeconds:
-          type: "integer"
           description: "Minimum duration in seconds"
+          type: "integer"
           format: "int64"
         maxSeconds:
-          type: "integer"
           description: "Maximum duration in seconds"
+          type: "integer"
           format: "int64"
-      description: "Filtering of calls based on the time spent by specified mailbox(es) on call"
     DayOfWeek:
+      title: "DayOfWeek"
       type: "string"
       enum:
       - "Sunday"
@@ -40832,26 +41070,30 @@ components:
       - "Friday"
       - "Saturday"
     CompanyHoursOptions:
+      title: "CompanyHoursOptions"
       type: "string"
       enum:
       - "BusinessHours"
       - "AfterHours"
     AggregationResponse:
+      title: "AggregationResponse"
+      type: "object"
       required:
       - "paging"
       - "data"
-      type: "object"
       properties:
         paging:
           $ref: "#/components/schemas/ResponsePaging"
         data:
           $ref: "#/components/schemas/AggregationResponseData"
     Direction:
+      title: "Direction"
       type: "string"
       enum:
       - "Inbound"
       - "Outbound"
     CallResponse:
+      title: "CallResponse"
       type: "string"
       enum:
       - "Answered"
@@ -40859,22 +41101,25 @@ components:
       - "Connected"
       - "NotConnected"
     CallsByOrigin:
+      title: "CallsByOrigin"
+      description: "Data for calls with breakdown by origin (Internal, External)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByOriginBreakdown"
-      description: "Data for calls with breakdown by origin (Internal, External)"
     QueueOpportunitiesAggregationType:
-      type: "string"
+      title: "QueueOpportunitiesAggregationType"
       description: "Counter aggregation type for queue opportunities, limited to `Sum` only."
+      type: "string"
       enum:
       - "Sum"
     CallType:
+      title: "CallType"
       type: "string"
       enum:
       - "Direct"
@@ -40884,99 +41129,103 @@ components:
       - "Outbound"
       - "Overflow"
     CallFilters:
+      title: "CallFilters"
+      description: "Optional filters that limit the scope of calls (joined via AND)"
       type: "object"
       properties:
         extensionFilters:
           $ref: "#/components/schemas/ExtensionFilters"
         queues:
-          type: "array"
-          items:
-            type: "string"
           description: "List of queues extension ids which allows to get data only for calls that were routed through any of these queues"
-        calledNumbers:
           type: "array"
           items:
             type: "string"
+        calledNumbers:
           description: "The direct company numbers the caller called (joined via OR)"
+          type: "array"
+          items:
+            type: "string"
         directions:
+          description: "Specifies the call directions relative to the scope specified in grouping object (joined via OR). Not applicable to internal origin calls with company scope"
           type: "array"
           items:
             $ref: "#/components/schemas/Direction"
-          description: "Specifies the call directions relative to the scope specified in grouping object (joined via OR). Not applicable to internal origin calls with company scope"
         origins:
+          description: "Specifies whether an external party was present in the initial segment of the call (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/Origin"
-          description: "Specifies whether an external party was present in the initial segment of the call (joined via OR)"
         callResponses:
+          description: "Filtering of calls by first response (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/CallResponse"
-          description: "Filtering of calls by first response (joined via OR)"
         callResults:
+          description: "Filtering of calls by the nature of call result (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/CallResult"
-          description: "Filtering of calls by the nature of call result (joined via OR)"
         callSegments:
+          description: "Filtering of calls by presence of specific segment (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/CallSegmentFilter"
-          description: "Filtering of calls by presence of specific segment (joined via OR)"
         callActions:
+          description: "Filtering of calls by presence of specific action (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/CallAction"
-          description: "Filtering of calls by presence of specific action (joined via OR)"
         companyHours:
+          description: "Filtering of calls by company's business hours or after hours (joined via OR)"
           type: "array"
           items:
             $ref: "#/components/schemas/CompanyHoursOptions"
-          description: "Filtering of calls by company's business hours or after hours (joined via OR)"
         callDuration:
           $ref: "#/components/schemas/CallDurationFilter"
         timeSpent:
           $ref: "#/components/schemas/TimeSpentFilter"
         queueSla:
+          description: "Filtering calls that were within or out of queue SLA (joined via OR). Only applicable to Queues grouping"
           type: "array"
           items:
             $ref: "#/components/schemas/QueueSlaOptions"
-          description: "Filtering calls that were within or out of queue SLA (joined via OR). Only applicable to Queues grouping"
         callTypes:
+          description: "Filtering of calls based on how the call started from the callee perspective (joined via OR). If the call is outbound relative to the grouping scope, CallType is Outbound"
           type: "array"
           items:
             $ref: "#/components/schemas/CallType"
-          description: "Filtering of calls based on how the call started from the callee perspective (joined via OR). If the call is outbound relative to the grouping scope, CallType is Outbound"
-      description: "Optional filters that limit the scope of calls (joined via AND)"
     AggregationResponseOptions:
+      title: "AggregationResponseOptions"
+      description: "This field provides mapping of possible breakdown options for call aggregation and aggregation formula"
       type: "object"
       properties:
         counters:
           $ref: "#/components/schemas/AggregationResponseOptionsCounters"
         timers:
           $ref: "#/components/schemas/AggregationResponseOptionsTimers"
-      description: "This field provides mapping of possible breakdown options for call aggregation and aggregation formula"
     CallsByDirectionBreakdown:
+      title: "CallsByDirectionBreakdown"
+      description: "Result breakdown by direction"
+      type: "object"
       required:
       - "inbound"
       - "outbound"
-      type: "object"
       properties:
         inbound:
-          type: "number"
           description: "Value for Inbound direction"
+          type: "number"
           format: "double"
         outbound:
-          type: "number"
           description: "Value for Outbound direction"
+          type: "number"
           format: "double"
-      description: "Result breakdown by direction"
     AggregationRequest:
+      title: "AggregationRequest"
+      type: "object"
       required:
       - "grouping"
       - "timeSettings"
       - "responseOptions"
-      type: "object"
       properties:
         grouping:
           $ref: "#/components/schemas/Grouping"
@@ -40987,79 +41236,85 @@ components:
         responseOptions:
           $ref: "#/components/schemas/AggregationResponseOptions"
     CallSegmentLengthFilter:
+      title: "CallSegmentLengthFilter"
+      description: "Duration bounds for the segment"
       type: "object"
       properties:
         minSeconds:
-          type: "integer"
           description: "Minimum duration of segment in seconds"
+          type: "integer"
           format: "int64"
         maxSeconds:
-          type: "integer"
           description: "Maximum duration of segment in seconds"
+          type: "integer"
           format: "int64"
-      description: "Duration bounds for the segment"
     CallsByQueueSla:
+      title: "CallsByQueueSla"
+      description: "Data for calls with breakdown by queue SLA (InSLA, OutSLA). This counter is only applicable to Queues grouping"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByQueueSlaBreakdown"
-      description: "Data for calls with breakdown by queue SLA (InSLA, OutSLA). This counter is only applicable to Queues grouping"
     HoursInterval:
+      title: "HoursInterval"
+      type: "object"
       required:
       - "from"
       - "to"
-      type: "object"
       properties:
         from:
-          type: "string"
           description: "Time in format hh:mm"
+          type: "string"
         to:
-          type: "string"
           description: "Time in format hh:mm"
+          type: "string"
     AggregationResponseData:
+      title: "AggregationResponseData"
+      description: "Aggregation result"
+      type: "object"
       required:
       - "groupedBy"
-      type: "object"
       properties:
         groupedBy:
           $ref: "#/components/schemas/GroupingOptions"
         records:
+          description: "A list of call aggregations as per the grouping and filtering options specified in the request"
           type: "array"
           items:
             $ref: "#/components/schemas/AggregationResponseRecord"
-          description: "A list of call aggregations as per the grouping and filtering options specified in the request"
-      description: "Aggregation result"
     ResponsePaging:
+      title: "ResponsePaging"
+      description: "Paging information"
+      type: "object"
       required:
       - "page"
       - "perPage"
       - "totalPages"
       - "totalElements"
-      type: "object"
       properties:
         page:
-          type: "integer"
           description: "The current page number"
+          type: "integer"
           format: "int64"
         perPage:
-          type: "integer"
           description: "How many items are displayed on the page"
+          type: "integer"
           format: "int64"
         totalPages:
-          type: "integer"
           description: "The total number of pages"
+          type: "integer"
           format: "int64"
         totalElements:
-          type: "integer"
           description: "The total number of items in the dataset"
+          type: "integer"
           format: "int64"
-      description: "Paging information"
     CallAction:
+      title: "CallAction"
       type: "string"
       enum:
       - "HoldOff"
@@ -41070,6 +41325,9 @@ components:
       - "WarmTransfer"
       - "DTMFTransfer"
     CallsByActionsBreakdown:
+      title: "CallsByActionsBreakdown"
+      description: "Result breakdown by actions"
+      type: "object"
       required:
       - "parkOn"
       - "parkOff"
@@ -41078,79 +41336,80 @@ components:
       - "blindTransfer"
       - "warmTransfer"
       - "dtmfTransfer"
-      type: "object"
       properties:
         parkOn:
-          type: "number"
           description: "Value for ParkOn action"
+          type: "number"
           format: "double"
         parkOff:
-          type: "number"
           description: "Value for ParkOff action"
+          type: "number"
           format: "double"
         holdOn:
-          type: "number"
           description: "Value for HoldOn action"
+          type: "number"
           format: "double"
         holdOff:
-          type: "number"
           description: "Value for HoldOff action"
+          type: "number"
           format: "double"
         blindTransfer:
-          type: "number"
           description: "Value for BlindTransfer action"
+          type: "number"
           format: "double"
         warmTransfer:
-          type: "number"
           description: "Value for WarmTransfer action"
+          type: "number"
           format: "double"
         dtmfTransfer:
-          type: "number"
           description: "Value for DTMFTransfer action"
+          type: "number"
           format: "double"
-      description: "Result breakdown by actions"
     ExtensionFilters:
+      title: "ExtensionFilters"
+      description: "Specifies filtering based on extension ids"
       type: "object"
       properties:
         fromIds:
-          type: "array"
-          items:
-            type: "string"
           description: "List of extension ids to match against incoming calls, joined via OR condition. Only applicable for `groupByMembers` options and Users, IVRs, SharedLines and Queues in `groupBy`"
-        toIds:
           type: "array"
           items:
             type: "string"
+        toIds:
           description: "List of extension ids to match against outgoing calls, joined via OR condition. Limited to the extension id that first accepted the call. Only applicable for `groupByMembers` options and Users, IVRs and SharedLines in `groupBy`"
-      description: "Specifies filtering based on extension ids"
+          type: "array"
+          items:
+            type: "string"
     CallsByResponseBreakdown:
+      title: "CallsByResponseBreakdown"
+      description: "Result breakdown by response"
+      type: "object"
       required:
       - "answered"
       - "notAnswered"
       - "connected"
       - "notConnected"
-      type: "object"
       properties:
         answered:
-          type: "number"
           description: "Value for Answered response"
+          type: "number"
           format: "double"
         notAnswered:
-          type: "number"
           description: "Value for NotAnswered response"
+          type: "number"
           format: "double"
         connected:
-          type: "number"
           description: "Value for Connected response"
+          type: "number"
           format: "double"
         notConnected:
-          type: "number"
           description: "Value for NotConnected response"
+          type: "number"
           format: "double"
-      description: "Result breakdown by response"
     CallSegmentOptions:
-      type: "string"
+      title: "CallSegmentOptions"
       description: "Call segment for filtering"
+      type: "string"
       enum:
       - "Ringing"
       - "LiveTalk"
@@ -41162,36 +41421,42 @@ components:
       - "VmGreeting"
       - "Setup"
     CallSegmentFilter:
+      title: "CallSegmentFilter"
+      type: "object"
       required:
       - "segment"
-      type: "object"
       properties:
         segment:
           $ref: "#/components/schemas/CallSegmentOptions"
         length:
           $ref: "#/components/schemas/CallSegmentLengthFilter"
     GroupingByMembers:
+      title: "GroupingByMembers"
+      description: "This grouping allows to specify the `groupByMembers` option. The response data will be grouped by users and will only include users that belong to the scope selected in `groupByMembers` field"
+      type: "object"
       required:
       - "groupByMembers"
-      type: "object"
       properties:
         groupByMembers:
           $ref: "#/components/schemas/MembersGroupingOptions"
         keys:
+          description: "This field can be used to further limit the users selection by specifying unique identifiers of corresponding entities. For example, providing unique queue ids along with `Queue` in `groupByMembers` field will limit the response to users that are queue agents in at least one of these queues"
           type: "array"
           items:
             type: "string"
-          description: "This field can be used to further limit the users selection by specifying unique identifiers of corresponding entities. For example, providing unique queue ids along with `Queue` in `groupByMembers` field will limit the response to users that are queue agents in at least one of these queues"
-      description: "This grouping allows to specify the `groupByMembers` option. The response data will be grouped by users and will only include users that belong to the scope selected in `groupByMembers` field"
     MembersGroupingOptions:
-      type: "string"
+      title: "MembersGroupingOptions"
       description: "The selected data scope"
+      type: "string"
       enum:
       - "Department"
       - "UserGroup"
       - "Queue"
       - "Site"
     CallsByResultBreakdown:
+      title: "CallsByResultBreakdown"
+      description: "Result breakdown by call result"
+      type: "object"
       required:
       - "completed"
       - "abandoned"
@@ -41199,98 +41464,104 @@ components:
       - "missed"
       - "accepted"
       - "unknown"
-      type: "object"
       properties:
         completed:
-          type: "number"
           description: "Value for Completed result"
+          type: "number"
           format: "double"
         abandoned:
-          type: "number"
           description: "Value for Abandoned result"
+          type: "number"
           format: "double"
         voicemail:
-          type: "number"
           description: "Value for Voicemail result"
+          type: "number"
           format: "double"
         missed:
-          type: "number"
           description: "Value for Missed result"
+          type: "number"
           format: "double"
         accepted:
-          type: "number"
           description: "Value for Accepted result"
+          type: "number"
           format: "double"
         unknown:
-          type: "number"
           description: "Value for Unknown result"
+          type: "number"
           format: "double"
-      description: "Result breakdown by call result"
     CallsByCompanyHours:
+      title: "CallsByCompanyHours"
+      description: "Data for calls with breakdown by company hours (BusinessHours, AfterHours)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByCompanyHoursBreakdown"
-      description: "Data for calls with breakdown by company hours (BusinessHours, AfterHours)"
     CallsByCompanyHoursBreakdown:
+      title: "CallsByCompanyHoursBreakdown"
+      description: "Result breakdown by company hours"
+      type: "object"
       required:
       - "businessHours"
       - "afterHours"
-      type: "object"
       properties:
         businessHours:
-          type: "number"
           description: "Value for BusinessHours company hours"
+          type: "number"
           format: "double"
         afterHours:
-          type: "number"
           description: "Value for AfterHours company hours"
+          type: "number"
           format: "double"
-      description: "Result breakdown by company hours"
     CallDurationFilter:
+      title: "CallDurationFilter"
+      description: "Filtering of calls based on the overall call length"
       type: "object"
       properties:
         minSeconds:
-          type: "integer"
           description: "Minimum duration of call in seconds"
+          type: "integer"
           format: "int64"
         maxSeconds:
-          type: "integer"
           description: "Maximum duration of call in seconds"
+          type: "integer"
           format: "int64"
-      description: "Filtering of calls based on the overall call length"
     CallsByQueueSlaBreakdown:
+      title: "CallsByQueueSlaBreakdown"
+      description: "Result breakdown by queue SLA"
+      type: "object"
       required:
       - "inSla"
       - "outOfSla"
-      type: "object"
       properties:
         inSla:
-          type: "number"
           description: "Value for InSla queue SLA"
+          type: "number"
           format: "double"
         outOfSla:
-          type: "number"
           description: "Value for OutSla queue SLA"
+          type: "number"
           format: "double"
-      description: "Result breakdown by queue SLA"
     CallsBySegments:
+      title: "CallsBySegments"
+      description: "Data for calls with breakdown by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsBySegmentsBreakdown"
-      description: "Data for calls with breakdown by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
     CallsByTypeBreakdown:
+      title: "CallsByTypeBreakdown"
+      description: "Result breakdown by type"
+      type: "object"
       required:
       - "direct"
       - "fromQueue"
@@ -41298,45 +41569,47 @@ components:
       - "transferred"
       - "outbound"
       - "overflow"
-      type: "object"
       properties:
         direct:
-          type: "number"
           description: "Value for Direct type"
+          type: "number"
           format: "double"
         fromQueue:
-          type: "number"
           description: "Value for FromQueue type"
+          type: "number"
           format: "double"
         parkRetrieval:
-          type: "number"
           description: "Value for ParkRetrieval type"
+          type: "number"
           format: "double"
         transferred:
-          type: "number"
           description: "Value for Transferred type"
+          type: "number"
           format: "double"
         outbound:
-          type: "number"
           description: "Value for Outbound type"
+          type: "number"
           format: "double"
         overflow:
-          type: "number"
           description: "Value for Overflow type"
+          type: "number"
           format: "double"
-      description: "Result breakdown by type"
     CallsByType:
+      title: "CallsByType"
+      description: "Data for calls with breakdown by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound, Overflow)"
+      type: "object"
       required:
       - "valueType"
       - "values"
-      type: "object"
       properties:
         valueType:
           $ref: "#/components/schemas/ValueType"
         values:
           $ref: "#/components/schemas/CallsByTypeBreakdown"
-      description: "Data for calls with breakdown by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound, Overflow)"
     CallsBySegmentsBreakdown:
+      title: "CallsBySegmentsBreakdown"
+      description: "Result breakdown by segments"
+      type: "object"
       required:
       - "ringing"
       - "liveTalk"
@@ -41347,53 +41620,52 @@ components:
       - "voicemail"
       - "vmGreeting"
       - "setup"
-      type: "object"
       properties:
         ringing:
-          type: "number"
           description: "Value for Ringing segment"
+          type: "number"
           format: "double"
         liveTalk:
-          type: "number"
           description: "Value for LiveTalk segment"
+          type: "number"
           format: "double"
         hold:
-          type: "number"
           description: "Value for Hold segment"
+          type: "number"
           format: "double"
         park:
-          type: "number"
           description: "Value for Park segment"
+          type: "number"
           format: "double"
         transfer:
-          type: "number"
           description: "Value for Transfer segment"
+          type: "number"
           format: "double"
         ivrPrompt:
-          type: "number"
           description: "Value for IVRPrompt segment"
+          type: "number"
           format: "double"
         voicemail:
-          type: "number"
           description: "Value for Voicemail segment"
+          type: "number"
           format: "double"
         vmGreeting:
-          type: "number"
           description: "Value for VMGreeting segment"
+          type: "number"
           format: "double"
         setup:
-          type: "number"
           description: "Value for Setup segment"
+          type: "number"
           format: "double"
-      description: "Result breakdown by segments"
     AggregationResponseRecord:
+      title: "AggregationResponseRecord"
+      type: "object"
       required:
       - "key"
-      type: "object"
       properties:
         key:
-          type: "string"
           description: "Grouping key"
+          type: "string"
         info:
           $ref: "#/components/schemas/KeyInfo"
         timers:
@@ -41401,16 +41673,19 @@ components:
         counters:
           $ref: "#/components/schemas/CallsCounters"
     KeyInfo:
+      title: "KeyInfo"
+      description: "Additional info about the key"
       type: "object"
       properties:
         extensionNumber:
-          type: "string"
           description: "Extension's number"
-        name:
           type: "string"
+        name:
           description: "Extension's name"
-      description: "Additional info about the key"
+          type: "string"
     CallsTimers:
+      title: "CallsTimers"
+      description: "Call length data for the specified grouping"
       type: "object"
       properties:
         allCalls:
@@ -41431,46 +41706,49 @@ components:
           $ref: "#/components/schemas/CallsByQueueSla"
         callsByType:
           $ref: "#/components/schemas/CallsByType"
-      description: "Call length data for the specified grouping"
     TimeRange:
+      title: "TimeRange"
+      description: "Time range for the request"
+      type: "object"
       required:
       - "timeFrom"
       - "timeTo"
-      type: "object"
       properties:
         timeFrom:
-          type: "string"
           description: "The start date-time for resulting records in RFC 3339 format including offset between local time and UTC, for example 2016-03-15T18:07:52.534Z"
+          type: "string"
           format: "date-time"
         timeTo:
-          type: "string"
           description: "The end date-time for resulting records in RFC 3339 format including offset between local time and UTC, for example 2016-03-15T18:07:52.534Z"
+          type: "string"
           format: "date-time"
-      description: "Time range for the request"
     TimelineResponsePoint:
+      title: "TimelineResponsePoint"
+      type: "object"
       required:
       - "time"
-      type: "object"
       properties:
         time:
-          type: "string"
           description: "Time point in RFC 3339 format"
+          type: "string"
           format: "date-time"
         timers:
           $ref: "#/components/schemas/CallsTimers"
         counters:
           $ref: "#/components/schemas/CallsCounters"
     TimelineResponse:
+      title: "TimelineResponse"
+      type: "object"
       required:
       - "paging"
       - "data"
-      type: "object"
       properties:
         paging:
           $ref: "#/components/schemas/ResponsePaging"
         data:
           $ref: "#/components/schemas/TimelineResponseData"
     Interval:
+      title: "Interval"
       type: "string"
       enum:
       - "Hour"
@@ -41478,102 +41756,107 @@ components:
       - "Week"
       - "Month"
     TimelineResponseOptions:
+      title: "TimelineResponseOptions"
+      description: "Counters and timers options for calls breakdown"
       type: "object"
       properties:
         counters:
           $ref: "#/components/schemas/TimelineResponseOptionsCounters"
         timers:
           $ref: "#/components/schemas/TimelineResponseOptionsTimers"
-      description: "Counters and timers options for calls breakdown"
     TimelineResponseOptionsTimers:
+      title: "TimelineResponseOptionsTimers"
+      description: "Options for selecting breakdown for calls duration"
       type: "object"
       properties:
         allCallsDuration:
-          type: "boolean"
           description: "Include data for all calls duration"
+          type: "boolean"
         callsDurationByDirection:
-          type: "boolean"
           description: "Include breakdown of calls duration by direction (Inbound, Outbound)"
+          type: "boolean"
         callsDurationByOrigin:
-          type: "boolean"
           description: "Include breakdown of calls duration by origin (Internal, External)"
+          type: "boolean"
         callsDurationByResponse:
-          type: "boolean"
           description: "Include breakdown of calls duration by response (Answered, NotAnswered, Connected, NotConnected)"
+          type: "boolean"
         callsSegmentsDuration:
-          type: "boolean"
           description: "Include breakdown of calls duration by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
+          type: "boolean"
         callsDurationByResult:
-          type: "boolean"
           description: "Include breakdown of calls duration by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
+          type: "boolean"
         callsDurationByCompanyHours:
-          type: "boolean"
           description: "Include breakdown of calls duration by company hours (BusinessHours, AfterHours)"
+          type: "boolean"
         callsDurationByQueueSla:
-          type: "boolean"
           description: "Include breakdown of calls duration by queue SLA (InSLA, OutSLA). This timer is only applicable to Queues grouping"
-        callsDurationByType:
           type: "boolean"
+        callsDurationByType:
           description: "Include breakdown of calls duration by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
-      description: "Options for selecting breakdown for calls duration"
+          type: "boolean"
     TimelineResponseRecord:
+      title: "TimelineResponseRecord"
+      type: "object"
       required:
       - "key"
-      type: "object"
       properties:
         key:
-          type: "string"
           description: "Grouping key"
+          type: "string"
         info:
           $ref: "#/components/schemas/KeyInfo"
         points:
+          description: "List of requested call data time-value points"
           type: "array"
           items:
             $ref: "#/components/schemas/TimelineResponsePoint"
-          description: "List of requested call data time-value points"
     TimelineResponseOptionsCounters:
+      title: "TimelineResponseOptionsCounters"
+      description: "Options for selecting breakdown for calls count"
       type: "object"
       properties:
         allCalls:
-          type: "boolean"
           description: "Include data for total calls count"
+          type: "boolean"
         callsByDirection:
-          type: "boolean"
           description: "Include breakdown of calls count by direction (Inbound, Outbound)"
+          type: "boolean"
         callsByOrigin:
-          type: "boolean"
           description: "Include breakdown of calls count by origin (Internal, External)"
+          type: "boolean"
         callsByResponse:
-          type: "boolean"
           description: "Include breakdown of calls count by response (Answered, NotAnswered, Connected, NotConnected)"
+          type: "boolean"
         callsSegments:
-          type: "boolean"
           description: "Include breakdown of calls count by segments (Ringing, LiveTalk, Hold, Park, Transfer, IvrPrompt, Voicemail, VmGreeting, Setup)"
+          type: "boolean"
         callsByResult:
-          type: "boolean"
           description: "Include breakdown of calls count by result (Completed, Abandoned, Voicemail, Unknown, Missed, Accepted)"
+          type: "boolean"
         callsByCompanyHours:
-          type: "boolean"
           description: "Include breakdown of calls count by company hours (BusinessHours, AfterHours)"
+          type: "boolean"
         callsByQueueSla:
-          type: "boolean"
           description: "Include breakdown of calls count by queue SLA (InSLA, OutSLA). This counter is only applicable to Queues grouping"
+          type: "boolean"
         callsByActions:
-          type: "boolean"
           description: "Include breakdown of calls count by action (HoldOff, HoldOn, ParkOn, ParkOff, BlindTransfer, WarmTransfer, DTMFTransfer)"
+          type: "boolean"
         callsByType:
-          type: "boolean"
           description: "Include breakdown of calls count by type (Direct, FromQueue, ParkRetrieval, Transferred, Outbound)"
-        queueOpportunities:
           type: "boolean"
+        queueOpportunities:
           description: "Include breakdown of calls count by the total number of times a Queue call was presented to the user. It is limited to `groupBy` Users and `groupByMembers` (Department, Queue, Site, UserGroup) grouping. Only the listed below options for call filters are applicable to `queueOpportunities` and provide meaningful results: `queues` (selected queue extension ids), `callResults` (Missed, Abandoned), `callResponses` (Answered, NotAnswered), `origins` (Internal, External)"
-      description: "Options for selecting breakdown for calls count"
+          type: "boolean"
     TimelineRequest:
+      title: "TimelineRequest"
+      type: "object"
       required:
       - "grouping"
       - "timeSettings"
       - "responseOptions"
-      type: "object"
       properties:
         grouping:
           $ref: "#/components/schemas/Grouping"
@@ -41584,18 +41867,19 @@ components:
         responseOptions:
           $ref: "#/components/schemas/TimelineResponseOptions"
     TimelineResponseData:
+      title: "TimelineResponseData"
+      description: "A list of time-value points of call data as per the grouping and filtering options specified in the request"
+      type: "object"
       required:
       - "groupedBy"
-      type: "object"
       properties:
         groupedBy:
           $ref: "#/components/schemas/GroupingOptions"
         records:
+          description: "List of call data as per the grouping and filtering options specified in the request"
           type: "array"
           items:
             $ref: "#/components/schemas/TimelineResponseRecord"
-          description: "List of call data as per the grouping and filtering options specified in the request"
-      description: "A list of time-value points of call data as per the grouping and filtering options specified in the request"
     TaskRecurrenceInfo:
       type: "object"
       description: "Task information"
@@ -43709,6 +43993,19 @@ components:
         type: "array"
         items:
           $ref: "#/components/schemas/CallDirectionEnum"
+    CallMetadataCategory:
+      name: "metadataCategory"
+      in: "query"
+      description: |
+        Category of metadata to be returned. If omitted, all call records are returned.
+        Multiple values are supported
+      style: "form"
+      explode: true
+      schema:
+        type: "array"
+        minItems: 0
+        items:
+          type: "string"
     CallLogDateFrom:
       name: "dateFrom"
       in: "query"
@@ -43860,8 +44157,11 @@ components:
         Direction of a message to filter the message list result.
         By default, there is no filter applied - both Inbound and Outbound messages are returned
       schema:
-        $ref: "#/components/schemas/SmsDirectionEnum"
-      example: "Inbound"
+        type: "array"
+        items:
+          $ref: "#/components/schemas/SmsDirectionEnum"
+      example:
+      - "Inbound"
     QueryBatchId:
       name: "batchId"
       in: "query"
@@ -44017,6 +44317,16 @@ components:
       required: true
       schema:
         type: "string"
+    OrderByInfo:
+      name: "orderBy"
+      in: "query"
+      description: "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n"
+      style: "form"
+      explode: false
+      schema:
+        type: "array"
+        items:
+          type: "string"
     JobId:
       name: "jobId"
       in: "path"
@@ -44083,6 +44393,13 @@ components:
       description: "Recording ID of the domain"
       schema:
         $ref: "#/components/schemas/SourceRecordId"
+    SourceSessionId:
+      name: "sourceSessionId"
+      in: "path"
+      required: true
+      description: "Session ID of the domain"
+      schema:
+        $ref: "#/components/schemas/SourceSessionId"
     ScimUserId:
       name: "scimUserId"
       in: "path"
