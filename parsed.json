@@ -47218,6 +47218,24 @@
       ]
     },
     {
+      "name": "GetSessionInsightsResponse",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "RecordingInsights"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "RSPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "SubscriptionInfoBlacklistedData",
       "fields": [
         {
@@ -60291,22 +60309,7 @@
           "appPermission": "RingSense",
           "withParameter": false,
           "responseSchema": {
-            "type": "object",
-            "required": [
-              "records",
-              "paging"
-            ],
-            "properties": {
-              "records": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/RecordingInsights"
-                }
-              },
-              "paging": {
-                "$ref": "#/components/schemas/RSPagingModel"
-              }
-            }
+            "$ref": "GetSessionInsightsResponse"
           },
           "queryParameters": "getSessionInsightsParameters"
         }
