@@ -3,3 +3,4 @@ lib/
 .env
 dev-notes.md
 rc-private-openapi.yml
+.DS_Store
