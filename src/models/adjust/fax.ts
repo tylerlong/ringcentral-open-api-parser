@@ -1,6 +1,6 @@
-import type { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema } from '../../types';
+import type { NamedSchema } from "../../types";
 
 /**
  * fix fax sending
@@ -11,29 +11,32 @@ import type { NamedSchema } from '../../types';
  * @returns
  */
 export const fixFax = (schemas: NamedSchema[]): NamedSchema[] => {
-  const createFaxMessageRequest = schemas.find((schema) => schema.name === 'CreateFaxMessageRequest')!;
-  createFaxMessageRequest.required = ['attachments', 'to'];
+  const createFaxMessageRequest = schemas.find((schema) =>
+    schema.name === "CreateFaxMessageRequest"
+  )!;
+  createFaxMessageRequest.required = ["attachments", "to"];
   const props = createFaxMessageRequest.properties!;
   props.attachments = {
-    type: 'array',
-    items: { type: 'string', format: 'binary', description: 'File to upload' },
+    type: "array",
+    items: { type: "string", format: "binary", description: "File to upload" },
   };
   delete props.attachment;
   const toItem = (props.to as OpenAPIV3.ArraySchemaObject).items;
-  (toItem as OpenAPIV3.ReferenceObject).$ref = '#/components/schemas/FaxReceiver';
+  (toItem as OpenAPIV3.ReferenceObject).$ref =
+    "#/components/schemas/FaxReceiver";
   delete (toItem as OpenAPIV3.SchemaObject).type;
   schemas.push({
-    name: 'FaxReceiver',
-    type: 'object',
-    description: 'Fax receiver',
+    name: "FaxReceiver",
+    type: "object",
+    description: "Fax receiver",
     properties: {
       phoneNumber: {
-        type: 'string',
-        description: 'Phone number in E.164 format',
+        type: "string",
+        description: "Phone number in E.164 format",
       },
       name: {
-        type: 'string',
-        description: 'Name of the receiver',
+        type: "string",
+        description: "Name of the receiver",
       },
     },
   });

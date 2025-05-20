@@ -5519,7 +5519,7 @@ paths:
         - Call Log
       summary: Get Company Call Record(s)
       description: |
-        Returns individual call log record(s) by ID. 
+        Returns individual call log record(s) by ID.
         [Batch syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: readCompanyCallRecord
       parameters:
@@ -9618,7 +9618,7 @@ paths:
         - Devices
       summary: List Extension Devices
       description: |
-        Returns devices of an extension or multiple extensions by their ID(s). 
+        Returns devices of an extension or multiple extensions by their ID(s).
         [Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: listExtensionDevices
       parameters:
@@ -13222,7 +13222,7 @@ paths:
         - Call Blocking
       summary: Delete Blocked/Allowed Number
       description: |
-        Deletes blocked or allowed phone number(s) by their ID(s). 
+        Deletes blocked or allowed phone number(s) by their ID(s).
         [Batch request](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
       operationId: deleteBlockedAllowedNumber
       parameters:
@@ -21961,7 +21961,7 @@ components:
           example: "94002"
         country:
           description: |
-            ISO-3166-1 2-letter country code (alpha2). 
+            ISO-3166-1 2-letter country code (alpha2).
             For available countries, see GET /dictionary/country
           type: string
           maxLength: 2
@@ -27280,7 +27280,7 @@ components:
         alternateOutboundCallRecordingMode:
           type: boolean
           description: |
-            Alternate call recording setting. Status of the smart ACR for outbound call recordings. 
+            Alternate call recording setting. Status of the smart ACR for outbound call recordings.
             Supported for "Outbound" and "All" call directions.
     BulkAccountCallRecordingsResource:
       type: object
@@ -31700,7 +31700,7 @@ components:
             - members of a Department; if these values are set for department outsiders,
             the 400 Bad Request error code is returned. The 'TakeDepartmentCallsOnly'
             status can be set through the old RingCentral user interface and is available
-            for some migrated accounts only. Not applicable for User extensions 
+            for some migrated accounts only. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -31711,7 +31711,7 @@ components:
         dndStatusPersonal:
           type: string
           description: |
-            Do Not Disturb status of a User extension. Applicable for User extensions 
+            Do Not Disturb status of a User extension. Applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -31767,8 +31767,8 @@ components:
         acceptCallQueueCalls:
           type: boolean
           description: |
-            Specifies if a Call Queue member extension will be able to receive Call Queue calls. 
-            Applicable for User extensions if the new communication handling service is activated on account. 
+            Specifies if a Call Queue member extension will be able to receive Call Queue calls.
+            Applicable for User extensions if the new communication handling service is activated on account.
             Used for Agent state type
     CallInfoCQ:
       type: object
@@ -31831,7 +31831,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -31851,7 +31851,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
         pickUpCallsOnHold:
           type: boolean
@@ -37252,7 +37252,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37266,7 +37266,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
         pickUpCallsOnHold:
           type: boolean
@@ -37442,7 +37442,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37456,7 +37456,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
         pickUpCallsOnHold:
           type: boolean
@@ -37481,7 +37481,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37492,7 +37492,7 @@ components:
         dndStatusPersonal:
           type: string
           description: |
-            Do Not Disturb status of a User extension. Applicable for User extensions 
+            Do Not Disturb status of a User extension. Applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37510,7 +37510,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
           default: false
         pickUpCallsOnHold:
@@ -37529,8 +37529,8 @@ components:
         acceptCallQueueCalls:
           type: boolean
           description: |
-            Specifies if a Call Queue member extension will be able to receive Call Queue calls. 
-            Applicable for User extensions if the new communication handling service is activated on account. 
+            Specifies if a Call Queue member extension will be able to receive Call Queue calls.
+            Applicable for User extensions if the new communication handling service is activated on account.
             Used for Agent state type
           default: false
     ActiveCallInfoWithoutSIP:
@@ -37627,7 +37627,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37641,7 +37641,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
         pickUpCallsOnHold:
           type: boolean
@@ -37666,7 +37666,7 @@ components:
         dndStatus:
           type: string
           description: |
-            Do Not Disturb status. Not applicable for User extensions 
+            Do Not Disturb status. Not applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37677,7 +37677,7 @@ components:
         dndStatusPersonal:
           type: string
           description: |
-            Do Not Disturb status of a User extension. Applicable for User extensions 
+            Do Not Disturb status of a User extension. Applicable for User extensions
             if the new communication handling service is activated on account
           enum:
             - TakeAllCalls
@@ -37686,8 +37686,8 @@ components:
         acceptCallQueueCalls:
           type: boolean
           description: |
-            Specifies if a Call Queue member extension will be able to receive Call Queue calls. 
-            Applicable for User extensions if the new communication handling service is activated on account. 
+            Specifies if a Call Queue member extension will be able to receive Call Queue calls.
+            Applicable for User extensions if the new communication handling service is activated on account.
             Used for Agent state type
         message:
           type: string
@@ -37710,7 +37710,7 @@ components:
         ringOnMonitoredCall:
           type: boolean
           description: |
-            If `true` enables to ring extension phone, if any user monitored 
+            If `true` enables to ring extension phone, if any user monitored
             by this extension is ringing
           default: false
         pickUpCallsOnHold:
@@ -47788,7 +47788,7 @@ components:
       name: advancedPermissions
       in: query
       description: |
-        Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource. 
+        Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.
         The default value is false
       schema:
         type: boolean
@@ -47851,7 +47851,7 @@ components:
       in: query
       description: |
         Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),
-        or minus sign '-' (descending order). 
+        or minus sign '-' (descending order).
         Supported values: 'name', 'modelName', 'siteName', 'featureEnabled'.
         The default sorting is by `name`
       style: form

@@ -1,4 +1,4 @@
-import type { NamedSchema } from '../../types';
+import type { NamedSchema } from "../../types";
 
 /**
  * fix creation of greeting
@@ -8,21 +8,28 @@ import type { NamedSchema } from '../../types';
  * @returns
  */
 export const fixGreeting = (schemas: NamedSchema[]): NamedSchema[] => {
-  const createCompanyGreeting = schemas.find((schema) => schema.name === 'CreateCompanyGreetingRequest')!;
+  const createCompanyGreeting = schemas.find((schema) =>
+    schema.name === "CreateCompanyGreetingRequest"
+  )!;
   delete createCompanyGreeting.properties!.answeringRuleId;
-  const createCustomUserGreeting = schemas.find((schema) => schema.name === 'CreateCustomUserGreetingRequest')!;
+  const createCustomUserGreeting = schemas.find((schema) =>
+    schema.name === "CreateCustomUserGreetingRequest"
+  )!;
   delete createCustomUserGreeting.properties!.answeringRuleId;
-  createCompanyGreeting.properties!.answeringRule = createCustomUserGreeting.properties!.answeringRule = {
-    $ref: '#/components/schemas/GreetingAnsweringRuleId',
-  };
+  createCompanyGreeting.properties!.answeringRule =
+    createCustomUserGreeting
+      .properties!.answeringRule =
+      {
+        $ref: "#/components/schemas/GreetingAnsweringRuleId",
+      };
   schemas.push({
-    type: 'object',
-    name: 'GreetingAnsweringRuleId',
+    type: "object",
+    name: "GreetingAnsweringRuleId",
     description: "Greeting's answering rule id",
     properties: {
       id: {
-        type: 'string',
-        description: 'Internal identifier of an answering rule',
+        type: "string",
+        description: "Internal identifier of an answering rule",
       },
     },
   });

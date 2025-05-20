@@ -1,6 +1,6 @@
-import { prepareModels } from './models';
-import { preparePaths } from './paths';
-import { getRawData } from './raw-data';
+import { prepareModels } from "./models";
+import { preparePaths } from "./paths";
+import { getRawData } from "./raw-data";
 
 /**
  * Prepares the specification by extracting the necessary data from the OpenAPI document.

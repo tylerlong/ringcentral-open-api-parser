@@ -1,6 +1,7 @@
 # OpenAPI Parser
 
-Parse OpenAPI spec to JavaScript objects. And the objects could be used for code generation.
+Parse OpenAPI spec to JavaScript objects. And the objects could be used for code
+generation.
 
 This project will be used to generate code for the following projects:
 

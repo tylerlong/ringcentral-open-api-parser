@@ -1,9 +1,12 @@
-import type { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema, RawOperation } from '../../types';
-import { capitalizeFirstLetter } from '../../utils';
+import type { NamedSchema, RawOperation } from "../../types";
+import { capitalizeFirstLetter } from "../../utils";
 
-export const collectQueryParams = (doc: OpenAPIV3.Document, operations: RawOperation[]) => {
+export const collectQueryParams = (
+  doc: OpenAPIV3.Document,
+  operations: RawOperation[],
+) => {
   const schemas: NamedSchema[] = [];
   for (const operation of operations) {
     if (!operation.parameters) {
@@ -12,18 +15,18 @@ export const collectQueryParams = (doc: OpenAPIV3.Document, operations: RawOpera
     let queryParameters = operation.parameters;
     for (const qp of queryParameters) {
       // inline parameters
-      if ('$ref' in qp) {
-        const name = (qp.$ref as string).split('/').pop()!;
+      if ("$ref" in qp) {
+        const name = (qp.$ref as string).split("/").pop()!;
         Object.assign(qp, doc.components?.parameters?.[name]);
         delete qp.$ref;
       }
     }
     // no path or header parameters
-    queryParameters = operation.parameters.filter((p) => p.in === 'query');
+    queryParameters = operation.parameters.filter((p) => p.in === "query");
     if (queryParameters.length === 0) {
       continue;
     }
-    const name = capitalizeFirstLetter(operation.operationId!) + 'Parameters';
+    const name = capitalizeFirstLetter(operation.operationId!) + "Parameters";
     const schema = {
       name,
       description: `Query parameters for operation ${operation.operationId}`,

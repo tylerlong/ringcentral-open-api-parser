@@ -1,4 +1,4 @@
-import type { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from "openapi-types";
 
 export type NamedSchema = OpenAPIV3.SchemaObject & { name: string };
 

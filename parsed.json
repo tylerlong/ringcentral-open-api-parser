@@ -2650,7 +2650,7 @@
       "fields": [
         {
           "name": "advancedPermissions",
-          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource. \nThe default value is false\n",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false\n",
           "type": "boolean",
           "default": false
         }
@@ -2662,7 +2662,7 @@
       "fields": [
         {
           "name": "advancedPermissions",
-          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource. \nThe default value is false\n",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false\n",
           "type": "boolean",
           "default": false
         }
@@ -2674,7 +2674,7 @@
       "fields": [
         {
           "name": "advancedPermissions",
-          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource. \nThe default value is false\n",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false\n",
           "type": "boolean",
           "default": false
         }
@@ -4306,7 +4306,7 @@
         },
         {
           "name": "orderBy",
-          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
+          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order).\nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4350,7 +4350,7 @@
         },
         {
           "name": "orderBy",
-          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
+          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order).\nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4394,7 +4394,7 @@
         },
         {
           "name": "orderBy",
-          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
+          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order).\nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4438,7 +4438,7 @@
         },
         {
           "name": "orderBy",
-          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
+          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order).\nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4497,7 +4497,7 @@
         },
         {
           "name": "orderBy",
-          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order). \nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
+          "description": "Comma-separated list of fields to order results prefixed by plus sign '+' (ascending order),\nor minus sign '-' (descending order).\nSupported values: 'name', 'modelName', 'siteName', 'featureEnabled'.\nThe default sorting is by `name`\n",
           "style": "form",
           "explode": false,
           "type": "array",
@@ -4928,7 +4928,7 @@
         },
         {
           "name": "advancedPermissions",
-          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource. \nThe default value is false\n",
+          "description": "Specifies whether to return advanced permissions capabilities within `permissionsCapabilities` resource.\nThe default value is false\n",
           "type": "boolean",
           "default": false
         }
@@ -13265,7 +13265,7 @@
           "required": true
         },
         {
-          "description": "ISO-3166-1 2-letter country code (alpha2). \nFor available countries, see GET /dictionary/country\n",
+          "description": "ISO-3166-1 2-letter country code (alpha2).\nFor available countries, see GET /dictionary/country\n",
           "type": "string",
           "maxLength": 2,
           "minLength": 2,
@@ -21544,7 +21544,7 @@
         },
         {
           "type": "boolean",
-          "description": "Alternate call recording setting. Status of the smart ACR for outbound call recordings. \nSupported for \"Outbound\" and \"All\" call directions.\n",
+          "description": "Alternate call recording setting. Status of the smart ACR for outbound call recordings.\nSupported for \"Outbound\" and \"All\" call directions.\n",
           "name": "alternateOutboundCallRecordingMode"
         }
       ]
@@ -28937,7 +28937,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Cannot be set for Department/Announcement/Voicemail\n(Take Messages Only)/Fax User/Shared Lines Group/Paging Only Group/IVR\nMenu/Application Extension/Park Location extensions. The 'DoNotAcceptDepartmentCalls'\nand 'TakeDepartmentCallsOnly' values are applicable only for extensions\n- members of a Department; if these values are set for department outsiders,\nthe 400 Bad Request error code is returned. The 'TakeDepartmentCallsOnly'\nstatus can be set through the old RingCentral user interface and is available\nfor some migrated accounts only. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Cannot be set for Department/Announcement/Voicemail\n(Take Messages Only)/Fax User/Shared Lines Group/Paging Only Group/IVR\nMenu/Application Extension/Park Location extensions. The 'DoNotAcceptDepartmentCalls'\nand 'TakeDepartmentCallsOnly' values are applicable only for extensions\n- members of a Department; if these values are set for department outsiders,\nthe 400 Bad Request error code is returned. The 'TakeDepartmentCallsOnly'\nstatus can be set through the old RingCentral user interface and is available\nfor some migrated accounts only. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -28949,7 +28949,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status of a User extension. Applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status of a User extension. Applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptAnyCalls",
@@ -29029,7 +29029,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls. \nApplicable for User extensions if the new communication handling service is activated on account. \nUsed for Agent state type\n",
+          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls.\nApplicable for User extensions if the new communication handling service is activated on account.\nUsed for Agent state type\n",
           "name": "acceptCallQueueCalls"
         }
       ]
@@ -29121,7 +29121,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -29147,7 +29147,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "name": "ringOnMonitoredCall"
         },
         {
@@ -37128,7 +37128,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -37145,7 +37145,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "name": "ringOnMonitoredCall"
         },
         {
@@ -37422,7 +37422,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -37439,7 +37439,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "name": "ringOnMonitoredCall"
         },
         {
@@ -37475,7 +37475,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -37487,7 +37487,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status of a User extension. Applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status of a User extension. Applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptAnyCalls",
@@ -37510,7 +37510,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "default": false,
           "name": "ringOnMonitoredCall"
         },
@@ -37532,7 +37532,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls. \nApplicable for User extensions if the new communication handling service is activated on account. \nUsed for Agent state type\n",
+          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls.\nApplicable for User extensions if the new communication handling service is activated on account.\nUsed for Agent state type\n",
           "default": false,
           "name": "acceptCallQueueCalls"
         }
@@ -37677,7 +37677,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -37694,7 +37694,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "name": "ringOnMonitoredCall"
         },
         {
@@ -37730,7 +37730,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status. Not applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status. Not applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptDepartmentCalls",
@@ -37742,7 +37742,7 @@
         },
         {
           "type": "string",
-          "description": "Do Not Disturb status of a User extension. Applicable for User extensions \nif the new communication handling service is activated on account\n",
+          "description": "Do Not Disturb status of a User extension. Applicable for User extensions\nif the new communication handling service is activated on account\n",
           "enum": [
             "TakeAllCalls",
             "DoNotAcceptAnyCalls",
@@ -37752,7 +37752,7 @@
         },
         {
           "type": "boolean",
-          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls. \nApplicable for User extensions if the new communication handling service is activated on account. \nUsed for Agent state type\n",
+          "description": "Specifies if a Call Queue member extension will be able to receive Call Queue calls.\nApplicable for User extensions if the new communication handling service is activated on account.\nUsed for Agent state type\n",
           "name": "acceptCallQueueCalls"
         },
         {
@@ -37780,7 +37780,7 @@
         },
         {
           "type": "boolean",
-          "description": "If `true` enables to ring extension phone, if any user monitored \nby this extension is ringing\n",
+          "description": "If `true` enables to ring extension phone, if any user monitored\nby this extension is ringing\n",
           "default": false,
           "name": "ringOnMonitoredCall"
         },
@@ -56960,7 +56960,7 @@
             "Call Log"
           ],
           "method2": "get",
-          "description": "Returns individual call log record(s) by ID. \n[Batch syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
+          "description": "Returns individual call log record(s) by ID.\n[Batch syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Get Company Call Record(s)",
           "operationId": "readCompanyCallRecord",
           "rateLimitGroup": "Heavy",
@@ -60037,7 +60037,7 @@
             "Devices"
           ],
           "method2": "get",
-          "description": "Returns devices of an extension or multiple extensions by their ID(s). \n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
+          "description": "Returns devices of an extension or multiple extensions by their ID(s).\n[Batch request syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "List Extension Devices",
           "operationId": "listExtensionDevices",
           "rateLimitGroup": "Light",
@@ -66742,7 +66742,7 @@
             "Call Blocking"
           ],
           "method2": "delete",
-          "description": "Deletes blocked or allowed phone number(s) by their ID(s). \n[Batch request](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
+          "description": "Deletes blocked or allowed phone number(s) by their ID(s).\n[Batch request](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
           "summary": "Delete Blocked/Allowed Number",
           "operationId": "deleteBlockedAllowedNumber",
           "rateLimitGroup": "Medium",

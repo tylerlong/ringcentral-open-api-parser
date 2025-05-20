@@ -1,7 +1,7 @@
-import type { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema, RawOperation } from '../../types';
-import { capitalizeFirstLetter } from '../../utils';
+import type { NamedSchema, RawOperation } from "../../types";
+import { capitalizeFirstLetter } from "../../utils";
 
 export const collectRequestBodies = (operations: RawOperation[]) => {
   const schemas: NamedSchema[] = [];
@@ -11,9 +11,9 @@ export const collectRequestBodies = (operations: RawOperation[]) => {
       continue;
     }
     const bodyContent =
-      requestBody.content?.['application/x-www-form-urlencoded'] ||
-      requestBody.content?.['multipart/form-data'] ||
-      requestBody.content?.['application/json'];
+      requestBody.content?.["application/x-www-form-urlencoded"] ||
+      requestBody.content?.["multipart/form-data"] ||
+      requestBody.content?.["application/json"];
     if (!bodyContent) {
       continue;
     }
@@ -21,12 +21,13 @@ export const collectRequestBodies = (operations: RawOperation[]) => {
     if (!schema) {
       continue;
     }
-    if ('$ref' in schema) {
+    if ("$ref" in schema) {
       continue;
     }
-    schema.name = capitalizeFirstLetter(operation.operationId!) + 'Request';
+    schema.name = capitalizeFirstLetter(operation.operationId!) + "Request";
     if (!schema.description) {
-      schema.description = `Request body for operation ${operation.operationId}`;
+      schema.description =
+        `Request body for operation ${operation.operationId}`;
     }
     schemas.push(schema);
   }

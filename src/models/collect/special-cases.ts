@@ -1,22 +1,22 @@
-import type { NamedSchema } from '../../types';
+import type { NamedSchema } from "../../types";
 
 export const handleSpecialCases = () => {
   // attachment
   const Attachment: NamedSchema = {
-    name: 'Attachment',
-    description: 'Attachment is a file to be uploaded',
-    required: ['content'],
+    name: "Attachment",
+    description: "Attachment is a file to be uploaded",
+    required: ["content"],
     properties: {
       filename: {
-        type: 'string',
+        type: "string",
         description: 'Filename with extension, such as "image.png"',
       },
       content: {
-        type: 'byte[]' as any,
-        description: 'Binary content of the file',
+        type: "byte[]" as any,
+        description: "Binary content of the file",
       },
       contentType: {
-        type: 'string',
+        type: "string",
         description: 'Content type of the file, such as "image/png"',
       },
     },

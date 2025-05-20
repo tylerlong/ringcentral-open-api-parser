@@ -1,6 +1,6 @@
-import type { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema } from '../../types';
+import type { NamedSchema } from "../../types";
 
 /**
  * we don't like properties of type `object`, because they should be a new model instead and we `$ref` them.
@@ -14,21 +14,27 @@ export const ref = (schemas: NamedSchema[]): NamedSchema[] => {
     }
     for (const propKey of Object.keys(properties)) {
       let property = properties[propKey];
-      if (!('properties' in property) && 'items' in property && 'properties' in property.items) {
+      if (
+        !("properties" in property) && "items" in property &&
+        "properties" in property.items
+      ) {
         property = property.items;
       }
-      if (!('properties' in property)) {
+      if (!("properties" in property)) {
         continue;
       }
-      const name = `${schema.name}${propKey.charAt(0).toUpperCase() + propKey.slice(1)}`;
+      const name = `${schema.name}${
+        propKey.charAt(0).toUpperCase() + propKey.slice(1)
+      }`;
       schemas.push({
-        type: 'object',
+        type: "object",
         properties: property.properties,
         name,
       });
       delete property.properties;
       delete property.type;
-      (property as OpenAPIV3.ReferenceObject).$ref = `#/components/schemas/${name}`;
+      (property as OpenAPIV3.ReferenceObject).$ref =
+        `#/components/schemas/${name}`;
     }
   }
   return schemas;
