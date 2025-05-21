@@ -47,6 +47,9 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
       delete schema.anyOf;
       delete schema.oneOf;
     }
+    if ("items" in schema && schema.items) {
+      mergeOne(schema.items as NamedSchema);
+    }
     for (const val of Object.values(schema.properties ?? {})) {
       mergeOne(val as NamedSchema);
       if ("items" in val) {

@@ -15581,19 +15581,34 @@
           "type": "array",
           "maxItems": 1,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CommStateScheduleConditionResource"
-              },
-              {
-                "$ref": "#/components/schemas/CommStateRefConditionResource"
-              }
-            ],
             "discriminator": {
               "propertyName": "type",
               "mapping": {
                 "Schedule": "#/components/schemas/CommStateScheduleConditionResource",
                 "State": "#/components/schemas/CommStateRefConditionResource"
+              }
+            },
+            "title": "State Condition",
+            "required": [
+              "type",
+              "schedule"
+            ],
+            "name": "CommStateScheduleConditionResource",
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/CommStateConditionTypeResource",
+                "type": "string",
+                "enum": [
+                  "Schedule",
+                  "State"
+                ]
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/CommStateScheduleResource"
+              },
+              "state": {
+                "$ref": "#/components/schemas/CommStateReferenceResource"
               }
             }
           },
@@ -15731,19 +15746,35 @@
           "minItems": 1,
           "maxItems": 1,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CommStateScheduleConditionRequest"
-              },
-              {
-                "$ref": "#/components/schemas/CommStateRefConditionRequest"
-              }
-            ],
             "discriminator": {
               "propertyName": "type",
               "mapping": {
                 "Schedule": "#/components/schemas/CommStateScheduleConditionRequest",
                 "State": "#/components/schemas/CommStateRefConditionRequest"
+              }
+            },
+            "title": "State Condition",
+            "required": [
+              "type",
+              "schedule",
+              "state"
+            ],
+            "name": "CommStateScheduleConditionRequest",
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/CommStateConditionTypeResource",
+                "type": "string",
+                "enum": [
+                  "Schedule",
+                  "State"
+                ]
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/CommStateScheduleResource"
+              },
+              "state": {
+                "$ref": "#/components/schemas/CommReferenceStateResource"
               }
             }
           },
@@ -18677,23 +18708,51 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleInteractionConditionResource"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleScheduleConditionResource"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleStateConditionResource"
-              }
-            ],
             "discriminator": {
               "propertyName": "type",
               "mapping": {
                 "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionResource",
                 "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionResource",
                 "State": "#/components/schemas/CommInteractionRuleStateConditionResource"
+              }
+            },
+            "title": "Interaction Rule Condition",
+            "required": [
+              "type",
+              "from",
+              "to",
+              "schedule"
+            ],
+            "name": "CommInteractionRuleInteractionConditionResource",
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/CommInteractionConditionTypeResource",
+                "type": "string",
+                "enum": [
+                  "Interaction",
+                  "Schedule",
+                  "State"
+                ],
+                "example": "State"
+              },
+              "from": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommFromResource"
+                }
+              },
+              "to": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommPhoneNumberString"
+                }
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/CommInteractionRuleScheduleResource"
+              },
+              "state": {
+                "$ref": "#/components/schemas/CommStateResource"
               }
             }
           },
@@ -18728,23 +18787,52 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleInteractionConditionRequest"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleScheduleConditionRequest"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleStateConditionRequest"
-              }
-            ],
             "discriminator": {
               "propertyName": "type",
               "mapping": {
                 "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionRequest",
                 "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionRequest",
                 "State": "#/components/schemas/CommInteractionRuleStateConditionRequest"
+              }
+            },
+            "title": "Interaction Rule Condition",
+            "required": [
+              "type",
+              "from",
+              "to",
+              "schedule",
+              "state"
+            ],
+            "name": "CommInteractionRuleInteractionConditionRequest",
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/CommInteractionConditionTypeResource",
+                "type": "string",
+                "enum": [
+                  "Interaction",
+                  "Schedule",
+                  "State"
+                ],
+                "example": "State"
+              },
+              "from": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommFromResource"
+                }
+              },
+              "to": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommPhoneNumberString"
+                }
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/CommInteractionRuleScheduleResource"
+              },
+              "state": {
+                "$ref": "#/components/schemas/CommReferenceStateResource"
               }
             }
           },
@@ -19062,23 +19150,52 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleInteractionConditionRequest"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleScheduleConditionRequest"
-              },
-              {
-                "$ref": "#/components/schemas/CommInteractionRuleStateConditionRequest"
-              }
-            ],
             "discriminator": {
               "propertyName": "type",
               "mapping": {
                 "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionRequest",
                 "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionRequest",
                 "State": "#/components/schemas/CommInteractionRuleStateConditionRequest"
+              }
+            },
+            "title": "Interaction Rule Condition",
+            "required": [
+              "type",
+              "from",
+              "to",
+              "schedule",
+              "state"
+            ],
+            "name": "CommInteractionRuleInteractionConditionRequest",
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/components/schemas/CommInteractionConditionTypeResource",
+                "type": "string",
+                "enum": [
+                  "Interaction",
+                  "Schedule",
+                  "State"
+                ],
+                "example": "State"
+              },
+              "from": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommFromResource"
+                }
+              },
+              "to": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommPhoneNumberString"
+                }
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/CommInteractionRuleScheduleResource"
+              },
+              "state": {
+                "$ref": "#/components/schemas/CommReferenceStateResource"
               }
             }
           },
