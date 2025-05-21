@@ -15503,14 +15503,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "triggerType",
-              "mapping": {
-                "Daily": "#/components/schemas/CommDailyTriggerResource",
-                "Weekly": "#/components/schemas/CommWeeklyTriggerResource",
-                "Range": "#/components/schemas/CommRangeTriggerResource"
-              }
-            },
             "title": "Trigger",
             "required": [
               "startTime",
@@ -15581,13 +15573,6 @@
           "type": "array",
           "maxItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "Schedule": "#/components/schemas/CommStateScheduleConditionResource",
-                "State": "#/components/schemas/CommStateRefConditionResource"
-              }
-            },
             "title": "State Condition",
             "required": [
               "type",
@@ -15746,13 +15731,6 @@
           "minItems": 1,
           "maxItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "Schedule": "#/components/schemas/CommStateScheduleConditionRequest",
-                "State": "#/components/schemas/CommStateRefConditionRequest"
-              }
-            },
             "title": "State Condition",
             "required": [
               "type",
@@ -16142,16 +16120,6 @@
           "minItems": 1,
           "description": "Action information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "ExtensionTerminatingTarget": "#/components/schemas/CommExtensionTerminatingTargetResource",
-                "PhoneNumberTerminatingTarget": "#/components/schemas/CommPhoneNumberTerminatingTargetResource",
-                "PlayAnnouncementTerminatingTarget": "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource",
-                "VoiceMailTerminatingTarget": "#/components/schemas/CommVoiceMailTerminatingTargetResource",
-                "ImsVoiceMailTerminatingTarget": "#/components/schemas/CommImsVoiceMailTerminatingTargetResource"
-              }
-            },
             "title": "Terminating Target",
             "required": [
               "name",
@@ -16472,13 +16440,6 @@
           "minItems": 1,
           "maxItems": 2,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingAlwaysRingTargetResource",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingAlwaysRingTargetResource"
-              }
-            },
             "title": "Ring Target - All Mobile",
             "required": [
               "name",
@@ -16802,18 +16763,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "PlayConnectingMessageAction": "#/components/schemas/CommPlayConnectingMessageActionResource",
-                "PlayConnectingPromptAction": "#/components/schemas/CommPlayConnectingPromptActionResource",
-                "PlayWelcomePromptAction": "#/components/schemas/CommPlayWelcomePromptActionResource",
-                "ScreeningAction": "#/components/schemas/CommScreeningActionResource",
-                "RingGroupAction": "#/components/schemas/CommRingGroupActionResource",
-                "RingAlwaysGroupAction": "#/components/schemas/CommRingAlwaysGroupActionResource",
-                "TerminatingAction": "#/components/schemas/CommTerminatingActionResource"
-              }
-            },
             "title": "Action Resource",
             "required": [
               "enabled",
@@ -16980,19 +16929,6 @@
           "minItems": 1,
           "description": "Target information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingTargetResource",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingTargetResource",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetResource",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetResource",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetResource",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetResource",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetResource",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetResource"
-              }
-            },
             "title": "Phone Number Target",
             "required": [
               "name",
@@ -17347,18 +17283,6 @@
           "minItems": 1,
           "description": "Action information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "PlayConnectingMessageAction": "#/components/schemas/CommPlayConnectingMessageActionRequest",
-                "PlayConnectingPromptAction": "#/components/schemas/CommPlayConnectingPromptActionRequest",
-                "PlayWelcomePromptAction": "#/components/schemas/CommPlayWelcomePromptActionRequest",
-                "ScreeningAction": "#/components/schemas/CommScreeningActionRequest",
-                "RingGroupAction": "#/components/schemas/CommRingGroupActionRequest",
-                "RingAlwaysGroupAction": "#/components/schemas/CommRingAlwaysGroupActionRequest",
-                "TerminatingAction": "#/components/schemas/CommTerminatingActionRequest"
-              }
-            },
             "title": "Action Resource",
             "required": [
               "enabled",
@@ -17419,19 +17343,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingTargetRequest",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingTargetRequest",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetRequest",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetRequest",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetRequest",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetRequest",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetRequest",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetRequest"
-              }
-            },
             "title": "Phone Number Target",
             "required": [
               "type",
@@ -17509,16 +17420,6 @@
           "minItems": 1,
           "description": "Action information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "ExtensionTerminatingTarget": "#/components/schemas/CommExtensionTerminatingTargetRequest",
-                "PhoneNumberTerminatingTarget": "#/components/schemas/CommPhoneNumberTerminatingTargetRequest",
-                "PlayAnnouncementTerminatingTarget": "#/components/schemas/CommPlayAnnouncementTerminatingTargetRequest",
-                "VoiceMailTerminatingTarget": "#/components/schemas/CommVoiceMailTerminatingTargetRequest",
-                "ImsVoiceMailTerminatingTarget": "#/components/schemas/CommImsVoiceMailTerminatingTargetRequest"
-              }
-            },
             "title": "Terminating Target",
             "required": [
               "prompt",
@@ -17844,19 +17745,6 @@
           "maxItems": 2,
           "description": "Target information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingTargetRequest",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingTargetRequest",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetRequest",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetRequest",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetRequest",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetRequest",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetRequest",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetRequest"
-              }
-            },
             "title": "Ring Target - All Mobile",
             "required": [
               "type"
@@ -18126,17 +18014,6 @@
         {
           "type": "array",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "CoworkerAppsRingTarget": "#/components/schemas/CommCoworkerAppsRingTargetRequest",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerForwardingTargetRequest",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceForwardingTargetRequest",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationForwardingTargetRequest",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberForwardingTargetRequest",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetRequest"
-              }
-            },
             "title": "Phone Number Target",
             "description": "Ring target",
             "required": [
@@ -18160,17 +18037,6 @@
         {
           "type": "array",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "CoworkerAppsRingTarget": "#/components/schemas/CommCoworkerAppsRingTargetResource",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerForwardingTargetResource",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceForwardingTargetResource",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberForwardingTargetResource",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationForwardingTargetResource",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberForwardingTargetResource"
-              }
-            },
             "title": "Phone Number Target",
             "description": "Ring target",
             "required": [
@@ -18569,17 +18435,6 @@
           "required": false
         },
         {
-          "discriminator": {
-            "propertyName": "type",
-            "mapping": {
-              "CoworkerAppsRingTarget": "#/components/schemas/CommCoworkerAppsRingTargetRequest",
-              "CoworkerRingTarget": "#/components/schemas/CommCoworkerForwardingTargetRequest",
-              "DeviceRingTarget": "#/components/schemas/CommDeviceForwardingTargetRequest",
-              "IntegrationRingTarget": "#/components/schemas/CommIntegrationForwardingTargetRequest",
-              "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberForwardingTargetRequest",
-              "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetRequest"
-            }
-          },
           "title": "Phone Number Target",
           "description": "Ring target",
           "required": true,
@@ -18708,14 +18563,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionResource",
-                "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionResource",
-                "State": "#/components/schemas/CommInteractionRuleStateConditionResource"
-              }
-            },
             "title": "Interaction Rule Condition",
             "required": [
               "type",
@@ -18787,14 +18634,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionRequest",
-                "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionRequest",
-                "State": "#/components/schemas/CommInteractionRuleStateConditionRequest"
-              }
-            },
             "title": "Interaction Rule Condition",
             "required": [
               "type",
@@ -18911,14 +18750,6 @@
           "type": "array",
           "description": "Trigger information",
           "items": {
-            "discriminator": {
-              "propertyName": "triggerType",
-              "mapping": {
-                "Daily": "#/components/schemas/CommDailyTriggerResource",
-                "Weekly": "#/components/schemas/CommWeeklyTriggerResource",
-                "Range": "#/components/schemas/CommRangeTriggerResource"
-              }
-            },
             "title": "Trigger",
             "required": [
               "startTime",
@@ -19076,18 +18907,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "PlayConnectingMessageAction": "#/components/schemas/CommPlayConnectingMessageActionResource",
-                "PlayConnectingPromptAction": "#/components/schemas/CommPlayConnectingPromptActionResource",
-                "PlayWelcomePromptAction": "#/components/schemas/CommPlayWelcomePromptActionResource",
-                "ScreeningAction": "#/components/schemas/CommScreeningActionResource",
-                "RingGroupAction": "#/components/schemas/CommRingGroupActionResource",
-                "RingAlwaysGroupAction": "#/components/schemas/CommRingAlwaysGroupActionResource",
-                "TerminatingAction": "#/components/schemas/CommTerminatingActionResource"
-              }
-            },
             "title": "Action Resource",
             "required": [
               "enabled",
@@ -19150,14 +18969,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "Interaction": "#/components/schemas/CommInteractionRuleInteractionConditionRequest",
-                "Schedule": "#/components/schemas/CommInteractionRuleScheduleConditionRequest",
-                "State": "#/components/schemas/CommInteractionRuleStateConditionRequest"
-              }
-            },
             "title": "Interaction Rule Condition",
             "required": [
               "type",
@@ -53238,24 +53049,6 @@
           "minItems": 1,
           "description": "Action information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingAlwaysRingTargetResource",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingAlwaysRingTargetResource",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetResource",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetResource",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetResource",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetResource",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetResource",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetResource",
-                "ExtensionTerminatingTarget": "#/components/schemas/CommExtensionTerminatingTargetResource",
-                "PhoneNumberTerminatingTarget": "#/components/schemas/CommPhoneNumberTerminatingTargetResource",
-                "PlayAnnouncementTerminatingTarget": "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource",
-                "VoiceMailTerminatingTarget": "#/components/schemas/CommVoiceMailTerminatingTargetResource",
-                "ImsVoiceMailTerminatingTarget": "#/components/schemas/CommImsVoiceMailTerminatingTargetResource"
-              }
-            },
             "title": "Terminating Target",
             "required": [
               "name",
@@ -53407,24 +53200,6 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingTargetRequest",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingTargetRequest",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetRequest",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetRequest",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetRequest",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetRequest",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetRequest",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetRequest",
-                "ExtensionTerminatingTarget": "#/components/schemas/CommExtensionTerminatingTargetRequest",
-                "PhoneNumberTerminatingTarget": "#/components/schemas/CommPhoneNumberTerminatingTargetRequest",
-                "PlayAnnouncementTerminatingTarget": "#/components/schemas/CommPlayAnnouncementTerminatingTargetRequest",
-                "VoiceMailTerminatingTarget": "#/components/schemas/CommVoiceMailTerminatingTargetRequest",
-                "ImsVoiceMailTerminatingTarget": "#/components/schemas/CommImsVoiceMailTerminatingTargetRequest"
-              }
-            },
             "title": "Terminating Target",
             "required": [
               "type",
@@ -53785,24 +53560,6 @@
           "minItems": 1,
           "description": "Action information",
           "items": {
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "AllDesktopRingTarget": "#/components/schemas/CommAllDesktopRingAlwaysRingTargetResource",
-                "AllMobileRingTarget": "#/components/schemas/CommAllMobileRingAlwaysRingTargetResource",
-                "CoworkerRingTarget": "#/components/schemas/CommCoworkerRingTargetResource",
-                "DeviceRingTarget": "#/components/schemas/CommDeviceRingTargetResource",
-                "HotdeskRingTarget": "#/components/schemas/CommHotdeskRingTargetResource",
-                "ImsPhoneNumberRingTarget": "#/components/schemas/CommImsPhoneNumberRingTargetResource",
-                "IntegrationRingTarget": "#/components/schemas/CommIntegrationRingTargetResource",
-                "PhoneNumberRingTarget": "#/components/schemas/CommPhoneNumberRingTargetResource",
-                "ExtensionTerminatingTarget": "#/components/schemas/CommExtensionTerminatingTargetResource",
-                "PhoneNumberTerminatingTarget": "#/components/schemas/CommPhoneNumberTerminatingTargetResource",
-                "PlayAnnouncementTerminatingTarget": "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource",
-                "VoiceMailTerminatingTarget": "#/components/schemas/CommVoiceMailTerminatingTargetResource",
-                "ImsVoiceMailTerminatingTarget": "#/components/schemas/CommImsVoiceMailTerminatingTargetResource"
-              }
-            },
             "title": "Terminating Target",
             "required": [
               "name",

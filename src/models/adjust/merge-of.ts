@@ -56,6 +56,9 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
         mergeOne(val.items as NamedSchema);
       }
     }
+
+    delete (schema as any).discriminator;
+
     return schema;
   };
   for (const schema of schemas) {
