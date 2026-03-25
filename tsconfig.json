@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
-    "types": ["node", "jest"]
-  }
+    "types": ["node", "jest"],
+    "rootDir": "./src",
+    "outDir": "lib",
+    "declaration": true
+  },
+  "files": [
+    "src/index.ts"
+  ]
 }

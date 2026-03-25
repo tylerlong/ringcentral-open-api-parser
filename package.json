@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "prepublishOnly": "tsc src/index.ts --declaration --outDir lib",
+    "prepublishOnly": "tsc",
     "test": "jest -c ./test/jest.config.ts"
   },
   "dependencies": {
