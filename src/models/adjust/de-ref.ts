@@ -35,8 +35,7 @@ export const deRef = (
       const target = doc.components!
         .schemas![(schema.$ref as string).split("/").pop()!] as NamedSchema;
       if (target) {
-        const temp = { ...target };
-        delete temp.name;
+        const { name, ...temp } = target;
         Object.assign(schema, temp);
       }
       delete schema.$ref;
