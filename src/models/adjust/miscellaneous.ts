@@ -9,5 +9,10 @@ export const fixMiscellaneous = (schemas: NamedSchema[]): NamedSchema[] => {
     bgImage.$ref = "#/components/schemas/BackgroundImage";
     delete (bgImage as unknown as NamedSchema).oneOf;
   }
+
+  // ref：https://jira.ringcentral.com/browse/PLD-2730
+  delete schemas.find((s) => s.name === "TcrCampaignRecord")!.properties!
+    .consentSettings;
+
   return schemas;
 };

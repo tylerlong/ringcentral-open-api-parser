@@ -26522,9 +26522,6 @@
           "name": "brand"
         },
         {
-          "name": "consentSettings"
-        },
-        {
           "type": "string",
           "enum": [
             "LowVolume",
