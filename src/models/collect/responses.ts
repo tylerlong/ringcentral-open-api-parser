@@ -5,7 +5,8 @@ import { capitalizeFirstLetter } from "../../utils";
 
 export const collectResponses = (doc: OpenAPIV3.Document) => {
   const schemas: NamedSchema[] = [];
-  Object.values(doc.paths).forEach((pathContent) => {
+  Object.values(doc.paths).forEach((_pathContent) => {
+    const pathContent = _pathContent as Record<string, any>;
     for (const method of ["get", "post", "put", "delete", "patch"]) {
       if (!(method in pathContent!)) {
         continue;
@@ -18,7 +19,7 @@ export const collectResponses = (doc: OpenAPIV3.Document) => {
         if (!("content" in response)) {
           continue;
         }
-        const responseContent = response.content!;
+        const responseContent = response.content as Record<string, any>;
         if (responseContent["application/json"]?.schema) {
           const schema = responseContent["application/json"].schema!;
           const multi = schema.allOf ?? schema.anyOf ?? schema.oneOf;
