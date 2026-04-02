@@ -26,6 +26,20 @@ export const collectQueryParams = (
     if (queryParameters.length === 0) {
       continue;
     }
+
+    // https://jira.ringcentral.com/browse/SDK-289
+    for (const qp of queryParameters) {
+      if (qp.name === "perPage") {
+        const schema = qp.schema as OpenAPIV3.SchemaObject | undefined;
+        if (!schema || !("oneOf" in schema) || !Array.isArray(schema.oneOf)) {
+          continue;
+        }
+        schema.oneOf = schema.oneOf.filter((item: any) => {
+          return item.type !== "string";
+        });
+      }
+    }
+
     const name = capitalizeFirstLetter(operation.operationId!) + "Parameters";
     const schema = {
       name,

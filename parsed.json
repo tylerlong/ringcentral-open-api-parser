@@ -2118,14 +2118,11 @@
           "description": "The number of items per page. Accepts a positive integer (1–1000) or\nthe special value `\"max\"` which returns up to 1000 records.\nIf the provided integer value exceeds 1000, the maximum value of 1000 is applied.\n",
           "explode": false,
           "example": 100,
-          "type": "string",
+          "type": "integer",
           "format": "int32",
           "minimum": 1,
           "maximum": 1000,
-          "default": 100,
-          "enum": [
-            "max"
-          ]
+          "default": 100
         },
         {
           "name": "page",
@@ -2340,14 +2337,11 @@
           "description": "The number of items per page. Accepts a positive integer (1–1000) or\nthe special value `\"max\"` which returns up to 1000 records.\nIf the provided integer value exceeds 1000, the maximum value of 1000 is applied.\n",
           "explode": false,
           "example": 100,
-          "type": "string",
+          "type": "integer",
           "format": "int32",
           "minimum": 1,
           "maximum": 1000,
-          "default": 100,
-          "enum": [
-            "max"
-          ]
+          "default": 100
         },
         {
           "name": "page",
@@ -2469,14 +2463,11 @@
           "description": "The number of items per page. Accepts a positive integer (1–1000) or\nthe special value `\"max\"` which returns up to 1000 records.\nIf the provided integer value exceeds 1000, the maximum value of 1000 is applied.\n",
           "explode": false,
           "example": 100,
-          "type": "string",
+          "type": "integer",
           "format": "int32",
           "minimum": 1,
           "maximum": 1000,
-          "default": 100,
-          "enum": [
-            "max"
-          ]
+          "default": 100
         },
         {
           "name": "page",
@@ -2736,14 +2727,11 @@
           "description": "The number of items per page. Accepts a positive integer (1–1000) or\nthe special value `\"max\"` which returns up to 1000 records.\nIf the provided integer value exceeds 1000, the maximum value of 1000 is applied.\n",
           "explode": false,
           "example": 100,
-          "type": "string",
+          "type": "integer",
           "format": "int32",
           "minimum": 1,
           "maximum": 1000,
-          "default": 100,
-          "enum": [
-            "max"
-          ]
+          "default": 100
         },
         {
           "name": "page",
@@ -3058,14 +3046,10 @@
         {
           "name": "perPage",
           "description": "Records count to be returned per one page. It can be either integer or string with the specific keyword values:\n- `all` - all records are returned in one page\n- `max` - maximum count of records that can be returned in one page\n",
-          "type": "string",
+          "type": "integer",
           "format": "int32",
           "default": 1000,
-          "maximum": 2000,
-          "enum": [
-            "max",
-            "all"
-          ]
+          "maximum": 2000
         },
         {
           "name": "siteId",
