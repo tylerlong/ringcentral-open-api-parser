@@ -1,6 +1,6 @@
 {
   "name": "ringcentral-open-api-parser",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "js-yaml": "^4.1.1",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "openapi-types": "^12.1.3"
   },
   "devDependencies": {
@@ -19,7 +19,7 @@
     "@types/node": "^25.5.0",
     "dotenv-override-true": "^6.2.2",
     "jest": "^30.3.0",
-    "ts-jest": "^29.4.6",
+    "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
     "ttpt": "^0.13.0",
     "typescript": "^6.0.2",
