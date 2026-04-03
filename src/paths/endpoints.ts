@@ -29,6 +29,15 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
       paths: endpoint.split("/").filter((t) => t !== "" && !t.startsWith("{")),
       operations: [],
     };
+
+    // special case
+    // because the extensionId is not in the endpoint
+    // but for longer endpoints, there is always an extensionId in the endpoint
+    if (endpoint === "/restapi/v2/accounts/{accountId}/extensions") {
+      path.parameter = "extensionId";
+      path.defaultParameter = "~";
+    }
+
     if (endpoint.endsWith("}")) {
       path.parameter = endpoint.split("/").slice(-1)[0].slice(1, -1);
       const name = last(path.paths);

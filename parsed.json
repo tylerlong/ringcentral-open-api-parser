@@ -59659,7 +59659,9 @@
           },
           "bodyParameters": "bulkDeleteUsersRequest"
         }
-      ]
+      ],
+      "parameter": "extensionId",
+      "defaultParameter": "~"
     },
     {
       "paths": [
