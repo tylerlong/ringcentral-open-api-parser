@@ -1,11 +1,11 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema, RawOperation } from "../../types";
-import { collectRequestBodies } from "./request-bodies";
-import { collectQueryParams } from "./query-params";
-import { collectSchemas } from "./schemas";
-import { handleSpecialCases } from "./special-cases";
-import { collectResponses } from "./responses";
+import type { NamedSchema, RawOperation } from "../../types.js";
+import { collectRequestBodies } from "./request-bodies.js";
+import { collectQueryParams } from "./query-params.js";
+import { collectSchemas } from "./schemas.js";
+import { handleSpecialCases } from "./special-cases.js";
+import { collectResponses } from "./responses.js";
 
 export const collect = (
   doc: OpenAPIV3.Document,

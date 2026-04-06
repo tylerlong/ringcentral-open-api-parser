@@ -1,13 +1,13 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema } from "../../types";
-import { deRef } from "./de-ref";
-import { fixFax } from "./fax";
-import { fixGreeting } from "./greeting";
-import { mergeOf } from "./merge-of";
-import { fixMiscellaneous } from "./miscellaneous";
-import { ref } from "./ref";
-import { implicitArray } from "./implicit-array";
+import type { NamedSchema } from "../../types.js";
+import { deRef } from "./de-ref.js";
+import { fixFax } from "./fax.js";
+import { fixGreeting } from "./greeting.js";
+import { mergeOf } from "./merge-of.js";
+import { fixMiscellaneous } from "./miscellaneous.js";
+import { ref } from "./ref.js";
+import { implicitArray } from "./implicit-array.js";
 
 export const adjust = (
   _schemas: NamedSchema[],

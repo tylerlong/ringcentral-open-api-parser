@@ -1,8 +1,9 @@
-import { isEqual, last } from "lodash";
+import lodash from "lodash";
 
-import type { Path } from "../types";
+import type { Path } from "../types.js";
 
 export const getBridgePaths = (result: Path[]): Path[] => {
+  const { isEqual, last } = lodash;
   const bridgePaths: Path[] = [];
   for (const item of result) {
     for (let i = 1; i < item.paths.length; i++) {

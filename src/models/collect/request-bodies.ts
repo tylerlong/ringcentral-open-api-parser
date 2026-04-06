@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema, RawOperation } from "../../types";
-import { capitalizeFirstLetter } from "../../utils";
+import type { NamedSchema, RawOperation } from "../../types.js";
+import { capitalizeFirstLetter } from "../../utils.js";
 
 export const collectRequestBodies = (operations: RawOperation[]) => {
   const schemas: NamedSchema[] = [];

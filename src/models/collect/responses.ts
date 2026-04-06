@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema } from "../../types";
-import { capitalizeFirstLetter } from "../../utils";
+import type { NamedSchema } from "../../types.js";
+import { capitalizeFirstLetter } from "../../utils.js";
 
 export const collectResponses = (doc: OpenAPIV3.Document) => {
   const schemas: NamedSchema[] = [];

@@ -1,9 +1,9 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import { collect } from "./collect";
-import { adjust } from "./adjust";
-import { normalize } from "./normalize";
-import type { RawOperation } from "../types";
+import { collect } from "./collect/index.js";
+import { adjust } from "./adjust/index.js";
+import { normalize } from "./normalize.js";
+import type { RawOperation } from "../types.js";
 
 export const prepareModels = (
   doc: OpenAPIV3.Document,

@@ -1,10 +1,11 @@
 import { readFileSync } from "fs";
-import { load } from "js-yaml";
+import jsYaml from "js-yaml";
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { RawOperation } from "./types";
+import type { RawOperation } from "./types.js";
 
 export const getRawData = (filePath: string) => {
+  const { load } = jsYaml;
   const doc = load(readFileSync(filePath, "utf8")) as OpenAPIV3.Document;
   const operations: RawOperation[] = [];
   Object.values(doc.paths).forEach((pathObject) => {

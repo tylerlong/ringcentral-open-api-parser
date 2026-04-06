@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "types": ["node", "jest"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
     "rootDir": "./src",
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   },
-  "files": [
-    "src/index.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

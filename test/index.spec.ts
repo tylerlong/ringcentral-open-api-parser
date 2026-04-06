@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 
-import { prepareSpec } from "../src";
+import { prepareSpec } from "../src/index.js";
 
 describe("index", () => {
   test("default", async () => {

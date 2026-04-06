@@ -1,8 +1,9 @@
-import { isEqual } from "lodash";
+import lodash from "lodash";
 
-import type { Path } from "../types";
+import type { Path } from "../types.js";
 
 export const handleSpecialCases = (paths: Path[]) => {
+  const { isEqual } = lodash;
   // body parameter is string[]
   const path = paths.find((p) =>
     isEqual(p.paths, ["restapi", "account", "extension", "message-store"])

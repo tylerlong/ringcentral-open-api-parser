@@ -1,6 +1,6 @@
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { NamedSchema } from "../../types";
+import type { NamedSchema } from "../../types.js";
 
 const shouldBeInline = (schema: NamedSchema): boolean => {
   if (

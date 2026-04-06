@@ -2,10 +2,18 @@
   "name": "ringcentral-open-api-parser",
   "version": "0.16.3",
   "license": "MIT",
+  "type": "module",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
   "scripts": {
     "prepublishOnly": "tsc",
-    "test": "jest -c ./test/jest.config.ts"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest -c ./test/jest.config.ts"
   },
   "dependencies": {
     "js-yaml": "^4.1.1",

@@ -1,8 +1,10 @@
-import { isEmpty, isEqual, last, remove } from "lodash";
+import lodash from "lodash";
 import type { OpenAPIV3 } from "openapi-types";
 
-import type { Model, Path, ResponseSchema } from "../types";
-import { capitalizeFirstLetter, lowerCaseFirstLetter } from "../utils";
+import type { Model, Path, ResponseSchema } from "../types.js";
+import { capitalizeFirstLetter, lowerCaseFirstLetter } from "../utils.js";
+
+const { isEmpty, isEqual, last, remove } = lodash;
 
 export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
   const entries = Object.entries(doc.paths).sort((

@@ -1,6 +1,6 @@
-import { isArray, mergeWith, uniq } from "lodash";
+import lodash from "lodash";
 
-import type { NamedSchema } from "../../types";
+import type { NamedSchema } from "../../types.js";
 import type { OpenAPIV3 } from "openapi-types";
 
 /**
@@ -10,6 +10,7 @@ import type { OpenAPIV3 } from "openapi-types";
  * @returns two array contatenated and without duplicates
  */
 function customizer(objValue: string[], srcValue: string[]) {
+  const { isArray, uniq } = lodash;
   if (isArray(objValue)) {
     return uniq(objValue.concat(srcValue));
   }
@@ -21,6 +22,7 @@ function customizer(objValue: string[], srcValue: string[]) {
  * @returns processed schemas
  */
 export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
+  const { mergeWith } = lodash;
   const mergeOne = (schema: NamedSchema) => {
     let multi = schema.allOf ?? schema.anyOf ?? schema.oneOf;
     if (multi) {
