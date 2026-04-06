@@ -32,8 +32,9 @@ export const deRef = (
   for (const schema of schemas) {
     // replace pure $ref with the actual schema
     if ("$ref" in schema) {
-      const target = doc.components!
-        .schemas![(schema.$ref as string).split("/").pop()!] as NamedSchema;
+      const target = doc.components!.schemas![
+        (schema.$ref as string).split("/").pop()!
+      ] as NamedSchema;
       if (target) {
         const { name, ...temp } = target;
         Object.assign(schema, temp);

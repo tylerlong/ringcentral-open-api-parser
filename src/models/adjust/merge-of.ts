@@ -1,7 +1,6 @@
 import lodash from "lodash";
-
-import type { NamedSchema } from "../../types.js";
 import type { OpenAPIV3 } from "openapi-types";
+import type { NamedSchema } from "../../types.js";
 
 /**
  * How to merge arrays
@@ -28,21 +27,32 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
     if (multi) {
       // todo: we cannot handle CaiErrorResponse properly
       // workaround is to ignore error response for now.
-      multi = multi.filter((m) =>
-        !(m as OpenAPIV3.ReferenceObject).$ref?.endsWith(
-          "schemas/CaiErrorResponse",
-        )
+      multi = multi.filter(
+        (m) =>
+          !(m as OpenAPIV3.ReferenceObject).$ref?.endsWith(
+            "schemas/CaiErrorResponse",
+          ),
       );
       for (const item of multi) {
         if ("$ref" in item) {
           const name = (item.$ref as string).split("/").pop()!;
-          mergeWith(schema, mergeOne(schemas.find((s) => s.name === name)!), {
-            name: schema.name,
-          }, customizer);
+          mergeWith(
+            schema,
+            mergeOne(schemas.find((s) => s.name === name)!),
+            {
+              name: schema.name,
+            },
+            customizer,
+          );
         } else {
-          mergeWith(schema, mergeOne(item as NamedSchema), {
-            name: schema.name,
-          }, customizer);
+          mergeWith(
+            schema,
+            mergeOne(item as NamedSchema),
+            {
+              name: schema.name,
+            },
+            customizer,
+          );
         }
       }
       delete schema.allOf;

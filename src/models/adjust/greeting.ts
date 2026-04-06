@@ -8,20 +8,18 @@ import type { NamedSchema } from "../../types.js";
  * @returns
  */
 export const fixGreeting = (schemas: NamedSchema[]): NamedSchema[] => {
-  const createCompanyGreeting = schemas.find((schema) =>
-    schema.name === "CreateCompanyGreetingRequest"
+  const createCompanyGreeting = schemas.find(
+    (schema) => schema.name === "CreateCompanyGreetingRequest",
   )!;
   delete createCompanyGreeting.properties!.answeringRuleId;
-  const createCustomUserGreeting = schemas.find((schema) =>
-    schema.name === "CreateCustomUserGreetingRequest"
+  const createCustomUserGreeting = schemas.find(
+    (schema) => schema.name === "CreateCustomUserGreetingRequest",
   )!;
   delete createCustomUserGreeting.properties!.answeringRuleId;
   createCompanyGreeting.properties!.answeringRule =
-    createCustomUserGreeting
-      .properties!.answeringRule =
-      {
-        $ref: "#/components/schemas/GreetingAnsweringRuleId",
-      };
+    createCustomUserGreeting.properties!.answeringRule = {
+      $ref: "#/components/schemas/GreetingAnsweringRuleId",
+    };
   schemas.push({
     type: "object",
     name: "GreetingAnsweringRuleId",

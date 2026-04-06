@@ -7,10 +7,9 @@ import { capitalizeFirstLetter, lowerCaseFirstLetter } from "../utils.js";
 const { isEmpty, isEqual, last, remove } = lodash;
 
 export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
-  const entries = Object.entries(doc.paths).sort((
-    item1,
-    item2,
-  ) => (item1[0].length > item2[0].length ? 1 : -1));
+  const entries = Object.entries(doc.paths).sort((item1, item2) =>
+    item1[0].length > item2[0].length ? 1 : -1,
+  );
 
   const result: Path[] = [];
 
@@ -65,8 +64,8 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
           }
         }
         if ("delete" in pathContent) {
-          const deleteOperation = path.operations.find((o) =>
-            o.method2 === "delete"
+          const deleteOperation = path.operations.find(
+            (o) => o.method2 === "delete",
           );
           if (deleteOperation) {
             deleteOperation.method2 = "deleteAll";
@@ -90,19 +89,19 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
       // queryParameters
       let queryParameters: string | undefined;
       if (
-        models.find((m) =>
-          m.name ===
+        models.find(
+          (m) =>
+            m.name ===
             capitalizeFirstLetter(operation.operationId ?? "doesNotExist") +
-              "Parameters"
+              "Parameters",
         )
       ) {
         queryParameters = operation.operationId + "Parameters";
       }
 
       // bodyParameters
-      const { bodyParameters, formUrlEncoded, multipart } = getBodyParameters(
-        operation,
-      );
+      const { bodyParameters, formUrlEncoded, multipart } =
+        getBodyParameters(operation);
 
       path.operations.push({
         endpoint,
@@ -162,8 +161,9 @@ const getBodyParameters = (operation: OpenAPIV3.OperationObject) => {
   let formUrlEncoded: boolean | undefined;
   let multipart: boolean | undefined;
   if (operation.requestBody) {
-    const requestContent =
-      (operation.requestBody as OpenAPIV3.RequestBodyObject).content;
+    const requestContent = (
+      operation.requestBody as OpenAPIV3.RequestBodyObject
+    ).content;
     const mediaTypeObject =
       requestContent["application/x-www-form-urlencoded"] ||
       requestContent["multipart/form-data"];

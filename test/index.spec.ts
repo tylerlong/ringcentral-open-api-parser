@@ -11,8 +11,8 @@ describe("index", () => {
     expect(parsed.paths).toBeDefined();
     expect(parsed.paths.length).toBeGreaterThan(0);
 
-    const extensionPath = parsed.paths.find((path) =>
-      path.paths.join("-") === "restapi-account-extension"
+    const extensionPath = parsed.paths.find(
+      (path) => path.paths.join("-") === "restapi-account-extension",
     )!;
     expect(extensionPath.parameter).toBe("extensionId");
 
@@ -21,13 +21,13 @@ describe("index", () => {
     )!;
     expect(pagingOnlyGroupPath.parameter).toBe("pagingOnlyGroupId");
 
-    const brandPath = parsed.paths.find((path) =>
-      path.paths.join("-") === "restapi-dictionary-brand"
+    const brandPath = parsed.paths.find(
+      (path) => path.paths.join("-") === "restapi-dictionary-brand",
     )!;
     expect(brandPath.parameter).toBe("brandId");
 
-    const scimPath = parsed.paths.find((path) =>
-      path.paths.join("-") === "scim"
+    const scimPath = parsed.paths.find(
+      (path) => path.paths.join("-") === "scim",
     )!;
     expect(scimPath.parameter).toBe("version");
     expect(scimPath.defaultParameter).toBe("v2");
@@ -35,8 +35,8 @@ describe("index", () => {
 
   test("form bodies", () => {
     const parsed = prepareSpec(process.env.SPEC_FILE_PATH!);
-    const createIVRPromptRequest = parsed.models.find((m) =>
-      m.name === "CreateIVRPromptRequest"
+    const createIVRPromptRequest = parsed.models.find(
+      (m) => m.name === "CreateIVRPromptRequest",
     );
     expect(createIVRPromptRequest).toBeDefined();
     expect(createIVRPromptRequest!.fields.map((f) => f.name).join(",")).toBe(
@@ -46,18 +46,19 @@ describe("index", () => {
 
   test("query parameters", () => {
     const parsed = prepareSpec(process.env.SPEC_FILE_PATH!);
-    const listUserTemplatesParameters = parsed.models.find((m) =>
-      m.name === "ListUserTemplatesParameters"
+    const listUserTemplatesParameters = parsed.models.find(
+      (m) => m.name === "ListUserTemplatesParameters",
     );
     expect(listUserTemplatesParameters).toBeDefined();
-    expect(listUserTemplatesParameters!.fields.map((f) => f.name).join(","))
-      .toBe("type,page,perPage");
+    expect(
+      listUserTemplatesParameters!.fields.map((f) => f.name).join(","),
+    ).toBe("type,page,perPage");
   });
 
   test("schemas", () => {
     const parsed = prepareSpec(process.env.SPEC_FILE_PATH!);
-    const callsByDirectionBreakdown = parsed.models.find((m) =>
-      m.name === "CallsByDirectionBreakdown"
+    const callsByDirectionBreakdown = parsed.models.find(
+      (m) => m.name === "CallsByDirectionBreakdown",
     );
     expect(callsByDirectionBreakdown).toBeDefined();
     expect(callsByDirectionBreakdown!.fields.map((f) => f.name).join(",")).toBe(

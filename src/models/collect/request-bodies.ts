@@ -26,8 +26,7 @@ export const collectRequestBodies = (operations: RawOperation[]) => {
     }
     schema.name = capitalizeFirstLetter(operation.operationId!) + "Request";
     if (!schema.description) {
-      schema.description =
-        `Request body for operation ${operation.operationId}`;
+      schema.description = `Request body for operation ${operation.operationId}`;
     }
     schemas.push(schema);
   }

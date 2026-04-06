@@ -15,7 +15,8 @@ export const ref = (schemas: NamedSchema[]): NamedSchema[] => {
     for (const propKey of Object.keys(properties)) {
       let property = properties[propKey];
       if (
-        !("properties" in property) && "items" in property &&
+        !("properties" in property) &&
+        "items" in property &&
         "properties" in property.items
       ) {
         property = property.items;

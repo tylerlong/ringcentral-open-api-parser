@@ -11,11 +11,9 @@ export const collectResponses = (doc: OpenAPIV3.Document) => {
       if (!(method in pathContent!)) {
         continue;
       }
-      for (
-        const response of Object.values(
-          pathContent![method].responses,
-        ) as OpenAPIV3.OperationObject[]
-      ) {
+      for (const response of Object.values(
+        pathContent![method].responses,
+      ) as OpenAPIV3.OperationObject[]) {
         if (!("content" in response)) {
           continue;
         }
@@ -24,18 +22,19 @@ export const collectResponses = (doc: OpenAPIV3.Document) => {
           const schema = responseContent["application/json"].schema!;
           const multi = schema.allOf ?? schema.anyOf ?? schema.oneOf;
           if (multi) {
-            const name = `${
-              capitalizeFirstLetter(pathContent![method].operationId!)
-            }Response`;
+            const name = `${capitalizeFirstLetter(
+              pathContent![method].operationId!,
+            )}Response`;
             schema.$ref = `#/components/schemas/${name}`;
             schemas.push({ ...schema, name });
             delete schema.allOf;
             delete schema.anyOf;
             delete schema.oneOf;
-          } else if (schema.type === "object") { // anonymous
-            const name = `${
-              capitalizeFirstLetter(pathContent![method].operationId!)
-            }Response`;
+          } else if (schema.type === "object") {
+            // anonymous
+            const name = `${capitalizeFirstLetter(
+              pathContent![method].operationId!,
+            )}Response`;
             schema.$ref = `#/components/schemas/${name}`;
             schemas.push({ ...schema, name });
             delete schema.type;

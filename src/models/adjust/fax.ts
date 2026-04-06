@@ -11,8 +11,8 @@ import type { NamedSchema } from "../../types.js";
  * @returns
  */
 export const fixFax = (schemas: NamedSchema[]): NamedSchema[] => {
-  const createFaxMessageRequest = schemas.find((schema) =>
-    schema.name === "CreateFaxMessageRequest"
+  const createFaxMessageRequest = schemas.find(
+    (schema) => schema.name === "CreateFaxMessageRequest",
   )!;
   createFaxMessageRequest.required = ["attachments", "to"];
   const props = createFaxMessageRequest.properties!;

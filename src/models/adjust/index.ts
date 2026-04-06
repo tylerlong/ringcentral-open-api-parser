@@ -4,10 +4,10 @@ import type { NamedSchema } from "../../types.js";
 import { deRef } from "./de-ref.js";
 import { fixFax } from "./fax.js";
 import { fixGreeting } from "./greeting.js";
+import { implicitArray } from "./implicit-array.js";
 import { mergeOf } from "./merge-of.js";
 import { fixMiscellaneous } from "./miscellaneous.js";
 import { ref } from "./ref.js";
-import { implicitArray } from "./implicit-array.js";
 
 export const adjust = (
   _schemas: NamedSchema[],
