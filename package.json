@@ -1,6 +1,6 @@
 {
   "name": "ringcentral-open-api-parser",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -17,7 +17,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --clean && tsc -p tsconfig.types.json",
+    "build": "tsup && tsc -p tsconfig.types.json",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "yarn build",
     "test": "vitest run -c ./test/vitest.config.ts"
