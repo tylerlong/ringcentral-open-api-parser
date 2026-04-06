@@ -1,6 +1,7 @@
 import { prepareModels } from "./models/index.js";
 import { preparePaths } from "./paths/index.js";
 import { getRawData } from "./raw-data.js";
+export type * from "./types.js";
 
 /**
  * Prepares the specification by extracting the necessary data from the OpenAPI document.
