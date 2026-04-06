@@ -18,6 +18,12 @@
   },
   "scripts": {
     "build": "tsup && tsc -p tsconfig.types.json",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --write",
+    "format": "biome format .",
+    "format:write": "biome format . --write",
+    "check": "biome check .",
+    "check:fix": "biome check . --write",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "yarn build",
     "test": "vitest run -c ./test/vitest.config.ts"
@@ -28,6 +34,7 @@
     "openapi-types": "^12.1.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash": "^4.17.24",
     "@types/node": "^25.5.2",
