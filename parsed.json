@@ -3703,6 +3703,25 @@
       ]
     },
     {
+      "name": "ReadGlipThreadPostsNewParameters",
+      "description": "Query parameters for operation readGlipThreadPostsNew",
+      "fields": [
+        {
+          "name": "recordCount",
+          "description": "Max number of posts to be fetched by one request (not more than 250)",
+          "maximum": 250,
+          "type": "integer",
+          "format": "int32",
+          "default": 30
+        },
+        {
+          "name": "pageToken",
+          "description": "Pagination token.",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "CreateGlipFileNewParameters",
       "description": "Query parameters for operation createGlipFileNew",
       "fields": [
@@ -4334,6 +4353,367 @@
     {
       "name": "ReadMessageContentParameters",
       "description": "Query parameters for operation readMessageContent",
+      "fields": [
+        {
+          "name": "contentDisposition",
+          "description": "Whether the content is expected to be displayed in the browser, or downloaded and saved locally",
+          "type": "string",
+          "enum": [
+            "Inline",
+            "Attachment"
+          ]
+        },
+        {
+          "name": "contentDispositionFilename",
+          "description": "The default filename of the file to be downloaded",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "MthListMessagesParameters",
+      "description": "Query parameters for operation mthListMessages",
+      "fields": [
+        {
+          "name": "threadStatus",
+          "description": "Thread status",
+          "type": "string",
+          "enum": [
+            "Open",
+            "Resolved"
+          ]
+        },
+        {
+          "name": "ownerExtensionIds",
+          "description": "Thread owner extension IDs",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "availability",
+          "description": "Availability filter (by default only `Alive` records are returned)\n",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Thread/message availability",
+            "enum": [
+              "Alive",
+              "Deleted"
+            ]
+          },
+          "default": [
+            "Alive"
+          ]
+        },
+        {
+          "name": "messageIds",
+          "description": "Message IDs to filter the list of results",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "threadIds",
+          "description": "Thread ID(s) to filter messages",
+          "explode": true,
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 0,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "creationTimeFrom",
+          "description": "Start date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeTo` is specified\n",
+          "type": "string"
+        },
+        {
+          "name": "creationTimeTo",
+          "description": "End date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeFrom` is specified\n",
+          "type": "string"
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If the provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        {
+          "name": "page",
+          "description": "The result set page number (1-indexed) to return",
+          "explode": false,
+          "example": 1,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      ]
+    },
+    {
+      "name": "MthListNotesParameters",
+      "description": "Query parameters for operation mthListNotes",
+      "fields": [
+        {
+          "name": "ownerExtensionIds",
+          "description": "Thread owner extension IDs",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "availability",
+          "description": "Availability filter (by default only `Alive` records are returned)\n",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Thread/message availability",
+            "enum": [
+              "Alive",
+              "Deleted"
+            ]
+          },
+          "default": [
+            "Alive"
+          ]
+        },
+        {
+          "name": "threadIds",
+          "description": "List of thread IDs to filter the list of results",
+          "explode": true,
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "noteIds",
+          "description": "List of note IDs to filter the list of results",
+          "explode": true,
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If the provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        {
+          "name": "page",
+          "description": "The result set page number (1-indexed) to return",
+          "explode": false,
+          "example": 1,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      ]
+    },
+    {
+      "name": "MthSyncEntriesParameters",
+      "description": "Query parameters for operation mthSyncEntries",
+      "fields": [
+        {
+          "name": "scope",
+          "description": "Scope of synchronization (`syncType=FSync` only):\n\n- `Accessible`: returns entries in threads monitored by the current user;\n- `Unassigned`: returns entries in accessible unassigned threads;\n- `AssignedToMe`: returns entries in threads that are assigned to the current user;\n- `AssignedToMeAndUnassigned`: returns entries in threads that are assigned to the current user or unassigned;\n- `Explicit`: returns entries in threads specified through the `threadIds` parameter.\n",
+          "type": "string",
+          "enum": [
+            "Accessible",
+            "Unassigned",
+            "AssignedToMe",
+            "AssignedToMeAndUnassigned",
+            "Explicit"
+          ],
+          "default": "AssignedToMe"
+        },
+        {
+          "name": "threadIds",
+          "explode": true,
+          "description": "List of thread IDs to synchronize (`Explicit` scope only)\n",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "syncType",
+          "description": "Type of message synchronization request:\n  - FSync -- full sync\n  - ISync -- incremental sync\n",
+          "type": "string",
+          "enum": [
+            "FSync",
+            "ISync"
+          ],
+          "default": "FSync"
+        },
+        {
+          "name": "syncToken",
+          "description": "Sync token (for \"ISync\" only)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncThreadsParameters",
+      "description": "Query parameters for operation mthSyncThreads",
+      "fields": [
+        {
+          "name": "syncType",
+          "description": "Type of message synchronization request:\n  - FSync -- full sync\n  - ISync -- incremental sync\n",
+          "type": "string",
+          "enum": [
+            "FSync",
+            "ISync"
+          ],
+          "default": "FSync"
+        },
+        {
+          "name": "syncToken",
+          "description": "Sync token (for \"ISync\" only)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "MthListThreadsParameters",
+      "description": "Query parameters for operation mthListThreads",
+      "fields": [
+        {
+          "name": "threadStatus",
+          "description": "Thread status",
+          "type": "string",
+          "enum": [
+            "Open",
+            "Resolved"
+          ]
+        },
+        {
+          "name": "ownerExtensionIds",
+          "description": "Thread owner extension IDs",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "creationTimeFrom",
+          "description": "Start date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeTo` is specified\n",
+          "type": "string"
+        },
+        {
+          "name": "creationTimeTo",
+          "description": "End date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeFrom` is specified\n",
+          "type": "string"
+        },
+        {
+          "name": "ownerPhoneNumber",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "maxLength": 18,
+          "example": "+16501234567"
+        },
+        {
+          "name": "guestPhoneNumber",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "maxLength": 18,
+          "example": "+16501234567"
+        },
+        {
+          "name": "availability",
+          "description": "Availability filter (by default only `Alive` records are returned)\n",
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Thread/message availability",
+            "enum": [
+              "Alive",
+              "Deleted"
+            ]
+          },
+          "default": [
+            "Alive"
+          ]
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If the provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        {
+          "name": "page",
+          "description": "The result set page number (1-indexed) to return",
+          "explode": false,
+          "example": 1,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      ]
+    },
+    {
+      "name": "MthReadMessageContentParameters",
+      "description": "Query parameters for operation mthReadMessageContent",
       "fields": [
         {
           "name": "contentDisposition",
@@ -5858,6 +6238,27 @@
           "type": "array",
           "items": {
             "description": "File to upload",
+            "$ref": "Attachment"
+          },
+          "name": "attachments",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MthSendMessageRequest",
+      "description": "Request body for operation mthSendMessage",
+      "fields": [
+        {
+          "$ref": "NewThreadMessageRequest",
+          "name": "metadata",
+          "required": true
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "description": "Multipart attachments in binary format. For supported  MIME types see\n[Sending MMS](https://developers.ringcentral.com/guide/messaging/sms/sending-images)\n",
             "$ref": "Attachment"
           },
           "name": "attachments",
@@ -13582,6 +13983,12 @@
           "required": true
         },
         {
+          "type": "boolean",
+          "description": "Indicates if the billing is active.",
+          "name": "billingActive",
+          "required": false
+        },
+        {
           "description": "Company name",
           "type": "string",
           "maxLength": 64,
@@ -20729,6 +21136,12 @@
         {
           "$ref": "UBrandInfo",
           "name": "uBrand"
+        },
+        {
+          "description": "Account sub-brand information",
+          "name": "ubrand",
+          "deprecated": true,
+          "$ref": "ServiceInfoUbrand"
         }
       ]
     },
@@ -21511,6 +21924,21 @@
           "type": "string",
           "description": "Internal identifier of a tax",
           "name": "taxId"
+        },
+        {
+          "type": "string",
+          "description": "Apartment number (country-specific address field, e.g. Portugal)",
+          "name": "apartment"
+        },
+        {
+          "type": "string",
+          "description": "Floor number (country-specific address field, e.g. Portugal)",
+          "name": "floor"
+        },
+        {
+          "type": "string",
+          "description": "Designation (country-specific address field, e.g. Portugal)",
+          "name": "designation"
         }
       ]
     },
@@ -22122,6 +22550,1094 @@
           "type": "string",
           "description": "Internal identifier for SIP authorization",
           "name": "authorizationId"
+        }
+      ]
+    },
+    {
+      "name": "ThreadUserModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "OwnerResource",
+      "description": "Message owner information. Supported for shared voicemail and sms messages only",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Name of a voicemail owner",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "extensionId"
+        }
+      ]
+    },
+    {
+      "name": "MessagePhoneParty",
+      "fields": [
+        {
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "maxLength": 18,
+          "example": "+16501234567",
+          "name": "phoneNumber",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MessageThreadList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "MessageThread"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MessageThread",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread ID",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread human-readable label",
+          "maxLength": 200,
+          "name": "label",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Thread status",
+          "enum": [
+            "Open",
+            "Resolved"
+          ],
+          "name": "status",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread status transition reason (for threads in `Resolved` status only):\n\n- `Manual` - the thread was resolved manually;\n- `ThreadExpired` - the thread was automatically resolved according to TTL settings;\n- `OwnerDeleted` - the thread owner's extension was deleted;\n- `OwnerPhoneNumberDeleted` - the thread owner's phone number this thread was created for was deleted.\n",
+          "enum": [
+            "Manual",
+            "ThreadExpired",
+            "OwnerDeleted",
+            "OwnerPhoneNumberDeleted"
+          ],
+          "name": "statusReason",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "$ref": "OwnerResource",
+          "name": "owner",
+          "required": true
+        },
+        {
+          "required": false,
+          "name": "ownerParty",
+          "description": "Thread owner phone number information",
+          "$ref": "MessageThreadOwnerParty"
+        },
+        {
+          "required": false,
+          "name": "guestParty",
+          "description": "Thread guest phone number information",
+          "$ref": "MessageThreadGuestParty"
+        },
+        {
+          "nullable": true,
+          "required": false,
+          "name": "assignee",
+          "description": "Cleared automatically when the thread is resolved or deleted",
+          "$ref": "MessageThreadAssignee"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Thread creation time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Thread last modification time",
+          "name": "lastModifiedTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadSyncList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "MessageThread"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "SyncInfoModel",
+          "name": "syncInfo",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "SyncInfoModel",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "FSync",
+            "ISync"
+          ],
+          "description": "Type of message synchronization request:\n  - FSync -- full sync\n  - ISync -- incremental sync\n",
+          "name": "syncType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Synchronization token",
+          "name": "syncToken",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Last synchronization date/time\n",
+          "format": "date-time",
+          "name": "syncTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadMessagesDeleteRequest",
+      "fields": [
+        {
+          "type": "array",
+          "description": "IDs of messages to be deleted",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "type": "string"
+          },
+          "example": [
+            "2268298947",
+            "2268300303"
+          ],
+          "name": "ids",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadMessageModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message creation date/time\n",
+          "format": "date-time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Inbound",
+            "Outbound"
+          ],
+          "description": "Message direction (inbound or outbound)\n",
+          "name": "direction",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message status. Different message types may have different\nallowed status values. For outbound faxes the aggregated message status\nis returned. If, for multi-recipient outbound message, a status for\nat least one recipient is `Queued`, then the `Queued` value is returned.\nIf a status for at least one recipient is `SendingFailed`,\nthen the 'SendingFailed' value is returned. In other cases,\nthe `Sent` status is returned\n",
+          "enum": [
+            "Queued",
+            "Sent",
+            "Delivered",
+            "DeliveryFailed",
+            "SendingFailed",
+            "Received"
+          ],
+          "name": "messageStatus",
+          "required": false
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "Message attachments (if any)",
+          "minItems": 1,
+          "items": {
+            "$ref": "MessageAttachmentResponseEntry"
+          },
+          "name": "attachments",
+          "required": false
+        },
+        {
+          "required": false,
+          "name": "author",
+          "description": "Message author (for outbound messages only)",
+          "$ref": "ThreadMessageModelAuthor"
+        }
+      ]
+    },
+    {
+      "name": "ThreadMessageList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "ThreadMessageModel"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MessageAttachmentResponseEntry",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Unique identifier of an attachment",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "MIME content type of an attachment",
+          "example": "audio/mpeg",
+          "name": "contentType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Suggested filename of an attachment.\n",
+          "example": "my-song.mp3",
+          "name": "filename",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to the attachment binary content",
+          "name": "contentUri",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int64",
+          "description": "Size of the file in bytes",
+          "name": "size",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "NewThreadMessageRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread.\nIf not specified, the thread will be assigned automatically based on phone numbers.\nIf provided `threadId` is invalid (e.g. does not exist, already resolved, etc.), the API returns an error.\n",
+          "name": "threadId",
+          "required": false
+        },
+        {
+          "$ref": "MessagePhoneParty",
+          "name": "from",
+          "required": true
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "$ref": "MessagePhoneParty"
+          },
+          "name": "to",
+          "required": true
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "AssignMessageThreadRequest",
+      "description": "Assignee extension information (can be `null` to unassign the thread)\n",
+      "fields": [
+        {
+          "nullable": true,
+          "required": true,
+          "$ref": "AssignMessageThreadRequestAssignee",
+          "name": "assignee"
+        }
+      ]
+    },
+    {
+      "name": "ThreadNoteList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "ThreadNoteModel"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "EnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadNoteCreateRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread\n",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadNotesDeleteRequest",
+      "fields": [
+        {
+          "type": "array",
+          "description": "IDs of notes to be deleted",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": [
+            "c21e5807-a143-4bb2-b275-1e9f9695bd9a",
+            "60a8dbff-0e1e-4143-8114-9424675f9890"
+          ],
+          "name": "ids",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadNoteModel",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a note",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Note creation date/time\n",
+          "format": "date-time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": false
+        },
+        {
+          "required": false,
+          "name": "author",
+          "description": "Thread note author",
+          "$ref": "ThreadNoteModelAuthor"
+        }
+      ]
+    },
+    {
+      "name": "ThreadNoteUpdateRequest",
+      "fields": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAliveMessage",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "AliveMessage"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message creation date/time\n",
+          "format": "date-time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Inbound",
+            "Outbound"
+          ],
+          "description": "Message direction (inbound or outbound)\n",
+          "name": "direction",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message status. Different message types may have different\nallowed status values. For outbound faxes the aggregated message status\nis returned. If, for multi-recipient outbound message, a status for\nat least one recipient is `Queued`, then the `Queued` value is returned.\nIf a status for at least one recipient is `SendingFailed`,\nthen the 'SendingFailed' value is returned. In other cases,\nthe `Sent` status is returned\n",
+          "enum": [
+            "Queued",
+            "Sent",
+            "Delivered",
+            "DeliveryFailed",
+            "SendingFailed",
+            "Received"
+          ],
+          "name": "messageStatus",
+          "required": false
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "Message attachments (if any)",
+          "minItems": 1,
+          "items": {
+            "$ref": "MessageAttachmentResponseEntry"
+          },
+          "name": "attachments",
+          "required": false
+        },
+        {
+          "required": false,
+          "name": "author",
+          "description": "Message author (for outbound messages only)",
+          "$ref": "MthSyncAliveMessageAuthor"
+        }
+      ]
+    },
+    {
+      "name": "ThreadEntriesSyncList",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "ThreadEntrySyncItem"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "SyncInfoModel",
+          "name": "syncInfo",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ThreadEntrySyncItem",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "AliveMessage",
+            "DeletedMessage",
+            "AliveNote",
+            "DeletedNote",
+            "ThreadCreatedHint",
+            "ThreadResolvedHint",
+            "ThreadDeletedHint",
+            "ThreadAssignedHint"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a system message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Note creation date/time\n",
+          "format": "date-time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "enum": [
+            "Inbound",
+            "Outbound"
+          ],
+          "description": "Message direction (inbound or outbound)\n",
+          "name": "direction",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Last modification date/time (always the same as a creation time since the system hints are immutable)\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message status. Different message types may have different\nallowed status values. For outbound faxes the aggregated message status\nis returned. If, for multi-recipient outbound message, a status for\nat least one recipient is `Queued`, then the `Queued` value is returned.\nIf a status for at least one recipient is `SendingFailed`,\nthen the 'SendingFailed' value is returned. In other cases,\nthe `Sent` status is returned\n",
+          "enum": [
+            "Queued",
+            "Sent",
+            "Delivered",
+            "DeliveryFailed",
+            "SendingFailed",
+            "Received"
+          ],
+          "name": "messageStatus",
+          "required": false
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": false
+        },
+        {
+          "type": "array",
+          "description": "Message attachments (if any)",
+          "minItems": 1,
+          "items": {
+            "$ref": "MessageAttachmentResponseEntry"
+          },
+          "name": "attachments",
+          "required": false
+        },
+        {
+          "required": false,
+          "name": "author",
+          "description": "Thread note author",
+          "$ref": "ThreadEntrySyncItemAuthor"
+        },
+        {
+          "required": false,
+          "name": "initiator",
+          "description": "Initiator of the action.\nCan be missing if the action was initiated by the system.\n",
+          "$ref": "ThreadEntrySyncItemInitiator"
+        },
+        {
+          "$ref": "ThreadUserModel",
+          "name": "assignee",
+          "required": false
+        },
+        {
+          "$ref": "ThreadUserModel",
+          "name": "previousAssignee",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAssignedHint",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "ThreadCreatedHint",
+            "ThreadResolvedHint",
+            "ThreadDeletedHint",
+            "ThreadAssignedHint"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a system message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Last modification date/time (always the same as a creation time since the system hints are immutable)\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "required": false,
+          "name": "initiator",
+          "description": "Initiator of the action.\nCan be missing if the action was initiated by the system.\n",
+          "$ref": "MthSyncAssignedHintInitiator"
+        },
+        {
+          "$ref": "ThreadUserModel",
+          "name": "assignee",
+          "required": false
+        },
+        {
+          "$ref": "ThreadUserModel",
+          "name": "previousAssignee",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "MthSyncDeletedMessage",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "DeletedMessage"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message availability status",
+          "enum": [
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAliveNote",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "AliveNote"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a note",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Thread/message availability",
+          "enum": [
+            "Alive",
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Note creation date/time\n",
+          "format": "date-time",
+          "name": "creationTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Message last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Message or note text\n",
+          "example": "Hello, how are you doing today?",
+          "name": "text",
+          "required": false
+        },
+        {
+          "required": false,
+          "name": "author",
+          "description": "Thread note author",
+          "$ref": "MthSyncAliveNoteAuthor"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncDeletedNote",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "DeletedNote"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a note",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Note availability status",
+          "enum": [
+            "Deleted"
+          ],
+          "name": "availability",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Note last modification date/time\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "MthSyncBaseHint",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "ThreadCreatedHint",
+            "ThreadResolvedHint",
+            "ThreadDeletedHint",
+            "ThreadAssignedHint"
+          ],
+          "name": "recordType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a system message",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a message thread",
+          "name": "threadId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Last modification date/time (always the same as a creation time since the system hints are immutable)\n",
+          "format": "date-time",
+          "name": "lastModifiedTime",
+          "required": true
+        },
+        {
+          "required": false,
+          "name": "initiator",
+          "description": "Initiator of the action.\nCan be missing if the action was initiated by the system.\n",
+          "$ref": "MthSyncBaseHintInitiator"
         }
       ]
     },
@@ -24415,7 +25931,8 @@
             "Text Relay",
             "Transfer",
             "Unknown",
-            "VoIP Call"
+            "VoIP Call",
+            "VoiceChat Call"
           ],
           "name": "action",
           "required": true
@@ -24829,7 +26346,8 @@
             "Text Relay",
             "Transfer",
             "Unknown",
-            "VoIP Call"
+            "VoIP Call",
+            "VoiceChat Call"
           ],
           "name": "action",
           "required": true
@@ -25146,7 +26664,8 @@
             "Text Relay",
             "Transfer",
             "Unknown",
-            "VoIP Call"
+            "VoIP Call",
+            "VoiceChat Call"
           ],
           "name": "action",
           "required": true
@@ -25361,7 +26880,8 @@
             "ImsCall",
             "JoinCall",
             "TextRelay",
-            "IvaCall"
+            "IvaCall",
+            "VoiceChat"
           ],
           "name": "legType",
           "required": true
@@ -25967,20 +27487,11 @@
           "name": "transition"
         },
         {
-          "$ref": "CostCenterInfo",
-          "name": "costCenter"
-        },
-        {
           "type": "array",
           "items": {
             "$ref": "CustomFieldInfo"
           },
           "name": "customFields"
-        },
-        {
-          "type": "boolean",
-          "description": "Hides extension from showing in company directory. Supported for extensions of User type only",
-          "name": "hidden"
         },
         {
           "$ref": "ProvisioningSiteInfo",
@@ -26068,22 +27579,6 @@
           "type": "string",
           "description": "Zip code of a user's company",
           "name": "zip"
-        }
-      ]
-    },
-    {
-      "name": "CostCenterInfo",
-      "description": "Cost center information. Applicable if Cost Center feature is enabled. The default is `root` cost center value",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a cost center",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Name of a cost center",
-          "name": "name"
         }
       ]
     },
@@ -32122,6 +33617,22 @@
       ]
     },
     {
+      "name": "CostCenterInfo",
+      "description": "Cost center information. Applicable if Cost Center feature is enabled. The default is `root` cost center value",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a cost center",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Name of a cost center",
+          "name": "name"
+        }
+      ]
+    },
+    {
       "name": "SiteOperatorReference",
       "description": "Site Fax/SMS recipient (operator) reference. Multi-level IVR should\nbe enabled\n",
       "fields": [
@@ -33152,7 +34663,7 @@
           "description": "For User extension type only. Extension user last name\n",
           "maxLength": 64,
           "name": "lastName",
-          "required": true
+          "required": false
         },
         {
           "type": "string",
@@ -34378,6 +35889,11 @@
         },
         {
           "type": "boolean",
+          "description": "Specifies whether the current extension is configured as SMS Recipient\nfor the call queue referenced in extension object\n",
+          "name": "callQueueSmsRecipient"
+        },
+        {
+          "type": "boolean",
           "description": "Specifies whether the current extension is configured as SMS Recipient for an extension\n",
           "name": "smsRecipient"
         }
@@ -34698,53 +36214,6 @@
           "$ref": "SyncInfoMessages",
           "name": "syncInfo",
           "required": true
-        }
-      ]
-    },
-    {
-      "name": "OwnerResource",
-      "description": "Message owner information. Supported for shared voicemail and sms messages only",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Name of a voicemail owner",
-          "name": "name"
-        },
-        {
-          "type": "string",
-          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
-          "enum": [
-            "User",
-            "Department",
-            "Announcement",
-            "Voicemail",
-            "DigitalUser",
-            "VirtualUser",
-            "FaxUser",
-            "PagingOnly",
-            "SharedLinesGroup",
-            "DelegatedLinesGroup",
-            "GroupCallPickup",
-            "IvrMenu",
-            "ApplicationExtension",
-            "ProxyAdmin",
-            "RoomConnector",
-            "ParkLocation",
-            "Limited",
-            "Bot",
-            "Site",
-            "Room",
-            "FlexibleUser",
-            "TieLine",
-            "Unknown"
-          ],
-          "example": "User",
-          "name": "extensionType"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an extension",
-          "name": "extensionId"
         }
       ]
     },
@@ -35502,6 +36971,14 @@
             "$ref": "UnconditionalForwardingInfo"
           },
           "name": "unconditionalForwarding"
+        },
+        {
+          "$ref": "QueueInfoPositionInQueue",
+          "name": "positionInQueue"
+        },
+        {
+          "$ref": "QueueInfoCallBack",
+          "name": "callBack"
         }
       ]
     },
@@ -39355,6 +40832,87 @@
       ]
     },
     {
+      "name": "SmsRecipient",
+      "fields": [
+        {
+          "type": "string",
+          "description": "ID of extension who is configured as a CQ's SMS recipient.",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "PIN of the extension who is configured as a CQ's SMS recipient.",
+          "name": "extensionNumber"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension assigned as Sms recipient.\n",
+          "enum": [
+            "User",
+            "DigitalUser",
+            "ApplicationExtension"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        },
+        {
+          "type": "string",
+          "description": "Name (first + last) of the extension who is configured as a CQ's SMS recipient.",
+          "name": "name"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates user's ability to become a thread assignee.",
+          "name": "assignable"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates availability of a new MessageThreadsPaid feature status.",
+          "name": "hasLicense"
+        }
+      ]
+    },
+    {
+      "name": "SmsRecipientsResource",
+      "fields": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "SmsRecipient"
+          },
+          "name": "smsRecipients"
+        }
+      ]
+    },
+    {
+      "name": "BulkAssignSmsRecipientsRequest",
+      "description": "One of the parameters ('addedExtensionIds', 'removedExtensionIds') must be specified and not empty.",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of added extensions.\nmaxItems values depends on MessageThreads feature.\nIf the feature is disabled maxItems=1, otherwise 50.\n",
+          "items": {
+            "type": "string",
+            "minItems": 1,
+            "maxItems": 50,
+            "uniqueItems": true
+          },
+          "name": "addedExtensionIds"
+        },
+        {
+          "type": "array",
+          "description": "List of removed extensions.\nmaxItems values depends on MessageThreads feature.\nIf the feature is disabled maxItems=1, otherwise 50.\n",
+          "items": {
+            "type": "string",
+            "minItems": 1,
+            "maxItems": 50,
+            "uniqueItems": true
+          },
+          "name": "removedExtensionIds"
+        }
+      ]
+    },
+    {
       "name": "NotificationSettingsUpdateRequest",
       "fields": [
         {
@@ -39754,6 +41312,7 @@
           "name": "includeManagers"
         },
         {
+          "deprecated": true,
           "type": "boolean",
           "description": "Specifies if sms recipients' emails are included in the list of emails to which\nnotifications are sent\n",
           "name": "includeSmsRecipients"
@@ -50687,6 +52246,16 @@
           "name": "text"
         },
         {
+          "type": "string",
+          "description": "Internal identifier of a parent post, in case post is a part of a thread",
+          "name": "parentPostId"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a thread, in case post is a part of a thread",
+          "name": "threadId"
+        },
+        {
           "type": "array",
           "description": "Identifier(s) of attachments. Maximum number of attachments is 25",
           "items": {
@@ -50708,6 +52277,21 @@
           "type": "string",
           "description": "Internal identifier of a group a post belongs to",
           "name": "groupId"
+        },
+        {
+          "type": "boolean",
+          "description": "Boolean flag indicating that current post is a parent post of a thread. Populated only for parent posts",
+          "name": "isParent"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a parent post, in case post is a part of a thread",
+          "name": "parentPostId"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of a thread, in case post is a part of a thread",
+          "name": "threadId"
         },
         {
           "type": "string",
@@ -53884,6 +55468,494 @@
       ]
     },
     {
+      "name": "ServiceInfoUbrand",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Sub-brand unique ID",
+          "example": "111.222",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Sub-brand name",
+          "example": "Sub-brand name",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "name": "MessageThreadOwnerParty",
+      "fields": [
+        {
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "maxLength": 18,
+          "example": "+16501234567",
+          "name": "phoneNumber"
+        }
+      ]
+    },
+    {
+      "name": "MessageThreadGuestParty",
+      "fields": [
+        {
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "maxLength": 18,
+          "example": "+16501234567",
+          "name": "phoneNumber"
+        }
+      ]
+    },
+    {
+      "name": "MessageThreadAssignee",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "ThreadMessageModelAuthor",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "AssignMessageThreadRequestAssignee",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Extension ID of the assignee",
+          "example": "9876453210",
+          "name": "extensionId"
+        }
+      ]
+    },
+    {
+      "name": "ThreadNoteModelAuthor",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAliveMessageAuthor",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "ThreadEntrySyncItemAuthor",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "ThreadEntrySyncItemInitiator",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAssignedHintInitiator",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncAliveNoteAuthor",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
+      "name": "MthSyncBaseHintInitiator",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Thread user's extension ID",
+          "example": "9876453210",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Thread user's name (first + last)",
+          "example": "John Doe",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Type of the extension. For unrecognized types the `Unknown` value is returned.\nPlease note that legacy 'Department' extension type corresponds to 'Call Queue'\nextensions in modern RingCentral product terminology\n",
+          "enum": [
+            "User",
+            "Department",
+            "Announcement",
+            "Voicemail",
+            "DigitalUser",
+            "VirtualUser",
+            "FaxUser",
+            "PagingOnly",
+            "SharedLinesGroup",
+            "DelegatedLinesGroup",
+            "GroupCallPickup",
+            "IvrMenu",
+            "ApplicationExtension",
+            "ProxyAdmin",
+            "RoomConnector",
+            "ParkLocation",
+            "Limited",
+            "Bot",
+            "Site",
+            "Room",
+            "FlexibleUser",
+            "TieLine",
+            "Unknown"
+          ],
+          "example": "User",
+          "name": "extensionType"
+        }
+      ]
+    },
+    {
       "name": "MetaDataValues",
       "fields": [
         {
@@ -54099,6 +56171,39 @@
           "type": "string",
           "description": "Identifier of a site",
           "name": "id"
+        }
+      ]
+    },
+    {
+      "name": "QueueInfoPositionInQueue",
+      "fields": [
+        {
+          "type": "string",
+          "default": "EveryInterval",
+          "enum": [
+            "EveryInterval",
+            "OnPositionChange"
+          ],
+          "description": "Controls when position-in-queue announcement is played.\n`OnPositionChange` - only if the caller's position changed since the last announcement.\n",
+          "name": "playbackFrequency"
+        }
+      ]
+    },
+    {
+      "name": "QueueInfoCallBack",
+      "fields": [
+        {
+          "type": "array",
+          "default": [],
+          "description": "Additional announcements appended to the base callback confirmation.\nEmpty array means no additional announcements.\n",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PositionInQueue",
+              "EstimatedWaitTime"
+            ]
+          },
+          "name": "confirmationAnnouncements"
         }
       ]
     },
@@ -55496,14 +57601,6 @@
     },
     {
       "paths": [
-        "ai",
-        "text"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
         "restapi"
       ],
       "operations": [
@@ -55545,23 +57642,7 @@
     },
     {
       "paths": [
-        "ai",
-        "audio"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
         "analytics"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "status"
       ],
       "operations": [],
       "noParentParameter": true
@@ -55586,15 +57667,6 @@
       "paths": [
         "rcvideo",
         "v2"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "text",
-        "v1"
       ],
       "operations": [],
       "noParentParameter": true
@@ -55713,23 +57785,6 @@
     },
     {
       "paths": [
-        "ai",
-        "insights"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "audio",
-        "v1"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
         ".well-known"
       ],
       "operations": [],
@@ -55739,15 +57794,6 @@
       "paths": [
         "ai",
         "ringsense"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "status",
-        "v1"
       ],
       "operations": [],
       "noParentParameter": true
@@ -55799,15 +57845,6 @@
       "paths": [
         "restapi",
         "oauth"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "insights",
-        "v1"
       ],
       "operations": [],
       "noParentParameter": true
@@ -55874,59 +57911,11 @@
     },
     {
       "paths": [
-        "ai",
-        "text",
-        "v1",
-        "async"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "audio",
-        "v1",
-        "async"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
         "team-messaging",
         "v1"
       ],
       "operations": [],
       "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "status",
-        "v1",
-        "jobs"
-      ],
-      "operations": [
-        {
-          "endpoint": "/ai/status/v1/jobs/{jobId}",
-          "method": "get",
-          "tags": [
-            "Status"
-          ],
-          "method2": "get",
-          "description": "Returns async task status by Job ID",
-          "summary": "Get Async Task Status",
-          "operationId": "caiJobStatusGet",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
-          "withParameter": true,
-          "responseSchema": {
-            "$ref": "JobStatusResponse"
-          }
-        }
-      ],
-      "parameter": "jobId"
     },
     {
       "paths": [
@@ -56189,16 +58178,6 @@
       "paths": [
         "webinar",
         "registration"
-      ],
-      "operations": [],
-      "noParentParameter": true
-    },
-    {
-      "paths": [
-        "ai",
-        "insights",
-        "v1",
-        "async"
       ],
       "operations": [],
       "noParentParameter": true
@@ -57588,6 +59567,9 @@
           "appPermission": "RoleManagement",
           "userPermission": "EditUserRoles",
           "withParameter": false,
+          "responseSchema": {
+            "$ref": "RoleResource"
+          },
           "queryParameters": "createCustomRoleParameters",
           "bodyParameters": "roleResource"
         },
@@ -57875,66 +59857,6 @@
           "responseSchema": {
             "$ref": "ScimProviderConfig"
           }
-        }
-      ]
-    },
-    {
-      "paths": [
-        "ai",
-        "text",
-        "v1",
-        "async",
-        "summarize"
-      ],
-      "operations": [
-        {
-          "endpoint": "/ai/text/v1/async/summarize",
-          "method": "post",
-          "tags": [
-            "Text"
-          ],
-          "method2": "post",
-          "description": "Returns Conversational Summarization to the webhook URI for segmented transcript of audios\nwith start, end, speakerId, text(alphanumeric and punctuations).\n",
-          "summary": "Conversational Summarization",
-          "operationId": "caiSummarize",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CaiAsyncApiResponse"
-          },
-          "queryParameters": "caiSummarizeParameters",
-          "bodyParameters": "summaryInput"
-        }
-      ]
-    },
-    {
-      "paths": [
-        "ai",
-        "text",
-        "v1",
-        "async",
-        "punctuate"
-      ],
-      "operations": [
-        {
-          "endpoint": "/ai/text/v1/async/punctuate",
-          "method": "post",
-          "tags": [
-            "Text"
-          ],
-          "method2": "post",
-          "description": "Returns Smart Punctuation to the provided webhook URI.",
-          "summary": "Smart Punctuation",
-          "operationId": "caiPunctuate",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CaiAsyncApiResponse"
-          },
-          "queryParameters": "caiPunctuateParameters",
-          "bodyParameters": "punctuateInput"
         }
       ]
     },
@@ -59781,6 +61703,17 @@
     },
     {
       "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "threads"
+      ],
+      "operations": [],
+      "parameter": "threadId",
+      "noParentParameter": false
+    },
+    {
+      "paths": [
         "restapi",
         "account",
         "extension",
@@ -59835,6 +61768,65 @@
           }
         }
       ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "message-threads"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "list",
+          "description": "Returns a paginated list of message threads for the specified account according to the specified criteria.\n\nDifferent filters are combined with logical \"AND\", different values for the same filter (if supported)\nare combined with logical \"OR\".\n\nOnly threads that accessible for a current authorized user are returned.\nThe records are sorted by `creationTime` in ascending order.\n",
+          "summary": "List Message Threads",
+          "operationId": "mthListThreads",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageThreadList"
+          },
+          "queryParameters": "mthListThreadsParameters"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/{threadId}",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "get",
+          "description": "Returns a message thread by ID.\n\nAPI returns a 403 error if the current user does not have access to the given thread.\n",
+          "summary": "Get Message Thread",
+          "operationId": "mthGetThread",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "MessageThread"
+          }
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/{threadId}",
+          "method": "delete",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "delete",
+          "description": "Deletes a message thread by IDs.\n\nTechnically this operation just sets thread's `availability` to `Deleted`.\nAPI returns a 403 error if the current user does not have access to the given thread.\n\nOnce the thread is deleted its `assignee` attribute is cleared automatically.\n",
+          "summary": "Delete Message Thread",
+          "operationId": "mthDeleteThread",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": true
+        }
+      ],
+      "parameter": "threadId"
     },
     {
       "paths": [
@@ -60532,36 +62524,6 @@
     },
     {
       "paths": [
-        "ai",
-        "audio",
-        "v1",
-        "async",
-        "speech-to-text"
-      ],
-      "operations": [
-        {
-          "endpoint": "/ai/audio/v1/async/speech-to-text",
-          "method": "post",
-          "tags": [
-            "Audio"
-          ],
-          "method2": "post",
-          "description": "Returns Speech to Text Conversion to the provided webhook URI.",
-          "summary": "Speech to Text Conversion",
-          "operationId": "caiSpeechToText",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CaiAsyncApiResponse"
-          },
-          "queryParameters": "caiSpeechToTextParameters",
-          "bodyParameters": "asrInput"
-        }
-      ]
-    },
-    {
-      "paths": [
         ".well-known",
         "openid-configuration"
       ],
@@ -61066,36 +63028,6 @@
     },
     {
       "paths": [
-        "ai",
-        "audio",
-        "v1",
-        "async",
-        "speaker-diarize"
-      ],
-      "operations": [
-        {
-          "endpoint": "/ai/audio/v1/async/speaker-diarize",
-          "method": "post",
-          "tags": [
-            "Audio"
-          ],
-          "method2": "post",
-          "description": "Identifies who said what. Speaker diarization will identify the speaker for each segment\nso you can tell who spoke the sentence, paragraph, or phrase.\n",
-          "summary": "Speaker Diarization",
-          "operationId": "caiSpeakerDiarize",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "CaiAsyncApiResponse"
-          },
-          "queryParameters": "caiSpeakerDiarizeParameters",
-          "bodyParameters": "diarizeInput"
-        }
-      ]
-    },
-    {
-      "paths": [
         "webinar",
         "configuration",
         "v1",
@@ -61516,7 +63448,7 @@
             "Call Control"
           ],
           "method2": "post",
-          "description": "Creates a new outbound call out session. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.",
+          "description": "Creates a new CallOut telephony session: an outbound call from the caller described in `from`\nto the destination in `to`. The caller may be identified with `from.deviceId` or with\n`from.extensionId` (internal extension / mailbox id); use one or the other, not both.\nWhen using `from.deviceId`, only Softphone and Hardphone device instance ids are supported;\nWebRTC/Mobile clients do not expose usable device ids for this API today.",
           "summary": "Make CallOut",
           "operationId": "createCallOutCallSession",
           "rateLimitGroup": "Heavy",
@@ -62060,6 +63992,34 @@
       "paths": [
         "restapi",
         "account",
+        "message-threads",
+        "sync"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/sync",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "get",
+          "description": "Synchronizes the list of message threads.\nReturns the thread records that the current user can monitor\n(assigned to current user, assigned to other users or unassigned).\n\nIn `FSync` mode, only `Open` and `Alive`threads are returned.\nThe records are sorted by `lastModifiedTime` in descending order.\n",
+          "summary": "Sync Message Threads",
+          "operationId": "mthSyncThreads",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ThreadSyncList"
+          },
+          "queryParameters": "mthSyncThreadsParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "telephony",
         "conference"
       ],
@@ -62211,6 +64171,115 @@
           "userPermission": "EditUserRoles",
           "withParameter": false,
           "bodyParameters": "bulkRoleAssignResource"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "message-threads",
+        "notes"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/notes",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "get",
+          "description": "Returns a list of notes from one or more threads.\nAll filters are applied as \"AND\" conditions.\n\nThe records are sorted by `creationTime` in ascending order.\n",
+          "summary": "List Notes",
+          "operationId": "mthListNotes",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ThreadNoteList"
+          },
+          "queryParameters": "mthListNotesParameters"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/notes",
+          "method": "post",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "post",
+          "description": "Creates a new note in the thread.\n\nThe thread must be in `Open` status and the current user must be in the list of thread monitors\nfor this operation to succeed.\n",
+          "summary": "Create New Note",
+          "operationId": "mthCreateNote",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ThreadNoteModel"
+          },
+          "bodyParameters": "threadNoteCreateRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/notes",
+          "method": "delete",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "delete",
+          "description": "Deletes thread note(s).\n\nThe corresponding threads must be in `Open` status and the calling user must be the notes' author\nfor this operation to succeed.\n",
+          "summary": "Delete Notes",
+          "operationId": "mthDeleteNotes",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "bodyParameters": "threadNotesDeleteRequest"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/notes/{noteId}",
+          "method": "patch",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "patch",
+          "description": "Updates the text of a note.\n\nThe thread must be in `Open` status and the calling user must be the note's author\nfor this operation to succeed.\n",
+          "summary": "Update Note",
+          "operationId": "mthUpdateNote",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": true,
+          "responseSchema": {
+            "$ref": "ThreadNoteModel"
+          },
+          "bodyParameters": "threadNoteUpdateRequest"
+        }
+      ],
+      "parameter": "noteId"
+    },
+    {
+      "paths": [
+        "team-messaging",
+        "v1",
+        "chats",
+        "threads",
+        "posts"
+      ],
+      "operations": [
+        {
+          "endpoint": "/team-messaging/v1/chats/{chatId}/threads/{threadId}/posts",
+          "method": "get",
+          "tags": [
+            "Posts"
+          ],
+          "method2": "get",
+          "description": "Returns a list of posts from the specified thread in a chat.",
+          "summary": "List Thread Posts",
+          "operationId": "readGlipThreadPostsNew",
+          "rateLimitGroup": "Medium",
+          "appPermission": "TeamMessaging",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "TMPostsList"
+          },
+          "queryParameters": "readGlipThreadPostsNewParameters"
         }
       ]
     },
@@ -62576,6 +64645,34 @@
       "paths": [
         "restapi",
         "account",
+        "message-threads",
+        "assign"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/{threadId}/assign",
+          "method": "post",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "post",
+          "description": "Assigns, unassigns, or reassigns the thread.\nThe authorized user must be in the list of thread monitors, otherwise the API returns a 403 error.\n",
+          "summary": "Assign Message Thread",
+          "operationId": "mthAssignThread",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageThread"
+          },
+          "bodyParameters": "assignMessageThreadRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "call-monitoring-groups"
       ],
       "operations": [
@@ -62846,6 +64943,16 @@
         "account",
         "ms-teams",
         "direct-routing"
+      ],
+      "operations": [],
+      "noParentParameter": true
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "message-threads",
+        "entries"
       ],
       "operations": [],
       "noParentParameter": true
@@ -63356,6 +65463,33 @@
       "paths": [
         "restapi",
         "account",
+        "message-threads",
+        "resolve"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/{threadId}/resolve",
+          "method": "post",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "post",
+          "description": "Resolves a message thread (sets the status to `Resolved`).\nThe current status of the thread must be `Open` for this operation to succeed.\nThe authorized user must be in the list of thread monitors, otherwise the API returns a 403 error.\n\nOnce the thread is resolved its `assignee` attribute is cleared automatically.\n",
+          "summary": "Resolve Message Thread",
+          "operationId": "mthResolveThread",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "MessageThread"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "call-queues",
         "bulk-assign"
       ],
@@ -63618,6 +65752,33 @@
       "paths": [
         "restapi",
         "account",
+        "extension",
+        "sms-recipients"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/sms-recipients",
+          "method": "get",
+          "tags": [
+            "Extensions"
+          ],
+          "method2": "get",
+          "description": "Returns a list of Extension's SMS recipients.\n",
+          "summary": "List SMS Recipients",
+          "operationId": "getSmsRecipients",
+          "rateLimitGroup": "Light",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "SmsRecipientsResource"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "address-book-bulk-upload"
       ],
       "operations": [
@@ -63675,31 +65836,63 @@
     },
     {
       "paths": [
-        "ai",
-        "insights",
-        "v1",
-        "async",
-        "analyze-interaction"
+        "restapi",
+        "account",
+        "message-threads",
+        "messages"
       ],
       "operations": [
         {
-          "endpoint": "/ai/insights/v1/async/analyze-interaction",
-          "method": "post",
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/messages",
+          "method": "get",
           "tags": [
-            "Insights"
+            "Message Threads"
           ],
-          "method2": "post",
-          "description": "Returns multiple insights including summaries, key phrases, questions asked, and more in a single API call.\n",
-          "summary": "Interaction Analytics",
-          "operationId": "caiAnalyzeInteraction",
-          "rateLimitGroup": "Heavy",
-          "appPermission": "AI",
+          "method2": "get",
+          "description": "Returns a list of messages across one or more threads.\nAll filters are applied as \"AND\" conditions.\n\nThe records are sorted by `creationTime` in ascending order.\n",
+          "summary": "List Messages",
+          "operationId": "mthListMessages",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
           "withParameter": false,
           "responseSchema": {
-            "$ref": "CaiAsyncApiResponse"
+            "$ref": "ThreadMessageList"
           },
-          "queryParameters": "caiAnalyzeInteractionParameters",
-          "bodyParameters": "interactionInput"
+          "queryParameters": "mthListMessagesParameters"
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/messages",
+          "method": "post",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "post",
+          "description": "Sends a new message.\n\nThe message is automatically attached to the thread indicated in `threadId` parameter, or, if omitted,\nto the relevant thread based on the phone numbers chosen (the new thread is created automatically if necessary).\n\nThis method supports multipart requests to combine traditional SMS/MMS metadata and\nbinary attachments (for rich messages) - see the example below.\n\nNote: the suggested filename for an attachment is not required, but can be provided via `filename` field\nin the `Content-Disposition` header.\n\n```\nPOST /restapi/v1.0/account/{accountId}/message-threads/messages\nContent-Length: 2740\nContent-Type: multipart/form-data; boundary=abcde12345\n\n--abcde12345\nContent-Disposition: form-data; name=\"metadata\"\nContent-Type: application/json\n\n{\n  \"threadId\": \"1234567890\",\n  \"from\": { \"phoneNumber\": \"+15551234567\" },\n  \"to\": [\n    { \"phoneNumber\": \"+15551234568\" }\n  ],\n  \"text\": \"Let me know if it resolves your issue\"\n}\n--abcde12345\nContent-Disposition: form-data; name=\"attachments\"; filename=\"picture1.jpg\"\nContent-Type: image/jpeg\n\n[Image binary content goes here]\n--abcde12345\nContent-Disposition: form-data; name=\"attachments\"\nContent-Type: image/png\n\n[Image binary content goes here]\n--abcde12345--\n```\n",
+          "summary": "Create and Send New Message",
+          "operationId": "mthSendMessage",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ThreadMessageModel"
+          },
+          "bodyParameters": "mthSendMessageRequest",
+          "multipart": true
+        },
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/messages",
+          "method": "delete",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "delete",
+          "description": "Deletes thread message(s).\n",
+          "summary": "Delete Messages",
+          "operationId": "mthDeleteMessages",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "bodyParameters": "threadMessagesDeleteRequest"
         }
       ]
     },
@@ -64808,6 +67001,35 @@
     },
     {
       "paths": [
+        "restapi",
+        "account",
+        "message-threads",
+        "entries",
+        "sync"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/entries/sync",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "get",
+          "description": "Synchronizes the list of thread entries. The response may contain:\n- added or updated messages (full payload);\n- added or updated notes (full payload);\n- deleted message entries (limited attributes, `availability` is set to `Deleted`);\n- deleted note entries (limited attributes, `availability` is set to `Deleted`);\n- system entries (`action` describes the action performed).\n\nIn `FSync` model:\n- only `Alive` messages and notes are returned;\n- only messages and notes from `Open` threads are returned (unless explicit `threadIds` are requested).\n\nThe records are sorted by `lastModifiedTime` in descending order.\n",
+          "summary": "Sync Thread Entries",
+          "operationId": "mthSyncEntries",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ThreadEntriesSyncList"
+          },
+          "queryParameters": "mthSyncEntriesParameters"
+        }
+      ]
+    },
+    {
+      "paths": [
         "webinar",
         "notifications",
         "v1",
@@ -65793,6 +68015,37 @@
     {
       "paths": [
         "restapi",
+        "account",
+        "message-threads",
+        "messages",
+        "content"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-threads/messages/{messageId}/content/{attachmentId}",
+          "method": "get",
+          "tags": [
+            "Message Threads"
+          ],
+          "method2": "get",
+          "description": "Returns media content of a rich message attachment.\n\nSee [Sending MMS](https://developers.ringcentral.com/guide/messaging/sms/sending-images) for the list of supported media types.\n\n**This API must be called via media API entry point, e.g. https://media.ringcentral.com**\n",
+          "summary": "Get Rich Message Attachment",
+          "operationId": "mthReadMessageContent",
+          "rateLimitGroup": "Medium",
+          "appPermission": "SMS",
+          "withParameter": true,
+          "responseSchema": {
+            "type": "string",
+            "format": "binary"
+          },
+          "queryParameters": "mthReadMessageContentParameters"
+        }
+      ],
+      "parameter": "attachmentId"
+    },
+    {
+      "paths": [
+        "restapi",
         "v2",
         "accounts",
         "extensions",
@@ -66565,6 +68818,32 @@
       "paths": [
         "restapi",
         "account",
+        "extension",
+        "sms-recipients",
+        "bulk-assign"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/sms-recipients/bulk-assign",
+          "method": "post",
+          "tags": [
+            "Extensions"
+          ],
+          "method2": "post",
+          "description": "Updates the list of SMS recipients for a given extension.\n",
+          "summary": "Assign SMS Recipients in Bulk",
+          "operationId": "bulkAssignSmsRecipients",
+          "rateLimitGroup": "Medium",
+          "appPermission": "EditExtensions",
+          "withParameter": false,
+          "bodyParameters": "bulkAssignSmsRecipientsRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
         "telephony",
         "sessions",
         "parties",
@@ -67014,7 +69293,7 @@
           "endpoint": "/ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/records/{sourceRecordId}/insights",
           "method": "get",
           "tags": [
-            "RingSense"
+            "AI Conversation Expert"
           ],
           "method2": "get",
           "description": "Returns the insights of a call recording",
@@ -67046,7 +69325,7 @@
           "endpoint": "/ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/sessions/{sourceSessionId}/insights",
           "method": "get",
           "tags": [
-            "RingSense"
+            "AI Conversation Expert"
           ],
           "method2": "get",
           "description": "Returns the insights of all call recordings in a session",
