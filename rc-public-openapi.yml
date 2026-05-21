@@ -105,11 +105,11 @@ x-tagGroups:
   - name: Artificial Intelligence
     popular: true
     tags:
+      - AI Conversation Expert
       - Insights
       - Audio
       - Text
       - Status
-      - RingSense
   - name: Authentication
     tags:
       - OAuth and OIDC
@@ -151,6 +151,7 @@ x-tagGroups:
       - Delegated Lines Groups
       - Directed Call Pickup
       - IVR Apps
+      - Web Voice Extensions
       - Video Configuration
       - Number Porting
       - SMB
@@ -161,6 +162,7 @@ x-tagGroups:
       - BYOC
       - Support Agent Permissions
       - MS Teams Direct Routing
+      - AUX Codes
   - name: Address Book
     tags:
       - External Contacts
@@ -189,12 +191,15 @@ x-tagGroups:
       - MixPanel
       - Billing Reports
       - Text-to-Quote Support
+      - NGBS Custom Bids Approval
   - name: Events and Notifications
     tags:
       - Subscriptions
   - name: User Integrations
     tags:
-      - Token Management
+      - Integration Sessions
+      - Integration Configurations
+      - Integration Profiles and Providers
       - Calendar Management
       - Calendar Event Management
       - Calendar Presence Link
@@ -230,6 +235,7 @@ x-tagGroups:
       - Category Groups
       - Channels
       - Cloud Profiles
+      - Dial Groups
       - Queues
       - Track Groups
       - Workflows
@@ -275,6 +281,7 @@ tags:
   - name: Call Queues
   - name: Posts
   - name: Compliance Exports
+  - name: Message Threads
   - name: Call Handling Rules
   - name: OAuth and OIDC
     description: Public OAuth 2.0 and OpenID Connect 1.0 Resources
@@ -289,6 +296,8 @@ tags:
   - name: Internal Contacts
   - name: Webinars and Sessions
     description: External APIs for webinar and session management
+  - name: AI Conversation Expert
+    description: Get the insights of call recordings
   - name: Chats
   - name: States
   - name: Delegation Management
@@ -307,8 +316,6 @@ tags:
   - name: Audio
     description: Conversational AI audio processing APIs
   - name: User Settings
-  - name: RingSense
-    description: Get the insights of call recordings
   - name: Text
     description: Conversational AI text processing APIs
   - name: Site Administration
@@ -2880,6 +2887,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceResource"
+        "409":
+          $ref: "#/components/responses/Conflict"
       x-feature: EditAccountDevices
       x-availability: Limited
       x-throttling-group: Medium
@@ -6363,6 +6372,60 @@ paths:
       x-throttling-group: Heavy
       x-app-permission: EditExtensions
       x-user-permission: CallQueueToCallQueue
+  "/restapi/v1.0/account/{accountId}/extension/{extensionId}/sms-recipients/bulk-assign":
+    post:
+      tags:
+        - Extensions
+      summary: Assign SMS Recipients in Bulk
+      description: |
+        Updates the list of SMS recipients for a given extension.
+      operationId: bulkAssignSmsRecipients
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/ExtensionId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkAssignSmsRecipientsRequest"
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-feature: EditExtensionInfo
+      x-availability: Limited
+      x-throttling-group: Medium
+      x-app-permission: EditExtensions
+  "/restapi/v1.0/account/{accountId}/extension/{extensionId}/sms-recipients":
+    get:
+      tags:
+        - Extensions
+      summary: List SMS Recipients
+      description: |
+        Returns a list of Extension's SMS recipients.
+      operationId: getSmsRecipients
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/ExtensionId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SmsRecipientsResource"
+      x-feature: ReadExtensions
+      x-availability: Limited
+      x-throttling-group: Light
+      x-app-permission: ReadAccounts
   "/restapi/v1.0/account/{accountId}/extension/{extensionId}/authz-profile":
     get:
       tags:
@@ -6543,8 +6606,8 @@ paths:
               $ref: "#/components/schemas/BulkRoleAssignResource"
         required: true
       responses:
-        "200":
-          description: Assigned user roles information
+        "204":
+          description: No Content
       x-feature: EditAssignedRoles
       x-availability: Limited
       x-throttling-group: Heavy
@@ -6692,8 +6755,12 @@ paths:
               $ref: "#/components/schemas/RoleResource"
         required: true
       responses:
-        "200":
+        "201":
           description: Created custom role information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoleResource"
       x-feature: EditRoles
       x-availability: Limited
       x-throttling-group: Medium
@@ -7414,6 +7481,7 @@ paths:
       x-user-permission: Meetings
   /ai/text/v1/async/summarize:
     post:
+      deprecated: true
       tags:
         - Text
       summary: Conversational Summarization
@@ -7453,6 +7521,7 @@ paths:
       x-app-permission: AI
   /ai/text/v1/async/punctuate:
     post:
+      deprecated: true
       tags:
         - Text
       summary: Smart Punctuation
@@ -7490,6 +7559,7 @@ paths:
       x-app-permission: AI
   /ai/audio/v1/async/speaker-diarize:
     post:
+      deprecated: true
       tags:
         - Audio
       summary: Speaker Diarization
@@ -7529,6 +7599,7 @@ paths:
       x-app-permission: AI
   /ai/audio/v1/async/speech-to-text:
     post:
+      deprecated: true
       tags:
         - Audio
       summary: Speech to Text Conversion
@@ -7566,6 +7637,7 @@ paths:
       x-app-permission: AI
   "/ai/status/v1/jobs/{jobId}":
     get:
+      deprecated: true
       tags:
         - Status
       summary: Get Async Task Status
@@ -7596,6 +7668,7 @@ paths:
       x-app-permission: AI
   /ai/insights/v1/async/analyze-interaction:
     post:
+      deprecated: true
       tags:
         - Insights
       summary: Interaction Analytics
@@ -11026,12 +11099,7 @@ paths:
       description: Returns information about the specified conversation, including the list of conversation participants. A conversation is an adhoc discussion between a particular set of users, not featuring any specific name or description; it is a chat of 'Group' type. If you add a person to the existing conversation, it creates a whole new conversation.
       operationId: readGlipConversationNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a conversation to be returned.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "200":
           description: Success
@@ -11108,12 +11176,7 @@ paths:
       description: Returns information about the specified team.
       operationId: readGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be returned.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "200":
           description: Success
@@ -11133,12 +11196,7 @@ paths:
       description: Deletes the specified team.
       operationId: deleteGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content.
@@ -11156,12 +11214,7 @@ paths:
       description: Updates the name and description of the specified team.
       operationId: patchGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be updated.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         description: JSON body
         content:
@@ -11193,12 +11246,7 @@ paths:
       description: Adds the current user to the specified team.
       operationId: joinGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be joined.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11219,12 +11267,7 @@ paths:
       description: Removes the current user from the specified team.
       operationId: leaveGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be left.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11245,12 +11288,7 @@ paths:
       description: Adds members to the specified team.
       operationId: addGlipTeamMembersNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to add members to.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         description: JSON body
         content:
@@ -11278,12 +11316,7 @@ paths:
       description: Removes members from the specified team.
       operationId: removeGlipTeamMembersNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to remove members from.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         description: JSON body
         content:
@@ -11311,12 +11344,7 @@ paths:
       description: Changes the status of the specified team to 'Archived'.
       operationId: archiveGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be archived.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11337,12 +11365,7 @@ paths:
       description: Changes the status of the specified team to 'Active'.
       operationId: unarchiveGlipTeamNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a team to be made active.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11478,12 +11501,7 @@ paths:
       description: Adds the specified chat to the users's list of favorite chats.
       operationId: favoriteGlipChatNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat to add to favorite list.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11504,12 +11522,7 @@ paths:
       description: Removes the specified chat from the users's list of favorite chats.
       operationId: unfavoriteGlipChatNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat to remove from favorite list.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       responses:
         "204":
           description: No Content
@@ -11526,18 +11539,8 @@ paths:
       description: Returns information about the specified post.
       operationId: readGlipPostNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
-        - name: postId
-          in: path
-          description: Internal identifier of a post
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
+        - $ref: "#/components/parameters/PostId"
       responses:
         "200":
           description: Success
@@ -11557,18 +11560,8 @@ paths:
       description: Deletes the specified post from the chat.
       operationId: deleteGlipPostNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
-        - name: postId
-          in: path
-          description: Internal identifier of a post to be deleted
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
+        - $ref: "#/components/parameters/PostId"
       responses:
         "204":
           description: No Content.
@@ -11586,18 +11579,8 @@ paths:
       description: Updates a specific post within a chat.
       operationId: patchGlipPostNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
-        - name: postId
-          in: path
-          description: Internal identifier of a post to be updated
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
+        - $ref: "#/components/parameters/PostId"
       requestBody:
         description: JSON body
         content:
@@ -11629,12 +11612,7 @@ paths:
       description: Returns a list of posts from the specified chat.
       operationId: readGlipPostsNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
         - name: recordCount
           in: query
           description: Max number of posts to be fetched by one request (not more than 250)
@@ -11669,12 +11647,7 @@ paths:
         Attachments can also be added to a post by passing the type and ID of attachment(s) in request body.
       operationId: createGlipPostNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         description: JSON body
         content:
@@ -11693,6 +11666,41 @@ paths:
           description: One of body parameters has invalid value.
         "404":
           description: Resource for parameter [chatId] is not found.
+      x-feature: TeamMessaging
+      x-throttling-group: Medium
+      x-app-permission: TeamMessaging
+  "/team-messaging/v1/chats/{chatId}/threads/{threadId}/posts":
+    get:
+      tags:
+        - Posts
+      summary: List Thread Posts
+      description: Returns a list of posts from the specified thread in a chat.
+      operationId: readGlipThreadPostsNew
+      parameters:
+        - $ref: "#/components/parameters/ChatId"
+        - $ref: "#/components/parameters/ThreadId"
+        - name: recordCount
+          in: query
+          description: Max number of posts to be fetched by one request (not more than 250)
+          schema:
+            maximum: 250
+            type: integer
+            format: int32
+            default: 30
+        - name: pageToken
+          in: query
+          description: Pagination token.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TMPostsList"
+        "404":
+          description: Chat or thread not found
       x-feature: TeamMessaging
       x-throttling-group: Medium
       x-app-permission: TeamMessaging
@@ -11753,12 +11761,7 @@ paths:
       description: Creates a new adaptive card in the chat specified in path.
       operationId: createGlipAdaptiveCardNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         content:
           application/json:
@@ -12087,12 +12090,7 @@ paths:
       description: Returns the list of chat notes.
       operationId: listChatNotesNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat to fetch notes from.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
         - name: creationTimeTo
           in: query
           description: |
@@ -12161,12 +12159,7 @@ paths:
       description: Creates a new note in the specified chat.
       operationId: createChatNoteNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat to create a note in
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         content:
           application/json:
@@ -12369,12 +12362,7 @@ paths:
       description: Returns the list of tasks of the specified chat.
       operationId: listChatTasksNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
         - name: creationTimeTo
           in: query
           description: |
@@ -12476,12 +12464,7 @@ paths:
       description: Creates a task in the specified chat.
       operationId: createTaskNew
       parameters:
-        - name: chatId
-          in: path
-          description: Internal identifier of a chat
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/ChatId"
       requestBody:
         content:
           application/json:
@@ -13993,6 +13976,707 @@ paths:
       x-availability: High
       x-throttling-group: Medium
       x-app-permission: ReadMessages
+  "/restapi/v1.0/account/{accountId}/message-threads/messages":
+    get:
+      summary: List Messages
+      description: |
+        Returns a list of messages across one or more threads.
+        All filters are applied as "AND" conditions.
+
+        The records are sorted by `creationTime` in ascending order.
+      operationId: mthListMessages
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadStatusFilter"
+        - $ref: "#/components/parameters/ThreadOwnerExtensionIdsFilter"
+        - $ref: "#/components/parameters/MessageOrThreadAvailabilityFilter"
+        - $ref: "#/components/parameters/ThreadMessageIdsFilter"
+        - $ref: "#/components/parameters/ThreadIdsFilter"
+        - $ref: "#/components/parameters/MessageThreadCreationTimeFrom"
+        - $ref: "#/components/parameters/MessageThreadCreationTimeTo"
+        - $ref: "#/components/parameters/PerPage"
+        - $ref: "#/components/parameters/Page"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadMessageList"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-request-max-body-size: 10m
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+    post:
+      summary: Create and Send New Message
+      description: |
+        Sends a new message.
+
+        The message is automatically attached to the thread indicated in `threadId` parameter, or, if omitted,
+        to the relevant thread based on the phone numbers chosen (the new thread is created automatically if necessary).
+
+        This method supports multipart requests to combine traditional SMS/MMS metadata and
+        binary attachments (for rich messages) - see the example below.
+
+        Note: the suggested filename for an attachment is not required, but can be provided via `filename` field
+        in the `Content-Disposition` header.
+
+        ```
+        POST /restapi/v1.0/account/{accountId}/message-threads/messages
+        Content-Length: 2740
+        Content-Type: multipart/form-data; boundary=abcde12345
+
+        --abcde12345
+        Content-Disposition: form-data; name="metadata"
+        Content-Type: application/json
+
+        {
+          "threadId": "1234567890",
+          "from": { "phoneNumber": "+15551234567" },
+          "to": [
+            { "phoneNumber": "+15551234568" }
+          ],
+          "text": "Let me know if it resolves your issue"
+        }
+        --abcde12345
+        Content-Disposition: form-data; name="attachments"; filename="picture1.jpg"
+        Content-Type: image/jpeg
+
+        [Image binary content goes here]
+        --abcde12345
+        Content-Disposition: form-data; name="attachments"
+        Content-Type: image/png
+
+        [Image binary content goes here]
+        --abcde12345--
+        ```
+      operationId: mthSendMessage
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewThreadMessageRequest"
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - metadata
+                - attachments
+              properties:
+                metadata:
+                  $ref: "#/components/schemas/NewThreadMessageRequest"
+                attachments:
+                  type: array
+                  minItems: 1
+                  items:
+                    $ref: "#/components/schemas/SmsBinaryAttachmentPart"
+            encoding:
+              metadata:
+                contentType: application/json
+                headers:
+                  Content-Disposition:
+                    schema:
+                      type: string
+                    example: form-data; name="metadata"
+              attachments:
+                contentType: binary/octet-stream
+                headers:
+                  Content-Disposition:
+                    schema:
+                      type: string
+                    example: form-data; name="attachments"; filename="picture1.jpg"
+      responses:
+        "201":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadMessageModel"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-request-max-body-size: 10m
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+    delete:
+      summary: Delete Messages
+      description: |
+        Deletes thread message(s).
+      operationId: mthDeleteMessages
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThreadMessagesDeleteRequest"
+      responses:
+        "204":
+          description: Successful response
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-request-max-body-size: 10m
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/notes":
+    get:
+      summary: List Notes
+      description: |
+        Returns a list of notes from one or more threads.
+        All filters are applied as "AND" conditions.
+
+        The records are sorted by `creationTime` in ascending order.
+      operationId: mthListNotes
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/ThreadOwnerExtensionIdsFilter"
+        - $ref: "#/components/parameters/MessageOrThreadAvailabilityFilter"
+        - name: threadIds
+          in: query
+          description: List of thread IDs to filter the list of results
+          required: false
+          explode: true
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 10
+            uniqueItems: true
+            items:
+              type: string
+        - name: noteIds
+          in: query
+          description: List of note IDs to filter the list of results
+          required: false
+          explode: true
+          schema:
+            type: array
+            uniqueItems: true
+            minItems: 1
+            maxItems: 10
+            items:
+              type: string
+        - $ref: "#/components/parameters/PerPage"
+        - $ref: "#/components/parameters/Page"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadNoteList"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+    post:
+      summary: Create New Note
+      description: |
+        Creates a new note in the thread.
+
+        The thread must be in `Open` status and the current user must be in the list of thread monitors
+        for this operation to succeed.
+      operationId: mthCreateNote
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThreadNoteCreateRequest"
+      responses:
+        "201":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadNoteModel"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+    delete:
+      summary: Delete Notes
+      description: |
+        Deletes thread note(s).
+
+        The corresponding threads must be in `Open` status and the calling user must be the notes' author
+        for this operation to succeed.
+      operationId: mthDeleteNotes
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThreadNotesDeleteRequest"
+      responses:
+        "204":
+          description: Successful response
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/notes/{noteId}":
+    patch:
+      summary: Update Note
+      description: |
+        Updates the text of a note.
+
+        The thread must be in `Open` status and the calling user must be the note's author
+        for this operation to succeed.
+      operationId: mthUpdateNote
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - name: noteId
+          in: path
+          required: true
+          description: |
+            Internal identifier of a note
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ThreadNoteUpdateRequest"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadNoteModel"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/entries/sync":
+    get:
+      summary: Sync Thread Entries
+      description: |
+        Synchronizes the list of thread entries. The response may contain:
+        - added or updated messages (full payload);
+        - added or updated notes (full payload);
+        - deleted message entries (limited attributes, `availability` is set to `Deleted`);
+        - deleted note entries (limited attributes, `availability` is set to `Deleted`);
+        - system entries (`action` describes the action performed).
+
+        In `FSync` model:
+        - only `Alive` messages and notes are returned;
+        - only messages and notes from `Open` threads are returned (unless explicit `threadIds` are requested).
+
+        The records are sorted by `lastModifiedTime` in descending order.
+      operationId: mthSyncEntries
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - name: scope
+          in: query
+          required: false
+          description: |
+            Scope of synchronization (`syncType=FSync` only):
+
+            - `Accessible`: returns entries in threads monitored by the current user;
+            - `Unassigned`: returns entries in accessible unassigned threads;
+            - `AssignedToMe`: returns entries in threads that are assigned to the current user;
+            - `AssignedToMeAndUnassigned`: returns entries in threads that are assigned to the current user or unassigned;
+            - `Explicit`: returns entries in threads specified through the `threadIds` parameter.
+          schema:
+            type: string
+            enum:
+              - Accessible
+              - Unassigned
+              - AssignedToMe
+              - AssignedToMeAndUnassigned
+              - Explicit
+            default: AssignedToMe
+        - name: threadIds
+          in: query
+          required: false
+          explode: true
+          description: |
+            List of thread IDs to synchronize (`Explicit` scope only)
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 10
+            uniqueItems: true
+            items:
+              type: string
+        - $ref: "#/components/parameters/SyncType"
+        - $ref: "#/components/parameters/SyncToken"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadEntriesSyncList"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/sync":
+    get:
+      summary: Sync Message Threads
+      description: |
+        Synchronizes the list of message threads.
+        Returns the thread records that the current user can monitor
+        (assigned to current user, assigned to other users or unassigned).
+
+        In `FSync` mode, only `Open` and `Alive`threads are returned.
+        The records are sorted by `lastModifiedTime` in descending order.
+      operationId: mthSyncThreads
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/SyncType"
+        - $ref: "#/components/parameters/SyncToken"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ThreadSyncList"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads":
+    get:
+      summary: List Message Threads
+      description: |
+        Returns a paginated list of message threads for the specified account according to the specified criteria.
+
+        Different filters are combined with logical "AND", different values for the same filter (if supported)
+        are combined with logical "OR".
+
+        Only threads that accessible for a current authorized user are returned.
+        The records are sorted by `creationTime` in ascending order.
+      operationId: mthListThreads
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadStatusFilter"
+        - $ref: "#/components/parameters/ThreadOwnerExtensionIdsFilter"
+        - $ref: "#/components/parameters/MessageThreadCreationTimeFrom"
+        - $ref: "#/components/parameters/MessageThreadCreationTimeTo"
+        - name: ownerPhoneNumber
+          in: query
+          required: false
+          description: |
+            Owner party phone number in E.164 format.
+          schema:
+            $ref: "#/components/schemas/PhoneNumberE164"
+        - name: guestPhoneNumber
+          in: query
+          required: false
+          description: |
+            Guest party phone number in E.164 format.
+          schema:
+            $ref: "#/components/schemas/PhoneNumberE164"
+        - $ref: "#/components/parameters/MessageOrThreadAvailabilityFilter"
+        - $ref: "#/components/parameters/PerPage"
+        - $ref: "#/components/parameters/Page"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageThreadList"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/{threadId}":
+    get:
+      summary: Get Message Thread
+      description: |
+        Returns a message thread by ID.
+
+        API returns a 403 error if the current user does not have access to the given thread.
+      operationId: mthGetThread
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadId"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageThread"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+    delete:
+      summary: Delete Message Thread
+      description: |
+        Deletes a message thread by IDs.
+
+        Technically this operation just sets thread's `availability` to `Deleted`.
+        API returns a 403 error if the current user does not have access to the given thread.
+
+        Once the thread is deleted its `assignee` attribute is cleared automatically.
+      operationId: mthDeleteThread
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadId"
+      responses:
+        "204":
+          description: Successful response
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/{threadId}/resolve":
+    post:
+      summary: Resolve Message Thread
+      description: |
+        Resolves a message thread (sets the status to `Resolved`).
+        The current status of the thread must be `Open` for this operation to succeed.
+        The authorized user must be in the list of thread monitors, otherwise the API returns a 403 error.
+
+        Once the thread is resolved its `assignee` attribute is cleared automatically.
+      operationId: mthResolveThread
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadId"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageThread"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/{threadId}/assign":
+    post:
+      summary: Assign Message Thread
+      description: |
+        Assigns, unassigns, or reassigns the thread.
+        The authorized user must be in the list of thread monitors, otherwise the API returns a 403 error.
+      operationId: mthAssignThread
+      tags:
+        - Message Threads
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/MessageThreadId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssignMessageThreadRequest"
+            examples:
+              AssignThread:
+                description: Assign or reassign the thread
+                value:
+                  assignee:
+                    extensionId: "1234567890"
+              UnassignThread:
+                description: Unassign the thread
+                value:
+                  assignee: null
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageThread"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
+  "/restapi/v1.0/account/{accountId}/message-threads/messages/{messageId}/content/{attachmentId}":
+    get:
+      tags:
+        - Message Threads
+      summary: Get Rich Message Attachment
+      description: |
+        Returns media content of a rich message attachment.
+
+        See [Sending MMS](https://developers.ringcentral.com/guide/messaging/sms/sending-images) for the list of supported media types.
+
+        **This API must be called via media API entry point, e.g. https://media.ringcentral.com**
+      operationId: mthReadMessageContent
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - name: messageId
+          in: path
+          required: true
+          description: Message ID
+          schema:
+            type: string
+        - name: attachmentId
+          in: path
+          required: true
+          description: Internal identifier of a message attachment
+          schema:
+            type: string
+        - $ref: "#/components/parameters/ContentDisposition"
+        - $ref: "#/components/parameters/ContentDispositionFilename"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            audio/*:
+              schema:
+                type: string
+                format: binary
+            image/*:
+              schema:
+                type: string
+                format: binary
+            video/*:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        "404":
+          $ref: "#/components/responses/NotFound"
+      x-media-api: true
+      x-availability: High
+      x-throttling-group: Medium
+      x-app-permission: SMS
   /restapi:
     get:
       tags:
@@ -16447,7 +17131,7 @@ paths:
   "/ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/records/{sourceRecordId}/insights":
     get:
       tags:
-        - RingSense
+        - AI Conversation Expert
       summary: Get Recording Insights
       description: Returns the insights of a call recording
       operationId: getRecordingInsights
@@ -16480,7 +17164,7 @@ paths:
   "/ai/ringsense/v1/public/accounts/{accountId}/domains/{domain}/sessions/{sourceSessionId}/insights":
     get:
       tags:
-        - RingSense
+        - AI Conversation Expert
       summary: Get Session Insights
       description: Returns the insights of all call recordings in a session
       operationId: getSessionInsights
@@ -17369,7 +18053,12 @@ paths:
       tags:
         - Call Control
       summary: Make CallOut
-      description: Creates a new outbound call out session. Currently this method is supported for Softphone/Hardphone only, since device IDs for WebRTC/Mobile apps cannot be obtained.
+      description: |-
+        Creates a new CallOut telephony session: an outbound call from the caller described in `from`
+        to the destination in `to`. The caller may be identified with `from.deviceId` or with
+        `from.extensionId` (internal extension / mailbox id); use one or the other, not both.
+        When using `from.deviceId`, only Softphone and Hardphone device instance ids are supported;
+        WebRTC/Mobile clients do not expose usable device ids for this API today.
       operationId: createCallOutCallSession
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -21911,6 +22600,9 @@ components:
           $ref: "#/components/schemas/PhoneNumberE164"
         status:
           $ref: "#/components/schemas/AccountStatusEnumFull"
+        billingActive:
+          type: boolean
+          description: Indicates if the billing is active.
         companyName:
           description: Company name
           type: string
@@ -26702,6 +27394,11 @@ components:
           $ref: "#/components/schemas/CountryInfoShortModel"
         uBrand:
           $ref: "#/components/schemas/UBrandInfo"
+        ubrand:
+          allOf:
+            - $ref: "#/components/schemas/UBrandInfo"
+            - deprecated: true
+          description: "Deprecated: use uBrand instead."
       description: |
         Account service information, including brand, sub-brand, service plan and
         billing plan
@@ -27345,6 +28042,15 @@ components:
         taxId:
           type: string
           description: Internal identifier of a tax
+        apartment:
+          type: string
+          description: Apartment number (country-specific address field, e.g. Portugal)
+        floor:
+          type: string
+          description: Floor number (country-specific address field, e.g. Portugal)
+        designation:
+          type: string
+          description: Designation (country-specific address field, e.g. Portugal)
       description: Address for emergency cases. The same emergency address is assigned to all numbers of a single device
     LinePoolingEnum:
       type: string
@@ -27749,6 +28455,616 @@ components:
         authorizationId:
           type: string
           description: Internal identifier for SIP authorization
+    ThreadUserModel:
+      type: object
+      required:
+        - extensionId
+      properties:
+        extensionId:
+          type: string
+          description: Thread user's extension ID
+          example: "9876453210"
+        name:
+          type: string
+          description: Thread user's name (first + last)
+          example: John Doe
+        extensionType:
+          $ref: "#/components/schemas/AllExtensionTypesEnum"
+    OwnerResource:
+      type: object
+      description: Message owner information. Supported for shared voicemail and sms messages only
+      properties:
+        name:
+          type: string
+          description: Name of a voicemail owner
+        extensionType:
+          $ref: "#/components/schemas/AllExtensionTypesEnum"
+        extensionId:
+          type: string
+          description: Internal identifier of an extension
+    ThreadAvailabilityEnum:
+      type: string
+      description: Thread/message availability
+      enum:
+        - Alive
+        - Deleted
+    ThreadStatusReasonEnum:
+      type: string
+      description: |
+        Thread status transition reason (for threads in `Resolved` status only):
+
+        - `Manual` - the thread was resolved manually;
+        - `ThreadExpired` - the thread was automatically resolved according to TTL settings;
+        - `OwnerDeleted` - the thread owner's extension was deleted;
+        - `OwnerPhoneNumberDeleted` - the thread owner's phone number this thread was created for was deleted.
+      enum:
+        - Manual
+        - ThreadExpired
+        - OwnerDeleted
+        - OwnerPhoneNumberDeleted
+    MessagePhoneParty:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          $ref: "#/components/schemas/PhoneNumberE164"
+    MessageThreadList:
+      type: object
+      required:
+        - records
+        - paging
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MessageThread"
+        paging:
+          $ref: "#/components/schemas/EnumeratedPagingModel"
+    ThreadStatusEnum:
+      type: string
+      description: Thread status
+      enum:
+        - Open
+        - Resolved
+    AllExtensionTypesEnum:
+      type: string
+      description: |
+        Type of the extension. For unrecognized types the `Unknown` value is returned.
+        Please note that legacy 'Department' extension type corresponds to 'Call Queue'
+        extensions in modern RingCentral product terminology
+      enum:
+        - User
+        - Department
+        - Announcement
+        - Voicemail
+        - DigitalUser
+        - VirtualUser
+        - FaxUser
+        - PagingOnly
+        - SharedLinesGroup
+        - DelegatedLinesGroup
+        - GroupCallPickup
+        - IvrMenu
+        - ApplicationExtension
+        - ProxyAdmin
+        - RoomConnector
+        - ParkLocation
+        - Limited
+        - Bot
+        - Site
+        - Room
+        - FlexibleUser
+        - TieLine
+        - Unknown
+      example: User
+    MessageThread:
+      type: object
+      required:
+        - id
+        - status
+        - availability
+        - creationTime
+        - lastModifiedTime
+        - owner
+      properties:
+        id:
+          type: string
+          description: Thread ID
+        label:
+          type: string
+          description: Thread human-readable label
+          maxLength: 200
+        status:
+          $ref: "#/components/schemas/ThreadStatusEnum"
+        statusReason:
+          $ref: "#/components/schemas/ThreadStatusReasonEnum"
+        availability:
+          $ref: "#/components/schemas/ThreadAvailabilityEnum"
+        owner:
+          $ref: "#/components/schemas/OwnerResource"
+        ownerParty:
+          allOf:
+            - $ref: "#/components/schemas/MessagePhoneParty"
+            - description: Thread owner phone number information
+        guestParty:
+          allOf:
+            - $ref: "#/components/schemas/MessagePhoneParty"
+            - description: Thread guest phone number information
+        assignee:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/ThreadUserModel"
+            - description: Cleared automatically when the thread is resolved or deleted
+        creationTime:
+          type: string
+          format: date-time
+          description: Thread creation time
+        lastModifiedTime:
+          type: string
+          format: date-time
+          description: Thread last modification time
+    ThreadSyncList:
+      type: object
+      required:
+        - records
+        - syncInfo
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/MessageThread"
+        syncInfo:
+          $ref: "#/components/schemas/SyncInfoModel"
+    SyncInfoModel:
+      type: object
+      required:
+        - syncType
+        - syncToken
+        - syncTime
+      properties:
+        syncType:
+          $ref: "#/components/schemas/SyncTypeEnum"
+        syncToken:
+          type: string
+          description: Synchronization token
+        syncTime:
+          type: string
+          description: |
+            Last synchronization date/time
+          format: date-time
+    SyncTypeEnum:
+      type: string
+      enum:
+        - FSync
+        - ISync
+      description: |
+        Type of message synchronization request:
+          - FSync -- full sync
+          - ISync -- incremental sync
+    MessageStatusEnum:
+      type: string
+      description: |
+        Message status. Different message types may have different
+        allowed status values. For outbound faxes the aggregated message status
+        is returned. If, for multi-recipient outbound message, a status for
+        at least one recipient is `Queued`, then the `Queued` value is returned.
+        If a status for at least one recipient is `SendingFailed`,
+        then the 'SendingFailed' value is returned. In other cases,
+        the `Sent` status is returned
+      enum:
+        - Queued
+        - Sent
+        - Delivered
+        - DeliveryFailed
+        - SendingFailed
+        - Received
+    ThreadMessagesDeleteRequest:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: IDs of messages to be deleted
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+          example:
+            - "2268298947"
+            - "2268300303"
+    ThreadMessageModel:
+      title: Thread Message
+      type: object
+      required:
+        - id
+        - threadId
+        - availability
+        - creationTime
+        - lastModifiedTime
+        - direction
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a message
+        threadId:
+          type: string
+          description: Internal identifier of a message thread
+        availability:
+          $ref: "#/components/schemas/ThreadAvailabilityEnum"
+        creationTime:
+          type: string
+          description: |
+            Message creation date/time
+          format: date-time
+        direction:
+          $ref: "#/components/schemas/MessageDirectionEnum"
+        lastModifiedTime:
+          type: string
+          description: |
+            Message last modification date/time
+          format: date-time
+        messageStatus:
+          $ref: "#/components/schemas/MessageStatusEnum"
+        text:
+          $ref: "#/components/schemas/ThreadMessageText"
+        attachments:
+          type: array
+          description: Message attachments (if any)
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/MessageAttachmentResponseEntry"
+        author:
+          allOf:
+            - $ref: "#/components/schemas/ThreadUserModel"
+            - description: Message author (for outbound messages only)
+    ThreadMessageList:
+      type: object
+      required:
+        - records
+        - paging
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ThreadMessageModel"
+        paging:
+          $ref: "#/components/schemas/EnumeratedPagingModel"
+    MessagePhonePartiesList:
+      type: array
+      minItems: 1
+      maxItems: 10
+      items:
+        $ref: "#/components/schemas/MessagePhoneParty"
+    MessageAttachmentResponseEntry:
+      type: object
+      required:
+        - id
+        - contentType
+        - contentUri
+        - size
+      properties:
+        id:
+          type: string
+          description: Unique identifier of an attachment
+        contentType:
+          type: string
+          description: MIME content type of an attachment
+          example: audio/mpeg
+        filename:
+          type: string
+          description: |
+            Suggested filename of an attachment.
+          example: my-song.mp3
+        contentUri:
+          type: string
+          format: uri
+          description: Link to the attachment binary content
+        size:
+          type: integer
+          format: int64
+          description: Size of the file in bytes
+    SmsBinaryAttachmentPart:
+      type: string
+      description: |
+        Multipart attachments in binary format. For supported  MIME types see
+        [Sending MMS](https://developers.ringcentral.com/guide/messaging/sms/sending-images)
+      format: binary
+    ThreadMessageText:
+      type: string
+      minLength: 1
+      maxLength: 1000
+      description: |
+        Message or note text
+      example: Hello, how are you doing today?
+    MessageDirectionEnum:
+      type: string
+      enum:
+        - Inbound
+        - Outbound
+      description: |
+        Message direction (inbound or outbound)
+    NewThreadMessageRequest:
+      type: object
+      required:
+        - from
+        - to
+        - text
+      properties:
+        threadId:
+          type: string
+          description: |
+            Internal identifier of a message thread.
+            If not specified, the thread will be assigned automatically based on phone numbers.
+            If provided `threadId` is invalid (e.g. does not exist, already resolved, etc.), the API returns an error.
+        from:
+          $ref: "#/components/schemas/MessagePhoneParty"
+        to:
+          $ref: "#/components/schemas/MessagePhonePartiesList"
+        text:
+          $ref: "#/components/schemas/ThreadMessageText"
+    AssignMessageThreadRequest:
+      type: object
+      description: |
+        Assignee extension information (can be `null` to unassign the thread)
+      required:
+        - assignee
+      properties:
+        assignee:
+          type: object
+          nullable: true
+          required:
+            - extensionId
+          properties:
+            extensionId:
+              type: string
+              description: Extension ID of the assignee
+              example: "9876453210"
+    ThreadNoteList:
+      type: object
+      required:
+        - records
+        - paging
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ThreadNoteModel"
+        paging:
+          $ref: "#/components/schemas/EnumeratedPagingModel"
+    ThreadNoteCreateRequest:
+      type: object
+      required:
+        - threadId
+        - text
+      properties:
+        threadId:
+          type: string
+          description: |
+            Internal identifier of a message thread
+        text:
+          $ref: "#/components/schemas/ThreadMessageText"
+    ThreadNotesDeleteRequest:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: IDs of notes to be deleted
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+            format: uuid
+          example:
+            - c21e5807-a143-4bb2-b275-1e9f9695bd9a
+            - 60a8dbff-0e1e-4143-8114-9424675f9890
+    ThreadNoteModel:
+      title: Thread Note
+      type: object
+      required:
+        - id
+        - threadId
+        - availability
+        - creationTime
+        - lastModifiedTime
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a note
+        threadId:
+          type: string
+          description: Internal identifier of a message thread
+        availability:
+          $ref: "#/components/schemas/ThreadAvailabilityEnum"
+        creationTime:
+          type: string
+          description: |
+            Note creation date/time
+          format: date-time
+        lastModifiedTime:
+          type: string
+          description: |
+            Message last modification date/time
+          format: date-time
+        text:
+          $ref: "#/components/schemas/ThreadMessageText"
+        author:
+          allOf:
+            - $ref: "#/components/schemas/ThreadUserModel"
+            - description: Thread note author
+    ThreadNoteUpdateRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          $ref: "#/components/schemas/ThreadMessageText"
+    MthSyncAliveMessage:
+      title: Alive Message
+      allOf:
+        - required:
+            - recordType
+        - type: object
+          properties:
+            recordType:
+              type: string
+              enum:
+                - AliveMessage
+        - $ref: "#/components/schemas/ThreadMessageModel"
+    ThreadEntriesSyncList:
+      type: object
+      required:
+        - records
+        - syncInfo
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ThreadEntrySyncItem"
+        syncInfo:
+          $ref: "#/components/schemas/SyncInfoModel"
+    ThreadEntrySyncItem:
+      oneOf:
+        - $ref: "#/components/schemas/MthSyncAliveMessage"
+        - $ref: "#/components/schemas/MthSyncDeletedMessage"
+        - $ref: "#/components/schemas/MthSyncAliveNote"
+        - $ref: "#/components/schemas/MthSyncDeletedNote"
+        - $ref: "#/components/schemas/MthSyncBaseHint"
+        - $ref: "#/components/schemas/MthSyncAssignedHint"
+      discriminator:
+        propertyName: recordType
+        mapping:
+          AliveMessage: "#/components/schemas/MthSyncAliveMessage"
+          DeletedMessage: "#/components/schemas/MthSyncDeletedMessage"
+          AliveNote: "#/components/schemas/MthSyncAliveNote"
+          DeletedNote: "#/components/schemas/MthSyncDeletedNote"
+          ThreadCreatedHint: "#/components/schemas/MthSyncBaseHint"
+          ThreadResolvedHint: "#/components/schemas/MthSyncBaseHint"
+          ThreadDeletedHint: "#/components/schemas/MthSyncBaseHint"
+          ThreadAssignedHint: "#/components/schemas/MthSyncAssignedHint"
+    MthSyncAssignedHint:
+      title: Thread Assignment System Hint
+      allOf:
+        - $ref: "#/components/schemas/MthSyncBaseHint"
+        - type: object
+          properties:
+            assignee:
+              $ref: "#/components/schemas/ThreadUserModel"
+            previousAssignee:
+              $ref: "#/components/schemas/ThreadUserModel"
+    MthSyncDeletedMessage:
+      title: Deleted Message
+      type: object
+      required:
+        - recordType
+        - id
+        - threadId
+        - availability
+        - lastModifiedTime
+      properties:
+        recordType:
+          type: string
+          enum:
+            - DeletedMessage
+        id:
+          type: string
+          description: Internal identifier of a message
+        threadId:
+          type: string
+          description: Internal identifier of a message thread
+        availability:
+          type: string
+          description: Message availability status
+          enum:
+            - Deleted
+        lastModifiedTime:
+          type: string
+          description: |
+            Message last modification date/time
+          format: date-time
+    MthSyncAliveNote:
+      title: Alive Note
+      allOf:
+        - required:
+            - recordType
+        - type: object
+          properties:
+            recordType:
+              type: string
+              enum:
+                - AliveNote
+        - $ref: "#/components/schemas/ThreadNoteModel"
+    MthSyncDeletedNote:
+      title: Deleted Note
+      type: object
+      required:
+        - recordType
+        - id
+        - threadId
+        - availability
+        - lastModifiedTime
+      properties:
+        recordType:
+          type: string
+          enum:
+            - DeletedNote
+        id:
+          type: string
+          description: Internal identifier of a note
+        threadId:
+          type: string
+          description: Internal identifier of a message thread
+        availability:
+          type: string
+          description: Note availability status
+          enum:
+            - Deleted
+        lastModifiedTime:
+          type: string
+          description: |
+            Note last modification date/time
+          format: date-time
+    MthSyncBaseHint:
+      title: Thread System Hint
+      type: object
+      required:
+        - recordType
+        - id
+        - threadId
+        - lastModifiedTime
+      properties:
+        recordType:
+          type: string
+          enum:
+            - ThreadCreatedHint
+            - ThreadResolvedHint
+            - ThreadDeletedHint
+            - ThreadAssignedHint
+        id:
+          type: string
+          description: Internal identifier of a system message
+        threadId:
+          type: string
+          description: Internal identifier of a message thread
+        lastModifiedTime:
+          type: string
+          description: |
+            Last modification date/time (always the same as a creation time since the system hints are immutable)
+          format: date-time
+        initiator:
+          allOf:
+            - $ref: "#/components/schemas/ThreadUserModel"
+            - description: |
+                Initiator of the action.
+                Can be missing if the action was initiated by the system.
     CustomFieldModel:
       type: object
       properties:
@@ -29631,6 +30947,7 @@ components:
         - JoinCall
         - TextRelay
         - IvaCall
+        - VoiceChat
     CallActionEnum:
       type: string
       description: The internal action corresponding to the call operation
@@ -29670,6 +30987,7 @@ components:
         - Transfer
         - Unknown
         - VoIP Call
+        - VoiceChat Call
     BaseCallLogToParty:
       type: object
       properties:
@@ -29993,15 +31311,10 @@ components:
           $ref: "#/components/schemas/CallQueueInfoRequest"
         transition:
           $ref: "#/components/schemas/UserTransitionInfo"
-        costCenter:
-          $ref: "#/components/schemas/CostCenterInfo"
         customFields:
           type: array
           items:
             $ref: "#/components/schemas/CustomFieldInfo"
-        hidden:
-          type: boolean
-          description: Hides extension from showing in company directory. Supported for extensions of User type only
         site:
           $ref: "#/components/schemas/ProvisioningSiteInfo"
         type:
@@ -30067,16 +31380,6 @@ components:
       description: |
         User's business address. The default is
         Company (Auto-Receptionist) settings
-    CostCenterInfo:
-      type: object
-      description: Cost center information. Applicable if Cost Center feature is enabled. The default is `root` cost center value
-      properties:
-        id:
-          type: string
-          description: Internal identifier of a cost center
-        name:
-          type: string
-          description: Name of a cost center
     ExtensionBulkUpdateRequest:
       required:
         - records
@@ -30515,13 +31818,6 @@ components:
           type: string
           description: Human-readable description of the error. Not suitable for end users.
           example: AccountId 1234 is invalid
-    MessageDirectionEnum:
-      type: string
-      enum:
-        - Inbound
-        - Outbound
-      description: |
-        Message direction (inbound or outbound)
     MessageStatusCounts:
       type: object
       description: Message status parameters
@@ -34149,6 +35445,16 @@ components:
       description: |
         Site Fax/SMS recipient (operator) reference. Multi-level IVR should
         be enabled
+    CostCenterInfo:
+      type: object
+      description: Cost center information. Applicable if Cost Center feature is enabled. The default is `root` cost center value
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a cost center
+        name:
+          type: string
+          description: Name of a cost center
     SiteOperatorReference:
       type: object
       properties:
@@ -34756,37 +36062,6 @@ components:
           $ref: "#/components/schemas/SiteAccessStatus"
         alertTimer:
           $ref: "#/components/schemas/CallQueueAlertTimerEnum"
-    AllExtensionTypesEnum:
-      type: string
-      description: |
-        Type of the extension. For unrecognized types the `Unknown` value is returned.
-        Please note that legacy 'Department' extension type corresponds to 'Call Queue'
-        extensions in modern RingCentral product terminology
-      enum:
-        - User
-        - Department
-        - Announcement
-        - Voicemail
-        - DigitalUser
-        - VirtualUser
-        - FaxUser
-        - PagingOnly
-        - SharedLinesGroup
-        - DelegatedLinesGroup
-        - GroupCallPickup
-        - IvrMenu
-        - ApplicationExtension
-        - ProxyAdmin
-        - RoomConnector
-        - ParkLocation
-        - Limited
-        - Bot
-        - Site
-        - Room
-        - FlexibleUser
-        - TieLine
-        - Unknown
-      example: User
     PermissionInfoAdmin:
       type: object
       properties:
@@ -34808,7 +36083,6 @@ components:
       type: object
       required:
         - firstName
-        - lastName
         - email
       properties:
         firstName:
@@ -35661,6 +36935,11 @@ components:
           description: |
             Specifies whether the user referenced in extension object is sharing voicemails
             with the current extension
+        callQueueSmsRecipient:
+          type: boolean
+          description: |
+            Specifies whether the current extension is configured as SMS Recipient
+            for the call queue referenced in extension object
         smsRecipient:
           type: boolean
           description: |
@@ -35872,23 +37151,6 @@ components:
         - VoiceMail
         - Pager
       description: Type of the message
-    MessageStatusEnum:
-      type: string
-      description: |
-        Message status. Different message types may have different
-        allowed status values. For outbound faxes the aggregated message status
-        is returned. If, for multi-recipient outbound message, a status for
-        at least one recipient is `Queued`, then the `Queued` value is returned.
-        If a status for at least one recipient is `SendingFailed`,
-        then the 'SendingFailed' value is returned. In other cases,
-        the `Sent` status is returned
-      enum:
-        - Queued
-        - Sent
-        - Delivered
-        - DeliveryFailed
-        - SendingFailed
-        - Received
     ConversationInfo:
       type: object
       properties:
@@ -35963,18 +37225,6 @@ components:
         - SourceDocument
         - RenderedDocument
         - MmsAttachment
-    OwnerResource:
-      type: object
-      description: Message owner information. Supported for shared voicemail and sms messages only
-      properties:
-        name:
-          type: string
-          description: Name of a voicemail owner
-        extensionType:
-          $ref: "#/components/schemas/AllExtensionTypesEnum"
-        extensionId:
-          type: string
-          description: Internal identifier of an extension
     FaxErrorCodeEnum:
       type: string
       enum:
@@ -36281,15 +37531,6 @@ components:
           default: false
         forwarding:
           $ref: "#/components/schemas/GetMessageForwardingInfo"
-    SyncTypeEnum:
-      type: string
-      enum:
-        - FSync
-        - ISync
-      description: |
-        Type of message synchronization request:
-          - FSync -- full sync
-          - ISync -- incremental sync
     MessagePriorityEnum:
       type: string
       description: Message priority
@@ -36556,6 +37797,32 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UnconditionalForwardingInfo"
+        positionInQueue:
+          type: object
+          properties:
+            playbackFrequency:
+              type: string
+              default: EveryInterval
+              enum:
+                - EveryInterval
+                - OnPositionChange
+              description: |
+                Controls when position-in-queue announcement is played.
+                `OnPositionChange` - only if the caller's position changed since the last announcement.
+        callBack:
+          type: object
+          properties:
+            confirmationAnnouncements:
+              type: array
+              default: []
+              description: |
+                Additional announcements appended to the base callback confirmation.
+                Empty array means no additional announcements.
+              items:
+                type: string
+                enum:
+                  - PositionInQueue
+                  - EstimatedWaitTime
       description: |
         Queue settings applied for department (call queue) extension type,
         with the 'AgentQueue' value specified as a call handling action
@@ -38952,6 +40219,68 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AssignedRoleResource"
+    SmsRecipientExtensionTypesEnum:
+      type: string
+      description: |
+        Type of the extension assigned as Sms recipient.
+      enum:
+        - User
+        - DigitalUser
+        - ApplicationExtension
+      example: User
+    SmsRecipient:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of extension who is configured as a CQ's SMS recipient.
+        extensionNumber:
+          type: string
+          description: PIN of the extension who is configured as a CQ's SMS recipient.
+        extensionType:
+          $ref: "#/components/schemas/SmsRecipientExtensionTypesEnum"
+        name:
+          type: string
+          description: Name (first + last) of the extension who is configured as a CQ's SMS recipient.
+        assignable:
+          type: boolean
+          description: Indicates user's ability to become a thread assignee.
+        hasLicense:
+          type: boolean
+          description: Indicates availability of a new MessageThreadsPaid feature status.
+    SmsRecipientsResource:
+      type: object
+      properties:
+        smsRecipients:
+          type: array
+          items:
+            $ref: "#/components/schemas/SmsRecipient"
+    BulkAssignSmsRecipientsRequest:
+      type: object
+      description: One of the parameters ('addedExtensionIds', 'removedExtensionIds') must be specified and not empty.
+      properties:
+        addedExtensionIds:
+          type: array
+          description: |
+            List of added extensions.
+            maxItems values depends on MessageThreads feature.
+            If the feature is disabled maxItems=1, otherwise 50.
+          items:
+            type: string
+            minItems: 1
+            maxItems: 50
+            uniqueItems: true
+        removedExtensionIds:
+          type: array
+          description: |
+            List of removed extensions.
+            maxItems values depends on MessageThreads feature.
+            If the feature is disabled maxItems=1, otherwise 50.
+          items:
+            type: string
+            minItems: 1
+            maxItems: 50
+            uniqueItems: true
     NotificationSettingsUpdateRequest:
       allOf:
         - $ref: "#/components/schemas/BaseNotificationSettings"
@@ -39146,6 +40475,7 @@ components:
                 Specifies if managers' emails are included in the list of emails to which
                 notifications are sent
             includeSmsRecipients:
+              deprecated: true
               type: boolean
               description: |
                 Specifies if sms recipients' emails are included in the list of emails to which
@@ -46001,6 +47331,12 @@ components:
         text:
           type: string
           description: Text of a post. Maximum length is 10000 symbols. Mentions can be added in .md format `![:Type](id)`
+        parentPostId:
+          type: string
+          description: Internal identifier of a parent post, in case post is a part of a thread
+        threadId:
+          type: string
+          description: Internal identifier of a thread, in case post is a part of a thread
         attachments:
           type: array
           description: Identifier(s) of attachments. Maximum number of attachments is 25
@@ -46015,6 +47351,15 @@ components:
         groupId:
           type: string
           description: Internal identifier of a group a post belongs to
+        isParent:
+          type: boolean
+          description: Boolean flag indicating that current post is a parent post of a thread. Populated only for parent posts
+        parentPostId:
+          type: string
+          description: Internal identifier of a parent post, in case post is a part of a thread
+        threadId:
+          type: string
+          description: Internal identifier of a thread, in case post is a part of a thread
         type:
           type: string
           description: Type of post
@@ -47244,14 +48589,6 @@ components:
       schema:
         type: string
         format: date-time
-    CallRecordingId:
-      name: recordingId
-      in: path
-      description: Internal identifier of a call recording (returned in Call Log)
-      required: true
-      schema:
-        type: string
-        example: "625387632786"
     ContentDisposition:
       name: contentDisposition
       in: query
@@ -47282,6 +48619,14 @@ components:
         type: string
         default: "~"
       example: "~"
+    CallRecordingId:
+      name: recordingId
+      in: path
+      description: Internal identifier of a call recording (returned in Call Log)
+      required: true
+      schema:
+        type: string
+        example: "625387632786"
     CallHandlingGreetingId:
       name: greetingId
       in: path
@@ -47506,6 +48851,108 @@ components:
       in: path
       description: Internal identifier of a device
       required: true
+      schema:
+        type: string
+    MessageThreadCreationTimeTo:
+      name: creationTimeTo
+      in: query
+      description: |
+        End date/time for resulting message threads or messages (depending on path resource) 
+        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. 
+        This parameter is supported if `creationTimeFrom` is specified
+      required: false
+      schema:
+        type: string
+    MessageThreadStatusFilter:
+      name: threadStatus
+      in: query
+      description: Thread status to filter the list of results
+      required: false
+      schema:
+        $ref: "#/components/schemas/ThreadStatusEnum"
+    ThreadOwnerExtensionIdsFilter:
+      name: ownerExtensionIds
+      in: query
+      description: Thread owner extension IDs to filter the list of results
+      required: false
+      schema:
+        description: Thread owner extension IDs
+        type: array
+        uniqueItems: true
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+    MessageThreadCreationTimeFrom:
+      name: creationTimeFrom
+      in: query
+      description: |
+        Start date/time for resulting message threads or messages (depending on path resource) 
+        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. 
+        This parameter is supported if `creationTimeTo` is specified
+      required: false
+      schema:
+        type: string
+    MessageOrThreadAvailabilityFilter:
+      name: availability
+      in: query
+      required: false
+      description: |
+        Availability filter (by default only `Alive` records are returned)
+      schema:
+        type: array
+        uniqueItems: true
+        minItems: 1
+        items:
+          $ref: "#/components/schemas/ThreadAvailabilityEnum"
+        default:
+          - Alive
+    SyncToken:
+      name: syncToken
+      in: query
+      description: Sync token (for "ISync" only)
+      required: false
+      schema:
+        type: string
+    SyncType:
+      name: syncType
+      in: query
+      description: Type of message synchronization
+      required: false
+      schema:
+        allOf:
+          - $ref: "#/components/schemas/SyncTypeEnum"
+          - default: FSync
+    ThreadIdsFilter:
+      name: threadIds
+      in: query
+      description: Thread ID(s) to filter messages
+      required: false
+      explode: true
+      schema:
+        type: array
+        uniqueItems: true
+        minItems: 0
+        maxItems: 10
+        items:
+          type: string
+    ThreadMessageIdsFilter:
+      name: messageIds
+      in: query
+      description: Message IDs to filter the list of results
+      required: false
+      schema:
+        type: array
+        uniqueItems: true
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+    MessageThreadId:
+      name: threadId
+      in: path
+      required: true
+      description: Message thread ID
       schema:
         type: string
     FieldId:
@@ -48039,6 +49486,27 @@ components:
       name: scimUserId
       in: path
       description: User ID
+      required: true
+      schema:
+        type: string
+    ChatId:
+      name: chatId
+      in: path
+      description: Internal identifier of a chat
+      required: true
+      schema:
+        type: string
+    PostId:
+      name: postId
+      in: path
+      description: Internal identifier of a post
+      required: true
+      schema:
+        type: string
+    ThreadId:
+      name: threadId
+      in: path
+      description: Identifier of a thread, in case post is a part of a thread
       required: true
       schema:
         type: string
