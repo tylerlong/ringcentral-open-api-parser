@@ -61,6 +61,7 @@ x-tagGroups:
       - SMS Brands/Campaigns
       - SMS Transport API
       - Message Threads
+      - Fax Cover Pages
   - name: Team Messaging
     popular: true
     tags:
@@ -1296,7 +1297,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForwardingNumberResource"
+                $ref: "#/components/schemas/ForwardingNumberInfo"
         "404":
           $ref: "#/components/responses/NotFound"
         "500":
@@ -2359,7 +2360,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/IvrMenuInfo"
+              $ref: "#/components/schemas/IvrMenuInfoCreate"
         required: true
       responses:
         "200":
@@ -2413,7 +2414,7 @@ paths:
       tags:
         - IVR
       summary: Update IVR Menu
-      description: Updates a company IVR menu by ID.
+      description: Updates a company IVR menu by ID. Omitted fields are not changed.
       operationId: updateIVRMenu
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -2423,7 +2424,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/IvrMenuInfo"
+              $ref: "#/components/schemas/IvrMenuInfoUpdate"
         required: true
       responses:
         "200":
@@ -2510,7 +2511,7 @@ paths:
     get:
       tags:
         - Call Recording Settings
-      summary: Get Call Recording Extension List
+      summary: List Call Recording Extensions
       description: Returns the list of extensions to be recorded.
       operationId: listCallRecordingExtensions
       parameters:
@@ -2537,9 +2538,9 @@ paths:
     post:
       tags:
         - Call Recording Settings
-      summary: Update Call Recording Extension List
+      summary: Update Call Recording Extensions
       description: Creates or updates the list of extensions to be recorded.
-      operationId: updateCallRecordingExtensionList
+      operationId: updateCallRecordingExtensions
       parameters:
         - $ref: "#/components/parameters/AccountId"
       requestBody:
@@ -2568,7 +2569,7 @@ paths:
     get:
       tags:
         - Call Recording Settings
-      summary: Get Call Recording Custom Greeting List
+      summary: List Call Recording Custom Greetings
       description: Returns call recording custom greetings.
       operationId: listCallRecordingCustomGreetings
       parameters:
@@ -2605,9 +2606,9 @@ paths:
     delete:
       tags:
         - Call Recording Settings
-      summary: Delete Call Recording Custom Greeting List
+      summary: Delete Call Recording Custom Greetings
       description: Deletes call recording custom greetings.
-      operationId: deleteCallRecordingCustomGreetingList
+      operationId: deleteCallRecordingCustomGreetings
       parameters:
         - $ref: "#/components/parameters/AccountId"
       responses:
@@ -2743,7 +2744,7 @@ paths:
     get:
       tags:
         - Custom Fields
-      summary: Get Custom Field List
+      summary: List Custom Fields
       description: Returns the list of created custom fields.
       operationId: listCustomFields
       parameters:
@@ -5836,6 +5837,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "403":
+          $ref: "#/components/responses/Forbidden"
       x-feature: EditSites
       x-availability: Limited
       x-throttling-group: Light
@@ -5905,7 +5908,8 @@ paths:
       summary: Update Site IVR Settings
       operationId: updateSiteIvrSettings
       description: |
-        Updates IVR settings for a site specified in path.
+        Updates IVR settings for a site specified in path. Omitted fields are
+        not changed.
       parameters:
         - $ref: "#/components/parameters/AccountId"
         - name: siteId
@@ -6126,6 +6130,7 @@ paths:
         - `ServicePlanLimitation` -  a feature is not included in account service plan;
         - `AccountLimitation` - a feature is turned off for account;
         - `ExtensionTypeLimitation` - a feature is not applicable for extension type;
+        - `ExtensionSubTypeLimitation` - a feature is not applicable for extension sub-type;
         - `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;
         - `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);
         - `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.
@@ -8207,7 +8212,7 @@ paths:
             default: 1
         - name: showDeleted
           in: query
-          description: Indicates that deleted calls records should be returned
+          description: Indicates that deleted call records should be returned
           schema:
             type: boolean
             default: false
@@ -8342,7 +8347,12 @@ paths:
       tags:
         - Call Log
       summary: Get User Call Record(s)
-      description: Returns call log records by ID.
+      description: |
+        Returns the user's individual call log record(s) by ID(s).
+        [Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported:
+        multiple IDs can be specified as a comma-separated list in `{callRecordId}` (up to 50 IDs).
+        A single ID returns HTTP 200 with `application/json`. Multiple IDs return HTTP 207 with
+        `multipart/mixed` (one status part, then one part per record).
       operationId: readUserCallRecord
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -8351,9 +8361,18 @@ paths:
         - $ref: "#/components/parameters/CallLogView"
       responses:
         "200":
-          description: Call Log Record
+          description: Call log record (single ID in path)
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/CallLogRecord"
+        "207":
+          description: |
+            Bulk result when multiple comma-separated IDs are specified in path.
+            The first `multipart/mixed` part contains per-record HTTP status metadata; subsequent parts
+            contain `CallLogRecord` JSON objects (or error bodies for failed IDs).
+          content:
+            multipart/mixed:
               schema:
                 $ref: "#/components/schemas/CallLogRecord"
         "400":
@@ -8609,8 +8628,11 @@ paths:
         - Call Log
       summary: Get Company Call Record(s)
       description: |
-        Returns individual call log record(s) by ID. 
-        [Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.
+        Returns the company's call log record(s) by ID(s).
+        [Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported:
+        multiple IDs can be specified as a comma-separated list in `{callRecordId}` (up to 50 IDs).
+        A single ID returns HTTP 200 with `application/json`. Multiple IDs return HTTP 207 with
+        `multipart/mixed` (one status part, then one part per record).
       operationId: readCompanyCallRecord
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -8618,9 +8640,18 @@ paths:
         - $ref: "#/components/parameters/CallLogView"
       responses:
         "200":
-          description: Successful response
+          description: Call log record (single ID in path)
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/CallLogRecord"
+        "207":
+          description: |
+            Bulk result when multiple comma-separated IDs are specified in path.
+            The first `multipart/mixed` part contains per-record HTTP status metadata; subsequent parts
+            contain `CallLogRecord` JSON objects (or error bodies for failed IDs).
+          content:
+            multipart/mixed:
               schema:
                 $ref: "#/components/schemas/CallLogRecord"
         "400":
@@ -14020,46 +14051,20 @@ paths:
     post:
       summary: Create and Send New Message
       description: |
-        Sends a new message.
+        Creates and sends a new message to one or more recipients.
 
-        The message is automatically attached to the thread indicated in `threadId` parameter, or, if omitted,
-        to the relevant thread based on the phone numbers chosen (the new thread is created automatically if necessary).
+        The message is automatically attached to the thread specified in the `threadId` parameter. If `threadId`
+        is omitted, it is routed to the matching thread based on the `from` and `to` phone numbers;
+        a new thread is created automatically when no matching thread exists.
 
-        This method supports multipart requests to combine traditional SMS/MMS metadata and
-        binary attachments (for rich messages) - see the example below.
+        The endpoint accepts two request formats:
+        - `application/json` - for text-only messages.
+        - `multipart/form-data` - to send a message together with one or more binary attachments
+          (for MMS / rich messages). Put the message fields in the `metadata` part and each file in
+          an `attachments` part, as shown in the example below.
 
-        Note: the suggested filename for an attachment is not required, but can be provided via `filename` field
-        in the `Content-Disposition` header.
-
-        ```
-        POST /restapi/v1.0/account/{accountId}/message-threads/messages
-        Content-Length: 2740
-        Content-Type: multipart/form-data; boundary=abcde12345
-
-        --abcde12345
-        Content-Disposition: form-data; name="metadata"
-        Content-Type: application/json
-
-        {
-          "threadId": "1234567890",
-          "from": { "phoneNumber": "+15551234567" },
-          "to": [
-            { "phoneNumber": "+15551234568" }
-          ],
-          "text": "Let me know if it resolves your issue"
-        }
-        --abcde12345
-        Content-Disposition: form-data; name="attachments"; filename="picture1.jpg"
-        Content-Type: image/jpeg
-
-        [Image binary content goes here]
-        --abcde12345
-        Content-Disposition: form-data; name="attachments"
-        Content-Type: image/png
-
-        [Image binary content goes here]
-        --abcde12345--
-        ```
+        Note: a suggested attachment filename is optional; when needed, provide it via the `filename`
+        field in the `Content-Disposition` header.
       operationId: mthSendMessage
       tags:
         - Message Threads
@@ -14979,13 +14984,22 @@ paths:
     get:
       tags:
         - Presence
-      summary: Get User Presence Status List
+      summary: Get Account Presence
       description: |
-        Returns presence status of all extensions of an account. Please
-        note: The presenceStatus is returned as Offline (the parameters telephonyStatus,
-        message, userStatus and dndStatus are not returned at all) for the following
-        extension types: Department, Announcement Only, Voicemail (Take Messages Only),
-        Fax User, Paging Only Group, Shared Lines Group, IVR Menu, Application Extension.
+        Returns the presence status of all extensions of an account.
+
+        Note: for the extension types listed below, `presenceStatus` is always returned
+        as `Offline`, and the `telephonyStatus`, `message`, `userStatus`, and `dndStatus`
+        attributes are not returned at all:
+
+        - Department
+        - Announcement Only
+        - Voicemail (Take Messages Only)
+        - Fax User
+        - Paging Only Group
+        - Shared Lines Group
+        - IVR Menu
+        - Application Extension
       operationId: readAccountPresence
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -15971,7 +15985,7 @@ paths:
     get:
       tags:
         - Bridge Management
-      summary: Search Bridge by Web PIN
+      summary: Find Bridge by Web PIN
       description: |
         Finds a bridge by short identifier (Web PIN). Also it can be used to find a default bridge by the alias
         (personal meeting name).
@@ -15997,7 +16011,7 @@ paths:
     get:
       tags:
         - Bridge Management
-      summary: Search Bridge by PSTN PIN
+      summary: Find Bridge by PSTN PIN
       description: Finds a bridge by Host or Participant PSTN PIN.
       operationId: getBridgeByPstnPin
       parameters:
@@ -17818,7 +17832,7 @@ paths:
 
         **DEPRECATED: Use `PATCH /restapi/v2/accounts/{accountId}/sms/consents` instead**
       deprecated: true
-      summary: Add Opt-In/Out Numbers
+      summary: Add SMS Opt-In/Opt-Out Numbers
       parameters:
         - $ref: "#/components/parameters/AccountId"
       requestBody:
@@ -18155,7 +18169,7 @@ paths:
     delete:
       tags:
         - Call Control
-      summary: Drop Call Session
+      summary: End Call Session
       description: Drops a call session.
       operationId: deleteCallSession
       parameters:
@@ -29115,12 +29129,12 @@ components:
         mode:
           type: string
           description: |
-            Here `Default` indicates that all greetings of that type
-            (in all languages) are default. If at least one greeting (in any language)
-            of the specified type is custom, then `Custom` is returned.
-          enum:
-            - Default
-            - Custom
+            Greeting prompt mode for the given `type`. When at least one custom greeting
+            exists for this type (in any language), the literal value `Custom` is returned.
+            Otherwise the localized display name of the system default prompt is returned
+            (for example `Default` in English or `Par défaut` in French), based on the
+            request locale.
+          example: Default
     AutomaticRecordingResource:
       type: object
       properties:
@@ -34428,6 +34442,8 @@ components:
           example: Super Admin
     IvrMenuInfo:
       type: object
+      required:
+        - promptRepeatCount
       properties:
         id:
           type: string
@@ -34442,6 +34458,8 @@ components:
         extensionNumber:
           type: string
           description: Number of an IVR Menu extension
+        promptRepeatCount:
+          $ref: "#/components/schemas/IvrPromptRepeatCount"
         site:
           $ref: "#/components/schemas/IvrMenuSiteInfo"
         prompt:
@@ -34515,6 +34533,11 @@ components:
           type: string
           description: Language locale code
       description: For 'TextToSpeech' mode only. Prompt language metadata
+    IvrPromptRepeatCountDefault:
+      allOf:
+        - $ref: "#/components/schemas/IvrPromptRepeatCount"
+        - type: integer
+          default: 3
     IvrMenuExtensionInfo:
       type: object
       properties:
@@ -34597,6 +34620,49 @@ components:
           description: List of ivr menus
           items:
             $ref: "#/components/schemas/IvrMenuListInfo"
+    IvrPromptRepeatCount:
+      type: integer
+      format: int32
+      description: |
+        Number of attempts the IVR prompt will be played during a call before
+        the "NoInput" rule will be executed. For request payloads, unsupported
+        values return a `CMN-101` error.
+      enum:
+        - 1
+        - 2
+        - 3
+    IvrMenuInfoRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: First name of an IVR Menu user
+        extensionNumber:
+          type: string
+          description: Number of an IVR Menu extension
+        site:
+          $ref: "#/components/schemas/IvrMenuSiteInfo"
+        prompt:
+          $ref: "#/components/schemas/IvrMenuPromptInfo"
+        actions:
+          type: array
+          description: Keys handling settings
+          items:
+            $ref: "#/components/schemas/IvrMenuActionsInfo"
+    IvrMenuInfoCreate:
+      allOf:
+        - $ref: "#/components/schemas/IvrMenuInfoRequest"
+        - type: object
+          properties:
+            promptRepeatCount:
+              $ref: "#/components/schemas/IvrPromptRepeatCountDefault"
+    IvrMenuInfoUpdate:
+      allOf:
+        - $ref: "#/components/schemas/IvrMenuInfoRequest"
+        - type: object
+          properties:
+            promptRepeatCount:
+              $ref: "#/components/schemas/IvrPromptRepeatCount"
     CreateMessageStoreReportRequest:
       type: object
       properties:
@@ -35555,9 +35621,13 @@ components:
       description: Extension information
     SiteIVRSettings:
       type: object
+      required:
+        - promptRepeatCount
       properties:
         topMenu:
           $ref: "#/components/schemas/SiteIVRTopMenu"
+        promptRepeatCount:
+          $ref: "#/components/schemas/IvrPromptRepeatCount"
         actions:
           type: array
           items:
@@ -35626,6 +35696,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/SiteIvrActions"
+        promptRepeatCount:
+          $ref: "#/components/schemas/IvrPromptRepeatCount"
     GetCallRecordingResponse:
       type: object
       required:
@@ -37681,32 +37753,6 @@ components:
             - HoldTimeExpiration
             - MaxCallers
             - NoAnswer
-    UnconditionalForwardingInfo:
-      type: object
-      description: |
-        Unconditional forwarding parameters.
-        Returned if 'UnconditionalForwarding' value is specified for the `callHandlingAction` parameter
-      properties:
-        phoneNumber:
-          type: string
-          description: |
-            Phone number to which the call is forwarded. In addition to
-            common E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,
-            444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in
-            E.164 format (without '+' sign) and yyyy is an external short extension number.
-            Max number of digits is 15
-        action:
-          type: string
-          description: Event that initiates forwarding to the specified phone number
-          enum:
-            - HoldTimeExpiration
-            - MaxCallers
-            - NoAnswer
-    TransferredExtensionInfo:
-      type: object
-      properties:
-        extension:
-          $ref: "#/components/schemas/TransferredExtension"
     QueueInfo:
       type: object
       properties:
@@ -37846,105 +37892,6 @@ components:
             extensionNumber:
               type: string
               description: Extension number
-    CallHandlingRuleInfo:
-      type: object
-      properties:
-        uri:
-          type: string
-          format: uri
-          description: Canonical URI to an answering rule resource
-        id:
-          type: string
-          description: Internal identifier of an answering rule
-        type:
-          $ref: "#/components/schemas/RuleTypeInfo"
-        name:
-          type: string
-          description: Name of an answering rule specified by user
-        enabled:
-          type: boolean
-          description: Specifies if an answering rule is active or inactive
-        schedule:
-          $ref: "#/components/schemas/ScheduleInfo"
-        calledNumbers:
-          type: array
-          description: Answering rules are applied when calling to selected number(s)
-          items:
-            $ref: "#/components/schemas/CalledNumberInfo"
-        callers:
-          type: array
-          description: Answering rules are applied when calls are received from specified caller(s)
-          items:
-            $ref: "#/components/schemas/CallersInfo"
-        callHandlingAction:
-          type: string
-          description: Specifies how incoming calls are forwarded
-          enum:
-            - ForwardCalls
-            - UnconditionalForwarding
-            - AgentQueue
-            - TransferToExtension
-            - TakeMessagesOnly
-            - PlayAnnouncementOnly
-            - SharedLines
-        forwarding:
-          $ref: "#/components/schemas/ForwardingInfo"
-        unconditionalForwarding:
-          $ref: "#/components/schemas/UnconditionalForwardingInfo"
-        queue:
-          $ref: "#/components/schemas/QueueInfo"
-        transfer:
-          $ref: "#/components/schemas/TransferredExtensionInfo"
-        voicemail:
-          $ref: "#/components/schemas/VoicemailInfo"
-        greetings:
-          type: array
-          description: Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List
-          items:
-            $ref: "#/components/schemas/GreetingInfo"
-        screening:
-          type: string
-          description: Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'
-          enum:
-            - Off
-            - NoCallerId
-            - UnknownCallerId
-            - Always
-          default: Off
-        sharedLines:
-          $ref: "#/components/schemas/SharedLinesInfo"
-        missedCall:
-          $ref: "#/components/schemas/MissedCallInfo"
-    CreateAnsweringRuleForwardingNumberInfo:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Internal identifier of a forwarding number
-        uri:
-          type: string
-          format: uri
-          description: Canonical URI of a forwarding/call flip phone number
-        phoneNumber:
-          type: string
-          description: Forwarding/Call flip phone number
-        label:
-          type: string
-          description: Forwarding/Call flip number title
-          maxLength: 60
-        type:
-          type: string
-          description: Type of forwarding number
-          enum:
-            - Home
-            - Mobile
-            - Work
-            - PhoneLine
-            - Outage
-            - Other
-            - BusinessMobilePhone
-            - ExternalCarrier
-            - ExtensionApps
     MissedCallExtensionInfo:
       type: object
       description: Specifies an extension (a calling group) which should be used for the missed call transfer. Returned only if the `actionType` is set to 'ConnectToExtension'
@@ -37972,108 +37919,18 @@ components:
         name:
           type: string
           description: Contact name of a caller
-    FixedOrderAgents:
-      type: object
-      properties:
-        extension:
-          $ref: "#/components/schemas/FixedOrderAgentsExtensionInfo"
-        index:
-          type: integer
-          format: int32
-          description: Ordinal of an agent (call queue member)
-    ScheduleInfo:
-      type: object
-      description: Schedule when an answering rule should be applied
-      properties:
-        weeklyRanges:
-          $ref: "#/components/schemas/WeeklyScheduleInfo"
-        ranges:
-          type: array
-          description: Specific data ranges
-          items:
-            $ref: "#/components/schemas/RangesInfo"
-        ref:
-          type: string
-          description: The user's schedule specified for business hours or after hours; it can also be set/retrieved calling the corresponding method
-          enum:
-            - BusinessHours
-            - AfterHours
-    MissedCallExtensionInfoExternalNumber:
-      type: object
-      description: Specifies an external PSTN number which should be used for the missed call transfer. Returned only if the actionType is set to `ConnectToExternalNumber`
-      properties:
-        phoneNumber:
-          type: string
-          description: "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15"
-    CustomAnsweringRuleInfo:
-      type: object
-      properties:
-        uri:
-          type: string
-          format: uri
-          description: Canonical URI to an answering rule resource
-        id:
-          type: string
-          description: Internal identifier of an answering rule
-        type:
-          $ref: "#/components/schemas/RuleTypeInfo"
-        name:
-          type: string
-          description: Name of an answering rule specified by user
-        enabled:
-          type: boolean
-          description: Specifies if an answering rule is active or inactive
-        schedule:
-          $ref: "#/components/schemas/ScheduleInfo"
-        calledNumbers:
-          type: array
-          description: Answering rules are applied when calling to selected number(s)
-          items:
-            $ref: "#/components/schemas/CalledNumberInfo"
-        callers:
-          type: array
-          description: Answering rules are applied when calls are received from specified caller(s)
-          items:
-            $ref: "#/components/schemas/CallersInfo"
-        callHandlingAction:
-          type: string
-          description: Specifies how incoming calls are forwarded
-          enum:
-            - ForwardCalls
-            - UnconditionalForwarding
-            - AgentQueue
-            - TransferToExtension
-            - TakeMessagesOnly
-            - PlayAnnouncementOnly
-            - SharedLines
-        forwarding:
-          $ref: "#/components/schemas/ForwardingInfo"
-        unconditionalForwarding:
-          $ref: "#/components/schemas/UnconditionalForwardingInfo"
-        queue:
-          $ref: "#/components/schemas/QueueInfo"
-        transfer:
-          $ref: "#/components/schemas/TransferredExtensionInfo"
-        voicemail:
-          $ref: "#/components/schemas/VoicemailInfo"
-        greetings:
-          type: array
-          description: Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List
-          items:
-            $ref: "#/components/schemas/GreetingInfo"
-        screening:
-          type: string
-          description: Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'
-          enum:
-            - Off
-            - NoCallerId
-            - UnknownCallerId
-            - Always
-          default: Off
-        sharedLines:
-          $ref: "#/components/schemas/SharedLinesInfo"
-        missedCall:
-          $ref: "#/components/schemas/MissedCallInfo"
+    ForwardingPhoneNumberTypeEnum:
+      type: string
+      description: Forwarding phone number type
+      enum:
+        - Home
+        - Mobile
+        - Work
+        - PhoneLine
+        - Outage
+        - Other
+        - BusinessMobilePhone
+        - ExtensionApps
     CreateAnsweringRuleRequest:
       required:
         - name
@@ -38246,6 +38103,222 @@ components:
         name:
           type: string
           description: Name of agent extension
+    UnconditionalForwardingInfo:
+      type: object
+      description: |
+        Unconditional forwarding parameters.
+        Returned if 'UnconditionalForwarding' value is specified for the `callHandlingAction` parameter
+      properties:
+        phoneNumber:
+          type: string
+          description: |
+            Phone number to which the call is forwarded. In addition to
+            common E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,
+            444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in
+            E.164 format (without '+' sign) and yyyy is an external short extension number.
+            Max number of digits is 15
+        action:
+          type: string
+          description: Event that initiates forwarding to the specified phone number
+          enum:
+            - HoldTimeExpiration
+            - MaxCallers
+            - NoAnswer
+    TransferredExtensionInfo:
+      type: object
+      properties:
+        extension:
+          $ref: "#/components/schemas/TransferredExtension"
+    CallHandlingRuleInfo:
+      type: object
+      properties:
+        uri:
+          type: string
+          format: uri
+          description: Canonical URI to an answering rule resource
+        id:
+          type: string
+          description: Internal identifier of an answering rule
+        type:
+          $ref: "#/components/schemas/RuleTypeInfo"
+        name:
+          type: string
+          description: Name of an answering rule specified by user
+        enabled:
+          type: boolean
+          description: Specifies if an answering rule is active or inactive
+        schedule:
+          $ref: "#/components/schemas/ScheduleInfo"
+        calledNumbers:
+          type: array
+          description: Answering rules are applied when calling to selected number(s)
+          items:
+            $ref: "#/components/schemas/CalledNumberInfo"
+        callers:
+          type: array
+          description: Answering rules are applied when calls are received from specified caller(s)
+          items:
+            $ref: "#/components/schemas/CallersInfo"
+        callHandlingAction:
+          type: string
+          description: Specifies how incoming calls are forwarded
+          enum:
+            - ForwardCalls
+            - UnconditionalForwarding
+            - AgentQueue
+            - TransferToExtension
+            - TakeMessagesOnly
+            - PlayAnnouncementOnly
+            - SharedLines
+        forwarding:
+          $ref: "#/components/schemas/ForwardingInfo"
+        unconditionalForwarding:
+          $ref: "#/components/schemas/UnconditionalForwardingInfo"
+        queue:
+          $ref: "#/components/schemas/QueueInfo"
+        transfer:
+          $ref: "#/components/schemas/TransferredExtensionInfo"
+        voicemail:
+          $ref: "#/components/schemas/VoicemailInfo"
+        greetings:
+          type: array
+          description: Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List
+          items:
+            $ref: "#/components/schemas/GreetingInfo"
+        screening:
+          type: string
+          description: Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'
+          enum:
+            - Off
+            - NoCallerId
+            - UnknownCallerId
+            - Always
+          default: Off
+        sharedLines:
+          $ref: "#/components/schemas/SharedLinesInfo"
+        missedCall:
+          $ref: "#/components/schemas/MissedCallInfo"
+    CreateAnsweringRuleForwardingNumberInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a forwarding number
+        uri:
+          type: string
+          format: uri
+          description: Canonical URI of a forwarding/call flip phone number
+        phoneNumber:
+          type: string
+          description: Forwarding/Call flip phone number
+        label:
+          type: string
+          description: Forwarding/Call flip number title
+          maxLength: 60
+        type:
+          $ref: "#/components/schemas/ForwardingPhoneNumberTypeEnum"
+    FixedOrderAgents:
+      type: object
+      properties:
+        extension:
+          $ref: "#/components/schemas/FixedOrderAgentsExtensionInfo"
+        index:
+          type: integer
+          format: int32
+          description: Ordinal of an agent (call queue member)
+    ScheduleInfo:
+      type: object
+      description: Schedule when an answering rule should be applied
+      properties:
+        weeklyRanges:
+          $ref: "#/components/schemas/WeeklyScheduleInfo"
+        ranges:
+          type: array
+          description: Specific data ranges
+          items:
+            $ref: "#/components/schemas/RangesInfo"
+        ref:
+          type: string
+          description: The user's schedule specified for business hours or after hours; it can also be set/retrieved calling the corresponding method
+          enum:
+            - BusinessHours
+            - AfterHours
+    MissedCallExtensionInfoExternalNumber:
+      type: object
+      description: Specifies an external PSTN number which should be used for the missed call transfer. Returned only if the actionType is set to `ConnectToExternalNumber`
+      properties:
+        phoneNumber:
+          type: string
+          description: "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15"
+    CustomAnsweringRuleInfo:
+      type: object
+      properties:
+        uri:
+          type: string
+          format: uri
+          description: Canonical URI to an answering rule resource
+        id:
+          type: string
+          description: Internal identifier of an answering rule
+        type:
+          $ref: "#/components/schemas/RuleTypeInfo"
+        name:
+          type: string
+          description: Name of an answering rule specified by user
+        enabled:
+          type: boolean
+          description: Specifies if an answering rule is active or inactive
+        schedule:
+          $ref: "#/components/schemas/ScheduleInfo"
+        calledNumbers:
+          type: array
+          description: Answering rules are applied when calling to selected number(s)
+          items:
+            $ref: "#/components/schemas/CalledNumberInfo"
+        callers:
+          type: array
+          description: Answering rules are applied when calls are received from specified caller(s)
+          items:
+            $ref: "#/components/schemas/CallersInfo"
+        callHandlingAction:
+          type: string
+          description: Specifies how incoming calls are forwarded
+          enum:
+            - ForwardCalls
+            - UnconditionalForwarding
+            - AgentQueue
+            - TransferToExtension
+            - TakeMessagesOnly
+            - PlayAnnouncementOnly
+            - SharedLines
+        forwarding:
+          $ref: "#/components/schemas/ForwardingInfo"
+        unconditionalForwarding:
+          $ref: "#/components/schemas/UnconditionalForwardingInfo"
+        queue:
+          $ref: "#/components/schemas/QueueInfo"
+        transfer:
+          $ref: "#/components/schemas/TransferredExtensionInfo"
+        voicemail:
+          $ref: "#/components/schemas/VoicemailInfo"
+        greetings:
+          type: array
+          description: Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List
+          items:
+            $ref: "#/components/schemas/GreetingInfo"
+        screening:
+          type: string
+          description: Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'
+          enum:
+            - Off
+            - NoCallerId
+            - UnknownCallerId
+            - Always
+          default: Off
+        sharedLines:
+          $ref: "#/components/schemas/SharedLinesInfo"
+        missedCall:
+          $ref: "#/components/schemas/MissedCallInfo"
     MissedCallInfo:
       type: object
       description: Specifies behavior for the missed call scenario. Returned only if `enabled` parameter of a voicemail is set to 'false'
@@ -38397,18 +38470,7 @@ components:
           type: string
           description: Internal identifier of a forwarding number
         type:
-          type: string
-          description: Forwarding phone number type
-          enum:
-            - Home
-            - Mobile
-            - Work
-            - PhoneLine
-            - Outage
-            - Other
-            - BusinessMobilePhone
-            - ExternalCarrier
-            - ExtensionApps
+          $ref: "#/components/schemas/ForwardingPhoneNumberTypeEnum"
         phoneNumber:
           type: string
           description: Forwarding/Call flip phone number
@@ -38682,31 +38744,22 @@ components:
         device:
           $ref: "#/components/schemas/CreateForwardingNumberDeviceInfo"
         type:
-          type: string
-          description: Forwarding phone number type
-          enum:
-            - Home
-            - Mobile
-            - Work
-            - PhoneLine
-            - Outage
-            - Other
-            - BusinessMobilePhone
-            - ExternalCarrier
-            - ExtensionApps
+          $ref: "#/components/schemas/ForwardingPhoneNumberTypeEnum"
         extension:
-          type: object
-          description: Extension information. Returned only if extension type is 'ExtensionApps'
-          properties:
-            id:
-              type: string
-              description: Internal identifier of an extension
-            extensionNumber:
-              type: string
-              description: Number of an extension
-            name:
-              type: string
-              description: Extension name
+          $ref: "#/components/schemas/ForwardingNumberExtensionInfo"
+    ForwardingNumberExtensionInfo:
+      type: object
+      description: Extension information (for ExtensionApps type only)
+      properties:
+        id:
+          type: string
+          description: Internal identifier of an extension
+        name:
+          type: string
+          description: Extension name
+        extensionNumber:
+          type: string
+          description: Number of an extension
     CreateForwardingNumberRequest:
       type: object
       properties:
@@ -38725,50 +38778,12 @@ components:
           description: Forwarding/call flip number title
           maxLength: 60
         type:
-          type: string
+          allOf:
+            - $ref: "#/components/schemas/ForwardingPhoneNumberTypeEnum"
+            - default: Other
           description: Forwarding/call flip phone type. If specified, 'label' attribute value is ignored
-          default: Other
-          enum:
-            - PhoneLine
-            - Home
-            - Mobile
-            - Work
-            - Other
         device:
           $ref: "#/components/schemas/CreateForwardingNumberDeviceInfo"
-    ForwardingNumberResource:
-      type: object
-      properties:
-        uri:
-          type: string
-          format: uri
-        id:
-          type: string
-        phoneNumber:
-          type: string
-        label:
-          type: string
-          maxLength: 60
-        features:
-          type: array
-          items:
-            type: string
-            enum:
-              - CallFlip
-              - CallForwarding
-        flipNumber:
-          pattern: "[1-8]"
-          type: string
-        type:
-          type: string
-          description: Forwarding phone number type
-          enum:
-            - Home
-            - Mobile
-            - Work
-            - PhoneLine
-            - Outage
-            - Other
     UpdateForwardingNumberRequest:
       type: object
       properties:
@@ -38783,17 +38798,7 @@ components:
           type: string
           description: Number assigned to the call flip phone number, corresponds to the shortcut dial number
         type:
-          type: string
-          description: Forwarding phone number type
-          enum:
-            - Home
-            - Mobile
-            - Work
-            - PhoneLine
-            - Outage
-            - Other
-            - BusinessMobilePhone
-            - ExternalCarrier
+          $ref: "#/components/schemas/ForwardingPhoneNumberTypeEnum"
     DetailedExtensionPresenceWithSIPEventBody:
       type: object
       description: Notification payload body
@@ -40614,6 +40619,7 @@ components:
             - ServicePlanLimitation
             - AccountLimitation
             - ExtensionTypeLimitation
+            - ExtensionSubTypeLimitation
             - ExtensionLimitation
             - InsufficientPermissions
             - ConfigurationLimitation
@@ -43446,35 +43452,13 @@ components:
           type: boolean
           description: Indicates if out of country emergency address is not allowed for the country of a phone line
     CreateSipRegistrationResponse:
-      required:
-        - device
-        - sipFlags
-        - sipInfo
-      type: object
-      properties:
-        device:
-          $ref: "#/components/schemas/SipRegistrationDeviceInfo"
-        sipInfo:
-          type: array
-          description: SIP settings for device
-          items:
-            $ref: "#/components/schemas/SipInfoResponse"
-        sipInfoPstn:
-          type: array
-          description: SIP PSTN settings for device
-          items:
-            $ref: "#/components/schemas/SipInfoResponse"
-        sipFlags:
-          $ref: "#/components/schemas/SipFlagsResponse"
-        sipErrorCodes:
-          type: array
-          items:
-            type: string
-        pollingInterval:
-          type: integer
-          format: int32
-          description: |
-            Suggested interval in seconds to periodically call SIP-provision API and update the local cache
+      allOf:
+        - $ref: "#/components/schemas/CreateDeviceRegistrationResponse"
+        - type: object
+          properties:
+            pstnConfigured:
+              type: boolean
+              description: Indicates whether the user has an RC App device configured in a PSTN gateway
     SIPInfoRequest:
       type: object
       properties:
@@ -43640,6 +43624,36 @@ components:
           type: string
           description: |
             Endpoint/device instance identifier for Softphone and mobile applications
+    CreateDeviceRegistrationResponse:
+      required:
+        - device
+        - sipFlags
+        - sipInfo
+      type: object
+      properties:
+        device:
+          $ref: "#/components/schemas/SipRegistrationDeviceInfo"
+        sipInfo:
+          type: array
+          description: SIP settings for device
+          items:
+            $ref: "#/components/schemas/SipInfoResponse"
+        sipInfoPstn:
+          type: array
+          description: SIP PSTN settings for device
+          items:
+            $ref: "#/components/schemas/SipInfoResponse"
+        sipFlags:
+          $ref: "#/components/schemas/SipFlagsResponse"
+        sipErrorCodes:
+          type: array
+          items:
+            type: string
+        pollingInterval:
+          type: integer
+          format: int32
+          description: |
+            Suggested interval in seconds to periodically call SIP-provision API and update the local cache
     UtteranceInsightsObject:
       required:
         - end
@@ -49126,14 +49140,18 @@ components:
     CallRecordId:
       name: callRecordId
       in: path
-      description: Internal identifier of a call log record. Multiple values are supported
+      description: |
+        Internal identifier of a call log record. Multiple comma-separated values are supported
+        (up to 50). For alternative bulk delete syntax, use asterisk `*` and pass IDs in the request body.
       required: true
       style: simple
       explode: false
       schema:
         type: array
+        maxItems: 50
         items:
           type: string
+          minLength: 1
     CallLogSyncType:
       name: syncType
       in: query
