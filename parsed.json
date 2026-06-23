@@ -2134,7 +2134,7 @@
         },
         {
           "name": "showDeleted",
-          "description": "Indicates that deleted calls records should be returned",
+          "description": "Indicates that deleted call records should be returned",
           "type": "boolean",
           "default": false
         }
@@ -23718,11 +23718,8 @@
         },
         {
           "type": "string",
-          "description": "Here `Default` indicates that all greetings of that type\n(in all languages) are default. If at least one greeting (in any language)\nof the specified type is custom, then `Custom` is returned.\n",
-          "enum": [
-            "Default",
-            "Custom"
-          ],
+          "description": "Greeting prompt mode for the given `type`. When at least one custom greeting\nexists for this type (in any language), the literal value `Custom` is returned.\nOtherwise the localized display name of the system default prompt is returned\n(for example `Default` in English or `Par défaut` in French), based on the\nrequest locale.\n",
+          "example": "Default",
           "name": "mode"
         }
       ]
@@ -32143,31 +32140,49 @@
         {
           "type": "string",
           "description": "Internal identifier of an IVR Menu extension",
-          "name": "id"
+          "name": "id",
+          "required": false
         },
         {
           "type": "string",
           "format": "uri",
           "description": "Link to an IVR Menu extension resource",
-          "name": "uri"
+          "name": "uri",
+          "required": false
         },
         {
           "type": "string",
           "description": "First name of an IVR Menu user",
-          "name": "name"
+          "name": "name",
+          "required": false
         },
         {
           "type": "string",
           "description": "Number of an IVR Menu extension",
-          "name": "extensionNumber"
+          "name": "extensionNumber",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of attempts the IVR prompt will be played during a call before\nthe \"NoInput\" rule will be executed. For request payloads, unsupported\nvalues return a `CMN-101` error.\n",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "name": "promptRepeatCount",
+          "required": true
         },
         {
           "$ref": "IvrMenuSiteInfo",
-          "name": "site"
+          "name": "site",
+          "required": false
         },
         {
           "$ref": "IvrMenuPromptInfo",
-          "name": "prompt"
+          "name": "prompt",
+          "required": false
         },
         {
           "type": "array",
@@ -32175,7 +32190,8 @@
           "items": {
             "$ref": "IvrMenuActionsInfo"
           },
-          "name": "actions"
+          "name": "actions",
+          "required": false
         }
       ]
     },
@@ -32394,6 +32410,122 @@
             "$ref": "IvrMenuListInfo"
           },
           "name": "records"
+        }
+      ]
+    },
+    {
+      "name": "IvrMenuInfoRequest",
+      "fields": [
+        {
+          "type": "string",
+          "description": "First name of an IVR Menu user",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Number of an IVR Menu extension",
+          "name": "extensionNumber"
+        },
+        {
+          "$ref": "IvrMenuSiteInfo",
+          "name": "site"
+        },
+        {
+          "$ref": "IvrMenuPromptInfo",
+          "name": "prompt"
+        },
+        {
+          "type": "array",
+          "description": "Keys handling settings",
+          "items": {
+            "$ref": "IvrMenuActionsInfo"
+          },
+          "name": "actions"
+        }
+      ]
+    },
+    {
+      "name": "IvrMenuInfoCreate",
+      "fields": [
+        {
+          "type": "string",
+          "description": "First name of an IVR Menu user",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Number of an IVR Menu extension",
+          "name": "extensionNumber"
+        },
+        {
+          "$ref": "IvrMenuSiteInfo",
+          "name": "site"
+        },
+        {
+          "$ref": "IvrMenuPromptInfo",
+          "name": "prompt"
+        },
+        {
+          "type": "array",
+          "description": "Keys handling settings",
+          "items": {
+            "$ref": "IvrMenuActionsInfo"
+          },
+          "name": "actions"
+        },
+        {
+          "name": "promptRepeatCount",
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of attempts the IVR prompt will be played during a call before\nthe \"NoInput\" rule will be executed. For request payloads, unsupported\nvalues return a `CMN-101` error.\n",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "default": 3
+        }
+      ]
+    },
+    {
+      "name": "IvrMenuInfoUpdate",
+      "fields": [
+        {
+          "type": "string",
+          "description": "First name of an IVR Menu user",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Number of an IVR Menu extension",
+          "name": "extensionNumber"
+        },
+        {
+          "$ref": "IvrMenuSiteInfo",
+          "name": "site"
+        },
+        {
+          "$ref": "IvrMenuPromptInfo",
+          "name": "prompt"
+        },
+        {
+          "type": "array",
+          "description": "Keys handling settings",
+          "items": {
+            "$ref": "IvrMenuActionsInfo"
+          },
+          "name": "actions"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of attempts the IVR prompt will be played during a call before\nthe \"NoInput\" rule will be executed. For request payloads, unsupported\nvalues return a `CMN-101` error.\n",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "name": "promptRepeatCount"
         }
       ]
     },
@@ -33800,14 +33932,28 @@
       "fields": [
         {
           "$ref": "SiteIVRTopMenu",
-          "name": "topMenu"
+          "name": "topMenu",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of attempts the IVR prompt will be played during a call before\nthe \"NoInput\" rule will be executed. For request payloads, unsupported\nvalues return a `CMN-101` error.\n",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "name": "promptRepeatCount",
+          "required": true
         },
         {
           "type": "array",
           "items": {
             "$ref": "SiteIvrActions"
           },
-          "name": "actions"
+          "name": "actions",
+          "required": false
         }
       ]
     },
@@ -33893,6 +34039,17 @@
             "$ref": "SiteIvrActions"
           },
           "name": "actions"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of attempts the IVR prompt will be played during a call before\nthe \"NoInput\" rule will be executed. For request payloads, unsupported\nvalues return a `CMN-101` error.\n",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "name": "promptRepeatCount"
         }
       ]
     },
@@ -36828,36 +36985,6 @@
       ]
     },
     {
-      "name": "UnconditionalForwardingInfo",
-      "description": "Unconditional forwarding parameters.\nReturned if 'UnconditionalForwarding' value is specified for the `callHandlingAction` parameter\n",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Phone number to which the call is forwarded. In addition to\ncommon E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,\n444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in\nE.164 format (without '+' sign) and yyyy is an external short extension number.\nMax number of digits is 15\n",
-          "name": "phoneNumber"
-        },
-        {
-          "type": "string",
-          "description": "Event that initiates forwarding to the specified phone number",
-          "enum": [
-            "HoldTimeExpiration",
-            "MaxCallers",
-            "NoAnswer"
-          ],
-          "name": "action"
-        }
-      ]
-    },
-    {
-      "name": "TransferredExtensionInfo",
-      "fields": [
-        {
-          "$ref": "TransferredExtension",
-          "name": "extension"
-        }
-      ]
-    },
-    {
       "name": "QueueInfo",
       "description": "Queue settings applied for department (call queue) extension type,\nwith the 'AgentQueue' value specified as a call handling action\n",
       "fields": [
@@ -37025,168 +37152,6 @@
       ]
     },
     {
-      "name": "CallHandlingRuleInfo",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI to an answering rule resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an answering rule",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "default": "Custom",
-          "description": "Type of an answering rule",
-          "enum": [
-            "BusinessHours",
-            "AfterHours",
-            "Custom"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of an answering rule specified by user",
-          "name": "name"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if an answering rule is active or inactive",
-          "name": "enabled"
-        },
-        {
-          "$ref": "ScheduleInfo",
-          "name": "schedule"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calling to selected number(s)",
-          "items": {
-            "$ref": "CalledNumberInfo"
-          },
-          "name": "calledNumbers"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calls are received from specified caller(s)",
-          "items": {
-            "$ref": "CallersInfo"
-          },
-          "name": "callers"
-        },
-        {
-          "type": "string",
-          "description": "Specifies how incoming calls are forwarded",
-          "enum": [
-            "ForwardCalls",
-            "UnconditionalForwarding",
-            "AgentQueue",
-            "TransferToExtension",
-            "TakeMessagesOnly",
-            "PlayAnnouncementOnly",
-            "SharedLines"
-          ],
-          "name": "callHandlingAction"
-        },
-        {
-          "$ref": "ForwardingInfo",
-          "name": "forwarding"
-        },
-        {
-          "$ref": "UnconditionalForwardingInfo",
-          "name": "unconditionalForwarding"
-        },
-        {
-          "$ref": "QueueInfo",
-          "name": "queue"
-        },
-        {
-          "$ref": "TransferredExtensionInfo",
-          "name": "transfer"
-        },
-        {
-          "$ref": "VoicemailInfo",
-          "name": "voicemail"
-        },
-        {
-          "type": "array",
-          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
-          "items": {
-            "$ref": "GreetingInfo"
-          },
-          "name": "greetings"
-        },
-        {
-          "type": "string",
-          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
-          "enum": [
-            "Off",
-            "NoCallerId",
-            "UnknownCallerId",
-            "Always"
-          ],
-          "default": "Off",
-          "name": "screening"
-        },
-        {
-          "$ref": "SharedLinesInfo",
-          "name": "sharedLines"
-        },
-        {
-          "$ref": "MissedCallInfo",
-          "name": "missedCall"
-        }
-      ]
-    },
-    {
-      "name": "CreateAnsweringRuleForwardingNumberInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a forwarding number",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI of a forwarding/call flip phone number",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Forwarding/Call flip phone number",
-          "name": "phoneNumber"
-        },
-        {
-          "type": "string",
-          "description": "Forwarding/Call flip number title",
-          "maxLength": 60,
-          "name": "label"
-        },
-        {
-          "type": "string",
-          "description": "Type of forwarding number",
-          "enum": [
-            "Home",
-            "Mobile",
-            "Work",
-            "PhoneLine",
-            "Outage",
-            "Other",
-            "BusinessMobilePhone",
-            "ExternalCarrier",
-            "ExtensionApps"
-          ],
-          "name": "type"
-        }
-      ]
-    },
-    {
       "name": "MissedCallExtensionInfo",
       "description": "Specifies an extension (a calling group) which should be used for the missed call transfer. Returned only if the `actionType` is set to 'ConnectToExtension'",
       "fields": [
@@ -37223,178 +37188,6 @@
           "type": "string",
           "description": "Contact name of a caller",
           "name": "name"
-        }
-      ]
-    },
-    {
-      "name": "FixedOrderAgents",
-      "fields": [
-        {
-          "$ref": "FixedOrderAgentsExtensionInfo",
-          "name": "extension"
-        },
-        {
-          "type": "integer",
-          "format": "int32",
-          "description": "Ordinal of an agent (call queue member)",
-          "name": "index"
-        }
-      ]
-    },
-    {
-      "name": "ScheduleInfo",
-      "description": "Schedule when an answering rule should be applied",
-      "fields": [
-        {
-          "$ref": "WeeklyScheduleInfo",
-          "name": "weeklyRanges"
-        },
-        {
-          "type": "array",
-          "description": "Specific data ranges",
-          "items": {
-            "$ref": "RangesInfo"
-          },
-          "name": "ranges"
-        },
-        {
-          "type": "string",
-          "description": "The user's schedule specified for business hours or after hours; it can also be set/retrieved calling the corresponding method",
-          "enum": [
-            "BusinessHours",
-            "AfterHours"
-          ],
-          "name": "ref"
-        }
-      ]
-    },
-    {
-      "name": "MissedCallExtensionInfoExternalNumber",
-      "description": "Specifies an external PSTN number which should be used for the missed call transfer. Returned only if the actionType is set to `ConnectToExternalNumber`",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15",
-          "name": "phoneNumber"
-        }
-      ]
-    },
-    {
-      "name": "CustomAnsweringRuleInfo",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "description": "Canonical URI to an answering rule resource",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an answering rule",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "default": "Custom",
-          "description": "Type of an answering rule",
-          "enum": [
-            "BusinessHours",
-            "AfterHours",
-            "Custom"
-          ],
-          "name": "type"
-        },
-        {
-          "type": "string",
-          "description": "Name of an answering rule specified by user",
-          "name": "name"
-        },
-        {
-          "type": "boolean",
-          "description": "Specifies if an answering rule is active or inactive",
-          "name": "enabled"
-        },
-        {
-          "$ref": "ScheduleInfo",
-          "name": "schedule"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calling to selected number(s)",
-          "items": {
-            "$ref": "CalledNumberInfo"
-          },
-          "name": "calledNumbers"
-        },
-        {
-          "type": "array",
-          "description": "Answering rules are applied when calls are received from specified caller(s)",
-          "items": {
-            "$ref": "CallersInfo"
-          },
-          "name": "callers"
-        },
-        {
-          "type": "string",
-          "description": "Specifies how incoming calls are forwarded",
-          "enum": [
-            "ForwardCalls",
-            "UnconditionalForwarding",
-            "AgentQueue",
-            "TransferToExtension",
-            "TakeMessagesOnly",
-            "PlayAnnouncementOnly",
-            "SharedLines"
-          ],
-          "name": "callHandlingAction"
-        },
-        {
-          "$ref": "ForwardingInfo",
-          "name": "forwarding"
-        },
-        {
-          "$ref": "UnconditionalForwardingInfo",
-          "name": "unconditionalForwarding"
-        },
-        {
-          "$ref": "QueueInfo",
-          "name": "queue"
-        },
-        {
-          "$ref": "TransferredExtensionInfo",
-          "name": "transfer"
-        },
-        {
-          "$ref": "VoicemailInfo",
-          "name": "voicemail"
-        },
-        {
-          "type": "array",
-          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
-          "items": {
-            "$ref": "GreetingInfo"
-          },
-          "name": "greetings"
-        },
-        {
-          "type": "string",
-          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
-          "enum": [
-            "Off",
-            "NoCallerId",
-            "UnknownCallerId",
-            "Always"
-          ],
-          "default": "Off",
-          "name": "screening"
-        },
-        {
-          "$ref": "SharedLinesInfo",
-          "name": "sharedLines"
-        },
-        {
-          "$ref": "MissedCallInfo",
-          "name": "missedCall"
         }
       ]
     },
@@ -37668,6 +37461,369 @@
       ]
     },
     {
+      "name": "UnconditionalForwardingInfo",
+      "description": "Unconditional forwarding parameters.\nReturned if 'UnconditionalForwarding' value is specified for the `callHandlingAction` parameter\n",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Phone number to which the call is forwarded. In addition to\ncommon E.164 format, the following number patterns are supported: 11xxxxxxxxxxx,\n444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where xxxxxxxxxxx is a phone number in\nE.164 format (without '+' sign) and yyyy is an external short extension number.\nMax number of digits is 15\n",
+          "name": "phoneNumber"
+        },
+        {
+          "type": "string",
+          "description": "Event that initiates forwarding to the specified phone number",
+          "enum": [
+            "HoldTimeExpiration",
+            "MaxCallers",
+            "NoAnswer"
+          ],
+          "name": "action"
+        }
+      ]
+    },
+    {
+      "name": "TransferredExtensionInfo",
+      "fields": [
+        {
+          "$ref": "TransferredExtension",
+          "name": "extension"
+        }
+      ]
+    },
+    {
+      "name": "CallHandlingRuleInfo",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI to an answering rule resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an answering rule",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "default": "Custom",
+          "description": "Type of an answering rule",
+          "enum": [
+            "BusinessHours",
+            "AfterHours",
+            "Custom"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Name of an answering rule specified by user",
+          "name": "name"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if an answering rule is active or inactive",
+          "name": "enabled"
+        },
+        {
+          "$ref": "ScheduleInfo",
+          "name": "schedule"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calling to selected number(s)",
+          "items": {
+            "$ref": "CalledNumberInfo"
+          },
+          "name": "calledNumbers"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calls are received from specified caller(s)",
+          "items": {
+            "$ref": "CallersInfo"
+          },
+          "name": "callers"
+        },
+        {
+          "type": "string",
+          "description": "Specifies how incoming calls are forwarded",
+          "enum": [
+            "ForwardCalls",
+            "UnconditionalForwarding",
+            "AgentQueue",
+            "TransferToExtension",
+            "TakeMessagesOnly",
+            "PlayAnnouncementOnly",
+            "SharedLines"
+          ],
+          "name": "callHandlingAction"
+        },
+        {
+          "$ref": "ForwardingInfo",
+          "name": "forwarding"
+        },
+        {
+          "$ref": "UnconditionalForwardingInfo",
+          "name": "unconditionalForwarding"
+        },
+        {
+          "$ref": "QueueInfo",
+          "name": "queue"
+        },
+        {
+          "$ref": "TransferredExtensionInfo",
+          "name": "transfer"
+        },
+        {
+          "$ref": "VoicemailInfo",
+          "name": "voicemail"
+        },
+        {
+          "type": "array",
+          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
+          "items": {
+            "$ref": "GreetingInfo"
+          },
+          "name": "greetings"
+        },
+        {
+          "type": "string",
+          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
+          "enum": [
+            "Off",
+            "NoCallerId",
+            "UnknownCallerId",
+            "Always"
+          ],
+          "default": "Off",
+          "name": "screening"
+        },
+        {
+          "$ref": "SharedLinesInfo",
+          "name": "sharedLines"
+        },
+        {
+          "$ref": "MissedCallInfo",
+          "name": "missedCall"
+        }
+      ]
+    },
+    {
+      "name": "CreateAnsweringRuleForwardingNumberInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a forwarding number",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI of a forwarding/call flip phone number",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Forwarding/Call flip phone number",
+          "name": "phoneNumber"
+        },
+        {
+          "type": "string",
+          "description": "Forwarding/Call flip number title",
+          "maxLength": 60,
+          "name": "label"
+        },
+        {
+          "type": "string",
+          "description": "Forwarding phone number type",
+          "enum": [
+            "Home",
+            "Mobile",
+            "Work",
+            "PhoneLine",
+            "Outage",
+            "Other",
+            "BusinessMobilePhone",
+            "ExtensionApps"
+          ],
+          "name": "type"
+        }
+      ]
+    },
+    {
+      "name": "FixedOrderAgents",
+      "fields": [
+        {
+          "$ref": "FixedOrderAgentsExtensionInfo",
+          "name": "extension"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Ordinal of an agent (call queue member)",
+          "name": "index"
+        }
+      ]
+    },
+    {
+      "name": "ScheduleInfo",
+      "description": "Schedule when an answering rule should be applied",
+      "fields": [
+        {
+          "$ref": "WeeklyScheduleInfo",
+          "name": "weeklyRanges"
+        },
+        {
+          "type": "array",
+          "description": "Specific data ranges",
+          "items": {
+            "$ref": "RangesInfo"
+          },
+          "name": "ranges"
+        },
+        {
+          "type": "string",
+          "description": "The user's schedule specified for business hours or after hours; it can also be set/retrieved calling the corresponding method",
+          "enum": [
+            "BusinessHours",
+            "AfterHours"
+          ],
+          "name": "ref"
+        }
+      ]
+    },
+    {
+      "name": "MissedCallExtensionInfoExternalNumber",
+      "description": "Specifies an external PSTN number which should be used for the missed call transfer. Returned only if the actionType is set to `ConnectToExternalNumber`",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Phone number to which the call is forwarded. In addition to common [E.164](https://www.itu.int/rec/T-REC-E.164-201011-I) format, the following number patterns are supported: 11xxxxxxxxxxx, 444xxxxxxxxxxx, 616xxxxxxxxxxx, 1700yyyy; where `xxxxxxxxxxx` is a phone number in E.164 format (without '+' sign) and `yyyy` is an external short extension number. Maximum number of digits is 15",
+          "name": "phoneNumber"
+        }
+      ]
+    },
+    {
+      "name": "CustomAnsweringRuleInfo",
+      "fields": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "Canonical URI to an answering rule resource",
+          "name": "uri"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an answering rule",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "default": "Custom",
+          "description": "Type of an answering rule",
+          "enum": [
+            "BusinessHours",
+            "AfterHours",
+            "Custom"
+          ],
+          "name": "type"
+        },
+        {
+          "type": "string",
+          "description": "Name of an answering rule specified by user",
+          "name": "name"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies if an answering rule is active or inactive",
+          "name": "enabled"
+        },
+        {
+          "$ref": "ScheduleInfo",
+          "name": "schedule"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calling to selected number(s)",
+          "items": {
+            "$ref": "CalledNumberInfo"
+          },
+          "name": "calledNumbers"
+        },
+        {
+          "type": "array",
+          "description": "Answering rules are applied when calls are received from specified caller(s)",
+          "items": {
+            "$ref": "CallersInfo"
+          },
+          "name": "callers"
+        },
+        {
+          "type": "string",
+          "description": "Specifies how incoming calls are forwarded",
+          "enum": [
+            "ForwardCalls",
+            "UnconditionalForwarding",
+            "AgentQueue",
+            "TransferToExtension",
+            "TakeMessagesOnly",
+            "PlayAnnouncementOnly",
+            "SharedLines"
+          ],
+          "name": "callHandlingAction"
+        },
+        {
+          "$ref": "ForwardingInfo",
+          "name": "forwarding"
+        },
+        {
+          "$ref": "UnconditionalForwardingInfo",
+          "name": "unconditionalForwarding"
+        },
+        {
+          "$ref": "QueueInfo",
+          "name": "queue"
+        },
+        {
+          "$ref": "TransferredExtensionInfo",
+          "name": "transfer"
+        },
+        {
+          "$ref": "VoicemailInfo",
+          "name": "voicemail"
+        },
+        {
+          "type": "array",
+          "description": "Greetings applied for an answering rule; only predefined greetings can be applied, see Dictionary Greeting List",
+          "items": {
+            "$ref": "GreetingInfo"
+          },
+          "name": "greetings"
+        },
+        {
+          "type": "string",
+          "description": "Call screening status. 'Off' - no call screening; 'NoCallerId' - if caller ID is missing, then callers are asked to say their name before connecting; 'UnknownCallerId' - if caller ID is not in contact list, then callers are asked to say their name before connecting; 'Always' - the callers are always asked to say their name before connecting. The default value is 'Off'",
+          "enum": [
+            "Off",
+            "NoCallerId",
+            "UnknownCallerId",
+            "Always"
+          ],
+          "default": "Off",
+          "name": "screening"
+        },
+        {
+          "$ref": "SharedLinesInfo",
+          "name": "sharedLines"
+        },
+        {
+          "$ref": "MissedCallInfo",
+          "name": "missedCall"
+        }
+      ]
+    },
+    {
       "name": "MissedCallInfo",
       "description": "Specifies behavior for the missed call scenario. Returned only if `enabled` parameter of a voicemail is set to 'false'",
       "fields": [
@@ -37906,7 +38062,6 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier",
             "ExtensionApps"
           ],
           "name": "type"
@@ -38364,15 +38519,34 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier",
             "ExtensionApps"
           ],
           "name": "type"
         },
         {
-          "description": "Extension information. Returned only if extension type is 'ExtensionApps'",
-          "$ref": "ForwardingNumberInfoExtension",
+          "$ref": "ForwardingNumberExtensionInfo",
           "name": "extension"
+        }
+      ]
+    },
+    {
+      "name": "ForwardingNumberExtensionInfo",
+      "description": "Extension information (for ExtensionApps type only)",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension",
+          "name": "id"
+        },
+        {
+          "type": "string",
+          "description": "Extension name",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "description": "Number of an extension",
+          "name": "extensionNumber"
         }
       ]
     },
@@ -38402,73 +38576,24 @@
           "name": "label"
         },
         {
-          "type": "string",
-          "description": "Forwarding/call flip phone type. If specified, 'label' attribute value is ignored",
-          "default": "Other",
-          "enum": [
-            "PhoneLine",
-            "Home",
-            "Mobile",
-            "Work",
-            "Other"
-          ],
-          "name": "type"
-        },
-        {
-          "$ref": "CreateForwardingNumberDeviceInfo",
-          "name": "device"
-        }
-      ]
-    },
-    {
-      "name": "ForwardingNumberResource",
-      "fields": [
-        {
-          "type": "string",
-          "format": "uri",
-          "name": "uri"
-        },
-        {
-          "type": "string",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "name": "phoneNumber"
-        },
-        {
-          "type": "string",
-          "maxLength": 60,
-          "name": "label"
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "CallFlip",
-              "CallForwarding"
-            ]
-          },
-          "name": "features"
-        },
-        {
-          "pattern": "[1-8]",
-          "type": "string",
-          "name": "flipNumber"
-        },
-        {
-          "type": "string",
           "description": "Forwarding phone number type",
+          "type": "string",
           "enum": [
             "Home",
             "Mobile",
             "Work",
             "PhoneLine",
             "Outage",
-            "Other"
+            "Other",
+            "BusinessMobilePhone",
+            "ExtensionApps"
           ],
-          "name": "type"
+          "name": "type",
+          "default": "Other"
+        },
+        {
+          "$ref": "CreateForwardingNumberDeviceInfo",
+          "name": "device"
         }
       ]
     },
@@ -38502,7 +38627,7 @@
             "Outage",
             "Other",
             "BusinessMobilePhone",
-            "ExternalCarrier"
+            "ExtensionApps"
           ],
           "name": "type"
         }
@@ -41545,6 +41670,7 @@
             "ServicePlanLimitation",
             "AccountLimitation",
             "ExtensionTypeLimitation",
+            "ExtensionSubTypeLimitation",
             "ExtensionLimitation",
             "InsufficientPermissions",
             "ConfigurationLimitation",
@@ -46454,6 +46580,12 @@
           "description": "Suggested interval in seconds to periodically call SIP-provision API and update the local cache\n",
           "name": "pollingInterval",
           "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates whether the user has an RC App device configured in a PSTN gateway",
+          "name": "pstnConfigured",
+          "required": false
         }
       ]
     },
@@ -46706,6 +46838,54 @@
           "type": "string",
           "description": "Endpoint/device instance identifier for Softphone and mobile applications\n",
           "name": "serial"
+        }
+      ]
+    },
+    {
+      "name": "CreateDeviceRegistrationResponse",
+      "fields": [
+        {
+          "$ref": "SipRegistrationDeviceInfo",
+          "name": "device",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "SIP settings for device",
+          "items": {
+            "$ref": "SipInfoResponse"
+          },
+          "name": "sipInfo",
+          "required": true
+        },
+        {
+          "type": "array",
+          "description": "SIP PSTN settings for device",
+          "items": {
+            "$ref": "SipInfoResponse"
+          },
+          "name": "sipInfoPstn",
+          "required": false
+        },
+        {
+          "$ref": "SipFlagsResponse",
+          "name": "sipFlags",
+          "required": true
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "name": "sipErrorCodes",
+          "required": false
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Suggested interval in seconds to periodically call SIP-provision API and update the local cache\n",
+          "name": "pollingInterval",
+          "required": false
         }
       ]
     },
@@ -56208,26 +56388,6 @@
       ]
     },
     {
-      "name": "ForwardingNumberInfoExtension",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of an extension",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Number of an extension",
-          "name": "extensionNumber"
-        },
-        {
-          "type": "string",
-          "description": "Extension name",
-          "name": "name"
-        }
-      ]
-    },
-    {
       "name": "ContractedCountryListResponseRecords",
       "fields": [
         {
@@ -59008,7 +59168,7 @@
             "Call Log"
           ],
           "method2": "get",
-          "description": "Returns individual call log record(s) by ID. \n[Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported.\n",
+          "description": "Returns the company's call log record(s) by ID(s).\n[Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported:\nmultiple IDs can be specified as a comma-separated list in `{callRecordId}` (up to 50 IDs).\nA single ID returns HTTP 200 with `application/json`. Multiple IDs return HTTP 207 with\n`multipart/mixed` (one status part, then one part per record).\n",
           "summary": "Get Company Call Record(s)",
           "operationId": "readCompanyCallRecord",
           "rateLimitGroup": "Heavy",
@@ -59066,8 +59226,8 @@
             "Presence"
           ],
           "method2": "get",
-          "description": "Returns presence status of all extensions of an account. Please\nnote: The presenceStatus is returned as Offline (the parameters telephonyStatus,\nmessage, userStatus and dndStatus are not returned at all) for the following\nextension types: Department, Announcement Only, Voicemail (Take Messages Only),\nFax User, Paging Only Group, Shared Lines Group, IVR Menu, Application Extension.\n",
-          "summary": "Get User Presence Status List",
+          "description": "Returns the presence status of all extensions of an account.\n\nNote: for the extension types listed below, `presenceStatus` is always returned\nas `Offline`, and the `telephonyStatus`, `message`, `userStatus`, and `dndStatus`\nattributes are not returned at all:\n\n- Department\n- Announcement Only\n- Voicemail (Take Messages Only)\n- Fax User\n- Paging Only Group\n- Shared Lines Group\n- IVR Menu\n- Application Extension\n",
+          "summary": "Get Account Presence",
           "operationId": "readAccountPresence",
           "rateLimitGroup": "Heavy",
           "appPermission": "ReadPresence",
@@ -59438,7 +59598,7 @@
           "responseSchema": {
             "$ref": "IvrMenuInfo"
           },
-          "bodyParameters": "ivrMenuInfo"
+          "bodyParameters": "ivrMenuInfoCreate"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/ivr-menus/{ivrMenuId}",
@@ -59465,7 +59625,7 @@
             "IVR"
           ],
           "method2": "put",
-          "description": "Updates a company IVR menu by ID.",
+          "description": "Updates a company IVR menu by ID. Omitted fields are not changed.",
           "summary": "Update IVR Menu",
           "operationId": "updateIVRMenu",
           "rateLimitGroup": "Medium",
@@ -59475,7 +59635,7 @@
           "responseSchema": {
             "$ref": "IvrMenuInfo"
           },
-          "bodyParameters": "ivrMenuInfo"
+          "bodyParameters": "ivrMenuInfoUpdate"
         }
       ],
       "parameter": "ivrMenuId"
@@ -59513,7 +59673,7 @@
             "Multi-Site"
           ],
           "method2": "put",
-          "description": "Updates IVR settings for a site specified in path.\n",
+          "description": "Updates IVR settings for a site specified in path. Omitted fields are\nnot changed.\n",
           "summary": "Update Site IVR Settings",
           "operationId": "updateSiteIvrSettings",
           "rateLimitGroup": "Medium",
@@ -59822,7 +59982,7 @@
           ],
           "method2": "get",
           "description": "Finds a bridge by short identifier (Web PIN). Also it can be used to find a default bridge by the alias\n(personal meeting name).\n",
-          "summary": "Search Bridge by Web PIN",
+          "summary": "Find Bridge by Web PIN",
           "operationId": "getBridgeByWebPin",
           "rateLimitGroup": "Medium",
           "appPermission": "Video",
@@ -60391,7 +60551,7 @@
           ],
           "method2": "get",
           "description": "Finds a bridge by Host or Participant PSTN PIN.",
-          "summary": "Search Bridge by PSTN PIN",
+          "summary": "Find Bridge by PSTN PIN",
           "operationId": "getBridgeByPstnPin",
           "rateLimitGroup": "Medium",
           "appPermission": "Video",
@@ -60805,7 +60965,7 @@
           ],
           "method2": "get",
           "description": "Returns the list of created custom fields.",
-          "summary": "Get Custom Field List",
+          "summary": "List Custom Fields",
           "operationId": "listCustomFields",
           "rateLimitGroup": "Light",
           "appPermission": "ReadAccounts",
@@ -63114,7 +63274,7 @@
             "Call Log"
           ],
           "method2": "get",
-          "description": "Returns call log records by ID.",
+          "description": "Returns the user's individual call log record(s) by ID(s).\n[Bulk syntax](https://developers.ringcentral.com/guide/basics/batch-requests) is supported:\nmultiple IDs can be specified as a comma-separated list in `{callRecordId}` (up to 50 IDs).\nA single ID returns HTTP 200 with `application/json`. Multiple IDs return HTTP 207 with\n`multipart/mixed` (one status part, then one part per record).\n",
           "summary": "Get User Call Record(s)",
           "operationId": "readUserCallRecord",
           "rateLimitGroup": "Heavy",
@@ -63273,7 +63433,7 @@
           ],
           "method2": "delete",
           "description": "Drops a call session.",
-          "summary": "Drop Call Session",
+          "summary": "End Call Session",
           "operationId": "deleteCallSession",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
@@ -63344,7 +63504,7 @@
             "User Settings"
           ],
           "method2": "get",
-          "description": "Returns a list of supported features and the information on their\navailability for the current extension. Particular feature(s) can\nbe checked by providing `featureId` query parameter. Multiple values\nare supported in the format: `?featureId=Feature1&featureId=Feature2`.\nTo get only available features in order to decrease response size,\n`availableOnly=true` query param can be specified. If a feature\nis available for the current user, `\"available\": true` is returned in\nresponse for the record with the corresponding feature ID. Otherwise,\nthe additional attribute `reason` is returned with the appropriate code:\n- `ServicePlanLimitation` -  a feature is not included in account service plan;\n- `AccountLimitation` - a feature is turned off for account;\n- `ExtensionTypeLimitation` - a feature is not applicable for extension type;\n- `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;\n- `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);\n- `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.\n- `PermissionLimitation` - a feature is unavailable due to a specific permission this extension has.\n\nAlso, some features may have additional parameters, e.g. limits, which are returned in `params` attribute as a name-value collection:\n\n    {\n      \"id\": \"HUD\",\n      \"available\": true,\n      \"params\": [\n        {\n          \"name\": \"limitMax\",\n          \"value\": \"100\"\n        }\n      ]\n    }\n",
+          "description": "Returns a list of supported features and the information on their\navailability for the current extension. Particular feature(s) can\nbe checked by providing `featureId` query parameter. Multiple values\nare supported in the format: `?featureId=Feature1&featureId=Feature2`.\nTo get only available features in order to decrease response size,\n`availableOnly=true` query param can be specified. If a feature\nis available for the current user, `\"available\": true` is returned in\nresponse for the record with the corresponding feature ID. Otherwise,\nthe additional attribute `reason` is returned with the appropriate code:\n- `ServicePlanLimitation` -  a feature is not included in account service plan;\n- `AccountLimitation` - a feature is turned off for account;\n- `ExtensionTypeLimitation` - a feature is not applicable for extension type;\n- `ExtensionSubTypeLimitation` - a feature is not applicable for extension sub-type;\n- `ExtensionLimitation` - a feature is not available for extension, e.g., additional license required;\n- `InsufficientPermissions` - required permission is not granted to the current user (not the one, who is specified in the URL, but the one who is calling this API);\n- `ConfigurationLimitation` - a feature is turned off for extension, e.g., by account administrator.\n- `PermissionLimitation` - a feature is unavailable due to a specific permission this extension has.\n\nAlso, some features may have additional parameters, e.g. limits, which are returned in `params` attribute as a name-value collection:\n\n    {\n      \"id\": \"HUD\",\n      \"available\": true,\n      \"params\": [\n        {\n          \"name\": \"limitMax\",\n          \"value\": \"100\"\n        }\n      ]\n    }\n",
           "summary": "Get User Features",
           "operationId": "readExtensionFeatures",
           "rateLimitGroup": "Medium",
@@ -65867,7 +66027,7 @@
             "Message Threads"
           ],
           "method2": "post",
-          "description": "Sends a new message.\n\nThe message is automatically attached to the thread indicated in `threadId` parameter, or, if omitted,\nto the relevant thread based on the phone numbers chosen (the new thread is created automatically if necessary).\n\nThis method supports multipart requests to combine traditional SMS/MMS metadata and\nbinary attachments (for rich messages) - see the example below.\n\nNote: the suggested filename for an attachment is not required, but can be provided via `filename` field\nin the `Content-Disposition` header.\n\n```\nPOST /restapi/v1.0/account/{accountId}/message-threads/messages\nContent-Length: 2740\nContent-Type: multipart/form-data; boundary=abcde12345\n\n--abcde12345\nContent-Disposition: form-data; name=\"metadata\"\nContent-Type: application/json\n\n{\n  \"threadId\": \"1234567890\",\n  \"from\": { \"phoneNumber\": \"+15551234567\" },\n  \"to\": [\n    { \"phoneNumber\": \"+15551234568\" }\n  ],\n  \"text\": \"Let me know if it resolves your issue\"\n}\n--abcde12345\nContent-Disposition: form-data; name=\"attachments\"; filename=\"picture1.jpg\"\nContent-Type: image/jpeg\n\n[Image binary content goes here]\n--abcde12345\nContent-Disposition: form-data; name=\"attachments\"\nContent-Type: image/png\n\n[Image binary content goes here]\n--abcde12345--\n```\n",
+          "description": "Creates and sends a new message to one or more recipients.\n\nThe message is automatically attached to the thread specified in the `threadId` parameter. If `threadId`\nis omitted, it is routed to the matching thread based on the `from` and `to` phone numbers;\na new thread is created automatically when no matching thread exists.\n\nThe endpoint accepts two request formats:\n- `application/json` - for text-only messages.\n- `multipart/form-data` - to send a message together with one or more binary attachments\n  (for MMS / rich messages). Put the message fields in the `metadata` part and each file in\n  an `attachments` part, as shown in the example below.\n\nNote: a suggested attachment filename is optional; when needed, provide it via the `filename`\nfield in the `Content-Disposition` header.\n",
           "summary": "Create and Send New Message",
           "operationId": "mthSendMessage",
           "rateLimitGroup": "Medium",
@@ -66017,7 +66177,7 @@
           ],
           "method2": "get",
           "description": "Returns the list of extensions to be recorded.",
-          "summary": "Get Call Recording Extension List",
+          "summary": "List Call Recording Extensions",
           "operationId": "listCallRecordingExtensions",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
@@ -66422,8 +66582,8 @@
           ],
           "method2": "post",
           "description": "Creates or updates the list of extensions to be recorded.",
-          "summary": "Update Call Recording Extension List",
-          "operationId": "updateCallRecordingExtensionList",
+          "summary": "Update Call Recording Extensions",
+          "operationId": "updateCallRecordingExtensions",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
           "userPermission": "ReadCompanyInfo",
@@ -66540,7 +66700,7 @@
           "userPermission": "ReadUserForwardingFlipNumbers",
           "withParameter": true,
           "responseSchema": {
-            "$ref": "ForwardingNumberResource"
+            "$ref": "ForwardingNumberInfo"
           }
         },
         {
@@ -67924,7 +68084,7 @@
           ],
           "method2": "get",
           "description": "Returns call recording custom greetings.",
-          "summary": "Get Call Recording Custom Greeting List",
+          "summary": "List Call Recording Custom Greetings",
           "operationId": "listCallRecordingCustomGreetings",
           "rateLimitGroup": "Medium",
           "appPermission": "ReadAccounts",
@@ -67943,8 +68103,8 @@
           ],
           "method2": "deleteAll",
           "description": "Deletes call recording custom greetings.",
-          "summary": "Delete Call Recording Custom Greeting List",
-          "operationId": "deleteCallRecordingCustomGreetingList",
+          "summary": "Delete Call Recording Custom Greetings",
+          "operationId": "deleteCallRecordingCustomGreetings",
           "rateLimitGroup": "Medium",
           "appPermission": "EditAccounts",
           "userPermission": "EditCompanyInfo",
