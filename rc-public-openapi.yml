@@ -17883,6 +17883,9 @@ paths:
       summary: List SMS Consent Records
       description: |
         Returns a list of account-level SMS consent records for opted-out and/or opted-in phone numbers.
+
+        DEPRECATED: Use `POST /restapi/v2/accounts/{accountId}/sms/consents/search` instead
+      deprecated: true
       operationId: listSmsConsentRecords
       parameters:
         - $ref: "#/components/parameters/AccountId"
@@ -17893,7 +17896,7 @@ paths:
           required: false
           style: form
           explode: true
-          description: The sender's phone number(s) used to filter records
+          description: The internal party's phone number(s) used to filter records
           schema:
             type: array
             minItems: 1
@@ -17905,7 +17908,7 @@ paths:
           required: false
           style: form
           explode: true
-          description: The recipient's phone number(s) used to filter records
+          description: The external party's phone number(s) used to filter records
           schema:
             type: array
             minItems: 1
@@ -18043,6 +18046,99 @@ paths:
             text/csv:
               schema:
                 type: string
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-feature: SMSSending
+      x-throttling-group: Light
+      x-availability: High
+      x-app-permission: SMS
+  "/restapi/v2/accounts/{accountId}/sms/consents/search":
+    post:
+      tags:
+        - SMS Consents
+      summary: Search SMS Consent Records
+      description: |
+        Returns the list of account-level SMS consent records according to the search criteria.
+      operationId: searchSmsConsentRecords
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchSmsConsentRecordsRequest"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OptRecordList"
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "502":
+          $ref: "#/components/responses/BadGateway"
+        "503":
+          $ref: "#/components/responses/ServiceNotAvailable"
+      x-feature: SMSSending
+      x-throttling-group: Light
+      x-availability: High
+      x-app-permission: SMS
+  "/restapi/v2/accounts/{accountId}/sms/consents/history":
+    get:
+      tags:
+        - SMS Consents
+      summary: List SMS Consent History Records
+      description: |
+        Returns the history of SMS consent records for opted-out and/or opted-in phone numbers.
+      operationId: listSmsConsentHistoryRecords
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/PageToken"
+        - $ref: "#/components/parameters/PerPage"
+        - name: to
+          in: query
+          required: false
+          style: form
+          explode: true
+          description: The external party's phone number(s)
+          schema:
+            type: array
+            minItems: 0
+            maxItems: 20
+            uniqueItems: true
+            items:
+              $ref: "#/components/schemas/PhoneNumberE164"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsentHistoryRecordList"
           headers:
             ETag:
               $ref: "#/components/headers/ETag"
@@ -22877,8 +22973,11 @@ components:
         - from
       properties:
         from:
-          $ref: "#/components/schemas/PhoneNumberE164"
+          allOf:
+            - description: The internal party's phone number
+            - $ref: "#/components/schemas/PhoneNumberE164"
     SmsOptRecord:
+      title: Explicit SMS Consent
       allOf:
         - $ref: "#/components/schemas/UpdateSmsOptRecord"
         - type: object
@@ -23008,6 +23107,85 @@ components:
         - Conversational
         - Informational
         - Promotional
+    SmsOptHistoryRecord:
+      title: Explicit SMS Consent
+      allOf:
+        - $ref: "#/components/schemas/UpdateSmsOptRecord"
+        - type: object
+          required:
+            - createdAt
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+              description: The time when the record was last updated
+    ConsentHistoryRecordList:
+      type: object
+      description: A list of SMS consent records
+      required:
+        - records
+        - paging
+      properties:
+        records:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/SmsOptHistoryRecord"
+        paging:
+          $ref: "#/components/schemas/NonEnumeratedPagingModel"
+    SearchSmsConsentRecordsRequest:
+      type: object
+      properties:
+        from:
+          type: array
+          description: |
+            The internal party's phone number(s) used to filter records
+            (if requested `coverage` is `PhoneNumber` or `Account`)
+          minItems: 1
+          maxItems: 20
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/PhoneNumberE164"
+        to:
+          type: array
+          description: The external party's phone number(s) used to filter records
+          minItems: 1
+          maxItems: 20
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/PhoneNumberE164"
+        optStatus:
+          $ref: "#/components/schemas/SmsOptStatusEnum"
+        coverage:
+          type: array
+          description: The coverage(s) used to filter records
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/SmsConsentCoverageEnum"
+        campaignType:
+          type: array
+          description: |
+            The campaign type(s) used to filter records
+            (if requested `coverage` is `Campaign`)
+          minItems: 1
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/SmsCampaignTypeEnum"
+        pageToken:
+          type: string
+          description: |
+            The token indicating the particular page of the result set to be retrieved.
+            If omitted the first page will be returned.
+        perPage:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 1000
+          default: 100
+          description: |
+            The number of items per page. If provided value in the request
+            is greater than a maximum, the maximum value is applied
     DeletePhoneNumbersResponse:
       type: object
       required:
@@ -27946,12 +28124,16 @@ components:
     PaymentTypeInfo:
       type: string
       description: |
-        Payment type. 'External' is returned for forwarded numbers 
+        Payment type. 'External' is returned for forwarded numbers
         which are not terminated in the RingCentral phone system
       enum:
         - External
-        - ExternalNumberProvider
+        - TollFree
         - Local
+        - BusinessMobileNumberProvider
+        - ExternalNumberProvider
+        - ExternalNumberProviderTollFree
+        - Mobile
     DeviceEmergencyServiceAddressResource:
       type: object
       properties:
@@ -37041,24 +37223,26 @@ components:
       minItems: 1
       uniqueItems: true
       items:
-        type: string
-        enum:
-          - User
-          - FaxUser
-          - VirtualUser
-          - DigitalUser
-          - Department
-          - Announcement
-          - Voicemail
-          - SharedLinesGroup
-          - PagingOnly
-          - IvrMenu
-          - ApplicationExtension
-          - ParkLocation
-          - Limited
-          - Bot
-          - Room
-          - DelegatedLinesGroup
+        $ref: "#/components/schemas/SearchGrantExtensionTypeEnum"
+    SearchGrantExtensionTypeEnum:
+      type: string
+      enum:
+        - User
+        - FaxUser
+        - VirtualUser
+        - DigitalUser
+        - Department
+        - Announcement
+        - Voicemail
+        - SharedLinesGroup
+        - PagingOnly
+        - IvrMenu
+        - ApplicationExtension
+        - ParkLocation
+        - Limited
+        - Bot
+        - Room
+        - DelegatedLinesGroup
     ConferencePhoneNumberInfo:
       type: object
       properties:
