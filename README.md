@@ -12,13 +12,13 @@ This project will be used to generate code for the following projects:
 ## How
 
 ```
-yarn test
+pnpm test
 ```
 
 Update the version in `package.json`.
 
 ```
-npm publish
+pnpm publish
 ```
 
 Parsed content is in [./parsed.json](./parsed.json) file.
