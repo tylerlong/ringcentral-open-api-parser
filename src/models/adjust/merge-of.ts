@@ -15,6 +15,22 @@ function customizer(objValue: string[], srcValue: string[]) {
   }
 }
 
+const hasDeprecatedComposedPart = (
+  schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+) => {
+  const multi =
+    "allOf" in schema && schema.allOf
+      ? schema.allOf
+      : "anyOf" in schema && schema.anyOf
+        ? schema.anyOf
+        : "oneOf" in schema && schema.oneOf
+          ? schema.oneOf
+          : undefined;
+  return (
+    multi?.some((m) => "deprecated" in m && m.deprecated === true) ?? false
+  );
+};
+
 /**
  * merge allOf, anyOf, oneOf into properties
  * @param schemas schemas to be processed
@@ -62,7 +78,12 @@ export const mergeOf = (schemas: NamedSchema[]): NamedSchema[] => {
     if ("items" in schema && schema.items) {
       mergeOne(schema.items as NamedSchema);
     }
-    for (const val of Object.values(schema.properties ?? {})) {
+    const properties = schema.properties ?? {};
+    for (const [key, val] of Object.entries(properties)) {
+      if (hasDeprecatedComposedPart(val)) {
+        delete properties[key];
+        continue;
+      }
       mergeOne(val as NamedSchema);
       if ("items" in val) {
         mergeOne(val.items as NamedSchema);

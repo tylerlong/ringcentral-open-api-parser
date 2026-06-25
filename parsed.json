@@ -15578,12 +15578,6 @@
           "required": true
         },
         {
-          "required": true,
-          "name": "emergency",
-          "deprecated": true,
-          "$ref": "BulkAddDevicesItemEmergency"
-        },
-        {
           "description": "Assign a specific phone number",
           "required": true,
           "name": "phoneInfo",
@@ -15762,12 +15756,6 @@
           ],
           "name": "type",
           "required": true
-        },
-        {
-          "required": true,
-          "name": "emergency",
-          "deprecated": true,
-          "$ref": "DeviceDefinitionEmergency"
         },
         {
           "description": "Assign a specific phone number",
@@ -21345,12 +21333,6 @@
         {
           "$ref": "UBrandInfo",
           "name": "uBrand"
-        },
-        {
-          "description": "Account sub-brand information",
-          "name": "ubrand",
-          "deprecated": true,
-          "$ref": "ServiceInfoUbrand"
         }
       ]
     },
@@ -54562,19 +54544,6 @@
       ]
     },
     {
-      "name": "BulkAddDevicesItemEmergency",
-      "fields": [
-        {
-          "$ref": "BulkAddDevicesItemEmergencyLocation",
-          "name": "location"
-        },
-        {
-          "$ref": "PostalAddress",
-          "name": "address"
-        }
-      ]
-    },
-    {
       "name": "BulkAddDevicesItemPhoneInfo",
       "fields": [
         {
@@ -54623,19 +54592,6 @@
           "type": "string",
           "description": "Phone number identifier",
           "name": "phoneNumberId"
-        }
-      ]
-    },
-    {
-      "name": "DeviceDefinitionEmergency",
-      "fields": [
-        {
-          "$ref": "DeviceDefinitionEmergencyLocation",
-          "name": "location"
-        },
-        {
-          "$ref": "PostalAddress",
-          "name": "address"
         }
       ]
     },
@@ -55857,23 +55813,6 @@
           "nullable": true,
           "readOnly": true,
           "name": "formats"
-        }
-      ]
-    },
-    {
-      "name": "ServiceInfoUbrand",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Sub-brand unique ID",
-          "example": "111.222",
-          "name": "id"
-        },
-        {
-          "type": "string",
-          "description": "Sub-brand name",
-          "example": "Sub-brand name",
-          "name": "name"
         }
       ]
     },
@@ -57674,26 +57613,6 @@
           "format": "email",
           "description": "Email of a person",
           "name": "email"
-        }
-      ]
-    },
-    {
-      "name": "BulkAddDevicesItemEmergencyLocation",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Emergency location ID",
-          "name": "id"
-        }
-      ]
-    },
-    {
-      "name": "DeviceDefinitionEmergencyLocation",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Emergency location ID",
-          "name": "id"
         }
       ]
     },
