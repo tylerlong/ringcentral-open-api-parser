@@ -5935,7 +5935,7 @@
           "name": "from",
           "style": "form",
           "explode": true,
-          "description": "The sender's phone number(s) used to filter records",
+          "description": "The internal party's phone number(s) used to filter records",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
@@ -5952,7 +5952,7 @@
           "name": "to",
           "style": "form",
           "explode": true,
-          "description": "The recipient's phone number(s) used to filter records",
+          "description": "The external party's phone number(s) used to filter records",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
@@ -6017,6 +6017,47 @@
               "Informational",
               "Promotional"
             ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "ListSmsConsentHistoryRecordsParameters",
+      "description": "Query parameters for operation listSmsConsentHistoryRecords",
+      "fields": [
+        {
+          "name": "pageToken",
+          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
+          "explode": false,
+          "type": "string"
+        },
+        {
+          "name": "perPage",
+          "description": "The number of items per page. If the provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "explode": false,
+          "example": 100,
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        {
+          "name": "to",
+          "style": "form",
+          "explode": true,
+          "description": "The external party's phone number(s)",
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "title": "E.164 Phone Number",
+            "type": "string",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
+            "description": "Phone number in e.164 format (with '+' prefix)",
+            "maxLength": 18,
+            "example": "+16501234567"
           }
         }
       ]
@@ -14328,13 +14369,13 @@
           "required": true
         },
         {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
           "title": "E.164 Phone Number",
           "type": "string",
           "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
           "maxLength": 18,
           "example": "+16501234567",
-          "name": "from",
           "required": true
         },
         {
@@ -14360,13 +14401,13 @@
       "name": "PhoneNumberSenderConsentRecord",
       "fields": [
         {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
           "title": "E.164 Phone Number",
           "type": "string",
           "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
           "maxLength": 18,
           "example": "+16501234567",
-          "name": "from",
           "required": true
         }
       ]
@@ -14396,13 +14437,13 @@
           "required": true
         },
         {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
           "title": "E.164 Phone Number",
           "type": "string",
           "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
           "maxLength": 18,
           "example": "+16501234567",
-          "name": "from",
           "required": true
         },
         {
@@ -14451,13 +14492,13 @@
           "required": true
         },
         {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
           "title": "E.164 Phone Number",
           "type": "string",
           "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
           "maxLength": 18,
           "example": "+16501234567",
-          "name": "from",
           "required": true
         },
         {
@@ -14554,13 +14595,13 @@
           "required": true
         },
         {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
           "title": "E.164 Phone Number",
           "type": "string",
           "pattern": "^\\+[1-9]\\d{1,14}$",
-          "description": "Phone number in e.164 format (with '+' prefix)",
           "maxLength": 18,
           "example": "+16501234567",
-          "name": "from",
           "required": true
         }
       ]
@@ -14595,6 +14636,174 @@
           "$ref": "NonEnumeratedPagingModel",
           "name": "paging",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "SmsOptHistoryRecord",
+      "fields": [
+        {
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "maxLength": 18,
+          "example": "+16501234567",
+          "name": "to",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Consent status of a recipient's phone number:\n- `OptOut` - The number is opted out of receiving SMS.\n- `OptIn` - The number is opted in to receiving SMS (if it was previously opted out).\n",
+          "enum": [
+            "OptOut",
+            "OptIn"
+          ],
+          "example": "OptOut",
+          "name": "optStatus",
+          "required": true
+        },
+        {
+          "description": "Phone number in e.164 format (with '+' prefix)",
+          "name": "from",
+          "title": "E.164 Phone Number",
+          "type": "string",
+          "pattern": "^\\+[1-9]\\d{1,14}$",
+          "maxLength": 18,
+          "example": "+16501234567",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The source of the consent record",
+          "enum": [
+            "Recipient",
+            "Api",
+            "Upstream",
+            "Carrier"
+          ],
+          "name": "source",
+          "required": true
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the record was last updated",
+          "name": "createdAt",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "ConsentHistoryRecordList",
+      "description": "A list of SMS consent records",
+      "fields": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "SmsOptHistoryRecord"
+          },
+          "name": "records",
+          "required": true
+        },
+        {
+          "$ref": "NonEnumeratedPagingModel",
+          "name": "paging",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "SearchSmsConsentRecordsRequest",
+      "fields": [
+        {
+          "type": "array",
+          "description": "The internal party's phone number(s) used to filter records\n(if requested `coverage` is `PhoneNumber` or `Account`)\n",
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "title": "E.164 Phone Number",
+            "type": "string",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
+            "description": "Phone number in e.164 format (with '+' prefix)",
+            "maxLength": 18,
+            "example": "+16501234567"
+          },
+          "name": "from"
+        },
+        {
+          "type": "array",
+          "description": "The external party's phone number(s) used to filter records",
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "title": "E.164 Phone Number",
+            "type": "string",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
+            "description": "Phone number in e.164 format (with '+' prefix)",
+            "maxLength": 18,
+            "example": "+16501234567"
+          },
+          "name": "to"
+        },
+        {
+          "type": "string",
+          "description": "Consent status of a recipient's phone number:\n- `OptOut` - The number is opted out of receiving SMS.\n- `OptIn` - The number is opted in to receiving SMS (if it was previously opted out).\n",
+          "enum": [
+            "OptOut",
+            "OptIn"
+          ],
+          "example": "OptOut",
+          "name": "optStatus"
+        },
+        {
+          "type": "array",
+          "description": "The coverage(s) used to filter records",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "description": "Coverage (scope) for the consent record",
+            "enum": [
+              "PhoneNumber",
+              "Account",
+              "CampaignType"
+            ]
+          },
+          "name": "coverage"
+        },
+        {
+          "type": "array",
+          "description": "The campaign type(s) used to filter records\n(if requested `coverage` is `Campaign`)\n",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "description": "Type of SMS campaign",
+            "enum": [
+              "Conversational",
+              "Informational",
+              "Promotional"
+            ]
+          },
+          "name": "campaignType"
+        },
+        {
+          "type": "string",
+          "description": "The token indicating the particular page of the result set to be retrieved.\nIf omitted the first page will be returned.\n",
+          "name": "pageToken"
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100,
+          "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
+          "name": "perPage"
         }
       ]
     },
@@ -22410,11 +22619,15 @@
         },
         {
           "type": "string",
-          "description": "Payment type. 'External' is returned for forwarded numbers \nwhich are not terminated in the RingCentral phone system\n",
+          "description": "Payment type. 'External' is returned for forwarded numbers\nwhich are not terminated in the RingCentral phone system\n",
           "enum": [
             "External",
+            "TollFree",
+            "Local",
+            "BusinessMobileNumberProvider",
             "ExternalNumberProvider",
-            "Local"
+            "ExternalNumberProviderTollFree",
+            "Mobile"
           ],
           "name": "paymentType"
         },
@@ -62538,24 +62751,6 @@
       "operations": [
         {
           "endpoint": "/restapi/v2/accounts/{accountId}/sms/consents",
-          "method": "get",
-          "tags": [
-            "SMS Consents"
-          ],
-          "method2": "get",
-          "description": "Returns a list of account-level SMS consent records for opted-out and/or opted-in phone numbers.\n",
-          "summary": "List SMS Consent Records",
-          "operationId": "listSmsConsentRecords",
-          "rateLimitGroup": "Light",
-          "appPermission": "SMS",
-          "withParameter": false,
-          "responseSchema": {
-            "$ref": "OptRecordList"
-          },
-          "queryParameters": "listSmsConsentRecordsParameters"
-        },
-        {
-          "endpoint": "/restapi/v2/accounts/{accountId}/sms/consents",
           "method": "patch",
           "tags": [
             "SMS Consents"
@@ -65733,6 +65928,36 @@
     {
       "paths": [
         "restapi",
+        "v2",
+        "accounts",
+        "sms",
+        "consents",
+        "search"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/sms/consents/search",
+          "method": "post",
+          "tags": [
+            "SMS Consents"
+          ],
+          "method2": "post",
+          "description": "Returns the list of account-level SMS consent records according to the search criteria.\n",
+          "summary": "Search SMS Consent Records",
+          "operationId": "searchSmsConsentRecords",
+          "rateLimitGroup": "Light",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "OptRecordList"
+          },
+          "bodyParameters": "searchSmsConsentRecordsRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
         "account",
         "extension",
         "answering-rule"
@@ -66053,6 +66278,36 @@
           "appPermission": "SMS",
           "withParameter": false,
           "bodyParameters": "threadMessagesDeleteRequest"
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "v2",
+        "accounts",
+        "sms",
+        "consents",
+        "history"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/v2/accounts/{accountId}/sms/consents/history",
+          "method": "get",
+          "tags": [
+            "SMS Consents"
+          ],
+          "method2": "get",
+          "description": "Returns the history of SMS consent records for opted-out and/or opted-in phone numbers.\n",
+          "summary": "List SMS Consent History Records",
+          "operationId": "listSmsConsentHistoryRecords",
+          "rateLimitGroup": "Light",
+          "appPermission": "SMS",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "ConsentHistoryRecordList"
+          },
+          "queryParameters": "listSmsConsentHistoryRecordsParameters"
         }
       ]
     },
