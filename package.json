@@ -1,6 +1,6 @@
 {
   "name": "ringcentral-open-api-parser",
-  "version": "0.17.5",
+  "version": "0.17.6",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
