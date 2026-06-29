@@ -1,5 +1,5 @@
-import type { NamedSchema } from "../src/types.js";
 import { mergeOf } from "../src/models/adjust/merge-of.js";
+import type { NamedSchema } from "../src/types.js";
 
 describe("mergeOf", () => {
   test("removes deprecated composed properties before merging", () => {

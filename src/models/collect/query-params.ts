@@ -40,7 +40,7 @@ export const collectQueryParams = (
       }
     }
 
-    const name = capitalizeFirstLetter(operation.operationId!) + "Parameters";
+    const name = `${capitalizeFirstLetter(operation.operationId!)}Parameters`;
     const schema = {
       name,
       description: `Query parameters for operation ${operation.operationId}`,

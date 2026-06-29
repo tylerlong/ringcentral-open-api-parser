@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { CORE_SCHEMA, load, timestampTag } from "js-yaml";
 import type { OpenAPIV3 } from "openapi-types";
 

@@ -92,11 +92,10 @@ export const getEndpointPaths = (doc: OpenAPIV3.Document, models: Model[]) => {
         models.find(
           (m) =>
             m.name ===
-            capitalizeFirstLetter(operation.operationId ?? "doesNotExist") +
-              "Parameters",
+            `${capitalizeFirstLetter(operation.operationId ?? "doesNotExist")}Parameters`,
         )
       ) {
-        queryParameters = operation.operationId + "Parameters";
+        queryParameters = `${operation.operationId}Parameters`;
       }
 
       // bodyParameters
