@@ -31,6 +31,14 @@ describe("index", () => {
     )!;
     expect(scimPath.parameter).toBe("version");
     expect(scimPath.defaultParameter).toBe("v2");
+
+    const readUserCallLogParameters = parsed.models.find(
+      (m) => m.name === "ReadUserCallLogParameters",
+    )!;
+    expect(
+      readUserCallLogParameters.fields.some((f) => f.name === "withRecording"),
+    ).toBe(false);
+    expect(JSON.stringify(parsed)).not.toContain('"deprecated":');
   });
 
   test("form bodies", () => {

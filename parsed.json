@@ -2069,13 +2069,6 @@
           ]
         },
         {
-          "name": "withRecording",
-          "deprecated": true,
-          "description": "Deprecated, replaced with `recordingType` filter, still supported for compatibility reasons.\nIndicates if only recorded calls should be returned.\n\nIf both `withRecording` and `recordingType` parameters are specified, then `withRecording` is ignored\n",
-          "type": "boolean",
-          "default": false
-        },
-        {
           "name": "recordingType",
           "description": "Indicates that call records with recordings of particular type should be returned.\nIf omitted, then calls with and without recordings are returned\n",
           "type": "string",
@@ -2210,13 +2203,6 @@
         {
           "name": "showDeleted",
           "description": "Supported for `ISync` mode. Indicates that deleted call records should be returned",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "withRecording",
-          "deprecated": true,
-          "description": "Deprecated, replaced with `recordingType` filter, still supported for compatibility reasons.\nIndicates if only recorded calls should be returned.\n\nIf both `withRecording` and `recordingType` parameters are specified, then `withRecording` is ignored\n",
           "type": "boolean",
           "default": false
         },
@@ -2409,13 +2395,6 @@
           ]
         },
         {
-          "name": "withRecording",
-          "deprecated": true,
-          "description": "Deprecated, replaced with `recordingType` filter, still supported for compatibility reasons.\nIndicates if only recorded calls should be returned.\n\nIf both `withRecording` and `recordingType` parameters are specified, then `withRecording` is ignored\n",
-          "type": "boolean",
-          "default": false
-        },
-        {
           "name": "recordingType",
           "description": "Indicates that call records with recordings of particular type should be returned.\nIf omitted, then calls with and without recordings are returned\n",
           "type": "string",
@@ -2544,13 +2523,6 @@
         {
           "name": "showDeleted",
           "description": "Supported for `ISync` mode. Indicates that deleted call records should be returned",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "withRecording",
-          "deprecated": true,
-          "description": "Deprecated, replaced with `recordingType` filter, still supported for compatibility reasons.\nIndicates if only recorded calls should be returned.\n\nIf both `withRecording` and `recordingType` parameters are specified, then `withRecording` is ignored\n",
           "type": "boolean",
           "default": false
         },
@@ -2904,79 +2876,6 @@
           "description": "Allows to make lookups across a whole directory skipping a filtering logic of Cross-Site access management feature.\n",
           "type": "boolean",
           "default": true
-        },
-        {
-          "name": "accountId",
-          "deprecated": true,
-          "description": "A list of Account IDs. Deprecated, use the appropriate body field 'accountIds' instead.",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "example": "400131426008"
-          }
-        },
-        {
-          "name": "department",
-          "deprecated": true,
-          "description": "Department name. Deprecated, use the appropriate body field 'department' instead.",
-          "type": "string",
-          "example": "North office"
-        },
-        {
-          "name": "siteId",
-          "deprecated": true,
-          "description": "A list of Site IDs. Deprecated, use the appropriate body field 'siteIds' instead.",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "example": "872781797006"
-          }
-        },
-        {
-          "name": "extensionStatus",
-          "deprecated": true,
-          "description": "List of extension current statuses. Deprecated, use the appropriate body field 'extensionStatuses' instead.",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "example": "Enabled"
-          }
-        },
-        {
-          "name": "extensionType",
-          "deprecated": true,
-          "description": "Types of extension to filter the contacts",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "description": "Type of extension to filter the contacts",
-            "enum": [
-              "User",
-              "Department",
-              "Announcement",
-              "Voicemail",
-              "DigitalUser",
-              "VirtualUser",
-              "FaxUser",
-              "PagingOnly",
-              "SharedLinesGroup",
-              "IvrMenu",
-              "ApplicationExtension",
-              "ParkLocation",
-              "Limited",
-              "Bot",
-              "Site",
-              "Room",
-              "ProxyAdmin",
-              "DelegatedLinesGroup",
-              "FlexibleUser",
-              "GroupCallPickup",
-              "RoomConnector",
-              "TieLine",
-              "External"
-            ],
-            "example": "User"
-          }
         }
       ]
     },
@@ -4937,18 +4836,6 @@
           "description": "The number of items per page. If provided value in the request\nis greater than a maximum, the maximum value is applied\n",
           "type": "integer",
           "format": "int32"
-        },
-        {
-          "name": "type",
-          "description": "Specifies types meeting to be returned. Possible values:\n  - <empty> (not passed) - return only the meetings where the requesting user is the participant OR host OR deputy OR watcher;\n  - `All`- return `Alive` meetings where the requesting user is the host OR deputy OR watcher;\n  - `My`- return `Alive` meetings where the requesting user is the host OR deputy;\n  - `Shared` - return `Alive` meetings where the requesting user is the watcher AND not host;\n  - `Deleted` - return `Deleted` meetings where the requesting user is the host OR deputy.\n",
-          "deprecated": true,
-          "type": "string",
-          "enum": [
-            "All",
-            "My",
-            "Deleted",
-            "Shared"
-          ]
         },
         {
           "name": "materials",
@@ -7152,14 +7039,6 @@
           "readOnly": true,
           "default": true,
           "name": "recordingDownloadEnabled"
-        },
-        {
-          "deprecated": true,
-          "type": "boolean",
-          "description": "DEPRECATED AND REPLACED BY 'pastSessionDeletionEnabled' setting.\nIndicates if recording can be deleted (this setting is read-only at webinar/session level)\n",
-          "readOnly": true,
-          "default": false,
-          "name": "recordingDeletionEnabled"
         },
         {
           "type": "boolean",
@@ -10279,14 +10158,6 @@
           "name": "recordingDownloadEnabled"
         },
         {
-          "deprecated": true,
-          "type": "boolean",
-          "description": "DEPRECATED AND REPLACED BY 'pastSessionDeletionEnabled' setting.\nIndicates if recording can be deleted (this setting is read-only at webinar level)\n",
-          "readOnly": true,
-          "default": false,
-          "name": "recordingDeletionEnabled"
-        },
-        {
           "type": "boolean",
           "description": "Indicates if deletion of past session along with its artifacts is enabled for Host.\nThis setting is read-only at webinar level\n",
           "readOnly": true,
@@ -12884,30 +12755,6 @@
           },
           "name": "rights",
           "required": true
-        },
-        {
-          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
-          "type": "string",
-          "deprecated": true,
-          "name": "longSummary",
-          "required": false
-        },
-        {
-          "description": "During meeting AI team analyze code and after meeting finished generates text summary about this meeting",
-          "type": "string",
-          "deprecated": true,
-          "name": "shortSummary",
-          "required": false
-        },
-        {
-          "description": "During meeting AI team analyze code and after meeting finished generates key words used in meeting",
-          "type": "array",
-          "deprecated": true,
-          "items": {
-            "type": "string"
-          },
-          "name": "keywords",
-          "required": false
         },
         {
           "type": "array",
@@ -37537,12 +37384,6 @@
           "name": "notifyMySoftPhones"
         },
         {
-          "type": "boolean",
-          "description": "Deprecated parameter. Specifies if the administrator's softphone is notified before forwarding the incoming call to desk phones and forwarding numbers. The default value is `false`",
-          "deprecated": true,
-          "name": "notifyAdminSoftPhones"
-        },
-        {
           "type": "integer",
           "format": "int32",
           "description": "Number of rings before forwarding starts",
@@ -37575,12 +37416,6 @@
           "type": "boolean",
           "description": "Specifies if desktop and mobile applications of the user are notified before (true) or after (false) forwarding the incoming call to desk phones and forwarding numbers. Applicable only if `notifyMySoftPhones` parameter is set to `true`",
           "name": "softPhonesPositionTop"
-        },
-        {
-          "type": "boolean",
-          "description": "Deprecated parameter. Specifies if mobile timeout is activated for the rule",
-          "deprecated": true,
-          "name": "mobileTimeout"
         }
       ]
     },
@@ -38166,12 +38001,6 @@
           "name": "notifyMySoftPhones"
         },
         {
-          "type": "boolean",
-          "description": "Deprecated parameter. Specifies if the administrator's softphone (desktop application) is notified before forwarding the incoming call to desk phones and forwarding numbers. The default value is `true`.",
-          "deprecated": true,
-          "name": "notifyAdminSoftPhones"
-        },
-        {
           "type": "integer",
           "format": "int32",
           "description": "Specifies delay between ring on apps and starting of a call forwarding. To activate this parameter use the value > 0, and turn off the `softPhonesAlwaysRing` setting. If the value is 1 or 0, the `softPhonesAlwaysRing` setting cannot be turned off",
@@ -38199,12 +38028,6 @@
             "$ref": "ForwardingRuleCreateRequest"
           },
           "name": "rules"
-        },
-        {
-          "type": "boolean",
-          "description": "Deprecated parameter. Specifies if mobile timeout is activated for the rule",
-          "deprecated": true,
-          "name": "mobileTimeout"
         }
       ]
     },
@@ -41632,12 +41455,6 @@
           "name": "includeManagers"
         },
         {
-          "deprecated": true,
-          "type": "boolean",
-          "description": "Specifies if sms recipients' emails are included in the list of emails to which\nnotifications are sent\n",
-          "name": "includeSmsRecipients"
-        },
-        {
           "type": "array",
           "description": "List of sms recipients specified for call queue. Returned only for call queue extension\n",
           "items": {
@@ -44299,13 +44116,6 @@
           "$ref": "EmergencyLocationInfo",
           "name": "emergencyLocation",
           "required": false
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "Emergency response location (address) internal identifier. \nOnly one of a pair `emergencyAddress` or `emergencyLocationId`\ncan be specified, otherwise the error is returned\n",
-          "name": "emergencyLocationId",
-          "required": false
         }
       ]
     },
@@ -44420,12 +44230,6 @@
         {
           "$ref": "EmergencyLocationAddressResource",
           "name": "emergencyAddress"
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "Emergency response location (address) internal identifier. \nOnly one of a pair `emergencyAddress` or `emergencyLocationId`\ncan be specified, otherwise the error is returned\n",
-          "name": "emergencyLocationId"
         },
         {
           "type": "boolean",
@@ -44768,13 +44572,6 @@
           "$ref": "EmergencyLocationInfo",
           "name": "emergencyLocation",
           "required": false
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "Emergency response location (address) internal identifier. \nOnly one of a pair `emergencyAddress` or `emergencyLocationId`\ncan be specified, otherwise the error is returned\n",
-          "name": "emergencyLocationId",
-          "required": false
         }
       ]
     },
@@ -44897,13 +44694,6 @@
           "$ref": "EmergencyLocationInfo",
           "name": "emergencyLocation",
           "required": false
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "Emergency response location (address) internal identifier. \nOnly one of a pair `emergencyAddress` or `emergencyLocationId`\ncan be specified, otherwise the error is returned\n",
-          "name": "emergencyLocationId",
-          "required": false
         }
       ]
     },
@@ -45014,12 +44804,6 @@
         {
           "$ref": "EmergencyAddressInfo",
           "name": "emergencyAddress"
-        },
-        {
-          "type": "string",
-          "deprecated": true,
-          "description": "Emergency response location (address) internal identifier. \nOnly one of a pair `emergencyAddress` or `emergencyLocationId`\ncan be specified, otherwise the error is returned\n",
-          "name": "emergencyLocationId"
         },
         {
           "$ref": "EmergencyLocationInfo",

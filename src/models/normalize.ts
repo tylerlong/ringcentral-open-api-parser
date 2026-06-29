@@ -18,9 +18,13 @@ const normalizeField = (field: Field): Field => {
 export const normalize = (schemas: NamedSchema[]): Model[] => {
   return schemas.map((schema) => {
     const properties = schema.properties!;
-    const fields = Object.keys(properties || {})
-      .map((k) => ({
-        ...(properties[k] as unknown as Field),
+    const fields = Object.entries(properties || {})
+      .filter(
+        ([, property]) =>
+          !("deprecated" in property && property.deprecated === true),
+      )
+      .map(([k, property]) => ({
+        ...(property as unknown as Field),
         name: k,
         required: schema.required?.includes(k),
       }))
