@@ -1,12 +1,15 @@
 import { readFileSync } from "fs";
-import jsYaml from "js-yaml";
+import { CORE_SCHEMA, load, timestampTag } from "js-yaml";
 import type { OpenAPIV3 } from "openapi-types";
 
 import type { RawOperation } from "./types.js";
 
+const schema = CORE_SCHEMA.withTags(timestampTag);
+
 export const getRawData = (filePath: string) => {
-  const { load } = jsYaml;
-  const doc = load(readFileSync(filePath, "utf8")) as OpenAPIV3.Document;
+  const doc = load(readFileSync(filePath, "utf8"), {
+    schema,
+  }) as OpenAPIV3.Document;
   const operations: RawOperation[] = [];
   Object.values(doc.paths).forEach((pathObject) => {
     Object.values(pathObject!).forEach((_ops) => {
