@@ -1957,7 +1957,7 @@ paths:
                     - work-hours
                     - do-not-disturb
                     - forward-all-calls
-                    - “agent"
+                    - agent
                 binary:
                   type: string
                   description: Media file to upload
@@ -13085,7 +13085,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MessageTemplateUpdateRequest"
+              $ref: "#/components/schemas/MessageTemplateRequest"
         required: true
       responses:
         "200":
@@ -13231,7 +13231,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MessageTemplateUpdateRequest"
+              $ref: "#/components/schemas/MessageTemplateRequest"
         required: true
       responses:
         "200":
@@ -18186,6 +18186,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CallSession"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "500":
+          $ref: "#/components/responses/InternalError"
         "503":
           $ref: "#/components/responses/ServiceNotAvailable"
       x-throttling-group: Heavy
@@ -18206,12 +18214,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CallSession"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18228,20 +18236,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/AccountId"
         - $ref: "#/components/parameters/TelephonySessionId"
-        - name: timestamp
-          in: query
-          description: The date and time of a call session latest change
-          required: false
-          schema:
-            type: string
-        - name: timeout
-          in: query
-          description: |
-            The time frame of awaiting for a status change before sending
-            the resulting one in response
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Success
@@ -18249,10 +18243,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CallSessionObject"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18274,10 +18272,14 @@ paths:
       responses:
         "204":
           description: No Content
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18315,6 +18317,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18345,6 +18349,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18373,6 +18379,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18406,8 +18414,8 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18447,6 +18455,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18491,6 +18501,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18530,6 +18542,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18569,6 +18583,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18608,6 +18624,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18647,6 +18665,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18682,6 +18702,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18714,6 +18736,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18756,6 +18780,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18780,10 +18806,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CallParty"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18800,13 +18830,24 @@ paths:
         - $ref: "#/components/parameters/AccountId"
         - $ref: "#/components/parameters/TelephonySessionId"
         - $ref: "#/components/parameters/TelephonySessionPartyId"
+      requestBody:
+        description: JSON body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeletePartyRequest"
+        required: false
       responses:
         "204":
           description: No Content
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18845,6 +18886,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18867,6 +18910,10 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallRecording"
         "400":
           $ref: "#/components/responses/InvalidRequest"
         "403":
@@ -18875,6 +18922,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18889,13 +18938,6 @@ paths:
       description: Pause/resume recording
       operationId: pauseResumeCallRecording
       parameters:
-        - name: brandId
-          in: query
-          description: Identifies a brand of a logged-in user or a brand of a sign-up session
-          required: true
-          schema:
-            type: string
-            default: "~"
         - $ref: "#/components/parameters/AccountId"
         - $ref: "#/components/parameters/TelephonySessionId"
         - $ref: "#/components/parameters/TelephonySessionPartyId"
@@ -18927,6 +18969,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -18963,8 +19007,8 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -19013,6 +19057,8 @@ paths:
           $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "500":
           $ref: "#/components/responses/InternalError"
         "503":
@@ -19213,6 +19259,14 @@ components:
       description: |
         General response with **HTTP 502 "Bad Gateway"** status.<br>
         Reasons: server cannot process the request, API Gateway should use fallback route
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponseModel"
+    UnsupportedMediaType:
+      description: |
+        General response with **HTTP 415 "Unsupported Media Type"** status.<br>
+        Reasons: the request content type is not supported for the target operation.
       content:
         application/json:
           schema:
@@ -23118,7 +23172,7 @@ components:
             createdAt:
               type: string
               format: date-time
-              description: The time when the record was last updated
+              description: The time when this history record was created
     ConsentHistoryRecordList:
       type: object
       description: A list of SMS consent records
@@ -23167,7 +23221,7 @@ components:
           type: array
           description: |
             The campaign type(s) used to filter records
-            (if requested `coverage` is `Campaign`)
+            (if requested `coverage` is `CampaignType`)
           minItems: 1
           uniqueItems: true
           items:
@@ -26469,6 +26523,7 @@ components:
           enum:
             - PhoneLine
             - External
+            - BusinessMobile
           description: Flip number type
           example: PhoneLine
         label:
@@ -29576,32 +29631,6 @@ components:
           items:
             $ref: "#/components/schemas/MetaData"
       description: Information on a party of a call session
-    OwnerInfo:
-      type: object
-      properties:
-        accountId:
-          type: string
-          description: Internal identifier of an account that monitors a call
-        extensionId:
-          type: string
-          description: Internal identifier of an extension that monitors a call
-        brandId:
-          type: string
-          description: Internal identifier of an account brandId that monitors a call
-      description: Deprecated. Information on a call owner
-    RecordingInfo:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Internal identifier of a recording resource
-        active:
-          type: boolean
-          description: True if the recording is active. False if the recording is paused.
-    CountryId:
-      type: integer
-      format: int64
-      description: Optional. Dialing plan country data. If not specified, then extension home country is applied by default.
     MakeCallOutCallerInfoRequestFrom:
       type: object
       properties:
@@ -29646,26 +29675,6 @@ components:
         extensionId:
           type: string
           description: Internal identifier of an extension
-    MobilePickupData:
-      type: object
-      properties:
-        ccMailboxes:
-          type: array
-          description: List of extension IDs, configured to pick up a call from Desktop/Mobile applications
-          items:
-            type: string
-        to:
-          type: string
-          description: SIP proxy registration name
-        sid:
-          type: string
-          description: User data
-        srvlvl:
-          type: string
-          description: User data
-        srvLvlExt:
-          type: string
-          description: User data
     CallSessionObject:
       type: object
       properties:
@@ -29686,6 +29695,78 @@ components:
           format: date-time
           description: Date and time of the latest session update represented in Unix time format
       description: Call session information
+    MakeCallOutCallerInfoRequestTo:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+          description: Phone number in E.164 format, short codes (*67, *86), emergency (911, 112) or special (988) numbers
+          example: "+16502223366"
+        extensionNumber:
+          type: string
+          description: Extension number
+          example: "103"
+      description: Phone number of the called party. This number corresponds to the 2nd leg of a CallOut call
+    CallSession:
+      type: object
+      properties:
+        session:
+          $ref: "#/components/schemas/CallSessionObject"
+    Attributes:
+      type: object
+      properties:
+        queueCall:
+          type: boolean
+          description: Indicates that this party is agent of new call queue
+        emergencyCallback:
+          type: boolean
+          description: Indicates that it was emergency ringback to party
+    OwnerInfo:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Internal identifier of an account that monitors a call
+        extensionId:
+          type: string
+          description: Internal identifier of an extension that monitors a call
+        brandId:
+          type: string
+          description: Internal identifier of an account brandId that monitors a call
+      description: Deprecated. Information on a call owner
+    RecordingInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a recording resource
+        active:
+          type: boolean
+          description: True if the recording is active. False if the recording is paused.
+    CountryId:
+      type: integer
+      format: int64
+      description: Optional. Dialing plan country data. If not specified, then extension home country is applied by default.
+    MobilePickupData:
+      type: object
+      properties:
+        ccMailboxes:
+          type: array
+          description: List of extension IDs, configured to pick up a call from Desktop/Mobile applications
+          items:
+            type: string
+        to:
+          type: string
+          description: SIP proxy registration name
+        sid:
+          type: string
+          description: User data
+        srvlvl:
+          type: string
+          description: User data
+        srvLvlExt:
+          type: string
+          description: User data
     CallStatusInfo:
       type: object
       properties:
@@ -29778,18 +29859,6 @@ components:
             - Zoom
             - CallOut
       description: Session origin details
-    MakeCallOutCallerInfoRequestTo:
-      type: object
-      properties:
-        phoneNumber:
-          type: string
-          description: Phone number in E.164 format, short codes (*67, *86), emergency (911, 112) or special (988) numbers
-          example: "+16502223366"
-        extensionNumber:
-          type: string
-          description: Extension number
-          example: "103"
-      description: Phone number of the called party. This number corresponds to the 2nd leg of a CallOut call
     ParkInfo:
       type: object
       properties:
@@ -29797,20 +29866,6 @@ components:
           type: string
           description: Call park identifier
       description: Call park information
-    CallSession:
-      type: object
-      properties:
-        session:
-          $ref: "#/components/schemas/CallSessionObject"
-    Attributes:
-      type: object
-      properties:
-        queueCall:
-          type: boolean
-          description: Indicates that this party is agent of new call queue
-        emergencyCallback:
-          type: boolean
-          description: Indicates that it was emergency ringback to party
     AccountTelephonySessionsEvent:
       type: object
       properties:
@@ -30016,7 +30071,17 @@ components:
           type: boolean
           description: If `true` then the party is not connected to a session voice conference, `false` means the party is connected to other parties in a session
       description: Party update data
+    DeletePartyRequest:
+      type: object
+      properties:
+        keepConferenceAlive:
+          type: boolean
+          description: Keep conference session alive after deleting the party
+          default: false
+          example: false
     CallPartyFlip:
+      required:
+        - callFlipId
       type: object
       properties:
         callFlipId:
@@ -30080,13 +30145,20 @@ components:
             - Inbound
             - Outbound
     CallPartyReply:
-      type: object
-      properties:
-        replyWithText:
-          type: string
-          description: Text to reply
-        replyWithPattern:
-          $ref: "#/components/schemas/ReplyWithPattern"
+      oneOf:
+        - type: object
+          required:
+            - replyWithText
+          properties:
+            replyWithText:
+              type: string
+              description: Text to reply
+        - type: object
+          required:
+            - replyWithPattern
+          properties:
+            replyWithPattern:
+              $ref: "#/components/schemas/ReplyWithPattern"
     BridgeTargetRequest:
       required:
         - partyId
@@ -30174,12 +30246,6 @@ components:
             session
         status:
           $ref: "#/components/schemas/CallStatusInfo"
-    CallRecordingUpdate:
-      type: object
-      properties:
-        active:
-          type: boolean
-          description: Recording status
     CallRecording:
       type: object
       properties:
@@ -30189,7 +30255,29 @@ components:
         active:
           type: boolean
           description: Call recording status
+        mode:
+          type: string
+          description: Recording mode
+          enum:
+            - Automatic
+            - OnDemand
+        view:
+          type: string
+          description: Recording view
+          enum:
+            - Party
+            - Session
+    CallRecordingUpdate:
+      required:
+        - active
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Recording status
     AnswerTarget:
+      required:
+        - deviceId
       type: object
       properties:
         deviceId:
@@ -30448,11 +30536,16 @@ components:
         - displayName
         - body
       properties:
+        id:
+          type: string
+          description: Internal identifier of a template. Ignored on input
         displayName:
           type: string
           description: Name of a template
         body:
           $ref: "#/components/schemas/MessageTemplateInfo"
+        scope:
+          $ref: "#/components/schemas/VisibilityType"
         site:
           $ref: "#/components/schemas/Site"
     Site:
@@ -30494,18 +30587,6 @@ components:
           $ref: "#/components/schemas/MessageTemplateInfo"
         scope:
           $ref: "#/components/schemas/VisibilityType"
-        site:
-          $ref: "#/components/schemas/Site"
-    MessageTemplateUpdateRequest:
-      type: object
-      required:
-        - body
-      properties:
-        displayName:
-          type: string
-          description: Name of a template
-        body:
-          $ref: "#/components/schemas/MessageTemplateInfo"
         site:
           $ref: "#/components/schemas/Site"
     BillingPackageInfo:
@@ -39720,8 +39801,12 @@ components:
         - InternationalDisabled
         - DestinationBlocked
         - NotEnoughFunds
-        - NoSuchUser
+        - NosuchUser
         - Error
+        - CannotReach
+        - NoAnsweringMachine
+        - NoSessionFound
+        - Unknown
     MakeRingOutRequest:
       required:
         - from
@@ -49055,8 +49140,8 @@ components:
       name: creationTimeTo
       in: query
       description: |
-        End date/time for resulting message threads or messages (depending on path resource) 
-        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. 
+        End date/time for resulting message threads or messages (depending on path resource)
+        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.
         This parameter is supported if `creationTimeFrom` is specified
       required: false
       schema:
@@ -49085,8 +49170,8 @@ components:
       name: creationTimeFrom
       in: query
       description: |
-        Start date/time for resulting message threads or messages (depending on path resource) 
-        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. 
+        Start date/time for resulting message threads or messages (depending on path resource)
+        in [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.
         This parameter is supported if `creationTimeTo` is specified
       required: false
       schema:
