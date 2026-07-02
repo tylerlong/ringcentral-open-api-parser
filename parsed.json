@@ -4336,12 +4336,12 @@
         },
         {
           "name": "creationTimeFrom",
-          "description": "Start date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeTo` is specified\n",
+          "description": "Start date/time for resulting message threads or messages (depending on path resource)\nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.\nThis parameter is supported if `creationTimeTo` is specified\n",
           "type": "string"
         },
         {
           "name": "creationTimeTo",
-          "description": "End date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeFrom` is specified\n",
+          "description": "End date/time for resulting message threads or messages (depending on path resource)\nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.\nThis parameter is supported if `creationTimeFrom` is specified\n",
           "type": "string"
         },
         {
@@ -4542,12 +4542,12 @@
         },
         {
           "name": "creationTimeFrom",
-          "description": "Start date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeTo` is specified\n",
+          "description": "Start date/time for resulting message threads or messages (depending on path resource)\nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.\nThis parameter is supported if `creationTimeTo` is specified\n",
           "type": "string"
         },
         {
           "name": "creationTimeTo",
-          "description": "End date/time for resulting message threads or messages (depending on path resource) \nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone. \nThis parameter is supported if `creationTimeFrom` is specified\n",
+          "description": "End date/time for resulting message threads or messages (depending on path resource)\nin [RFC-3339](https://datatracker.ietf.org/doc/html/rfc3339) format including timezone.\nThis parameter is supported if `creationTimeFrom` is specified\n",
           "type": "string"
         },
         {
@@ -5946,34 +5946,6 @@
             "maxLength": 18,
             "example": "+16501234567"
           }
-        }
-      ]
-    },
-    {
-      "name": "ReadCallSessionStatusParameters",
-      "description": "Query parameters for operation readCallSessionStatus",
-      "fields": [
-        {
-          "name": "timestamp",
-          "description": "The date and time of a call session latest change",
-          "type": "string"
-        },
-        {
-          "name": "timeout",
-          "description": "The time frame of awaiting for a status change before sending\nthe resulting one in response\n",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "PauseResumeCallRecordingParameters",
-      "description": "Query parameters for operation pauseResumeCallRecording",
-      "fields": [
-        {
-          "name": "brandId",
-          "description": "Identifies a brand of a logged-in user or a brand of a sign-up session",
-          "type": "string",
-          "default": "~"
         }
       ]
     },
@@ -14535,7 +14507,7 @@
         {
           "type": "string",
           "format": "date-time",
-          "description": "The time when the record was last updated",
+          "description": "The time when this history record was created",
           "name": "createdAt",
           "required": true
         }
@@ -14624,7 +14596,7 @@
         },
         {
           "type": "array",
-          "description": "The campaign type(s) used to filter records\n(if requested `coverage` is `Campaign`)\n",
+          "description": "The campaign type(s) used to filter records\n(if requested `coverage` is `CampaignType`)\n",
           "minItems": 1,
           "uniqueItems": true,
           "items": {
@@ -19986,7 +19958,8 @@
           "type": "string",
           "enum": [
             "PhoneLine",
-            "External"
+            "External",
+            "BusinessMobile"
           ],
           "description": "Flip number type",
           "example": "PhoneLine",
@@ -24178,42 +24151,6 @@
       ]
     },
     {
-      "name": "OwnerInfo",
-      "description": "Deprecated. Information on a call owner",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of an account that monitors a call",
-          "name": "accountId"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an extension that monitors a call",
-          "name": "extensionId"
-        },
-        {
-          "type": "string",
-          "description": "Internal identifier of an account brandId that monitors a call",
-          "name": "brandId"
-        }
-      ]
-    },
-    {
-      "name": "RecordingInfo",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Internal identifier of a recording resource",
-          "name": "id"
-        },
-        {
-          "type": "boolean",
-          "description": "True if the recording is active. False if the recording is paused.",
-          "name": "active"
-        }
-      ]
-    },
-    {
       "name": "MakeCallOutCallerInfoRequestFrom",
       "description": "Instance id of the caller. It corresponds to the 1st leg of the CallOut call.",
       "fields": [
@@ -24270,39 +24207,6 @@
       ]
     },
     {
-      "name": "MobilePickupData",
-      "fields": [
-        {
-          "type": "array",
-          "description": "List of extension IDs, configured to pick up a call from Desktop/Mobile applications",
-          "items": {
-            "type": "string"
-          },
-          "name": "ccMailboxes"
-        },
-        {
-          "type": "string",
-          "description": "SIP proxy registration name",
-          "name": "to"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "sid"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "srvlvl"
-        },
-        {
-          "type": "string",
-          "description": "User data",
-          "name": "srvLvlExt"
-        }
-      ]
-    },
-    {
       "name": "CallSessionObject",
       "description": "Call session information",
       "fields": [
@@ -24332,6 +24236,117 @@
           "format": "date-time",
           "description": "Date and time of the latest session update represented in Unix time format",
           "name": "creationTime"
+        }
+      ]
+    },
+    {
+      "name": "MakeCallOutCallerInfoRequestTo",
+      "description": "Phone number of the called party. This number corresponds to the 2nd leg of a CallOut call",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Phone number in E.164 format, short codes (*67, *86), emergency (911, 112) or special (988) numbers",
+          "example": "+16502223366",
+          "name": "phoneNumber"
+        },
+        {
+          "type": "string",
+          "description": "Extension number",
+          "example": "103",
+          "name": "extensionNumber"
+        }
+      ]
+    },
+    {
+      "name": "CallSession",
+      "fields": [
+        {
+          "$ref": "CallSessionObject",
+          "name": "session"
+        }
+      ]
+    },
+    {
+      "name": "Attributes",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Indicates that this party is agent of new call queue",
+          "name": "queueCall"
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates that it was emergency ringback to party",
+          "name": "emergencyCallback"
+        }
+      ]
+    },
+    {
+      "name": "OwnerInfo",
+      "description": "Deprecated. Information on a call owner",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of an account that monitors a call",
+          "name": "accountId"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an extension that monitors a call",
+          "name": "extensionId"
+        },
+        {
+          "type": "string",
+          "description": "Internal identifier of an account brandId that monitors a call",
+          "name": "brandId"
+        }
+      ]
+    },
+    {
+      "name": "RecordingInfo",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a recording resource",
+          "name": "id"
+        },
+        {
+          "type": "boolean",
+          "description": "True if the recording is active. False if the recording is paused.",
+          "name": "active"
+        }
+      ]
+    },
+    {
+      "name": "MobilePickupData",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of extension IDs, configured to pick up a call from Desktop/Mobile applications",
+          "items": {
+            "type": "string"
+          },
+          "name": "ccMailboxes"
+        },
+        {
+          "type": "string",
+          "description": "SIP proxy registration name",
+          "name": "to"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "sid"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "srvlvl"
+        },
+        {
+          "type": "string",
+          "description": "User data",
+          "name": "srvLvlExt"
         }
       ]
     },
@@ -24459,24 +24474,6 @@
       ]
     },
     {
-      "name": "MakeCallOutCallerInfoRequestTo",
-      "description": "Phone number of the called party. This number corresponds to the 2nd leg of a CallOut call",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Phone number in E.164 format, short codes (*67, *86), emergency (911, 112) or special (988) numbers",
-          "example": "+16502223366",
-          "name": "phoneNumber"
-        },
-        {
-          "type": "string",
-          "description": "Extension number",
-          "example": "103",
-          "name": "extensionNumber"
-        }
-      ]
-    },
-    {
       "name": "ParkInfo",
       "description": "Call park information",
       "fields": [
@@ -24484,30 +24481,6 @@
           "type": "string",
           "description": "Call park identifier",
           "name": "id"
-        }
-      ]
-    },
-    {
-      "name": "CallSession",
-      "fields": [
-        {
-          "$ref": "CallSessionObject",
-          "name": "session"
-        }
-      ]
-    },
-    {
-      "name": "Attributes",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Indicates that this party is agent of new call queue",
-          "name": "queueCall"
-        },
-        {
-          "type": "boolean",
-          "description": "Indicates that it was emergency ringback to party",
-          "name": "emergencyCallback"
         }
       ]
     },
@@ -24831,12 +24804,25 @@
       ]
     },
     {
+      "name": "DeletePartyRequest",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Keep conference session alive after deleting the party",
+          "default": false,
+          "example": false,
+          "name": "keepConferenceAlive"
+        }
+      ]
+    },
+    {
       "name": "CallPartyFlip",
       "fields": [
         {
           "type": "string",
           "description": "Call flip id",
-          "name": "callFlipId"
+          "name": "callFlipId",
+          "required": true
         }
       ]
     },
@@ -24934,11 +24920,13 @@
         {
           "type": "string",
           "description": "Text to reply",
-          "name": "replyWithText"
+          "name": "replyWithText",
+          "required": true
         },
         {
           "$ref": "ReplyWithPattern",
-          "name": "replyWithPattern"
+          "name": "replyWithPattern",
+          "required": true
         }
       ]
     },
@@ -25073,16 +25061,6 @@
       ]
     },
     {
-      "name": "CallRecordingUpdate",
-      "fields": [
-        {
-          "type": "boolean",
-          "description": "Recording status",
-          "name": "active"
-        }
-      ]
-    },
-    {
       "name": "CallRecording",
       "fields": [
         {
@@ -25094,6 +25072,35 @@
           "type": "boolean",
           "description": "Call recording status",
           "name": "active"
+        },
+        {
+          "type": "string",
+          "description": "Recording mode",
+          "enum": [
+            "Automatic",
+            "OnDemand"
+          ],
+          "name": "mode"
+        },
+        {
+          "type": "string",
+          "description": "Recording view",
+          "enum": [
+            "Party",
+            "Session"
+          ],
+          "name": "view"
+        }
+      ]
+    },
+    {
+      "name": "CallRecordingUpdate",
+      "fields": [
+        {
+          "type": "boolean",
+          "description": "Recording status",
+          "name": "active",
+          "required": true
         }
       ]
     },
@@ -25104,7 +25111,8 @@
           "type": "string",
           "description": "Device ID that is used to answer to incoming call.",
           "example": "400018633008",
-          "name": "deviceId"
+          "name": "deviceId",
+          "required": true
         }
       ]
     },
@@ -25414,6 +25422,12 @@
       "fields": [
         {
           "type": "string",
+          "description": "Internal identifier of a template. Ignored on input",
+          "name": "id",
+          "required": false
+        },
+        {
+          "type": "string",
           "description": "Name of a template",
           "name": "displayName",
           "required": true
@@ -25422,6 +25436,16 @@
           "$ref": "MessageTemplateInfo",
           "name": "body",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Specifies if a template is available on a user (Personal) or a company (Company) level",
+          "enum": [
+            "Company",
+            "Personal"
+          ],
+          "name": "scope",
+          "required": false
         },
         {
           "$ref": "Site",
@@ -25488,27 +25512,6 @@
         {
           "$ref": "Site",
           "name": "site"
-        }
-      ]
-    },
-    {
-      "name": "MessageTemplateUpdateRequest",
-      "fields": [
-        {
-          "type": "string",
-          "description": "Name of a template",
-          "name": "displayName",
-          "required": false
-        },
-        {
-          "$ref": "MessageTemplateInfo",
-          "name": "body",
-          "required": true
-        },
-        {
-          "$ref": "Site",
-          "name": "site",
-          "required": false
         }
       ]
     },
@@ -39797,8 +39800,12 @@
             "InternationalDisabled",
             "DestinationBlocked",
             "NotEnoughFunds",
-            "NoSuchUser",
-            "Error"
+            "NosuchUser",
+            "Error",
+            "CannotReach",
+            "NoAnsweringMachine",
+            "NoSessionFound",
+            "Unknown"
           ],
           "name": "callStatus"
         },
@@ -39818,8 +39825,12 @@
             "InternationalDisabled",
             "DestinationBlocked",
             "NotEnoughFunds",
-            "NoSuchUser",
-            "Error"
+            "NosuchUser",
+            "Error",
+            "CannotReach",
+            "NoAnsweringMachine",
+            "NoSessionFound",
+            "Unknown"
           ],
           "name": "callerStatus"
         },
@@ -39839,8 +39850,12 @@
             "InternationalDisabled",
             "DestinationBlocked",
             "NotEnoughFunds",
-            "NoSuchUser",
-            "Error"
+            "NosuchUser",
+            "Error",
+            "CannotReach",
+            "NoAnsweringMachine",
+            "NoSessionFound",
+            "Unknown"
           ],
           "name": "calleeStatus"
         }
@@ -63320,8 +63335,7 @@
           "withParameter": true,
           "responseSchema": {
             "$ref": "CallSessionObject"
-          },
-          "queryParameters": "readCallSessionStatusParameters"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}",
@@ -65498,7 +65512,7 @@
           "responseSchema": {
             "$ref": "MessageTemplateResponse"
           },
-          "bodyParameters": "messageTemplateUpdateRequest"
+          "bodyParameters": "messageTemplateRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/message-store-templates/{templateId}",
@@ -66239,7 +66253,8 @@
           "operationId": "deleteCallParty",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": true
+          "withParameter": true,
+          "bodyParameters": "deletePartyRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}",
@@ -68503,7 +68518,7 @@
           "responseSchema": {
             "$ref": "MessageTemplateResponse"
           },
-          "bodyParameters": "messageTemplateUpdateRequest"
+          "bodyParameters": "messageTemplateRequest"
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/message-store-templates/{templateId}",
@@ -68980,7 +68995,10 @@
           "operationId": "startCallRecording",
           "rateLimitGroup": "Light",
           "appPermission": "CallControl",
-          "withParameter": false
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "CallRecording"
+          }
         },
         {
           "endpoint": "/restapi/{apiVersion}/account/{accountId}/telephony/sessions/{telephonySessionId}/parties/{partyId}/recordings/{recordingId}",
@@ -68998,7 +69016,6 @@
           "responseSchema": {
             "$ref": "CallRecording"
           },
-          "queryParameters": "pauseResumeCallRecordingParameters",
           "bodyParameters": "callRecordingUpdate"
         }
       ],
