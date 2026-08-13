@@ -126,6 +126,7 @@ x-tagGroups:
       - Multi-Site
       - Phone Numbers
       - Presence
+      - Presence Monitored Lists
       - Regional Settings
       - User Permissions
       - User Settings
@@ -164,7 +165,9 @@ x-tagGroups:
       - BYOC
       - Support Agent Permissions
       - MS Teams Direct Routing
+      - Application Extensions
       - AUX Codes
+      - Call Disposition Codes
   - name: Address Book
     tags:
       - External Contacts
@@ -249,6 +252,7 @@ x-tagGroups:
       - Roles
       - Sub Accounts
       - Agent Groups
+      - Dialog Requests
   - name: Utilities
     tags:
       - API Info
@@ -1874,6 +1878,8 @@ paths:
                   description: |
                     Internal identifier of a language. See Get Language
                     List
+                text:
+                  $ref: "#/components/schemas/TextForSpeech"
                 binary:
                   type: string
                   description: Media file to upload
@@ -1986,6 +1992,8 @@ paths:
                 answeringRuleId:
                   type: string
                   description: Internal identifier of an answering rule
+                text:
+                  $ref: "#/components/schemas/TextForSpeech"
                 binary:
                   type: string
                   description: Media file to upload
@@ -2935,6 +2943,7 @@ paths:
         - name: linePooling
           in: query
           description: Pooling type of device - Host - a device with standalone paid phone line which can be linked to a soft client instance - Guest - a device with a linked phone line - None - a device without a phone line or with specific line (free, BLA, etc.)
+          required: false
           schema:
             type: string
             enum:
@@ -2944,25 +2953,30 @@ paths:
         - $ref: "#/components/parameters/DeviceFeature"
         - name: type
           in: query
-          description: Device type
+          description: Device type or multiple device types
+          required: false
+          style: form
+          explode: true
           schema:
-            type: string
-            default: HardPhone
-            enum:
-              - HardPhone
-              - SoftPhone
-              - OtherPhone
-              - MobileDevice
-              - BLA
-              - Paging
-              - WebPhone
-              - WebRTC
-              - Room
+            type: array
+            items:
+              type: string
+              enum:
+                - HardPhone
+                - SoftPhone
+                - OtherPhone
+                - WebRTC
+                - Room
         - name: lineType
           in: query
-          description: Phone line type
+          description: Phone line type or multiple phone line types
+          required: false
+          style: form
+          explode: true
           schema:
-            $ref: "#/components/schemas/PhoneLineTypeEnum"
+            type: array
+            items:
+              $ref: "#/components/schemas/PhoneLineTypeEnum"
       responses:
         "200":
           description: Extension devices information
@@ -3002,6 +3016,35 @@ paths:
       x-throttling-group: Medium
       x-app-permission: EditAccounts
       x-user-permission: EditCompanyDevices
+  "/restapi/v1.0/account/{accountId}/extension/{extensionId}/webapp-devices":
+    get:
+      tags:
+        - Devices
+      summary: List User Web Phone Devices
+      operationId: listWebAppDevices
+      description: |
+        Returns the list of Web Phone (RC App) devices of the specified user extension,
+        and their current registration status (`Online`/`Offline`).
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+        - $ref: "#/components/parameters/ExtensionId"
+      responses:
+        "200":
+          description: List of Web Phone devices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebAppDevicesResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+      x-feature: ReadExtensionDevices
+      x-availability: Limited
+      x-throttling-group: Medium
+      x-app-permission: ReadAccounts
   "/restapi/v2/accounts/{accountId}/cost-centers":
     get:
       tags:
@@ -8878,10 +8921,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CommStateResource"
-      x-feature: ReadExtensionAnsweringRules
+      x-feature: EditExtensionAnsweringRules
       x-availability: Limited
       x-throttling-group: Medium
-      x-app-permission: ReadAccounts
+      x-app-permission: EditExtensions
   "/restapi/v2/accounts/{accountId}/extensions/{extensionId}/comm-handling/voice/state-rules":
     get:
       operationId: listVoiceStateBasedRules
@@ -10346,8 +10389,16 @@ paths:
           description: |
             Internal identifier of a device model for filtering. Multiple
             values are supported
+          style: form
+          explode: true
           schema:
-            type: string
+            type: array
+            minItems: 0
+            maxItems: 100
+            items:
+              type: string
+              minLength: 1
+              maxLength: 18
         - name: compatibleOnly
           in: query
           description: Filters devices which support HELD protocol
@@ -23439,6 +23490,13 @@ components:
         callerIdName:
           type: string
           description: Caller ID Name
+        label:
+          type: string
+          description: Custom user-defined name of a phone number, if any
+        primary:
+          type: boolean
+          description: |
+            Indicates if a phone number is primary, i.e. displayed as 'main number' and called by default
         extension:
           type: object
           description: Reference to the extension this number is assigned to. Omitted for company numbers
@@ -24671,6 +24729,21 @@ components:
           enum:
             - AllDesktopRingTarget
           example: AllDesktopRingTarget
+    CommCloudConnectorTargetResource:
+      title: Ring Target - Cloud Connector
+      required:
+        - destination
+      type: object
+      description: Ring target
+      properties:
+        destination:
+          $ref: "#/components/schemas/CommCloudDestination"
+        type:
+          type: string
+          description: Type of a ring target
+          enum:
+            - CloudConnectorRingTarget
+          example: CloudConnectorRingTarget
     CommDeviceRingTargetResource:
       title: Ring Target - Device
       required:
@@ -24764,6 +24837,12 @@ components:
       allOf:
         - $ref: "#/components/schemas/CommRingTargetResource"
         - $ref: "#/components/schemas/CommIntegrationTargetResource"
+    CommCloudConnectorRingTargetResource:
+      title: Ring Target - Coworker
+      description: Extension of a coworker to be ringed
+      allOf:
+        - $ref: "#/components/schemas/CommCloudConnectorTargetResource"
+        - $ref: "#/components/schemas/CommRingTargetResource"
     CommTerminatingTargetResource:
       title: Terminating Target
       required:
@@ -24782,6 +24861,7 @@ components:
           PhoneNumberTerminatingTarget: "#/components/schemas/CommPhoneNumberTerminatingTargetResource"
           PlayAnnouncementTerminatingTarget: "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource"
           VoiceMailTerminatingTarget: "#/components/schemas/CommVoiceMailTerminatingTargetResource"
+          CloudConnectorTerminatingTarget: "#/components/schemas/CommCloudConnectorTerminatingTargetResource"
     CommActionResource:
       title: Action Resource
       required:
@@ -24851,6 +24931,7 @@ components:
         - FmcPhoneNumberRingTarget
         - IntegrationRingTarget
         - PhoneNumberRingTarget
+        - CloudConnectorRingTarget
     CommStateBasedRulesResource:
       required:
         - records
@@ -24882,6 +24963,7 @@ components:
                   - $ref: "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource"
                   - $ref: "#/components/schemas/CommPhoneNumberTerminatingTargetResource"
                   - $ref: "#/components/schemas/CommExtensionTerminatingTargetResource"
+                  - $ref: "#/components/schemas/CommCloudConnectorTerminatingTargetResource"
                 discriminator:
                   propertyName: type
                   mapping:
@@ -24889,6 +24971,7 @@ components:
                     PhoneNumberTerminatingTarget: "#/components/schemas/CommPhoneNumberTerminatingTargetResource"
                     PlayAnnouncementTerminatingTarget: "#/components/schemas/CommPlayAnnouncementTerminatingTargetResource"
                     VoiceMailTerminatingTarget: "#/components/schemas/CommVoiceMailTerminatingTargetResource"
+                    CloudConnectorTerminatingTarget: "#/components/schemas/CommCloudConnectorTerminatingTargetResource"
             ringingTargetType:
               $ref: "#/components/schemas/CommTerminatingTargetTypeResource"
             terminatingTargetType:
@@ -24936,6 +25019,7 @@ components:
           FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberRingTargetResource"
           IntegrationRingTarget: "#/components/schemas/CommIntegrationRingTargetResource"
           PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberRingTargetResource"
+          CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetResource"
     CommScreeningActionResource:
       title: Screening Action
       required:
@@ -24958,6 +25042,24 @@ components:
               example: ScreeningAction
               enum:
                 - ScreeningAction
+    CommCloudConnectorTerminatingTargetResource:
+      title: Terminating Target - Cloud Connector
+      required:
+        - destination
+        - dispatchingType
+      allOf:
+        - $ref: "#/components/schemas/CommTerminatingTargetResource"
+        - type: object
+          properties:
+            destination:
+              $ref: "#/components/schemas/CommCloudDestination"
+            type:
+              type: string
+              enum:
+                - CloudConnectorTerminatingTarget
+              example: CloudConnectorTerminatingTarget
+            dispatchingType:
+              $ref: "#/components/schemas/CommTerminatingTargetDispatchingTypeResource"
     CommImsPhoneNumberTargetResource:
       title: Ring Target - IMS Phone Number
       required:
@@ -25242,6 +25344,20 @@ components:
         - RingGroupAction
         - RingAlwaysGroupAction
         - TerminatingAction
+    CommCloudDestination:
+      required:
+        - integrationId
+      type: object
+      properties:
+        integrationId:
+          type: string
+          example: "1111111"
+        extensionNumber:
+          type: string
+          example: "88888"
+        phoneNumber:
+          type: string
+          example: "+16509994313"
     CommRingAlwaysRingTargetTypeResource:
       type: string
       description: |
@@ -25302,6 +25418,7 @@ components:
         - PhoneNumberTerminatingTarget
         - PlayAnnouncementTerminatingTarget
         - VoiceMailTerminatingTarget
+        - CloudConnectorTerminatingTarget
     CommScreeningResultTypeResource:
       type: string
       enum:
@@ -25344,6 +25461,7 @@ components:
                   - $ref: "#/components/schemas/CommFmcPhoneNumberRingTargetResource"
                   - $ref: "#/components/schemas/CommIntegrationRingTargetResource"
                   - $ref: "#/components/schemas/CommPhoneNumberRingTargetResource"
+                  - $ref: "#/components/schemas/CommCloudConnectorRingTargetResource"
                 discriminator:
                   propertyName: type
                   mapping:
@@ -25356,6 +25474,7 @@ components:
                     FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberRingTargetResource"
                     IntegrationRingTarget: "#/components/schemas/CommIntegrationRingTargetResource"
                     PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberRingTargetResource"
+                    CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetResource"
             customStartOffset:
               type: integer
               format: int32
@@ -25457,6 +25576,7 @@ components:
           FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberRingTargetRequest"
           IntegrationRingTarget: "#/components/schemas/CommIntegrationRingTargetRequest"
           PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberRingTargetRequest"
+          CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetRequest"
     CommPlayConnectingPromptActionRequest:
       title: Play Connecting Prompt
       required:
@@ -25558,6 +25678,28 @@ components:
                 TerminatingAction: "#/components/schemas/CommTerminatingActionRequest"
         type:
           $ref: "#/components/schemas/CommDispatchingTypeResource"
+    CommCloudConnectorTerminatingTargetRequest:
+      title: Terminating Target - Cloud Connector
+      required:
+        - destination
+        - dispatchingType
+        - name
+      allOf:
+        - $ref: "#/components/schemas/CommTerminatingTargetRequest"
+        - type: object
+          properties:
+            destination:
+              $ref: "#/components/schemas/CommCloudDestination"
+            type:
+              type: string
+              enum:
+                - CloudConnectorTerminatingTarget
+              example: CloudConnectorTerminatingTarget
+            dispatchingType:
+              $ref: "#/components/schemas/CommTerminatingTargetDispatchingTypeResource"
+            name:
+              type: string
+              description: The customised target name
     CommRingGroupActionRequest:
       title: Ring Group Action
       description: Ring targets included in a group will ring simultaneously. Any ring target can be added to a group
@@ -25586,6 +25728,7 @@ components:
                   - $ref: "#/components/schemas/CommFmcPhoneNumberRingTargetRequest"
                   - $ref: "#/components/schemas/CommIntegrationRingTargetRequest"
                   - $ref: "#/components/schemas/CommPhoneNumberRingTargetRequest"
+                  - $ref: "#/components/schemas/CommCloudConnectorRingTargetRequest"
                 discriminator:
                   propertyName: type
                   mapping:
@@ -25598,6 +25741,7 @@ components:
                     FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberRingTargetRequest"
                     IntegrationRingTarget: "#/components/schemas/CommIntegrationRingTargetRequest"
                     PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberRingTargetRequest"
+                    CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetRequest"
             customStartOffset:
               type: integer
               format: int32
@@ -25645,6 +25789,7 @@ components:
                   - $ref: "#/components/schemas/CommPlayAnnouncementTerminatingTargetRequest"
                   - $ref: "#/components/schemas/CommPhoneNumberTerminatingTargetRequest"
                   - $ref: "#/components/schemas/CommExtensionTerminatingTargetRequest"
+                  - $ref: "#/components/schemas/CommCloudConnectorTerminatingTargetRequest"
                 discriminator:
                   propertyName: type
                   mapping:
@@ -25652,6 +25797,7 @@ components:
                     PhoneNumberTerminatingTarget: "#/components/schemas/CommPhoneNumberTerminatingTargetRequest"
                     PlayAnnouncementTerminatingTarget: "#/components/schemas/CommPlayAnnouncementTerminatingTargetRequest"
                     VoiceMailTerminatingTarget: "#/components/schemas/CommVoiceMailTerminatingTargetRequest"
+                    CloudConnectorTerminatingTarget: "#/components/schemas/CommCloudConnectorTerminatingTargetRequest"
             ringingTargetType:
               type: string
               example: VoiceMailTerminatingTarget
@@ -25757,6 +25903,7 @@ components:
           PhoneNumberTerminatingTarget: "#/components/schemas/CommPhoneNumberTerminatingTargetRequest"
           PlayAnnouncementTerminatingTarget: "#/components/schemas/CommPlayAnnouncementTerminatingTargetRequest"
           VoiceMailTerminatingTarget: "#/components/schemas/CommVoiceMailTerminatingTargetRequest"
+          CloudConnectorTerminatingTarget: "#/components/schemas/CommCloudConnectorTerminatingTargetRequest"
     CommCallTypesResource:
       required:
         - queueCallsIncluded
@@ -25876,6 +26023,12 @@ components:
       allOf:
         - $ref: "#/components/schemas/CommRingTargetRequest"
         - $ref: "#/components/schemas/CommCoworkerTargetResource"
+    CommCloudConnectorRingTargetRequest:
+      title: Ring Target - Coworker
+      description: Extension of a coworker to be ringed
+      allOf:
+        - $ref: "#/components/schemas/CommRingTargetRequest"
+        - $ref: "#/components/schemas/CommCloudConnectorTargetRequest"
     CommActionTypeRequest:
       type: string
       enum:
@@ -25925,6 +26078,33 @@ components:
           RingGroupAction: "#/components/schemas/CommRingGroupActionRequest"
           RingAlwaysGroupAction: "#/components/schemas/CommRingAlwaysGroupActionRequest"
           TerminatingAction: "#/components/schemas/CommTerminatingActionRequest"
+    CloudConnectorTargetRequest:
+      title: Ring Target - Cloud Connector
+      required:
+        - destination
+      type: object
+      description: Ring target
+      properties:
+        destination:
+          $ref: "#/components/schemas/CommCloudDestination"
+        type:
+          type: string
+          description: Type of a ring target
+          enum:
+            - CloudConnectorRingTarget
+          example: CloudConnectorRingTarget
+    CommCloudConnectorTargetRequest:
+      title: Ring Target - Cloud Connector
+      required:
+        - name
+      description: Ring target
+      allOf:
+        - $ref: "#/components/schemas/CloudConnectorTargetRequest"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: Cloud Connector Contact
     CommImsPhoneNumberRingTargetRequest:
       title: Ring Target - IMS Phone Number
       allOf:
@@ -25949,6 +26129,7 @@ components:
               - $ref: "#/components/schemas/CommDeviceForwardingTargetRequest"
               - $ref: "#/components/schemas/CommIntegrationForwardingTargetRequest"
               - $ref: "#/components/schemas/CommPhoneNumberForwardingTargetRequest"
+              - $ref: "#/components/schemas/CommCloudConnectorRingTargetRequest"
             discriminator:
               propertyName: type
               mapping:
@@ -25957,6 +26138,7 @@ components:
                 DeviceRingTarget: "#/components/schemas/CommDeviceForwardingTargetRequest"
                 IntegrationRingTarget: "#/components/schemas/CommIntegrationForwardingTargetRequest"
                 PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberForwardingTargetRequest"
+                CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetRequest"
     CommForwardingTargetsResource:
       title: Forwarding Targets
       required:
@@ -25975,6 +26157,7 @@ components:
               - $ref: "#/components/schemas/CommFmcPhoneNumberForwardingTargetResource"
               - $ref: "#/components/schemas/CommIntegrationForwardingTargetResource"
               - $ref: "#/components/schemas/CommPhoneNumberForwardingTargetResource"
+              - $ref: "#/components/schemas/CommCloudConnectorForwardingTargetResource"
             discriminator:
               propertyName: type
               mapping:
@@ -25985,6 +26168,7 @@ components:
                 FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberForwardingTargetResource"
                 IntegrationRingTarget: "#/components/schemas/CommIntegrationForwardingTargetResource"
                 PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberForwardingTargetResource"
+                CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorForwardingTargetResource"
         paging:
           $ref: "#/components/schemas/EnumeratedPagingModel"
     CommCoworkerForwardingTargetResource:
@@ -26013,6 +26197,7 @@ components:
         - ImsPhoneNumberRingTarget
         - IntegrationRingTarget
         - PhoneNumberRingTarget
+        - CloudConnectorRingTarget
     CommFmcPhoneNumberForwardingTargetResource:
       title: Forwarding Target - Fmc Full Phone Number
       allOf:
@@ -26055,11 +26240,23 @@ components:
       allOf:
         - $ref: "#/components/schemas/CommForwardingTargetResource"
         - $ref: "#/components/schemas/CommPhoneNumberTargetResource"
+    CommCloudConnectorForwardingTargetRequest:
+      title: Ring Target - Coworker
+      description: Extension of a coworker to be ringed
+      allOf:
+        - $ref: "#/components/schemas/CloudConnectorTargetRequest"
+        - $ref: "#/components/schemas/CommForwardingTargetRequest"
     CommImsPhoneNumberForwardingTargetResource:
       title: Forwarding Target - IMS Phone Number
       allOf:
         - $ref: "#/components/schemas/CommForwardingTargetResource"
         - $ref: "#/components/schemas/CommImsPhoneNumberTargetResource"
+    CommCloudConnectorForwardingTargetResource:
+      title: Ring Target - Coworker
+      description: Extension of a coworker to be ringed
+      allOf:
+        - $ref: "#/components/schemas/CommCloudConnectorTargetResource"
+        - $ref: "#/components/schemas/CommForwardingTargetResource"
     CommPhoneNumberForwardingTargetRequest:
       title: Forwarding Target - Phone Number
       allOf:
@@ -26120,6 +26317,7 @@ components:
             - $ref: "#/components/schemas/CommDeviceForwardingTargetRequest"
             - $ref: "#/components/schemas/CommIntegrationForwardingTargetRequest"
             - $ref: "#/components/schemas/CommPhoneNumberForwardingTargetRequest"
+            - $ref: "#/components/schemas/CommCloudConnectorRingTargetRequest"
           discriminator:
             propertyName: type
             mapping:
@@ -26128,6 +26326,7 @@ components:
               DeviceRingTarget: "#/components/schemas/CommDeviceForwardingTargetRequest"
               IntegrationRingTarget: "#/components/schemas/CommIntegrationForwardingTargetRequest"
               PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberForwardingTargetRequest"
+              CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorRingTargetRequest"
     CommForwardingTargetRequest:
       title: Forwarding Target
       required:
@@ -26147,6 +26346,7 @@ components:
           ImsPhoneNumberRingTarget: "#/components/schemas/CommImsPhoneNumberRingTargetRequest"
           IntegrationRingTarget: "#/components/schemas/CommIntegrationForwardingTargetRequest"
           PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberForwardingTargetRequest"
+          CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorForwardingTargetRequest"
     CommForwardingTargetTypeResource:
       type: string
       description: Ring target type
@@ -26158,6 +26358,7 @@ components:
         - FmcPhoneNumberRingTarget
         - IntegrationRingTarget
         - PhoneNumberRingTarget
+        - CloudConnectorRingTarget
     CommForwardingTargetResource:
       title: Forwarding Target
       required:
@@ -26176,6 +26377,7 @@ components:
           FmcPhoneNumberRingTarget: "#/components/schemas/CommFmcPhoneNumberForwardingTargetResource"
           IntegrationRingTarget: "#/components/schemas/CommIntegrationForwardingTargetResource"
           PhoneNumberRingTarget: "#/components/schemas/CommPhoneNumberForwardingTargetResource"
+          CloudConnectorRingTarget: "#/components/schemas/CommCloudConnectorForwardingTargetResource"
     CommExtensionListResource:
       title: Extension List
       required:
@@ -28076,7 +28278,6 @@ components:
         type:
           type: string
           description: Device type
-          default: HardPhone
           enum:
             - BLA
             - SoftPhone
@@ -28515,6 +28716,11 @@ components:
         freeServiceCredit:
           type: number
           format: double
+    TrustedFlag:
+      type: boolean
+      description: |
+        Specifies emergency address validation during the ERL creation/update.
+        If set to 'true', then address validation for non-US addresses is skipped
     DeviceEmergencyInfo:
       type: object
       properties:
@@ -28673,6 +28879,10 @@ components:
           description: Address format ID
         addressFormatStatus:
           $ref: "#/components/schemas/AddressFormatStatus"
+        trusted:
+          allOf:
+            - $ref: "#/components/schemas/TrustedFlag"
+            - readOnly: true
       description: Company emergency response location details
     OutboundProxyInfo:
       type: object
@@ -30769,6 +30979,7 @@ components:
       description: Call delegation type
       enum:
         - Coworker
+        - QueueForwarding
         - Unknown
     CallDirectionEnum:
       description: The direction of a call
@@ -30933,6 +31144,9 @@ components:
           $ref: "#/components/schemas/BillingInfo"
         internalType:
           $ref: "#/components/schemas/CallInternalTypeEnum"
+        finished:
+          type: boolean
+          description: Indicates whether the call has reached a finished state
     CallTransportEnum:
       type: string
       description: |
@@ -33432,11 +33646,9 @@ components:
           enum:
             - Public
         trusted:
-          type: boolean
-          default: false
-          description: |
-            Specifies emergency address validation during the ERL creation/update.
-            If set to 'true', then address validation for non-US addresses is skipped
+          allOf:
+            - $ref: "#/components/schemas/TrustedFlag"
+            - default: false
     EmergencyAddressStatus:
       type: string
       description: Emergency address status
@@ -33580,6 +33792,8 @@ components:
           description: Address format ID
         addressFormatStatus:
           $ref: "#/components/schemas/AddressFormatStatus"
+        trusted:
+          $ref: "#/components/schemas/TrustedFlag"
       description: Company emergency response location details
     LocationOwnerInfo:
       type: object
@@ -33605,15 +33819,7 @@ components:
         - Active
         - Inactive
     EmergencyLocationResponseResource:
-      allOf:
-        - $ref: "#/components/schemas/CommonEmergencyLocationResource"
-        - type: object
-          properties:
-            trusted:
-              type: boolean
-              description: |
-                Specifies emergency address validation during the ERL creation/update.
-                If set to 'true', then address validation for non-US addresses is skipped
+      $ref: "#/components/schemas/CommonEmergencyLocationResource"
     EmergencyLocationVisibility:
       type: string
       description: |
@@ -35056,6 +35262,10 @@ components:
           type: string
           description: Message that describes the error. This message can be used in UI.
           readOnly: true
+        parameterName:
+          type: string
+          description: Name of invalid parameter.
+          readOnly: true
       description: Description of an error occurred during request processing. This data type can be used only in readonly mode, no writing is allowed
     BusinessSiteResource:
       type: object
@@ -35069,6 +35279,30 @@ components:
         code:
           type: string
           example: "1007"
+    UsageTypes:
+      type: string
+      enum:
+        - MainCompanyNumber
+        - AdditionalCompanyNumber
+        - DirectNumber
+        - CompanyNumber
+        - CompanyFaxNumber
+        - ForwardedNumber
+        - ForwardedCompanyNumber
+        - ContactCenterNumber
+        - ConferencingNumber
+        - MeetingsNumber
+        - NumberPool
+        - ELIN
+        - BusinessMobileNumber
+        - ExternalMobileNumber
+        - IntegrationNumber
+        - PartnerBusinessMobileNumber
+        - NumberPoolPartnerBusinessMobileNumber
+        - NumberStorage
+        - FmcBusinessMobileNumber
+        - InventoryFmcBusinessMobileNumber
+        - InventoryMobileNumber
     AdgPhoneNumberResource:
       type: object
       properties:
@@ -35086,15 +35320,14 @@ components:
           description: Custom user name of a phone number, if any
           example: Boss
         usageType:
-          type: string
           description: Usage type of phone number
-          enum:
-            - MobileNumber
-            - ContactNumber
-            - DirectNumber
-            - ForwardedNumber
-            - PartnerBusinessMobileNumber
           example: DirectNumber
+          anyOf:
+            - $ref: "#/components/schemas/UsageTypes"
+            - type: string
+              enum:
+                - MobileNumber
+                - ContactNumber
         hidden:
           type: boolean
           description: Specifies if a phone number should be hidden or not
@@ -36058,6 +36291,8 @@ components:
           $ref: "#/components/schemas/CustomGreetingAnsweringRuleInfo"
         language:
           $ref: "#/components/schemas/CustomCompanyGreetingLanguageInfo"
+        text:
+          $ref: "#/components/schemas/TextForSpeech"
     CustomGreetingAnsweringRuleInfo:
       type: object
       properties:
@@ -36069,6 +36304,11 @@ components:
           type: string
           description: Internal identifier of an answering rule
       description: Information on an answering rule that the greeting is applied to
+    TextForSpeech:
+      type: string
+      description: Text to be used for speech transcription
+      maxLength: 2000
+      example: Welcome to RingCentral
     RoleResource:
       type: object
       properties:
@@ -38931,11 +39171,9 @@ components:
           type: string
           description: Address format ID
         trusted:
-          type: boolean
-          default: false
-          description: |
-            Specifies emergency address validation during the ERL creation/update.
-            If set to 'true', then address validation for non-US addresses is skipped
+          allOf:
+            - $ref: "#/components/schemas/TrustedFlag"
+            - default: false
         address:
           $ref: "#/components/schemas/EmergencyAddressResourceRequest"
         site:
@@ -41434,6 +41672,50 @@ components:
           type: string
           description: Internal identifier of a resource (required when alternative syntax with '*' is used)
           example: "1724099032020"
+    WebAppDevicesResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          description: List of Web Phone devices
+          items:
+            $ref: "#/components/schemas/WebAppDeviceRecord"
+    WebAppDeviceRecord:
+      type: object
+      required:
+        - id
+        - type
+        - status
+      properties:
+        id:
+          type: string
+          description: Internal identifier of a device
+        type:
+          type: string
+          description: Device type. Always `WebPhone` for Web Phone (RC App) devices
+          enum:
+            - WebPhone
+        name:
+          type: string
+          description: Device name
+        serial:
+          type: string
+          description: Endpoint ID of the Web Phone (RC App) instance
+        status:
+          type: string
+          description: |
+            Current registration status of the device. Set to `Online` when the device
+            has an active registration; otherwise `Offline`.
+          default: Offline
+          enum:
+            - Offline
+            - Online
+        expiresIn:
+          type: integer
+          format: int32
+          description: |
+            Time to live (TTL) of the current registration, in seconds.
+            Returned only while the device has an active registration.
     CustomUserGreetingInfo:
       type: object
       properties:
@@ -41470,6 +41752,8 @@ components:
           description: Link to a greeting content (audio file)
         answeringRule:
           $ref: "#/components/schemas/CustomGreetingAnsweringRuleInfo"
+        text:
+          $ref: "#/components/schemas/TextForSpeech"
     UpdateUnifiedPresence:
       type: object
       properties:
@@ -43726,7 +44010,7 @@ components:
         - $ref: "#/components/schemas/CreateDeviceRegistrationResponse"
         - type: object
           properties:
-            pstnConfigured:
+            persistGatewayConfigured:
               type: boolean
               description: Indicates whether the user has an RC App device configured in a PSTN gateway
     SIPInfoRequest:
@@ -43780,6 +44064,8 @@ components:
           description: Address format ID
         addressFormatStatus:
           $ref: "#/components/schemas/AddressFormatStatus"
+        trusted:
+          $ref: "#/components/schemas/TrustedFlag"
     DevicePhoneLinesInfo:
       type: object
       properties:
@@ -49625,6 +49911,7 @@ components:
       name: feature
       in: query
       description: Device feature or multiple features supported
+      required: false
       style: form
       explode: true
       schema:
