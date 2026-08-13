@@ -567,32 +567,38 @@
         },
         {
           "name": "type",
-          "description": "Device type",
-          "type": "string",
-          "default": "HardPhone",
-          "enum": [
-            "HardPhone",
-            "SoftPhone",
-            "OtherPhone",
-            "MobileDevice",
-            "BLA",
-            "Paging",
-            "WebPhone",
-            "WebRTC",
-            "Room"
-          ]
+          "description": "Device type or multiple device types",
+          "style": "form",
+          "explode": true,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "HardPhone",
+              "SoftPhone",
+              "OtherPhone",
+              "WebRTC",
+              "Room"
+            ]
+          }
         },
         {
           "name": "lineType",
-          "description": "The type of phone line",
-          "type": "string",
-          "enum": [
-            "Unknown",
-            "Standalone",
-            "StandaloneFree",
-            "BlaPrimary",
-            "BlaSecondary"
-          ]
+          "description": "Phone line type or multiple phone line types",
+          "style": "form",
+          "explode": true,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The type of phone line",
+            "enum": [
+              "Unknown",
+              "Standalone",
+              "StandaloneFree",
+              "BlaPrimary",
+              "BlaSecondary"
+            ]
+          }
         }
       ]
     },
@@ -3350,7 +3356,16 @@
         {
           "name": "modelId",
           "description": "Internal identifier of a device model for filtering. Multiple\nvalues are supported\n",
-          "type": "string"
+          "style": "form",
+          "explode": true,
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 18
+          }
         },
         {
           "name": "compatibleOnly",
@@ -5973,6 +5988,14 @@
           "required": false
         },
         {
+          "type": "string",
+          "description": "Text to be used for speech transcription",
+          "maxLength": 2000,
+          "example": "Welcome to RingCentral",
+          "name": "text",
+          "required": false
+        },
+        {
           "description": "Media file to upload",
           "name": "binary",
           "required": true,
@@ -6004,6 +6027,14 @@
           ],
           "name": "type",
           "required": true
+        },
+        {
+          "type": "string",
+          "description": "Text to be used for speech transcription",
+          "maxLength": 2000,
+          "example": "Welcome to RingCentral",
+          "name": "text",
+          "required": false
         },
         {
           "description": "Media file to upload",
@@ -14939,6 +14970,18 @@
           "required": false
         },
         {
+          "type": "string",
+          "description": "Custom user-defined name of a phone number, if any",
+          "name": "label",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates if a phone number is primary, i.e. displayed as 'main number' and called by default\n",
+          "name": "primary",
+          "required": false
+        },
+        {
           "description": "Reference to the extension this number is assigned to. Omitted for company numbers",
           "required": false,
           "$ref": "AccountPhoneNumberInfoExtension",
@@ -16647,6 +16690,27 @@
       ]
     },
     {
+      "name": "CommCloudConnectorTargetResource",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Type of a ring target",
+          "enum": [
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "CommDeviceRingTargetResource",
       "fields": [
         {
@@ -16666,7 +16730,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "DeviceRingTarget",
           "name": "type",
@@ -16758,7 +16823,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "VoiceMailTerminatingTarget",
           "title": "Terminating Target Type",
@@ -16854,7 +16920,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "IntegrationRingTarget",
           "name": "type",
@@ -16864,6 +16931,41 @@
           "$ref": "CommIntegrationResource",
           "name": "integration",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorRingTargetResource",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Ring target type",
+          "enum": [
+            "AllDesktopRingTarget",
+            "AllMobileRingTarget",
+            "CoworkerRingTarget",
+            "DeviceRingTarget",
+            "HotdeskRingTarget",
+            "ImsPhoneNumberRingTarget",
+            "FmcPhoneNumberRingTarget",
+            "IntegrationRingTarget",
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "required": false
         }
       ]
     },
@@ -16883,7 +16985,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "type",
           "required": true
@@ -17029,7 +17132,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "ringingTargetType",
           "required": false
@@ -17042,7 +17146,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "terminatingTargetType",
           "required": false
@@ -17090,7 +17195,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "name": "type",
           "required": true
@@ -17141,6 +17247,46 @@
             "PlayCallerNameOnly"
           ],
           "name": "screeningResult",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorTerminatingTargetResource",
+      "fields": [
+        {
+          "type": "string",
+          "name": "name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "enum": [
+            "ExtensionTerminatingTarget",
+            "PhoneNumberTerminatingTarget",
+            "PlayAnnouncementTerminatingTarget",
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
+          ],
+          "example": "CloudConnectorTerminatingTarget",
+          "title": "Terminating Target Type",
+          "description": "Terminating target type",
+          "name": "type",
+          "required": true
+        },
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "title": "Dispatching Type - Terminating Target",
+          "type": "string",
+          "enum": [
+            "Ringing",
+            "Terminating"
+          ],
+          "name": "dispatchingType",
           "required": true
         }
       ]
@@ -17323,7 +17469,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerRingTarget",
           "name": "type",
@@ -17376,7 +17523,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "PlayAnnouncementTerminatingTarget",
           "title": "Terminating Target Type",
@@ -17485,7 +17633,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "ExtensionTerminatingTarget",
           "title": "Terminating Target Type",
@@ -17530,7 +17679,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "AllDesktopRingTarget",
           "description": "Ring target type",
@@ -17641,6 +17791,29 @@
       ]
     },
     {
+      "name": "CommCloudDestination",
+      "fields": [
+        {
+          "type": "string",
+          "example": "1111111",
+          "name": "integrationId",
+          "required": true
+        },
+        {
+          "type": "string",
+          "example": "88888",
+          "name": "extensionNumber",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "+16509994313",
+          "name": "phoneNumber",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "CommPlayConnectingPromptActionResource",
       "description": "Action information",
       "fields": [
@@ -17692,7 +17865,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "FmcPhoneNumberRingTarget",
           "name": "type",
@@ -17720,7 +17894,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "PhoneNumberTerminatingTarget",
           "title": "Terminating Target Type",
@@ -17764,7 +17939,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "ImsPhoneNumberRingTarget",
           "name": "type",
@@ -17808,7 +17984,7 @@
           "minItems": 1,
           "description": "Target information",
           "items": {
-            "title": "Phone Number Target",
+            "title": "Ring Target",
             "name": "CommAllDesktopRingTargetResource",
             "required": [
               "type",
@@ -17863,7 +18039,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "AllMobileRingTarget",
           "description": "Ring target type",
@@ -17922,7 +18099,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "HotdeskRingTarget",
           "name": "type",
@@ -17955,7 +18133,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "PhoneNumberRingTarget",
           "name": "type",
@@ -18031,7 +18210,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "name": "type",
           "required": true
@@ -18085,7 +18265,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "HotdeskRingTarget",
           "name": "type",
@@ -18103,7 +18284,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "PhoneNumberTerminatingTarget",
           "title": "Terminating Target Type",
@@ -18197,6 +18379,47 @@
       ]
     },
     {
+      "name": "CommCloudConnectorTerminatingTargetRequest",
+      "fields": [
+        {
+          "type": "string",
+          "enum": [
+            "ExtensionTerminatingTarget",
+            "PhoneNumberTerminatingTarget",
+            "PlayAnnouncementTerminatingTarget",
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
+          ],
+          "example": "CloudConnectorTerminatingTarget",
+          "title": "Terminating Target Type",
+          "description": "Terminating target type",
+          "name": "type",
+          "required": true
+        },
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "title": "Dispatching Type - Terminating Target",
+          "type": "string",
+          "enum": [
+            "Ringing",
+            "Terminating"
+          ],
+          "name": "dispatchingType",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "The customised target name",
+          "name": "name",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "CommRingGroupActionRequest",
       "description": "Action information",
       "fields": [
@@ -18226,14 +18449,15 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "title": "Phone Number Target",
+            "title": "Ring Target - Cloud Connector",
             "name": "CommAllDesktopRingTargetRequest",
             "required": [
               "type",
               "extension",
               "device",
               "destination",
-              "integration"
+              "integration",
+              "name"
             ],
             "description": "Ring target",
             "$ref": "CommRingGroupActionRequestTargets"
@@ -18309,7 +18533,8 @@
               "type",
               "dispatchingType",
               "destination",
-              "extension"
+              "extension",
+              "name"
             ],
             "name": "CommVoiceMailTerminatingTargetRequest",
             "$ref": "CommTerminatingActionRequestTargets"
@@ -18346,7 +18571,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "PhoneNumberRingTarget",
           "name": "type",
@@ -18379,7 +18605,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "DeviceRingTarget",
           "name": "type",
@@ -18407,7 +18634,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "VoiceMailTerminatingTarget",
           "title": "Terminating Target Type",
@@ -18441,7 +18669,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "FmcPhoneNumberRingTarget",
           "name": "type",
@@ -18534,7 +18763,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "type",
           "required": true
@@ -18566,7 +18796,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "AllDesktopRingTarget",
           "description": "Ring target type",
@@ -18613,7 +18844,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "AllMobileRingTarget",
           "description": "Ring target type",
@@ -18681,7 +18913,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "PlayAnnouncementTerminatingTarget",
           "title": "Terminating Target Type",
@@ -18739,7 +18972,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "example": "ExtensionTerminatingTarget",
           "title": "Terminating Target Type",
@@ -18780,7 +19014,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerRingTarget",
           "name": "type",
@@ -18789,6 +19024,42 @@
         {
           "$ref": "CommReferencedExtensionResource",
           "name": "extension",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorRingTargetRequest",
+      "description": "Ring target",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Ring target type",
+          "enum": [
+            "AllDesktopRingTarget",
+            "AllMobileRingTarget",
+            "CoworkerRingTarget",
+            "DeviceRingTarget",
+            "HotdeskRingTarget",
+            "ImsPhoneNumberRingTarget",
+            "FmcPhoneNumberRingTarget",
+            "IntegrationRingTarget",
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": true
+        },
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "example": "Cloud Connector Contact",
+          "name": "name",
           "required": true
         }
       ]
@@ -18847,6 +19118,54 @@
       ]
     },
     {
+      "name": "CloudConnectorTargetRequest",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Type of a ring target",
+          "enum": [
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorTargetRequest",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Type of a ring target",
+          "enum": [
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": false
+        },
+        {
+          "type": "string",
+          "example": "Cloud Connector Contact",
+          "name": "name",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "CommImsPhoneNumberRingTargetRequest",
       "fields": [
         {
@@ -18861,7 +19180,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "ImsPhoneNumberRingTarget",
           "name": "type",
@@ -18889,7 +19209,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "IntegrationRingTarget",
           "name": "type",
@@ -18908,14 +19229,15 @@
         {
           "type": "array",
           "items": {
-            "title": "Phone Number Target",
+            "title": "Ring Target - Cloud Connector",
             "description": "Ring target",
             "required": [
               "extension",
               "type",
               "device",
               "integration",
-              "destination"
+              "destination",
+              "name"
             ],
             "name": "CommCoworkerAppsRingTargetRequest",
             "$ref": "CommRemoveForwardingTargetsRequestRecords"
@@ -18931,7 +19253,7 @@
         {
           "type": "array",
           "items": {
-            "title": "Phone Number Target",
+            "title": "Forwarding Target",
             "description": "Ring target",
             "required": [
               "extension",
@@ -18973,7 +19295,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerRingTarget",
           "name": "type",
@@ -18998,7 +19321,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "DeviceRingTarget",
           "name": "type",
@@ -19033,7 +19357,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "IntegrationRingTarget",
           "name": "type",
@@ -19059,7 +19384,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "FmcPhoneNumberRingTarget",
           "name": "type",
@@ -19090,7 +19416,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerRingTarget",
           "name": "type",
@@ -19121,7 +19448,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerAppsRingTarget",
           "name": "type",
@@ -19160,7 +19488,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "PhoneNumberRingTarget",
           "name": "type",
@@ -19170,6 +19499,38 @@
           "$ref": "CommPhoneNumberResource",
           "name": "destination",
           "required": true
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorForwardingTargetRequest",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Ring target type",
+          "enum": [
+            "CoworkerAppsRingTarget",
+            "CoworkerRingTarget",
+            "DeviceRingTarget",
+            "ImsPhoneNumberRingTarget",
+            "IntegrationRingTarget",
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "name": "name",
+          "required": false
         }
       ]
     },
@@ -19186,7 +19547,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "ImsPhoneNumberRingTarget",
           "name": "type",
@@ -19195,6 +19557,34 @@
         {
           "$ref": "CommPhoneNumberResource",
           "name": "destination",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "CommCloudConnectorForwardingTargetResource",
+      "description": "Ring target",
+      "fields": [
+        {
+          "$ref": "CommCloudDestination",
+          "name": "destination",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Ring target type",
+          "enum": [
+            "CoworkerAppsRingTarget",
+            "CoworkerRingTarget",
+            "DeviceRingTarget",
+            "ImsPhoneNumberRingTarget",
+            "FmcPhoneNumberRingTarget",
+            "IntegrationRingTarget",
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
+          ],
+          "example": "CloudConnectorRingTarget",
+          "name": "type",
           "required": true
         }
       ]
@@ -19216,7 +19606,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "PhoneNumberRingTarget",
           "name": "type",
@@ -19242,7 +19633,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "IntegrationRingTarget",
           "name": "type",
@@ -19269,7 +19661,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "CoworkerAppsRingTarget",
           "name": "type",
@@ -19295,7 +19688,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "DeviceRingTarget",
           "name": "type",
@@ -19338,7 +19732,7 @@
           "required": false
         },
         {
-          "title": "Phone Number Target",
+          "title": "Ring Target - Cloud Connector",
           "description": "Ring target",
           "required": true,
           "name": "bulkItem",
@@ -19363,7 +19757,8 @@
             "DeviceRingTarget",
             "ImsPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "name": "type",
           "required": true
@@ -19383,7 +19778,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "name": "type",
           "required": true
@@ -21648,7 +22044,6 @@
         {
           "type": "string",
           "description": "Device type",
-          "default": "HardPhone",
           "enum": [
             "BLA",
             "SoftPhone",
@@ -22511,6 +22906,12 @@
           ],
           "description": "Address format statuses",
           "name": "addressFormatStatus"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
+          "name": "trusted",
+          "readOnly": true
         }
       ]
     },
@@ -25930,6 +26331,7 @@
           "description": "Call delegation type",
           "enum": [
             "Coworker",
+            "QueueForwarding",
             "Unknown"
           ],
           "name": "delegationType",
@@ -26142,6 +26544,12 @@
             "Unknown"
           ],
           "name": "internalType",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates whether the call has reached a finished state",
+          "name": "finished",
           "required": false
         },
         {
@@ -26345,6 +26753,7 @@
           "description": "Call delegation type",
           "enum": [
             "Coworker",
+            "QueueForwarding",
             "Unknown"
           ],
           "name": "delegationType",
@@ -26557,6 +26966,12 @@
             "Unknown"
           ],
           "name": "internalType",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates whether the call has reached a finished state",
+          "name": "finished",
           "required": false
         }
       ]
@@ -26663,6 +27078,7 @@
           "description": "Call delegation type",
           "enum": [
             "Coworker",
+            "QueueForwarding",
             "Unknown"
           ],
           "name": "delegationType",
@@ -26875,6 +27291,12 @@
             "Unknown"
           ],
           "name": "internalType",
+          "required": false
+        },
+        {
+          "type": "boolean",
+          "description": "Indicates whether the call has reached a finished state",
+          "name": "finished",
           "required": false
         },
         {
@@ -30268,9 +30690,9 @@
         },
         {
           "type": "boolean",
-          "default": false,
           "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
-          "name": "trusted"
+          "name": "trusted",
+          "default": false
         }
       ]
     },
@@ -30492,6 +30914,11 @@
           ],
           "description": "Address format statuses",
           "name": "addressFormatStatus"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
+          "name": "trusted"
         }
       ]
     },
@@ -32757,6 +33184,12 @@
           "description": "Message that describes the error. This message can be used in UI.",
           "readOnly": true,
           "name": "message"
+        },
+        {
+          "type": "string",
+          "description": "Name of invalid parameter.",
+          "readOnly": true,
+          "name": "parameterName"
         }
       ]
     },
@@ -32805,16 +33238,34 @@
           "name": "label"
         },
         {
-          "type": "string",
           "description": "Usage type of phone number",
-          "enum": [
-            "MobileNumber",
-            "ContactNumber",
-            "DirectNumber",
-            "ForwardedNumber",
-            "PartnerBusinessMobileNumber"
-          ],
           "example": "DirectNumber",
+          "type": "string",
+          "enum": [
+            "MainCompanyNumber",
+            "AdditionalCompanyNumber",
+            "DirectNumber",
+            "CompanyNumber",
+            "CompanyFaxNumber",
+            "ForwardedNumber",
+            "ForwardedCompanyNumber",
+            "ContactCenterNumber",
+            "ConferencingNumber",
+            "MeetingsNumber",
+            "NumberPool",
+            "ELIN",
+            "BusinessMobileNumber",
+            "ExternalMobileNumber",
+            "IntegrationNumber",
+            "PartnerBusinessMobileNumber",
+            "NumberPoolPartnerBusinessMobileNumber",
+            "NumberStorage",
+            "FmcBusinessMobileNumber",
+            "InventoryFmcBusinessMobileNumber",
+            "InventoryMobileNumber",
+            "MobileNumber",
+            "ContactNumber"
+          ],
           "name": "usageType"
         },
         {
@@ -34229,6 +34680,13 @@
         {
           "$ref": "CustomCompanyGreetingLanguageInfo",
           "name": "language"
+        },
+        {
+          "type": "string",
+          "description": "Text to be used for speech transcription",
+          "maxLength": 2000,
+          "example": "Welcome to RingCentral",
+          "name": "text"
         }
       ]
     },
@@ -38408,9 +38866,9 @@
         },
         {
           "type": "boolean",
-          "default": false,
           "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
-          "name": "trusted"
+          "name": "trusted",
+          "default": false
         },
         {
           "$ref": "EmergencyAddressResourceRequest",
@@ -42763,6 +43221,69 @@
       ]
     },
     {
+      "name": "WebAppDevicesResponse",
+      "fields": [
+        {
+          "type": "array",
+          "description": "List of Web Phone devices",
+          "items": {
+            "$ref": "WebAppDeviceRecord"
+          },
+          "name": "records"
+        }
+      ]
+    },
+    {
+      "name": "WebAppDeviceRecord",
+      "fields": [
+        {
+          "type": "string",
+          "description": "Internal identifier of a device",
+          "name": "id",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Device type. Always `WebPhone` for Web Phone (RC App) devices",
+          "enum": [
+            "WebPhone"
+          ],
+          "name": "type",
+          "required": true
+        },
+        {
+          "type": "string",
+          "description": "Device name",
+          "name": "name",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Endpoint ID of the Web Phone (RC App) instance",
+          "name": "serial",
+          "required": false
+        },
+        {
+          "type": "string",
+          "description": "Current registration status of the device. Set to `Online` when the device\nhas an active registration; otherwise `Offline`.\n",
+          "default": "Offline",
+          "enum": [
+            "Offline",
+            "Online"
+          ],
+          "name": "status",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "format": "int32",
+          "description": "Time to live (TTL) of the current registration, in seconds.\nReturned only while the device has an active registration.\n",
+          "name": "expiresIn",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "CustomUserGreetingInfo",
       "fields": [
         {
@@ -42811,6 +43332,13 @@
         {
           "$ref": "CustomGreetingAnsweringRuleInfo",
           "name": "answeringRule"
+        },
+        {
+          "type": "string",
+          "description": "Text to be used for speech transcription",
+          "maxLength": 2000,
+          "example": "Welcome to RingCentral",
+          "name": "text"
         }
       ]
     },
@@ -46578,7 +47106,7 @@
         {
           "type": "boolean",
           "description": "Indicates whether the user has an RC App device configured in a PSTN gateway",
-          "name": "pstnConfigured",
+          "name": "persistGatewayConfigured",
           "required": false
         }
       ]
@@ -46667,6 +47195,11 @@
           ],
           "description": "Address format statuses",
           "name": "addressFormatStatus"
+        },
+        {
+          "type": "boolean",
+          "description": "Specifies emergency address validation during the ERL creation/update.\nIf set to 'true', then address validation for non-US addresses is skipped\n",
+          "name": "trusted"
         }
       ]
     },
@@ -54720,9 +55253,10 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
-          "example": "ExtensionTerminatingTarget",
+          "example": "CloudConnectorTerminatingTarget",
           "title": "Terminating Target Type",
           "name": "type"
         },
@@ -54744,7 +55278,7 @@
           "name": "dispatchingType"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         }
       ]
@@ -54863,7 +55397,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "ringingTargetType"
         },
@@ -54875,7 +55410,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "terminatingTargetType"
         }
@@ -54899,9 +55435,10 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
-          "example": "PhoneNumberRingTarget",
+          "example": "CloudConnectorRingTarget",
           "description": "Ring target type",
           "name": "type"
         },
@@ -54914,7 +55451,7 @@
           "name": "device"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -54980,6 +55517,7 @@
               "device",
               "destination",
               "integration",
+              "name",
               "prompt",
               "dispatchingType"
             ],
@@ -55031,9 +55569,10 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
-          "example": "PhoneNumberRingTarget",
+          "example": "CloudConnectorRingTarget",
           "description": "Ring target type",
           "name": "type"
         },
@@ -55046,7 +55585,7 @@
           "name": "device"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -55055,6 +55594,7 @@
         },
         {
           "type": "string",
+          "example": "Cloud Connector Contact",
           "name": "name"
         }
       ]
@@ -55069,9 +55609,10 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
-          "example": "ExtensionTerminatingTarget",
+          "example": "CloudConnectorTerminatingTarget",
           "title": "Terminating Target Type",
           "name": "type"
         },
@@ -55094,11 +55635,11 @@
         },
         {
           "type": "string",
-          "description": "Phone number name",
+          "description": "The customised target name",
           "name": "name"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         }
       ]
@@ -55117,7 +55658,8 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
           "example": "AllMobileRingTarget",
           "description": "Ring target type",
@@ -55134,20 +55676,25 @@
       "fields": [
         {
           "type": "string",
+          "example": "Cloud Connector Contact",
           "name": "name"
         },
         {
           "type": "string",
           "description": "Ring target type",
           "enum": [
-            "CoworkerAppsRingTarget",
+            "AllDesktopRingTarget",
+            "AllMobileRingTarget",
             "CoworkerRingTarget",
             "DeviceRingTarget",
+            "HotdeskRingTarget",
             "ImsPhoneNumberRingTarget",
+            "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
-          "example": "PhoneNumberRingTarget",
+          "example": "CloudConnectorRingTarget",
           "name": "type"
         },
         {
@@ -55163,7 +55710,7 @@
           "name": "integration"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         }
       ]
@@ -55181,9 +55728,10 @@
             "ImsPhoneNumberRingTarget",
             "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
-          "example": "PhoneNumberRingTarget",
+          "example": "CloudConnectorRingTarget",
           "name": "type"
         },
         {
@@ -55201,7 +55749,7 @@
           "name": "name"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -55215,20 +55763,25 @@
       "fields": [
         {
           "type": "string",
+          "example": "Cloud Connector Contact",
           "name": "name"
         },
         {
           "type": "string",
           "description": "Ring target type",
           "enum": [
-            "CoworkerAppsRingTarget",
+            "AllDesktopRingTarget",
+            "AllMobileRingTarget",
             "CoworkerRingTarget",
             "DeviceRingTarget",
+            "HotdeskRingTarget",
             "ImsPhoneNumberRingTarget",
+            "FmcPhoneNumberRingTarget",
             "IntegrationRingTarget",
-            "PhoneNumberRingTarget"
+            "PhoneNumberRingTarget",
+            "CloudConnectorRingTarget"
           ],
-          "example": "PhoneNumberRingTarget",
+          "example": "CloudConnectorRingTarget",
           "name": "type"
         },
         {
@@ -55244,7 +55797,7 @@
           "name": "integration"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         }
       ]
@@ -55377,7 +55930,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "ringingTargetType"
         },
@@ -55389,7 +55943,8 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
           "name": "terminatingTargetType"
         }
@@ -57470,9 +58025,10 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
-          "example": "ExtensionTerminatingTarget",
+          "example": "CloudConnectorTerminatingTarget",
           "description": "Terminating target type",
           "title": "Terminating Target Type",
           "name": "type"
@@ -57486,7 +58042,7 @@
           "name": "device"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -57517,9 +58073,10 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
-          "example": "ExtensionTerminatingTarget",
+          "example": "CloudConnectorTerminatingTarget",
           "description": "Terminating target type",
           "title": "Terminating Target Type",
           "name": "type"
@@ -57533,7 +58090,7 @@
           "name": "device"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -57542,7 +58099,8 @@
         },
         {
           "type": "string",
-          "description": "Phone number name",
+          "example": "Cloud Connector Contact",
+          "description": "The customised target name",
           "name": "name"
         },
         {
@@ -57573,9 +58131,10 @@
             "ExtensionTerminatingTarget",
             "PhoneNumberTerminatingTarget",
             "PlayAnnouncementTerminatingTarget",
-            "VoiceMailTerminatingTarget"
+            "VoiceMailTerminatingTarget",
+            "CloudConnectorTerminatingTarget"
           ],
-          "example": "ExtensionTerminatingTarget",
+          "example": "CloudConnectorTerminatingTarget",
           "description": "Terminating target type",
           "title": "Terminating Target Type",
           "name": "type"
@@ -57589,7 +58148,7 @@
           "name": "device"
         },
         {
-          "$ref": "CommPhoneNumberResource",
+          "$ref": "CommCloudDestination",
           "name": "destination"
         },
         {
@@ -65855,6 +66414,33 @@
         "restapi",
         "account",
         "extension",
+        "webapp-devices"
+      ],
+      "operations": [
+        {
+          "endpoint": "/restapi/{apiVersion}/account/{accountId}/extension/{extensionId}/webapp-devices",
+          "method": "get",
+          "tags": [
+            "Devices"
+          ],
+          "method2": "get",
+          "description": "Returns the list of Web Phone (RC App) devices of the specified user extension,\nand their current registration status (`Online`/`Offline`).\n",
+          "summary": "List User Web Phone Devices",
+          "operationId": "listWebAppDevices",
+          "rateLimitGroup": "Medium",
+          "appPermission": "ReadAccounts",
+          "withParameter": false,
+          "responseSchema": {
+            "$ref": "WebAppDevicesResponse"
+          }
+        }
+      ]
+    },
+    {
+      "paths": [
+        "restapi",
+        "account",
+        "extension",
         "sms-recipients"
       ],
       "operations": [
@@ -68751,7 +69337,7 @@
           "summary": "Update Comm Handling State",
           "operationId": "updateCicState",
           "rateLimitGroup": "Medium",
-          "appPermission": "ReadAccounts",
+          "appPermission": "EditExtensions",
           "withParameter": true,
           "responseSchema": {
             "$ref": "CommStateResource"
