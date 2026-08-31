@@ -29019,6 +29019,8 @@ components:
         - Room
         - FlexibleUser
         - TieLine
+        - VoiceAppIntegration
+        - WebVoice
         - Unknown
       example: User
     MessageThread:
@@ -33500,6 +33502,9 @@ components:
         - DigitalSignageOnlyRooms
         - Unknown
         - Emergency
+        - Programmable
+        - Air
+        - AirPro
     CallQueuePresenceEvent:
       type: object
       properties:
@@ -35801,6 +35806,10 @@ components:
               format: date-time
             mainNumber:
               $ref: "#/components/schemas/AdgPhoneNumberResource"
+            contactCenterEnabled:
+              type: boolean
+              default: false
+              description: Indicates whether Contact Center is enabled for the account.
     PagingGroupExtensionInfo:
       type: object
       properties:
