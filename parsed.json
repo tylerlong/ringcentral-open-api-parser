@@ -1242,6 +1242,8 @@
               "Room",
               "FlexibleUser",
               "TieLine",
+              "VoiceAppIntegration",
+              "WebVoice",
               "Unknown"
             ],
             "example": "User"
@@ -4028,6 +4030,8 @@
               "Room",
               "FlexibleUser",
               "TieLine",
+              "VoiceAppIntegration",
+              "WebVoice",
               "Unknown"
             ],
             "example": "User"
@@ -4257,6 +4261,8 @@
               "Room",
               "FlexibleUser",
               "TieLine",
+              "VoiceAppIntegration",
+              "WebVoice",
               "Unknown"
             ],
             "example": "User"
@@ -23012,6 +23018,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -23055,6 +23063,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -30536,7 +30546,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "extensionSubType"
         }
@@ -33918,6 +33931,13 @@
           "$ref": "AdgPhoneNumberResource",
           "name": "mainNumber",
           "required": false
+        },
+        {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether Contact Center is enabled for the account.",
+          "name": "contactCenterEnabled",
+          "required": false
         }
       ]
     },
@@ -35206,6 +35226,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -35219,7 +35241,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "subType"
         },
@@ -35874,6 +35899,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -35887,7 +35914,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "subType"
         },
@@ -36137,7 +36167,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "subType"
         },
@@ -43925,7 +43958,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "subType"
         },
@@ -44231,7 +44267,10 @@
             "VideoProPlus",
             "DigitalSignageOnlyRooms",
             "Unknown",
-            "Emergency"
+            "Emergency",
+            "Programmable",
+            "Air",
+            "AirPro"
           ],
           "name": "subType"
         },
@@ -56239,6 +56278,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56287,6 +56328,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56346,6 +56389,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56394,6 +56439,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56442,6 +56489,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56490,6 +56539,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56538,6 +56589,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56586,6 +56639,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
@@ -56634,6 +56689,8 @@
             "Room",
             "FlexibleUser",
             "TieLine",
+            "VoiceAppIntegration",
+            "WebVoice",
             "Unknown"
           ],
           "example": "User",
